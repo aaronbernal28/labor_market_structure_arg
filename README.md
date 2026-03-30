@@ -13,7 +13,7 @@
 ## Project Structure
 
 ```text
-occupational_networks_structure_arg/
+labor_market_structure_arg/
 ├── requirements.txt                   # Replaces requirements.txt
 ├── Snakefile                          # Master orchestrator
 ├── config.yaml                        # Dynamic paths, colors, thresholds
@@ -29,17 +29,22 @@ occupational_networks_structure_arg/
 │   │   └── nodelist_ciuo.csv
 │   └── processed/                     # Snakemake writes datasets AND intermediate files here
 ├── images/                            # Final visualizations written by Snakemake
+│   └── <script_name>/                 # Subfolders for each script's output
+│       └── <script_name>_<parameters>*.png # Parameterized filenames
 ├── scripts/                           # Connect data to src/
-│   ├── compute/
+│   ├── __init__.py
+│   ├── utils/
 │   │   ├── prepare_data.py
 │   │   ├── build_bipartite.py
-│   │   ├── build_projection.py
-│   │   └── detect_communities.py
-│   └── plot/
-│       ├── eda_distributions.py
-│       ├── bipartite_network.py
-│       ├── projection.py
-│       └── edge_correlation.py
+│   │   └── build_projection.py
+│   ├── plot/
+│   │   ├── 00_top_workers.py
+│   │   ├── 01_bipartite_by_groups.py
+│   │   ├── 02_projection_by_groups.py
+|   |   ├── 03_projection_by_gradient.py
+│   │   └── 04_edge_correlation.py
+│   └── report/
+│       └── 00_walt_test.py
 └── src/                               # The core Python package, independent of Snakemake
 	└── occupational_networks/
 		├── __init__.py
@@ -54,7 +59,7 @@ occupational_networks_structure_arg/
 		│   ├── __init__.py
 		│   ├── eda.py                 # Plotting functions for exploratory data analysis
 		│   ├── bipartite.py           # Plotting functions for bipartite graphs
-		│   ├── projection.py         # Plotting functions for projection graphs
+		│   ├── projection.py          # Plotting functions for projection graphs
 		│   └── styles/
 		│       └── publication.mplstyle # Matplotlib style for publication-quality figures
 		└── utils.py                   # Utility functions
