@@ -11,23 +11,23 @@ datasets:
   enes_2019:
     source: null
     url: "https://datasets.datos.mincyt.gob.ar/dataset/b0c0ae96-4028-4d0e-919a-c6830110f6b6/resource/421a7e29-7d15-4b69-a2e8-d7242b58b770/download/base_enespersonas.csv"
-    col_id: ["nocues", "nhog"]
-    col_caes_id: "v182caes"
-    col_ciuo_id: "v183ciuo"
-    col_sex_id: "v109"
-    col_public_worker: "v188"
-    col_total_income: "ITI"
+    id: ["nocues", "nhog"]
+    caes_id: "v182caes"
+    ciuo_id: "v183ciuo"
+    sex_id: "v109"
+    public_worker: "v188"
+    total_income: "ITI"
 
   enes_2021:
     source: data/raw/base_enespersonas_2021.csv
     url: null
     year: 2021
-    col_id: "CUEST"
-    col_caes_id: "CAES_num"
-    col_ciuo_id: "CIUO_encuestado"
-    col_sex_id: "SEXO"
-    col_public_worker: "M3_7"
-    col_total_income: null
+    id: "CUEST"
+    caes_id: "CAES_num"
+    ciuo_id: "CIUO_encuestado"
+    sex_id: "SEXO"
+    public_worker: "M3_7"
+    total_income: null
 
 metadata:
   nodelist_caes:

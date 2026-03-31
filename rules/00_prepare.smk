@@ -10,11 +10,13 @@ rule prepare_data_enes_2019:
 	script:
 		"scripts/utils/prepare_data_enes_2019.py"
 
+
 rule prepare_data_enes_2021:
 	output:
 		"data/processed/{DATASETS[1]}.csv"
 	script:
 		"scripts/utils/prepare_data_enes_2021.py"
+
 
 rule prepare_enes_all:
 	'''Merge the ENES 2019 and 2021 datasets into a single dataset.'''
@@ -26,6 +28,7 @@ rule prepare_enes_all:
 	script:
 		"scripts/utils/prepare_data_enes_all.py"
 
+
 rule prepare_nodelist_caes:
 	'''Add coloring information to the CAES nodelist.'''
 	input:
@@ -35,6 +38,7 @@ rule prepare_nodelist_caes:
 	script:
 		"scripts/utils/prepare_nodelist_caes.py"
 
+
 rule prepare_nodelist_ciuo:
 	'''Add coloring information to the CIUO nodelist.'''
 	input:
@@ -43,3 +47,4 @@ rule prepare_nodelist_ciuo:
 		"data/processed/{METADATA[1]}_{dataset}.csv"
 	script:
 		"scripts/utils/prepare_nodelist_ciuo.py"
+
