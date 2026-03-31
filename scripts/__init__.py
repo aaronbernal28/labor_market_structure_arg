@@ -1,4 +1,5 @@
 from snakemake.script import snakemake
+from src import *
 # Wait until src/ is fully refactored before fixing and uncommenting these imports.
 # import config as cfg
 # import src.communities as comm
