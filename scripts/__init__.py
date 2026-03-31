@@ -1,3 +1,4 @@
+from snakemake.script import snakemake
 # Wait until src/ is fully refactored before fixing and uncommenting these imports.
 # import config as cfg
 # import src.communities as comm
@@ -8,4 +9,4 @@
 # import src.plotting as pl
 # import src.utils as utils
 
-__all__ = ["cfg", "comm", "dl", "gc", "metrics", "nc", "pl", "utils"]
+__all__ = ["snakemake"]
