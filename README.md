@@ -23,7 +23,7 @@ labor_market_structure_arg/
 │   └── 02_projection.smk              # Rules for projections graphs and community detection
 ├── data/
 │   ├── raw/                           # Raw survey data
-|   |   ├── base_enespersonas.csv      # Autonomously downloaded from ENES PISAC 2019
+│   │   ├── base_enespersonas.csv      # Autonomously downloaded from ENES PISAC 2019
 │   │   ├── base_enespersonas_2021.csv # Must be manually placed here
 │   │   ├── nodelist_caes.csv
 │   │   └── nodelist_ciuo.csv
@@ -41,28 +41,27 @@ labor_market_structure_arg/
 │   │   ├── 00_top_workers.py
 │   │   ├── 01_bipartite_by_groups.py
 │   │   ├── 02_projection_by_groups.py
-|   |   ├── 03_projection_by_gradient.py
+│   │   ├── 03_projection_by_gradient.py
 │   │   └── 04_edge_correlation.py
 │   └── report/
 │       └── 00_walt_test.py
 └── src/                               # The core Python package, independent of Snakemake
-	└── occupational_networks/
-		├── __init__.py
-		├── data/
-		│   ├── loader.py              # Loading and merging raw datasets
-		│   └── features.py            # Feature engineering functions
-		├── graph/
-		│   ├── builder.py             # Functions to build bipartite and projection graphs
-		│   ├── metrics.py             # Functions to compute degree, centrality, etc.
-		│   └── topology.py            # Functions to analyze graph structure
-		├── plotting/
-		│   ├── __init__.py
-		│   ├── eda.py                 # Plotting functions for exploratory data analysis
-		│   ├── bipartite.py           # Plotting functions for bipartite graphs
-		│   ├── projection.py          # Plotting functions for projection graphs
-		│   └── styles/
-		│       └── publication.mplstyle # Matplotlib style for publication-quality figures
-		└── utils.py                   # Utility functions
+	├── __init__.py
+	├── data/
+	│   ├── loader.py              # Loading and merging raw datasets
+	│   └── features.py            # Feature engineering functions
+	├── graph/
+	│   ├── builder.py             # Functions to build bipartite and projection graphs
+	│   ├── metrics.py             # Functions to compute degree, centrality, etc.
+	│   └── topology.py            # Functions to analyze graph structure
+	├── plotting/
+	│   ├── __init__.py
+	│   ├── eda.py                 # Plotting functions for exploratory data analysis
+	│   ├── bipartite.py           # Plotting functions for bipartite graphs
+	│   ├── projection.py          # Plotting functions for projection graphs
+	│   └── styles/
+	│       └── publication.mplstyle # Matplotlib style for publication-quality figures
+	└── utils.py                   # Utility functions
 ```
 
 ## Methodology
