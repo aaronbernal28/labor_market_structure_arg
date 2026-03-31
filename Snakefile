@@ -2,17 +2,84 @@ configfile: "config.yaml"
 
 DATASETS = ["enes_all", "enes_2019", "enes_2021"]
 METADATA = ["nodelist_caes", "nodelist_ciuo"]
-WEIGHTS = ["vecinos_compartidos", "hub_depressed", "dot_product", "hidalgo"]
-ALGORITHMS = ["louvain", "leiden", "infomap"]
-FEATURES = ["sex_id", "public_worker", "total_income"]
+WEIGHTS = ["hidalgo"]
+ALGORITHMS = ["louvain"]
+VARIABLES = ["sex_id", "public_worker", "total_income"]
+DISCRETE_FEATURES = ["sex_id", "public_worker", "community"]
+CONTINUOUS_FEATURES = ["total_income", "sex_proportion", "public_worker_proportion"]
+
 LAYOUTS = ["spring_layout"]
+CLASSES = ["caes", "ciuo"]
+LOGSCALES = ["false"]
+ALPHAS = ["1.0000"] # No filtering for now
+
 
 rule all:
 	input:
 		expand(
-			"images/02_projection_by_groups/02_projection_{dataset}_{layout}.png",
-			dataset=DATASETS,
-		)
+			"images/00_aed_report/aed_{dataset}_top_sectors.png",
+			dataset=[DATASETS[0]],
+		),
+		expand(
+			"images/00_aed_report/aed_{dataset}_top_occupations.png",
+			dataset=[DATASETS[0]],
+		),
+		expand(
+			"images/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap_{dataset}.png",
+			dataset=[DATASETS[0]],
+		),
+		expand(
+			"images/02_bipartite_plot_by_groups/bipartite_layout_by_groups{dataset}_{logscale}_{layout}.png",
+			dataset=[DATASETS[0]],
+			logscale=LOGSCALES,
+			layout=LAYOUTS,
+		),
+		expand(
+			"images/02_bipartite_plot_by_groups/bipartite_degree_dist_{dataset}_{logscale}_{layout}.png",
+			dataset=[DATASETS[0]],
+			logscale=LOGSCALES,
+			layout=LAYOUTS,
+		),
+		expand(
+			"images/03_projection_plot_by_groups/projection_plot_by_groups_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{discrete_feature}.png",
+			dataset=[DATASETS[0]],
+			logscale=LOGSCALES,
+			weight=WEIGHTS,
+			algorithm=ALGORITHMS,
+			layout=LAYOUTS,
+			discrete_feature=DISCRETE_FEATURES,
+		),
+		expand(
+			"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{continuous_feature}.png",
+			dataset=[DATASETS[0]],
+			logscale=LOGSCALES,
+			weight=WEIGHTS,
+			algorithm=ALGORITHMS,
+			layout=LAYOUTS,
+			continuous_feature=CONTINUOUS_FEATURES,
+		),
+		expand(
+			"images/filter_projection/filter_projection_alpha_sensitivity_{dataset}_{logscale}_{class}_{weight}_{algorithm}.png",
+			dataset=[DATASETS[0]],
+			class=CLASSES,
+			logscale=LOGSCALES,
+			weight=WEIGHTS,
+			algorithm=ALGORITHMS,
+		),
+		expand(
+			"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}_{feature}.png",
+			dataset=[DATASETS[0]],
+			class=CLASSES,
+			logscale=LOGSCALES,
+			weight=WEIGHTS,
+			algorithm=ALGORITHMS,
+			alpha=ALPHAS,
+			feature=VARIABLES,
+		),
+		expand(
+			"images/06_sankey_plot/sankey_plot_{dataset}.png",
+			dataset=[DATASETS[0]],
+		),
 
 
 rule _00_aed_report:
@@ -44,10 +111,10 @@ rule _01_biadjacency_matrix_heatmap:
 rule _02_bipartite_plot_by_groups:
 	'''Plot bipartite graph from graph.'''
 	input:
-		"data/graphs/bipartite_{dataset}.gexf"
+		"data/graphs/bipartite_{dataset}_{logscale}.gexf"
 	output:
-		"images/02_bipartite_plot_by_groups/bipartite_layout_by_groups{dataset}_{layout}.png",
-		"images/02_bipartite_plot_by_groups/bipartite_degree_dist_{dataset}_{layout}.png"
+		"images/02_bipartite_plot_by_groups/bipartite_layout_by_groups{dataset}_{logscale}_{layout}.png",
+		"images/02_bipartite_plot_by_groups/bipartite_degree_dist_{dataset}_{logscale}_{layout}.png"
 	script:
 		"scripts/02_bipartite_plot_by_groups.py"
 
@@ -55,7 +122,7 @@ rule _02_bipartite_plot_by_groups:
 rule _03_projection_plot_by_groups:
 	'''Plot projection graph from graph.'''
 	input:
-		"data/graphs/projection_{dataset}_{class}_{logscale}_{weight}_{algorithm}_{alpha}.gexf"
+		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.gexf"
 	output:
 		"images/03_projection_plot_by_groups/projection_plot_by_groups_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{discrete_feature}.png"
 	script:
@@ -65,7 +132,7 @@ rule _03_projection_plot_by_groups:
 rule _03_projection_plot_gradient:
 	'''Plot projection graph from graph.'''
 	input:
-		"data/graphs/projection_{dataset}_{class}_{logscale}_{weight}_{algorithm}_{alpha}.gexf"
+		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.gexf"
 	output:
 		"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{continuous_feature}.png"
 	script:
@@ -88,9 +155,9 @@ rule _04_walt_test:
 rule _05_edge_weight_correlation:
 	'''Correlation between edge weights in projection graphs.'''
 	input:
-		"data/graphs/projection_{dataset}_{class}_{logscale}_{weight}_{algorithm}_{alpha}.gexf"
+		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.gexf"
 	output:
-		"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{class}_{logscale}_{weight}_{algorithm}_{alpha}_{feature}.png"
+		"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}_{feature}.png"
 	script:
 		"scripts/05_edge_weight_correlation.py"
 

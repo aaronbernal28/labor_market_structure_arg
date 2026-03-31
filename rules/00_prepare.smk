@@ -6,14 +6,14 @@ rule prepare_data_enes_2019:
 	- Cleaning the data
 	'''
 	output:
-		"data/processed/{DATASETS[0]}.csv"
+		"data/processed/enes_2019.csv"
 	script:
 		"scripts/utils/prepare_data_enes_2019.py"
 
 
 rule prepare_data_enes_2021:
 	output:
-		"data/processed/{DATASETS[1]}.csv"
+		"data/processed/enes_2021.csv"
 	script:
 		"scripts/utils/prepare_data_enes_2021.py"
 
@@ -21,10 +21,10 @@ rule prepare_data_enes_2021:
 rule prepare_enes_all:
 	'''Merge the ENES 2019 and 2021 datasets into a single dataset.'''
 	input:
-		"data/processed/{DATASETS[0]}.csv",
-		"data/processed/{DATASETS[1]}.csv"
+		"data/processed/enes_2019.csv",
+		"data/processed/enes_2021.csv"
 	output:
-		"data/processed/{DATASETS[2]}.csv"
+		"data/processed/enes_all.csv"
 	script:
 		"scripts/utils/prepare_data_enes_all.py"
 
