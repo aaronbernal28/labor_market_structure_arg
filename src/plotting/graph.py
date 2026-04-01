@@ -1086,3 +1086,23 @@ def fceyn_compute_and_plot_edge_correlation(
 		plt.close()
 	elif show is None or show:
 		plt.show()
+
+
+def fceyn_plot_bipartite_layout_by_groups(*args, **kwargs):
+	"""Placeholder for bipartite layout plotting."""
+	return plt.figure()
+
+
+def fceyn_plot_bipartite_degree_distribution(*args, **kwargs):
+	"""Placeholder for bipartite degree distribution plotting."""
+	return plt.figure()
+
+
+def fceyn_plot_projection_by_groups(*args, **kwargs):
+	"""Placeholder for projection-by-groups plotting."""
+	return plt.figure()
+
+
+def fceyn_plot_edge_weight_correlation(*args, **kwargs):
+	"""Placeholder for edge-weight correlation plotting."""
+	return plt.figure()

@@ -86,7 +86,7 @@ def fceyn_infer_node_attribute(
 		filtered = {
 			key: values
 			for key, values in attr_values.items()
-			if all(fun_is_finite_number(v) for v in values) == prefer_numeric
+			if all(fceyn_is_finite_number(v) for v in values) == prefer_numeric
 		}
 		if filtered:
 			attr_values = filtered
@@ -169,7 +169,10 @@ def fceyn_infer_group_column(df: pd.DataFrame, hint: str) -> str | None:
 
 
 def fceyn_infer_group_columns(df: pd.DataFrame) -> tuple[str | None, str | None]:
-	return (fun_infer_group_column(df, "caes"), fceyn_infer_group_column(df, "ciuo"))
+	return (
+		fceyn_infer_group_column(df, "caes"),
+		fceyn_infer_group_column(df, "ciuo"),
+	)
 
 
 def fceyn_ensure_label_column(

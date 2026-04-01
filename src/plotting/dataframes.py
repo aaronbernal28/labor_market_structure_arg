@@ -604,3 +604,21 @@ def fceyn_plot_top_n_bar(
 		plt.show()
 
 
+def fceyn_plot_biadjacency_heatmap(*args, **kwargs):
+	"""Placeholder for biadjacency heatmap plotting."""
+	return plt.figure()
+
+
+def fceyn_plot_aed_top_sectors(*args, **kwargs):
+	"""Placeholder for AED top sectors plot."""
+	return plt.figure()
+
+
+def fceyn_plot_aed_top_occupations(*args, **kwargs):
+	"""Placeholder for AED top occupations plot."""
+	return plt.figure()
+
+
+def fceyn_plot_sankey(*args, **kwargs):
+	"""Placeholder for sankey plot."""
+	return plt.figure()

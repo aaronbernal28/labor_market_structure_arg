@@ -264,6 +264,41 @@ def fceyn_load_dataset(
 	return {"enes": enes, "caes_nodes": caes_df, "ciuo_nodes": ciuo_df}
 
 
+def fceyn_clean_data_enes(*args, **kwargs):
+	"""Placeholder for ENES cleaning logic."""
+	return kwargs.get("df_enes")
+
+
+def fceyn_color_map_caes(*args, **kwargs):
+	"""Placeholder color map for CAES nodes."""
+	return {}
+
+
+def fceyn_color_letra_map_caes(*args, **kwargs):
+	"""Placeholder color map for CAES letra labels."""
+	return {}
+
+
+def fceyn_color_agrupation_map_caes(*args, **kwargs):
+	"""Placeholder color map for CAES agrupation labels."""
+	return {}
+
+
+def fceyn_color_map_ciuo(*args, **kwargs):
+	"""Placeholder color map for CIUO nodes."""
+	return {}
+
+
+def fceyn_color_1digit_map_ciuo(*args, **kwargs):
+	"""Placeholder color map for CIUO 1-digit labels."""
+	return {}
+
+
+def fceyn_color_ciuo3cat_map_ciuo(*args, **kwargs):
+	"""Placeholder color map for CIUO 3-category labels."""
+	return {}
+
+
 def fceyn_export_processed(
 	enes_df: pd.DataFrame, processed_path: Path, name: str
 ) -> Path:
