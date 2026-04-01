@@ -1,4 +1,5 @@
-from scripts import *
+from snakemake.script import snakemake
+from src import fceyn_attach_group_characteristics, fceyn_compute_group_characteristics
 import pandas as pd
 
 

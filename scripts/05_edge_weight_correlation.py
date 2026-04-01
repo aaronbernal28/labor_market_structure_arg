@@ -1,4 +1,5 @@
-from scripts import *
+from snakemake.script import snakemake
+from src import fceyn_plot_edge_weight_correlation
 import networkx as nx
 
 

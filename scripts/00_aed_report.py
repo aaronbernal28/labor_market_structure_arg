@@ -1,4 +1,5 @@
-from scripts import *
+from snakemake.script import snakemake
+from src import fceyn_plot_aed_top_occupations, fceyn_plot_aed_top_sectors
 import pandas as pd
 
 

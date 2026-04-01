@@ -1,4 +1,5 @@
-from scripts import *
+from snakemake.script import snakemake
+from src import fceyn_plot_biadjacency_heatmap
 import pandas as pd
 
 
