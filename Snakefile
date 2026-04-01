@@ -24,6 +24,7 @@ rule all:
 			"images/00_aed_report/aed_{dataset}_top_occupations.png",
 			dataset=[DATASETS[0]],
 		),
+""" 
 		expand(
 			"images/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap_{dataset}.png",
 			dataset=[DATASETS[0]],
@@ -80,6 +81,7 @@ rule all:
 			"images/06_sankey_plot/sankey_plot_{dataset}.png",
 			dataset=[DATASETS[0]],
 		),
+"""
 
 
 rule _00_aed_report:

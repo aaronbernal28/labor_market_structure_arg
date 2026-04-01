@@ -37,14 +37,11 @@ labor_market_structure_arg/
 │   │   ├── prepare_data.py
 │   │   ├── build_bipartite.py
 │   │   └── build_projection.py
-│   ├── plot/
-│   │   ├── 00_top_workers.py
-│   │   ├── 01_bipartite_by_groups.py
-│   │   ├── 02_projection_by_groups.py
-│   │   ├── 03_projection_by_gradient.py
-│   │   └── 04_edge_correlation.py
-│   └── report/
-│       └── 00_walt_test.py
+│   ├── 00_top_workers.py
+│   ├── 01_bipartite_by_groups.py
+│   ├── 02_projection_by_groups.py
+│   ├── 03_projection_by_gradient.py
+│   └── 04_edge_correlation.py
 └── src/                               # The core Python package, independent of Snakemake
 	├── __init__.py
 	├── data/

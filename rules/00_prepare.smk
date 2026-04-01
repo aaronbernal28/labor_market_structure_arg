@@ -1,21 +1,15 @@
-rule prepare_data_enes_2019:
-	# TODO: refactor to use the same script for both datasets, with parameters
+rule prepare_data_enes:
 	'''
-	Prepare the data for the ENES 2019 dataset. This includes:
+	Prepare the data for the ENES {year} dataset. This includes:
 	- Filtering the data to include only the relevant columns and rows
 	- Cleaning the data
 	'''
 	output:
-		"data/processed/enes_2019.csv"
+		"data/processed/{dataset}.csv"
 	script:
-		"scripts/utils/prepare_data_enes_2019.py"
-
-
-rule prepare_data_enes_2021:
-	output:
-		"data/processed/enes_2021.csv"
-	script:
-		"scripts/utils/prepare_data_enes_2021.py"
+		"scripts/utils/prepare_data_enes.py"
+	params:
+		dataset = lambda wildcards: wildcards.dataset
 
 
 rule prepare_enes_all:
@@ -29,22 +23,14 @@ rule prepare_enes_all:
 		"scripts/utils/prepare_data_enes_all.py"
 
 
-rule prepare_nodelist_caes:
+rule prepare_nodelist:
 	'''Add coloring information to the CAES nodelist.'''
 	input:
 		"data/processed/{dataset}.csv"
 	output:
-		"data/processed/{METADATA[0]}_{dataset}.csv"
+		"data/processed/{nodelist}_{dataset}.csv"
 	script:
-		"scripts/utils/prepare_nodelist_caes.py"
-
-
-rule prepare_nodelist_ciuo:
-	'''Add coloring information to the CIUO nodelist.'''
-	input:
-		"data/processed/{dataset}.csv"
-	output:
-		"data/processed/{METADATA[1]}_{dataset}.csv"
-	script:
-		"scripts/utils/prepare_nodelist_ciuo.py"
-
+		"scripts/utils/prepare_nodelist.py"
+	params:
+		nodelist = lambda wildcards: wildcards.nodelist
+	
