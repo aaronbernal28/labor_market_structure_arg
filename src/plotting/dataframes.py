@@ -610,13 +610,47 @@ def fceyn_plot_biadjacency_heatmap(*args, **kwargs):
 
 
 def fceyn_plot_aed_top_sectors(*args, **kwargs):
-	"""Placeholder for AED top sectors plot."""
-	return plt.figure()
+	"""Plot top CAES groups by count and return the figure."""
+	data = args[0] if args else kwargs.get("data")
+	title = kwargs.get("title", "Top sectors")
+	top_n = kwargs.get("top_n", 15)
+	if data is None:
+		return plt.figure()
+
+	caes_col, _ = ut.fceyn_infer_group_columns(data)
+	if caes_col is None:
+		return plt.figure()
+
+	counts = data[caes_col].value_counts(dropna=True).head(top_n)
+	fig, ax = plt.subplots(figsize=(12, 8))
+	sns.barplot(x=counts.values, y=counts.index.astype(str), ax=ax)
+	ax.set_title(title)
+	ax.set_xlabel("Count")
+	ax.set_ylabel("")
+	plt.tight_layout()
+	return fig
 
 
 def fceyn_plot_aed_top_occupations(*args, **kwargs):
-	"""Placeholder for AED top occupations plot."""
-	return plt.figure()
+	"""Plot top CIUO groups by count and return the figure."""
+	data = args[0] if args else kwargs.get("data")
+	title = kwargs.get("title", "Top occupations")
+	top_n = kwargs.get("top_n", 15)
+	if data is None:
+		return plt.figure()
+
+	_, ciuo_col = ut.fceyn_infer_group_columns(data)
+	if ciuo_col is None:
+		return plt.figure()
+
+	counts = data[ciuo_col].value_counts(dropna=True).head(top_n)
+	fig, ax = plt.subplots(figsize=(12, 8))
+	sns.barplot(x=counts.values, y=counts.index.astype(str), ax=ax)
+	ax.set_title(title)
+	ax.set_xlabel("Count")
+	ax.set_ylabel("")
+	plt.tight_layout()
+	return fig
 
 
 def fceyn_plot_sankey(*args, **kwargs):

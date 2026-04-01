@@ -87,13 +87,12 @@ rule all:
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''
 	input:
-		"data/processed/{dataset}.csv",
-		"data/processed/{METADATA[0]}_{dataset}.csv",
-		"data/processed/{METADATA[1]}_{dataset}.csv"
+		enes="data/processed/{dataset}.csv",
+		caes=lambda wc: f"data/processed/{METADATA[0]}_{wc.dataset}.csv",
+		ciuo=lambda wc: f"data/processed/{METADATA[1]}_{wc.dataset}.csv"
 	output:
 		"images/00_aed_report/aed_{dataset}_top_sectors.png",
-		"images/00_aed_report/aed_{dataset}_top_occupations.png",
-		"reports/00_aed_report/aed_{dataset}.csv"
+		"images/00_aed_report/aed_{dataset}_top_occupations.png"
 	script:
 		"scripts/00_aed_report.py"
 

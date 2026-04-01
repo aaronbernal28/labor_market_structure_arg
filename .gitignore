@@ -226,3 +226,4 @@ images_new/
 data/raw/base_enespersonas.csv
 ruff.toml
 scripts/deprecated/
+.snakemake/

@@ -1,4 +1,8 @@
-from snakemake.script import snakemake
+import os
+import sys
+
+sys.path.insert(0, os.getcwd())
+
 from src import fceyn_clean_data_enes
 import pandas as pd
 
@@ -10,7 +14,7 @@ def main() -> None:
 	URL = snakemake.config["datasets"][dataset]["url"]
 	FEATURES = snakemake.config["datasets"][dataset]["features"]
 
-	df_enes = pd.read_csv(SOURCE if SOURCE else URL)
+	df_enes = pd.read_csv(SOURCE if SOURCE else URL, sep=";" if dataset == "enes_2019" else ",")
 	df_enes = fceyn_clean_data_enes(
 		df_enes=df_enes,
 		id_1=snakemake.config["datasets"][dataset]["id_1"],
@@ -22,6 +26,7 @@ def main() -> None:
 
 	if dataset == "enes_2021":
 		# For the 2021 survey, we need to rename the columns to match the 2019 survey for CAES and CIUO IDs, as well as the features.
+		features_2019 = snakemake.config["datasets"]["enes_2019"]["features"]
 		df_enes = df_enes.rename(
 			columns={
 				snakemake.config["datasets"][dataset]["caes_id"]: snakemake.config[
@@ -31,9 +36,10 @@ def main() -> None:
 					"datasets"
 				]["enes_2019"]["ciuo_id"],
 				**{
-					feature: FEATURES[i]
-					for i, feature in enumerate(FEATURES)
-					if feature in df_enes.columns
+					FEATURES[feature_name]: features_2019[feature_name]
+					for feature_name in FEATURES
+					if FEATURES.get(feature_name) in df_enes.columns
+					and features_2019.get(feature_name)
 				},
 			}
 		)

@@ -265,8 +265,32 @@ def fceyn_load_dataset(
 
 
 def fceyn_clean_data_enes(*args, **kwargs):
-	"""Placeholder for ENES cleaning logic."""
-	return kwargs.get("df_enes")
+	"""Clean ENES data by selecting columns and normalizing ids."""
+	df_enes = kwargs.get("df_enes")
+	id_caes = kwargs.get("id_caes")
+	id_ciuo = kwargs.get("id_ciuo")
+	id_1 = kwargs.get("id_1")
+	id_2 = kwargs.get("id_2")
+	features = kwargs.get("features") or {}
+
+	if df_enes is None:
+		raise ValueError("Missing df_enes for ENES cleaning.")
+	if id_caes is None or id_ciuo is None:
+		raise ValueError("Missing id_caes/id_ciuo for ENES cleaning.")
+
+	feature_cols = [col for col in features.values() if col]
+	base_cols = [id_1, id_2, id_caes, id_ciuo]
+	cols = [col for col in base_cols + feature_cols if col]
+
+	missing = [col for col in cols if col not in df_enes.columns]
+	if missing:
+		raise KeyError(f"Missing columns in ENES dataframe: {missing}")
+
+	clean = df_enes[cols].copy()
+	clean = clean.dropna(subset=[id_caes, id_ciuo])
+	clean[id_caes] = clean[id_caes].astype(int)
+	clean[id_ciuo] = clean[id_ciuo].astype(int)
+	return clean
 
 
 def fceyn_color_map_caes(*args, **kwargs):

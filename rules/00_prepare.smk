@@ -4,12 +4,14 @@ rule prepare_data_enes:
 	- Filtering the data to include only the relevant columns and rows
 	- Cleaning the data
 	'''
+	wildcard_constraints:
+		dataset = "enes_2019|enes_2021"
 	output:
 		"data/processed/{dataset}.csv"
-	script:
-		"scripts/utils/prepare_data_enes.py"
 	params:
 		dataset = lambda wildcards: wildcards.dataset
+	script:
+		"../scripts/utils/prepare_data_enes.py"
 
 
 rule prepare_enes_all:
@@ -20,17 +22,20 @@ rule prepare_enes_all:
 	output:
 		"data/processed/enes_all.csv"
 	script:
-		"scripts/utils/prepare_data_enes_all.py"
+		"../scripts/utils/prepare_data_enes_all.py"
 
 
 rule prepare_nodelist:
 	'''Add coloring information to the CAES nodelist.'''
+	wildcard_constraints:
+		nodelist = "nodelist_caes|nodelist_ciuo",
+		dataset = "enes_2019|enes_2021|enes_all"
 	input:
 		"data/processed/{dataset}.csv"
 	output:
 		"data/processed/{nodelist}_{dataset}.csv"
-	script:
-		"scripts/utils/prepare_nodelist.py"
 	params:
 		nodelist = lambda wildcards: wildcards.nodelist
+	script:
+		"../scripts/utils/prepare_nodelist_caes.py"
 	

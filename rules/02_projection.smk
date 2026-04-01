@@ -14,6 +14,6 @@ rule filter_projection:
 		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_1.0000.gexf"
 	output:
 		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.gexf",
-		"images/filter_projection/filter_projection_alpha_sensitivity_{dataset}_{logscale}_{class}_{weight}_{algorithm}.png"
+		"images/filter_projection/filter_projection_alpha_sensitivity_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.png"
 	script:
 		"scripts/utils/filter_projection.py"
