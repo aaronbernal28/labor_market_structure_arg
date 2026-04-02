@@ -8,14 +8,14 @@ from ripser import ripser
 from sklearn.cluster import DBSCAN
 
 
-def fceyn_compute_persistence(distance_matrix, maxdim=2, thresh=np.inf, coeff=2):
+def compute_persistence(distance_matrix, maxdim=2, thresh=np.inf, coeff=2):
 	result = ripser(
 		distance_matrix, maxdim=maxdim, thresh=thresh, distance_matrix=True, coeff=coeff
 	)
 	return result["dgms"]
 
 
-def fceyn_visualize_mapper_graph(
+def visualize_mapper_graph(
 	mapper,
 	graph,
 	lens,

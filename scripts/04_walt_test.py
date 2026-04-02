@@ -1,4 +1,4 @@
-from snakemake.script import snakemake
+from scripts import *
 import pandas as pd
 
 

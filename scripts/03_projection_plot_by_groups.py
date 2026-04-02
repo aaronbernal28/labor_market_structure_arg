@@ -1,5 +1,4 @@
-from snakemake.script import snakemake
-from src import fceyn_plot_projection_by_groups
+from scripts import *
 import networkx as nx
 
 

@@ -1,6 +1,6 @@
-from snakemake.script import snakemake
-from src import fceyn_plot_alpha_sensitivity
+from scripts import *
 import networkx as nx
+from scripts import *
 
 
 def main() -> None:

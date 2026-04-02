@@ -7,7 +7,7 @@ import networkx as nx
 MetricValue = Union[int, float, None]
 
 
-def fceyn_average_degree(graph: nx.Graph, weight: Optional[str] = None) -> float:
+def average_degree(graph: nx.Graph, weight: Optional[str] = None) -> float:
 	"""Return the average (weighted) degree of the provided graph."""
 	node_count = graph.number_of_nodes()
 	if node_count == 0:
@@ -20,7 +20,7 @@ def fceyn_average_degree(graph: nx.Graph, weight: Optional[str] = None) -> float
 	return res
 
 
-def fceyn_diameter_of_largest_component(graph: nx.Graph) -> Optional[int]:
+def diameter_of_largest_component(graph: nx.Graph) -> Optional[int]:
 	"""Return the diameter of the largest connected component, or None if the graph is empty."""
 	if graph.number_of_nodes() == 0:
 		return None
@@ -33,23 +33,23 @@ def fceyn_diameter_of_largest_component(graph: nx.Graph) -> Optional[int]:
 	return nx.diameter(subgraph) if subgraph.number_of_nodes() > 0 else None
 
 
-def fceyn_summarize_graph(graph: nx.Graph) -> Dict[str, MetricValue]:
+def summarize_graph(graph: nx.Graph) -> Dict[str, MetricValue]:
 	"""Compute a handful of descriptive metrics for the graph."""
 	return {
 		"node_count": graph.number_of_nodes(),
 		"edge_count": graph.number_of_edges(),
 		"self_loops": nx.number_of_selfloops(graph),
-		"avg_degree": fceyn_average_degree(graph),
-		"avg_weighted_degree": fceyn_average_degree(graph, weight="weight"),
+		"avg_degree": average_degree(graph),
+		"avg_weighted_degree": average_degree(graph, weight="weight"),
 		"avg_clustering": nx.average_clustering(graph, weight="weight")
 		if graph.number_of_nodes() > 0
 		else 0.0,
 		"connected_components": nx.number_connected_components(graph),
-		"diameter": fceyn_diameter_of_largest_component(graph),
+		"diameter": diameter_of_largest_component(graph),
 	}
 
 
-def fceyn_log_graph_metrics(label: str, metrics: Dict[str, MetricValue]) -> None:
+def log_graph_metrics(label: str, metrics: Dict[str, MetricValue]) -> None:
 	"""Emit formatted metrics for the named graph in English."""
 	print(f"{label} metrics:")
 	print(f"Node count: {metrics['node_count']}")

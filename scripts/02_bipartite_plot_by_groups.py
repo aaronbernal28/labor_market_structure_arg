@@ -1,8 +1,4 @@
-from snakemake.script import snakemake
-from src import (
-	fceyn_plot_bipartite_degree_distribution,
-	fceyn_plot_bipartite_layout_by_groups,
-)
+from scripts import *
 import networkx as nx
 
 

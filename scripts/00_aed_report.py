@@ -1,9 +1,4 @@
-import os
-import sys
-
-sys.path.insert(0, os.getcwd())
-
-from src import fceyn_plot_aed_top_occupations, fceyn_plot_aed_top_sectors
+from scripts import *
 import pandas as pd
 
 
@@ -11,16 +6,13 @@ def main() -> None:
 	df_enes = pd.read_csv(snakemake.input[0])
 	df_nodelist_caes = pd.read_csv(snakemake.input[1])
 	df_nodelist_ciuo = pd.read_csv(snakemake.input[2])
-
 	caes_id = snakemake.config["datasets"]["enes_2019"]["caes_id"]
 	ciuo_id = snakemake.config["datasets"]["enes_2019"]["ciuo_id"]
 	caes_meta_id = snakemake.config["metadata"]["nodelist_caes"]["id"]
 	ciuo_meta_id = snakemake.config["metadata"]["nodelist_ciuo"]["id"]
 
-	caes_counts = (
-		df_enes[caes_id].value_counts().rename("count").reset_index()
-	)
-	caes_counts.columns = [caes_id, "count"]
+	caes_counts = df_enes[caes_id].value_counts().rename("n_obs").reset_index()
+	caes_counts.columns = [caes_id, "n_obs"]
 
 	df_nodelist_caes = pd.merge(
 		df_nodelist_caes,
@@ -33,10 +25,8 @@ def main() -> None:
 	fig = fceyn_plot_aed_top_sectors(df_nodelist_caes, title="Top sectors")
 	fig.savefig(snakemake.output[0], bbox_inches="tight")
 
-	ciuo_counts = (
-		df_enes[ciuo_id].value_counts().rename("count").reset_index()
-	)
-	ciuo_counts.columns = [ciuo_id, "count"]
+	ciuo_counts = df_enes[ciuo_id].value_counts().rename("n_obs").reset_index()
+	ciuo_counts.columns = [ciuo_id, "n_obs"]
 	df_nodelist_ciuo = pd.merge(
 		df_nodelist_ciuo,
 		ciuo_counts,

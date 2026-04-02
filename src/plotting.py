@@ -4,34 +4,41 @@ Plotting utilities extracted from the exploratory notebook.
 
 from pathlib import Path
 from typing import Dict, Iterable, Mapping
-import textwrap
+import src.utils as ut
 
-import matplotlib as mpl
-import matplotlib.colors as mcolors
+try:
+	from persim import plot_diagrams
+except ImportError:  # Optional dependency for TDA plots.
+	plot_diagrams = None
+
+try:
+	import gudhi
+except ImportError:  # Optional dependency for barcode plots.
+	gudhi = None
+
 import matplotlib.patches as patches
 import matplotlib.path as mpath
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import networkx as nx
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from scipy import stats
-
-import src.utils as ut
+import textwrap
 
 LIGTHGRAY = "#a8a8a8"
 
-# plt.rcParams.update({"figure.dpi": 100, "savefig.dpi": 100})
+plt.rcParams.update({"figure.dpi": 100, "savefig.dpi": 100})
 
 
-def fceyn_mean_edge_color(color_u, color_v):
+def _mean_edge_color(color_u, color_v):
 	"""Return the mean RGB color between two node colors."""
 	rgb_u = np.asarray(mcolors.to_rgb(color_u), dtype=float)
 	rgb_v = np.asarray(mcolors.to_rgb(color_v), dtype=float)
 	return tuple(((rgb_u + rgb_v) / 2.0).tolist())
 
 
-def fceyn_edge_alpha_from_weight(
+def _edge_alpha_from_weight(
 	weight: float,
 	max_weight: float,
 	*,
@@ -62,12 +69,270 @@ def fceyn_edge_alpha_from_weight(
 	return alpha_floor + (alpha_cap - alpha_floor) * r
 
 
-def fceyn_edge_rgba_from_node_colors(color_u, color_v, alpha: float):
-	rgb = fceyn_mean_edge_color(color_u, color_v)
+def _edge_rgba_from_node_colors(color_u, color_v, alpha: float):
+	rgb = _mean_edge_color(color_u, color_v)
 	return mcolors.to_rgba(rgb, alpha=alpha)
 
 
-def fceyn_draw_bipartite_by_color(
+def plot_heatmap(
+	biadjacency: pd.DataFrame,
+	output_path: Path = None,
+	save: bool = True,
+	font_size: int = None,
+) -> None:
+	"""Plot heatmap of the bipartite adjacency matrix."""
+	plt.figure(figsize=(16, 10))
+
+	# Text Wrapping Configuration
+	col_wrap_width = 15
+	idx_wrap_width = 35
+
+	wrapped_columns = [
+		textwrap.fill(str(col), width=col_wrap_width) for col in biadjacency.columns
+	]
+	wrapped_index = [
+		textwrap.fill(str(idx), width=idx_wrap_width) for idx in biadjacency.index
+	]
+
+	biadjacency.columns = wrapped_columns
+	biadjacency.index = wrapped_index
+
+	values = biadjacency.to_numpy()
+	is_integer = np.issubdtype(values.dtype, np.integer)
+	fmt = "d" if is_integer else ".2f"
+	default_fontsize = font_size if font_size else 9
+	ax = sns.heatmap(
+		biadjacency,
+		annot=True,
+		fmt=fmt,
+		cmap="Greens",
+		cbar=False,
+		annot_kws={"fontsize": default_fontsize},
+	)
+
+	ax.xaxis.tick_top()  # Move ticks to top
+	ax.xaxis.set_label_position("top")
+	plt.xticks(rotation=0, fontsize=default_fontsize)
+
+	# Row labels: align LEFT (or RIGHT if font_size specified for single-char labels)
+	if font_size:
+		ax.set_yticklabels(
+			ax.get_yticklabels(), ha="right", rotation=0, fontsize=default_fontsize
+		)
+		ax.tick_params(axis="y", pad=20)
+	else:
+		ax.set_yticklabels(ax.get_yticklabels(), ha="left")
+		ax.tick_params(axis="y", pad=190)
+	ax.tick_params(left=False, top=False)
+
+	plt.xlabel("")
+	plt.ylabel("")
+	plt.tight_layout()
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def _wrap_labels(df: pd.DataFrame) -> pd.DataFrame:
+	wrapped = df.copy()
+	col_wrap_width = 15
+	idx_wrap_width = 35
+	wrapped.columns = [
+		textwrap.fill(str(c), width=col_wrap_width) for c in wrapped.columns
+	]
+	wrapped.index = [textwrap.fill(str(i), width=idx_wrap_width) for i in wrapped.index]
+	return wrapped
+
+
+def _style_heatmap_axes(ax, title: str, font_size: int = None) -> None:
+	ax.xaxis.tick_top()
+	ax.xaxis.set_label_position("top")
+	default_fontsize = font_size if font_size else 9
+	title_fontsize = font_size + 2 if font_size else 11
+	plt.xticks(rotation=0, fontsize=default_fontsize)
+	if font_size:
+		ax.set_yticklabels(
+			ax.get_yticklabels(), ha="right", rotation=0, fontsize=default_fontsize
+		)
+		ax.tick_params(axis="y", pad=20)
+	else:
+		ax.set_yticklabels(ax.get_yticklabels(), ha="left")
+		ax.tick_params(axis="y", pad=190)
+	ax.tick_params(left=False, top=False)
+	ax.set_xlabel("")
+	ax.set_ylabel("")
+	ax.set_title(title, fontsize=title_fontsize, pad=12)
+	plt.tight_layout()
+
+
+def plot_rejection_heatmap(
+	p_values: np.ndarray,
+	rejected: np.ndarray,
+	rownames: Iterable[str],
+	colnames: Iterable[str],
+	bonferroni_threshold: float,
+	output_path: Path,
+	save: bool = True,
+	font_size: int = None,
+) -> None:
+	"""Heatmap of p-values: black below Bonferroni threshold, YlOrRd above it."""
+	from matplotlib.colors import LinearSegmentedColormap, ListedColormap
+	import matplotlib.ticker as ticker
+
+	# Smart formatting: hide extreme values, automatic scientific notation for others
+	def format_pvalue(v):
+		if v > 0.99:  # Hide extreme high p-values (essentially 1)
+			return ""
+		else:
+			return f"{v:.3g}"
+
+	annot = np.vectorize(format_pvalue)(p_values)
+	df = pd.DataFrame(p_values, index=rownames, columns=colnames)
+	df = _wrap_labels(df)
+	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
+	n_rejected = int(rejected.sum())
+	title = (
+		f"Prueba de Wald - p-valores (Bonferroni alpha/d = {bonferroni_threshold:.3g})\n"
+		f"n rechazadas = {n_rejected} / {rejected.size} ({100 * n_rejected / rejected.size:.1f}%)"
+	)
+
+	n_black = 25
+	n_total = max(256, int(round(n_black / bonferroni_threshold)))
+	n_rest = n_total - n_black
+	base_cmap = plt.get_cmap("plasma", n_rest)
+	black_colours = np.tile([0.0, 0.0, 0.0, 1.0], (n_black, 1))
+	rest_colours = base_cmap(np.linspace(0, 1, n_rest))
+	all_colours = np.vstack([black_colours, rest_colours])
+	cmap = ListedColormap(all_colours)
+
+	default_fontsize = font_size if font_size else 11
+	fig, ax = plt.subplots(figsize=(16, 10))
+	sns.heatmap(
+		df,
+		ax=ax,
+		annot=annot_df,
+		fmt="",
+		cmap=cmap,
+		vmin=0,
+		vmax=1,
+		cbar=True,
+		cbar_kws={"shrink": 0.35, "label": "p-valor"},
+		annot_kws={"fontsize": default_fontsize},
+		alpha=0.9,
+	)
+	# Mark the Bonferroni threshold on the colorbar
+	cbar = ax.collections[0].colorbar
+	cbar.ax.axhline(
+		y=bonferroni_threshold, color="white", linewidth=1.5, linestyle="--"
+	)
+	cbar.ax.text(
+		1.05,
+		bonferroni_threshold,
+		f"{bonferroni_threshold:.2e}",
+		va="center",
+		ha="left",
+		fontsize=7,
+		transform=cbar.ax.transData,
+		color="dimgray",
+	)
+	_style_heatmap_axes(ax, title, font_size)
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_delta_heatmap(
+	delta_hat: np.ndarray,
+	rownames: Iterable[str],
+	colnames: Iterable[str],
+	output_path: Path,
+	save: bool = True,
+	font_size: int = None,
+) -> None:
+	"""Diverging heatmap showing delta_hat annotations in scientific notation."""
+
+	# Smart formatting: hide extreme values, automatic scientific notation for others
+	def format_delta(v):
+		if abs(v) < 0.0001:  # Hide essentially zero differences
+			return ""
+		else:
+			return f"{v:.3g}"
+
+	annot = np.vectorize(format_delta)(delta_hat)
+	df = pd.DataFrame(delta_hat, index=rownames, columns=colnames)
+	df = _wrap_labels(df)
+	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
+	abs_max = np.max(np.abs(delta_hat))
+	title = "Diferencia estimada delta = p(ENES 2019) - p(ESAyPP 2021)"
+	default_fontsize = font_size if font_size else 11
+	fig, ax = plt.subplots(figsize=(16, 10))
+	sns.heatmap(
+		df,
+		ax=ax,
+		annot=annot_df,
+		fmt="",
+		cmap="twilight_shifted",
+		vmin=-abs_max,
+		vmax=abs_max,
+		cbar=True,
+		cbar_kws={"shrink": 0.35, "label": "delta"},
+		annot_kws={"fontsize": default_fontsize},
+	)
+	_style_heatmap_axes(ax, title, font_size)
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_bootstrap_se_heatmap(
+	se_boot: np.ndarray,
+	rownames: Iterable[str],
+	colnames: Iterable[str],
+	output_path: Path,
+	save: bool = True,
+	font_size: int = None,
+) -> None:
+	"""Heatmap of bootstrap SE estimates (B=1000) for the delta proportions."""
+
+	# Smart formatting: hide extreme values, automatic scientific notation for others
+	def format_se(v):
+		if v < 0.00001:  # Hide essentially zero SE
+			return ""
+		else:
+			return f"{v:.3g}"
+
+	annot = np.vectorize(format_se)(se_boot)
+	df = pd.DataFrame(se_boot, index=rownames, columns=colnames)
+	df = _wrap_labels(df)
+	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
+	title = "Bootstrap SE de delta (B=1000)"
+	default_fontsize = font_size if font_size else 11
+	fig, ax = plt.subplots(figsize=(16, 10))
+	sns.heatmap(
+		df,
+		ax=ax,
+		annot=annot_df,
+		fmt="",
+		cmap="YlOrRd",
+		cbar=True,
+		cbar_kws={"shrink": 0.35, "label": "SE bootstrap"},
+		annot_kws={"fontsize": default_fontsize},
+	)
+	_style_heatmap_axes(ax, title, font_size)
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def draw_bipartite_by_color(
 	graph: nx.Graph,
 	color_map: Dict[int, str],
 	label_map: Dict[int, str] = None,
@@ -84,7 +349,6 @@ def fceyn_draw_bipartite_by_color(
 	factor_node_size: float = 3.0,
 	node_size_map: Mapping[int, float] = None,
 	node_size_exponent: float = 1.0,
-	show: bool | None = None,
 ) -> Dict[str, tuple]:
 	"""Draw the bipartite network with custom layout and return the positions.
 
@@ -110,34 +374,34 @@ def fceyn_draw_bipartite_by_color(
 	pos_caes_y = [
 		pos[node][1]
 		for node in graph.nodes()
-		if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("caes")
+		if graph.nodes[node].get("bipartite") == ut.get_class_index("caes")
 	]
 	pos_ciuo_y = [
 		pos[node][1]
 		for node in graph.nodes()
-		if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("ciuo")
+		if graph.nodes[node].get("bipartite") == ut.get_class_index("ciuo")
 	]
 
 	# Sigmoidal normalization functions
-	def fceyn_sigmoid(x):
-		return 1 / (1 + np.exp(-x))
-
-	def fceyn_normalize_caes_y(y):
-		return fceyn_sigmoid(2.5 * (y - np.mean(pos_caes_y)) / np.std(pos_caes_y))
-
-	def fceyn_normalize_ciuo_y(y):
-		return fceyn_sigmoid(2.5 * (y - np.mean(pos_ciuo_y)) / np.std(pos_ciuo_y))
+	sigmoid_ = lambda x: 1 / (1 + np.exp(-x))
+	normalize_caes_y = lambda y: sigmoid_(
+		2.5 * (y - np.mean(pos_caes_y)) / np.std(pos_caes_y)
+	)
+	normalize_ciuo_y = lambda y: sigmoid_(
+		2.5 * (y - np.mean(pos_ciuo_y)) / np.std(pos_ciuo_y)
+	)
 
 	# Adjust positions (shift axis x and normalize y)
 	for node in graph.nodes():
-		if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("caes"):
+		if graph.nodes[node].get("bipartite") == ut.get_class_index("caes"):
 			pos[node][0] -= shift_x
-			pos[node][1] = fceyn_normalize_caes_y(pos[node][1])
+			pos[node][1] = normalize_caes_y(pos[node][1])
 		else:
 			pos[node][0] += shift_x
-			pos[node][1] = fceyn_normalize_ciuo_y(pos[node][1])
+			pos[node][1] = normalize_ciuo_y(pos[node][1])
 
 	# Defining color and size maps
+	node_colors = [color_map.get(int(node), LIGTHGRAY) for node in graph.nodes()]
 	if node_size_map is not None:
 		raw_sizes = {
 			node: float(node_size_map.get(node, node_size_map.get(int(node), 1.0)))
@@ -156,12 +420,12 @@ def fceyn_draw_bipartite_by_color(
 	caes_nodes = [
 		node
 		for node in graph.nodes()
-		if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("caes")
+		if graph.nodes[node].get("bipartite") == ut.get_class_index("caes")
 	]
 	ciuo_nodes = [
 		node
 		for node in graph.nodes()
-		if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("ciuo")
+		if graph.nodes[node].get("bipartite") == ut.get_class_index("ciuo")
 	]
 
 	# Plotting
@@ -218,12 +482,12 @@ def fceyn_draw_bipartite_by_color(
 		top_nodes_caes = [
 			node
 			for node, _ in sorted_degrees
-			if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("caes")
+			if graph.nodes[node].get("bipartite") == ut.get_class_index("caes")
 		][:top_n]
 		top_nodes_ciuo = [
 			node
 			for node, _ in sorted_degrees
-			if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("ciuo")
+			if graph.nodes[node].get("bipartite") == ut.get_class_index("ciuo")
 		][:top_n]
 		label_map = {
 			node: label_map[node] if label_map and node in label_map else node
@@ -251,12 +515,12 @@ def fceyn_draw_bipartite_by_color(
 			node_id = int(node)
 			lbl = label_map.get(node_id, str(node_id))
 			color = color_map.get(node_id, LIGTHGRAY)
-			if graph.nodes[node].get("bipartite") == ut.fceyn_get_class_index("caes"):
+			if graph.nodes[node].get("bipartite") == ut.get_class_index("caes"):
 				caes_groups[lbl] = color
 			else:
 				ciuo_groups[lbl] = color
 
-	def fceyn_make_handles(groups, marker_shape="o"):
+	def _make_handles(groups, marker_shape="o"):
 		ms = float(legend_marker_size) if legend_marker_size is not None else 11.0
 		return [
 			plt.Line2D(
@@ -274,7 +538,7 @@ def fceyn_draw_bipartite_by_color(
 
 	if caes_groups:
 		leg_l = plt.legend(
-			handles=fceyn_make_handles(caes_groups, marker_shape="^"),
+			handles=_make_handles(caes_groups, marker_shape="^"),
 			title="Ramas de actividad (CAES)",
 			loc="upper left",
 			bbox_to_anchor=(0.0, 1.0),
@@ -289,7 +553,7 @@ def fceyn_draw_bipartite_by_color(
 		plt.gca().add_artist(leg_l)
 	if ciuo_groups:
 		plt.legend(
-			handles=fceyn_make_handles(ciuo_groups, marker_shape="o"),
+			handles=_make_handles(ciuo_groups, marker_shape="o"),
 			title="Ocupaciones (CIUO)",
 			loc="upper right",
 			bbox_to_anchor=(1.0, 1.0),
@@ -309,12 +573,12 @@ def fceyn_draw_bipartite_by_color(
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
-	elif show is None or show:
+	else:
 		plt.show()
 	return pos
 
 
-def fceyn_draw_bipartite_normal_layout_by_color(
+def draw_bipartite_normal_layout_by_color(
 	graph: nx.Graph,
 	color_map: Dict[int, str],
 	label_map: Dict[int, str] = None,
@@ -327,7 +591,6 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 	node_scale: float = 8.0,
 	edge_alpha: float = 0.35,
 	edge_lw: float = 0.15,
-	show: bool | None = None,
 ) -> Dict[str, tuple]:
 	"""Draw the bipartite network with nodes sorted by group to minimise edge crossings."""
 	import matplotlib.patches as mpatches
@@ -339,8 +602,8 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 		"Graph contains nodes not present in label map."
 	)
 
-	caes_idx = ut.fceyn_get_class_index("caes")
-	ciuo_idx = ut.fceyn_get_class_index("ciuo")
+	caes_idx = ut.get_class_index("caes")
+	ciuo_idx = ut.get_class_index("ciuo")
 
 	caes_nodes = [
 		n for n in graph.nodes() if graph.nodes[n].get("bipartite") == caes_idx
@@ -351,20 +614,18 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 
 	# Sort each partition by group label so same-colored nodes are contiguous,
 	# which dramatically reduces edge crossings.
-	def fceyn_group_key(n):
-		return label_map.get(int(n), str(n)) if label_map else str(n)
+	group_key = lambda n: label_map.get(int(n), str(n)) if label_map else str(n)
+	caes_nodes = sorted(caes_nodes, key=group_key)
+	ciuo_nodes = sorted(ciuo_nodes, key=group_key)
 
-	caes_nodes = sorted(caes_nodes, key=fceyn_group_key)
-	ciuo_nodes = sorted(ciuo_nodes, key=fceyn_group_key)
-
-	def fceyn_linear_positions(nodes, x):
+	def _linear_positions(nodes, x):
 		n = len(nodes)
 		ys = np.linspace(1.0, -1.0, n) if n > 1 else [0.0]
 		return {node: np.array([x, y]) for node, y in zip(nodes, ys)}
 
 	pos = {}
-	pos.update(fceyn_linear_positions(caes_nodes, -1.0))
-	pos.update(fceyn_linear_positions(ciuo_nodes, 1.0))
+	pos.update(_linear_positions(caes_nodes, -1.0))
+	pos.update(_linear_positions(ciuo_nodes, 1.0))
 
 	fig, ax = plt.subplots(figsize=figsize)
 	ax.set_aspect("auto")
@@ -390,8 +651,8 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 		color_u = color_map.get(int(u), LIGTHGRAY)
 		color_v = color_map.get(int(v), LIGTHGRAY)
 		w = graph[u][v].get("weight", 1.0)
-		alpha = fceyn_edge_alpha_from_weight(w, max_weight, alpha_max=edge_alpha)
-		edge_color = fceyn_edge_rgba_from_node_colors(color_u, color_v, alpha)
+		alpha = _edge_alpha_from_weight(w, max_weight, alpha_max=edge_alpha)
+		edge_color = _edge_rgba_from_node_colors(color_u, color_v, alpha)
 		ax.add_patch(
 			patches.PathPatch(
 				path,
@@ -423,7 +684,7 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 			else:
 				ciuo_groups[lbl] = c
 
-	def fceyn_make_handles(groups):
+	def _make_handles(groups):
 		return [
 			mpatches.Patch(facecolor=c, label=textwrap.fill(lbl, 28), linewidth=0)
 			for lbl, c in sorted(groups.items())
@@ -431,7 +692,7 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 
 	if caes_groups:
 		leg_l = ax.legend(
-			handles=fceyn_make_handles(caes_groups),
+			handles=_make_handles(caes_groups),
 			title="Ramas economicas\n(CAES)",
 			loc="upper left",
 			bbox_to_anchor=(0.0, 1.0),
@@ -446,7 +707,7 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 		ax.add_artist(leg_l)
 	if ciuo_groups:
 		ax.legend(
-			handles=fceyn_make_handles(ciuo_groups),
+			handles=_make_handles(ciuo_groups),
 			title="Ocupaciones\n(CIUO)",
 			loc="upper right",
 			bbox_to_anchor=(1.0, 1.0),
@@ -465,12 +726,92 @@ def fceyn_draw_bipartite_normal_layout_by_color(
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
-	elif show is None or show:
+	else:
 		plt.show()
 	return pos
 
 
-def fceyn_plot_projection_by_group(
+def plot_degree_histogram(
+	degrees: Iterable,
+	color: str,
+	title: str,
+	output_path: Path = None,
+	save: bool = False,
+	ax: plt.Axes = None,
+	logscale: bool = False,
+	is_discrete: bool = True,
+) -> None:
+	"""Plot degree distribution as scatter plot for discrete data or histogram for continuous data."""
+	created_fig = ax is None
+	if created_fig:
+		fig, ax = plt.subplots(figsize=(6, 5))
+
+	degrees_array = np.array(list(degrees))
+
+	# Use scatter plot for discrete data (few unique values), histogram for continuous
+	if logscale:
+		ax.set_xscale("log")
+		ax.set_yscale("log")
+
+	if is_discrete:
+		# Count frequency of each degree value and plot as scatter
+		degree_counts = pd.Series(degrees_array).value_counts().sort_index()
+		sns.scatterplot(
+			x=degree_counts.index,
+			y=degree_counts.values,
+			color=color,
+			s=50,
+			alpha=0.7,
+			ax=ax,
+		)
+		if not logscale:
+			ax.set_ylim(-0.05 * degree_counts.max(), degree_counts.max() * 1.05)
+	else:
+		# Use seaborn histogram for continuous data
+		sns.histplot(degrees_array, color=color, alpha=0.5, ax=ax)
+		if not logscale:
+			ylim_max = max(ax.get_ylim()[1], 1) * 1.05
+			ax.set_ylim(-0.05 * ylim_max, ylim_max)
+
+	ax.set_xlabel("k")
+	ax.set_ylabel("Frecuencia")
+	ax.set_title(f"{title}\n<k> = {np.mean(degrees_array):.2f}")
+	ax.grid(True, alpha=0.3)
+
+	if created_fig:  # only do tight_layout if we created the figure
+		plt.tight_layout()
+		if save and output_path is not None:
+			plt.savefig(output_path, bbox_inches="tight")
+			plt.close()
+		else:
+			plt.show()
+
+
+def plot_degree_histograms(
+	degrees: Dict[str, list],
+	colors: Dict[str, str],
+	output_path: Path = None,
+	save: bool = True,
+	logscale: bool = False,
+) -> None:
+	"""Plot degree histograms for all nodes, CAES nodes, and CIUO nodes."""
+	fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+	configs = [
+		(degrees["all"], colors["all"], "Grados (todos los nodos)"),
+		(degrees["caes"], colors["caes"], "Grados CAES"),
+		(degrees["ciuo"], colors["ciuo"], "Grados CIUO"),
+	]
+	for i, (values, color, title) in enumerate(configs):
+		plot_degree_histogram(values, color, title, ax=axes[i], logscale=logscale)
+	plt.tight_layout()
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_projection_by_group(
 	graph: nx.Graph,
 	group_map: Mapping[str, str],
 	group_color_map: Mapping[str, str],
@@ -492,7 +833,6 @@ def fceyn_plot_projection_by_group(
 	method: str = "auto",
 	edge_alpha: float = 0.1,
 	node_alpha: float = 0.5,
-	show: bool | None = None,
 ) -> dict:
 	"""
 	Plot the graph with nodes colored by their group.
@@ -565,7 +905,7 @@ def fceyn_plot_projection_by_group(
 			max_weight = max(weights) if max(weights) > 0 else 1.0
 			edge_widths = [0.1 + 1.9 * (w / max_weight) for w in weights]
 			edge_alphas = [
-				fceyn_edge_alpha_from_weight(w, max_weight, alpha_max=edge_alpha)
+				_edge_alpha_from_weight(w, max_weight, alpha_max=edge_alpha)
 				for w in weights
 			]
 		else:
@@ -581,14 +921,14 @@ def fceyn_plot_projection_by_group(
 	if len(edges) > 0:
 		if isinstance(edge_alphas, list):
 			edge_colors = [
-				fceyn_edge_rgba_from_node_colors(
+				_edge_rgba_from_node_colors(
 					node_color_by_node[u], node_color_by_node[v], a
 				)
 				for (u, v), a in zip(edges, edge_alphas)
 			]
 		else:
 			edge_colors = [
-				fceyn_edge_rgba_from_node_colors(
+				_edge_rgba_from_node_colors(
 					node_color_by_node[u], node_color_by_node[v], edge_alphas
 				)
 				for u, v in edges
@@ -620,12 +960,12 @@ def fceyn_plot_projection_by_group(
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
-	elif show is None or show:
+	else:
 		plt.show()
 	return pos
 
 
-def fceyn_plot_projection_gradient(
+def plot_projection_gradient(
 	graph: nx.Graph,
 	pos: dict,
 	node_values: dict,
@@ -643,13 +983,12 @@ def fceyn_plot_projection_gradient(
 	node_size_exponent: float = 1.0,
 	edge_alpha: float = 0.1,
 	node_alpha: float = 0.5,
-	show: bool | None = None,
 ):
 	"""Plot the projection network with nodes colored by a continuous scalar gradient.
 
 	Parameters:
 	- graph: NetworkX graph to plot.
-	- pos: Precomputed node positions (from fceyn_plot_projection_by_group).
+	- pos: Precomputed node positions (from plot_projection_by_group).
 	- node_values: Mapping from node id to float scalar (nodes missing from the map get gray).
 	- title: Plot title.
 	- colorbar_label: Label shown on the colorbar.
@@ -695,7 +1034,7 @@ def fceyn_plot_projection_gradient(
 			max_weight = max(weights) if max(weights) > 0 else 1.0
 			edge_widths = [0.1 + 1.9 * (w / max_weight) for w in weights]
 			edge_alphas = [
-				fceyn_edge_alpha_from_weight(w, max_weight, alpha_max=edge_alpha)
+				_edge_alpha_from_weight(w, max_weight, alpha_max=edge_alpha)
 				for w in weights
 			]
 		else:
@@ -715,7 +1054,7 @@ def fceyn_plot_projection_gradient(
 	if len(edges) > 0:
 		if isinstance(edge_alphas, list):
 			edge_colors = [
-				fceyn_edge_rgba_from_node_colors(
+				_edge_rgba_from_node_colors(
 					node_color_by_node.get(u, "lightgray"),
 					node_color_by_node.get(v, "lightgray"),
 					a,
@@ -724,7 +1063,7 @@ def fceyn_plot_projection_gradient(
 			]
 		else:
 			edge_colors = [
-				fceyn_edge_rgba_from_node_colors(
+				_edge_rgba_from_node_colors(
 					node_color_by_node.get(u, "lightgray"),
 					node_color_by_node.get(v, "lightgray"),
 					edge_alphas,
@@ -752,11 +1091,250 @@ def fceyn_plot_projection_gradient(
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
-	elif show is None or show:
+	else:
 		plt.show()
 
 
-def fceyn_color_map_caes(caes_nodes: Iterable[str]) -> Dict[int, str]:
+def plot_stacked_by_group(
+	df_index: pd.DataFrame,
+	group_col: str,
+	community_map: Dict[int, int],
+	title: str,
+	output_path: Path,
+	group_color_map: Dict[str, tuple] = None,
+	legend_title: str = None,
+	figsize: tuple = (16, 4),
+	font_size: int = 11,
+	save: bool = True,
+	percentage: bool = True,
+) -> None:
+	"""Plot stacked bar chart showing distribution of groups within communities."""
+	df_index_copy = df_index.copy()
+	df_index_copy["community"] = df_index_copy.index.map(community_map)
+	df_index_copy = df_index_copy.dropna(subset=["community"])
+	df_index_copy["community"] = df_index_copy["community"].astype(int)
+
+	# Create crosstab and normalize if needed
+	if percentage:
+		ct = (
+			pd.crosstab(
+				df_index_copy["community"], df_index_copy[group_col], normalize="index"
+			)
+			* 100
+		)
+	else:
+		ct = pd.crosstab(df_index_copy["community"], df_index_copy[group_col])
+
+	# Build color list matching the column order
+	if group_color_map:
+		colors = [group_color_map.get(col, "gray") for col in ct.columns]
+		ax = ct.plot(
+			kind="barh", stacked=True, figsize=figsize, width=0.8, color=colors
+		)
+	else:
+		ax = ct.plot(kind="barh", stacked=True, figsize=figsize, width=0.8)
+
+	ax.set_xlabel("Porcentaje (%)" if percentage else "Conteo", fontsize=font_size)
+	ax.set_title(title, fontsize=font_size + 1)
+	ax.tick_params(axis="both", labelsize=font_size - 1)
+	ax.set_xlim(0, 100 if percentage else None)
+	legend_title = legend_title or group_col
+	ax.legend(
+		title=legend_title,
+		bbox_to_anchor=(1.05, 1),
+		loc="upper left",
+		fontsize=font_size - 2,
+		title_fontsize=font_size,
+	)
+
+	# Format y-axis labels as C0, C1, ...
+	yticks = ax.get_yticks()
+	ax.set_yticklabels([f"C{int(y)}" for y in yticks])
+
+	# Remove axis borders
+	ax.spines["top"].set_visible(False)
+	ax.spines["right"].set_visible(False)
+	ax.spines["left"].set_visible(False)
+	ax.spines["bottom"].set_visible(False)
+
+	plt.tight_layout()
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_distance_histogram(
+	distance_matrix: np.ndarray,
+	output_path: Path = None,
+	bins: int = 30,
+	title: str = "Histograma de distancias",
+	include_infinite: bool = True,
+	save: bool = True,
+) -> None:
+	"""Plot histogram of finite distances from a distance matrix."""
+	values = np.asarray(distance_matrix, dtype=float).ravel()
+	finite = values[np.isfinite(values) & (values > 0)]
+	inf_count = np.isinf(values).sum()
+
+	plt.figure(figsize=(8, 5))
+	counts, bin_edges, _ = plt.hist(finite, bins=bins, alpha=0.8, color="steelblue")
+	if include_infinite and inf_count > 0:
+		bin_width = bin_edges[1] - bin_edges[0] if len(bin_edges) > 1 else 1.0
+		inf_x = bin_edges[-1] + bin_width
+		plt.bar([inf_x], [inf_count], width=bin_width * 0.8, color="tomato", alpha=0.8)
+		plt.xticks(list(plt.xticks()[0]) + [inf_x], list(plt.xticks()[0]) + ["inf"])
+	plt.xlabel("Distancia")
+	plt.ylabel("Frecuencia")
+	plt.title(f"{title}\nfinito={len(finite)} | inf={inf_count}")
+	plt.grid(True, alpha=0.3)
+	plt.tight_layout()
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_distance_heatmap(
+	distance_matrix: np.ndarray,
+	output_path: Path = None,
+	title: str = "Matriz de distancias",
+	labels: Iterable[str] = None,
+	save: bool = True,
+) -> None:
+	"""Plot heatmap for a distance matrix (infinite distances are masked)."""
+	data = np.asarray(distance_matrix, dtype=float).copy()
+	data[np.isinf(data)] = np.nan
+	mask = np.isnan(data)
+
+	plt.figure(figsize=(10, 8))
+	ax = sns.heatmap(data, cmap="mako", mask=mask, cbar=True)
+	if labels:
+		ax.set_xticks(np.arange(len(labels)) + 0.5)
+		ax.set_yticks(np.arange(len(labels)) + 0.5)
+		ax.set_xticklabels(
+			[f"{i:02d}" for i in range(len(labels))],
+			rotation=45,
+			ha="right",
+			fontsize=6,
+		)
+		ax.set_yticklabels(
+			[f"{i:02d}" for i in range(len(labels))], rotation=0, fontsize=6
+		)
+		ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=6)
+		ax.set_yticklabels(labels, rotation=0, fontsize=6)
+	else:
+		ax.set_xticks([])
+		ax.set_yticks([])
+	plt.title(title)
+	plt.tight_layout()
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_backbone_weight_histogram(
+	original_weights: list,
+	backbone_weights: list,
+	alpha: float,
+	title_prefix: str,
+	output_path: Path,
+	save: bool = True,
+) -> None:
+	"""Plot overlapped histograms comparing original and backbone edge weights."""
+	fig, ax = plt.subplots(figsize=(10, 6))
+
+	sns.histplot(
+		original_weights,
+		bins=50,
+		kde=True,
+		ax=ax,
+		color="steelblue",
+		alpha=0.3,
+		label=f"Original ({len(original_weights)} aristas)",
+	)
+	sns.histplot(
+		backbone_weights,
+		bins=50,
+		kde=True,
+		ax=ax,
+		color="coral",
+		alpha=0.3,
+		label=f"Esqueleto ({len(backbone_weights)} aristas)",
+	)
+
+	ax.set_title(
+		f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (alpha={alpha})"
+	)
+	ax.set_xlabel("Peso de arista")
+	ax.set_ylabel("Frecuencia")
+	ax.set_yscale("log")
+	ax.set_ylim(bottom=1e-1)
+	ax.legend()
+
+	plt.tight_layout()
+	if save:
+		plt.savefig(output_path, dpi=300, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_persistence_diagrams(
+	diagrams,
+	title: str = "Persistence Diagrams",
+	output_path: Path = None,
+	save: bool = True,
+):
+	"""Plot persistence diagrams."""
+	if plot_diagrams is None:
+		raise ImportError("persim is required for plot_persistence_diagrams.")
+
+	plt.figure(figsize=(8, 6))
+	plot_diagrams(diagrams, show=False)
+	plt.title(title)
+	if save:
+		plt.savefig(output_path)
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_persistence_barcodes(
+	diagrams,
+	title: str = "Persistence Barcodes",
+	output_path: Path = None,
+	save: bool = True,
+) -> None:
+	"""Plot persistence barcodes using GUDHI."""
+	if gudhi is None:
+		raise ImportError("gudhi is required for plot_persistence_barcodes.")
+
+	gudhi_diagrams = []
+	for dim, dgm in enumerate(diagrams):
+		if len(dgm) == 0:
+			continue
+		for birth, death in dgm:
+			gudhi_diagrams.append((dim, (float(birth), float(death))))
+
+	plt.figure(figsize=(8, 6))
+	gudhi.plot_persistence_barcode(gudhi_diagrams)
+	plt.title(title)
+	if save:
+		plt.savefig(output_path)
+		plt.close()
+	else:
+		plt.show()
+
+
+import matplotlib as mpl
+
+
+def color_map_caes(caes_nodes: Iterable[str]) -> Dict[int, str]:
 	"""Create a color map for CAES nodes based on their group."""
 	cmap = mpl.colormaps["Accent"]
 	x = np.linspace(
@@ -766,12 +1344,12 @@ def fceyn_color_map_caes(caes_nodes: Iterable[str]) -> Dict[int, str]:
 	return {node: cmap(x[node]) for node in caes_nodes}
 
 
-def fceyn_color_map_ciuo(ciuo_nodes: Iterable[str], max_caes_id: int) -> Dict[int, str]:
+def color_map_ciuo(ciuo_nodes: Iterable[str], max_caes_id: int) -> Dict[int, str]:
 	"""Create a color map for CIUO nodes based on their group."""
 	cmap = mpl.colormaps["inferno"]
 	# Mapping from input node (desambiated) to original ID
 	node_to_original = {
-		node: ut.fceyn_original_ciuo_id(int(node), max_caes_id=max_caes_id)
+		node: ut.original_ciuo_id(int(node), max_caes_id=max_caes_id)
 		for node in ciuo_nodes
 	}
 	original_ids = list(node_to_original.values())
@@ -784,40 +1362,214 @@ def fceyn_color_map_ciuo(ciuo_nodes: Iterable[str], max_caes_id: int) -> Dict[in
 	return {node: cmap(x[orig_id]) for node, orig_id in node_to_original.items()}
 
 
-def fceyn_mean_color(colors):
+def mean_color(colors):
 	colors_array = np.array([list(c) for c in colors])
 	return tuple(colors_array.mean(axis=0))
 
 
-def fceyn_color_letra_map_caes(
+def color_letra_map_caes(
 	caes_df: pd.DataFrame, letra_col: str, base_color_col: str
 ) -> Dict[str, str]:
 	"""Create a color map for CAES letra based on their group."""
-	return caes_df.groupby(letra_col)[base_color_col].apply(fceyn_mean_color).to_dict()
+	return caes_df.groupby(letra_col)[base_color_col].apply(mean_color).to_dict()
 
 
-def fceyn_color_1digit_map_ciuo(
+def color_1digit_map_ciuo(
 	ciuo_df: pd.DataFrame, letra_col: str, base_color_col: str
 ) -> Dict[str, str]:
 	"""Create a color map for CIUO letra based on their group."""
-	return ciuo_df.groupby(letra_col)[base_color_col].apply(fceyn_mean_color).to_dict()
+	return ciuo_df.groupby(letra_col)[base_color_col].apply(mean_color).to_dict()
 
 
-def fceyn_color_agrupation_map_caes(
+def color_agrupation_map_caes(
 	caes_df: pd.DataFrame, ag_col: str, base_color_col: str
 ) -> Dict[str, str]:
 	"""Create a color map for CAES agrupation based on their group."""
-	return caes_df.groupby(ag_col)[base_color_col].apply(fceyn_mean_color).to_dict()
+	return caes_df.groupby(ag_col)[base_color_col].apply(mean_color).to_dict()
 
 
-def fceyn_color_ciuo3cat_map_ciuo(
+def color_ciuo3cat_map_ciuo(
 	ciuo_df: pd.DataFrame, cat_col: str, base_color_col: str
 ) -> Dict[str, str]:
 	"""Create a color map for CIUO 3-category based on their group."""
-	return ciuo_df.groupby(cat_col)[base_color_col].apply(fceyn_mean_color).to_dict()
+	return ciuo_df.groupby(cat_col)[base_color_col].apply(mean_color).to_dict()
 
 
-def fceyn_plot_alpha_sensitivity(
+def plot_top_n_bar(
+	df: pd.DataFrame,
+	label_col: str,
+	val_col: str,
+	color_col: str,
+	title: str,
+	xlabel: str,
+	top_n: int = 15,
+	figsize: tuple = (12, 8),
+	font_size: int = 11,
+	output_path: Path = None,
+	save: bool = True,
+) -> None:
+	if val_col not in df.columns or label_col not in df.columns:
+		return
+	top_df = df.nlargest(top_n, val_col)
+
+	palette_by_label = {}
+	for _, row in top_df.iterrows():
+		label = row[label_col]
+		if color_col in top_df.columns:
+			palette_by_label[label] = ut.parse_color(row[color_col])
+		else:
+			palette_by_label[label] = "steelblue"
+
+	plt.figure(figsize=figsize)
+	ax = sns.barplot(
+		data=top_df,
+		x=val_col,
+		y=label_col,
+		hue=label_col,
+		dodge=False,
+		palette=palette_by_label,
+		legend=False,
+	)
+	plt.title(title, fontsize=font_size + 1)
+	plt.xlabel(xlabel, fontsize=font_size)
+	plt.ylabel("", fontsize=font_size)
+	ax.tick_params(axis="both", labelsize=font_size - 1)
+
+	ax.xaxis.set_major_formatter(
+		plt.FuncFormatter(lambda x, loc: "{:,}".format(int(x)))
+	)
+
+	# Remove axis borders
+	ax.spines["top"].set_visible(False)
+	ax.spines["right"].set_visible(False)
+	ax.spines["left"].set_visible(False)
+	ax.spines["bottom"].set_visible(False)
+
+	plt.tight_layout()
+	if save:
+		plt.savefig(output_path, dpi=300, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
+def plot_exploratory_analysis(
+	caes_nodes: pd.DataFrame, ciuo_nodes: pd.DataFrame, output_dir: Path
+) -> None:
+	"""Generate exploratory data analysis plots for node characteristics."""
+	output_dir.mkdir(parents=True, exist_ok=True)
+
+	def plot_scatter(
+		x_col, y_col, xlabel, ylabel, filename, hue_col=None, hue_label=None
+	):
+		fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+
+		if x_col in caes_nodes.columns and y_col in caes_nodes.columns:
+			kwargs = {
+				"data": caes_nodes,
+				"x": x_col,
+				"y": y_col,
+				"ax": axes[0],
+				"alpha": 0.7,
+			}
+			if "n_obs" in caes_nodes.columns:
+				caes_nodes["n_obs"] = caes_nodes["n_obs"].astype(float)
+				kwargs["size"] = "n_obs"
+				kwargs["sizes"] = (20, 500)
+			if hue_col and hue_col in caes_nodes.columns:
+				kwargs["hue"] = hue_col
+				kwargs["palette"] = "viridis"
+
+			sns.scatterplot(**kwargs)
+			axes[0].set_title("Economic Branches (CAES)")
+			axes[0].set_xlabel(xlabel)
+			axes[0].set_ylabel(ylabel)
+			if hue_col and hue_col in caes_nodes.columns and axes[0].get_legend():
+				axes[0].legend(
+					title=hue_label, bbox_to_anchor=(1.05, 1), loc="upper left"
+				)
+			elif "n_obs" in caes_nodes.columns and axes[0].get_legend():
+				axes[0].legend(
+					title="Total Workers", bbox_to_anchor=(1.05, 1), loc="upper left"
+				)
+
+		if x_col in ciuo_nodes.columns and y_col in ciuo_nodes.columns:
+			kwargs = {
+				"data": ciuo_nodes,
+				"x": x_col,
+				"y": y_col,
+				"ax": axes[1],
+				"alpha": 0.7,
+			}
+			if "n_obs" in ciuo_nodes.columns:
+				ciuo_nodes["n_obs"] = ciuo_nodes["n_obs"].astype(float)
+				kwargs["size"] = "n_obs"
+				kwargs["sizes"] = (20, 500)
+			if hue_col and hue_col in ciuo_nodes.columns:
+				kwargs["hue"] = hue_col
+				kwargs["palette"] = "viridis"
+
+			sns.scatterplot(**kwargs)
+			axes[1].set_title("Occupations (CIUO)")
+			axes[1].set_xlabel(xlabel)
+			axes[1].set_ylabel(ylabel)
+			if hue_col and hue_col in ciuo_nodes.columns and axes[1].get_legend():
+				axes[1].legend(
+					title=hue_label, bbox_to_anchor=(1.05, 1), loc="upper left"
+				)
+			elif "n_obs" in ciuo_nodes.columns and axes[1].get_legend():
+				axes[1].legend(
+					title="Total Workers", bbox_to_anchor=(1.05, 1), loc="upper left"
+				)
+
+		plt.tight_layout()
+		plt.savefig(output_dir / filename, bbox_inches="tight")
+		plt.close()
+
+	plot_scatter(
+		"higher_education_pct",
+		"income_median",
+		"% Higher Education",
+		"Median Income",
+		"00_income_vs_education.png",
+		hue_col="female_pct",
+		hue_label="% Female",
+	)
+	plot_scatter(
+		"female_pct",
+		"income_median",
+		"% Female Workers",
+		"Median Income",
+		"00_income_vs_gender.png",
+		hue_col="higher_education_pct",
+		hue_label="% Higher Ed",
+	)
+	plot_scatter(
+		"age_median",
+		"income_median",
+		"Median Age",
+		"Median Income",
+		"00_age_vs_income.png",
+		hue_col="salaried_pct",
+		hue_label="% Salaried",
+	)
+
+	for df in [caes_nodes, ciuo_nodes]:
+		if "income_q3" in df.columns and "income_q1" in df.columns:
+			df["income_iqr"] = df["income_q3"] - df["income_q1"]
+
+	plot_scatter(
+		"income_median",
+		"income_iqr",
+		"Median Income",
+		"Income IQR (Q3 - Q1)",
+		"00_income_inequality.png",
+		hue_col="higher_education_pct",
+		hue_label="% Higher Ed",
+	)
+
+
+def plot_alpha_sensitivity(
 	alphas: np.ndarray,
 	nodes_with_edges: np.ndarray,
 	edge_counts: np.ndarray,
@@ -829,7 +1581,6 @@ def fceyn_plot_alpha_sensitivity(
 	reference_alpha: float = 0.05,
 	save: bool = True,
 	logscale: bool = True,
-	show: bool | None = None,
 ) -> None:
 	"""Plot backbone sensitivity to alpha: relative nodes-with-edges and edge fraction on
 	the left y-axis; clustering coefficient and (optionally) modularity on the right y-axis.
@@ -923,11 +1674,14 @@ def fceyn_plot_alpha_sensitivity(
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
-	elif show is None or show:
+	else:
 		plt.show()
 
 
-def fceyn_compute_and_plot_edge_correlation(
+from scipy import stats
+
+
+def compute_and_plot_edge_correlation(
 	G: nx.Graph,
 	feature_map: dict,
 	color_map: dict,
@@ -943,7 +1697,6 @@ def fceyn_compute_and_plot_edge_correlation(
 	perfect_line: bool = True,
 	figsize: tuple = (9, 8),
 	font_size: int = 11,
-	show: bool | None = None,
 ) -> None:
 	# Only keep nodes that have the feature
 	valid_nodes = set(feature_map.keys())
@@ -985,7 +1738,7 @@ def fceyn_compute_and_plot_edge_correlation(
 	highlight_set = set(highlight_communities) if highlight_communities else None
 	raw_node_sizes = node_size_map or {}
 
-	def fceyn_node_color(node_id: int) -> str:
+	def _node_color(node_id: int) -> str:
 		if highlight_set and community_map is not None:
 			community = community_map.get(node_id)
 			if community in highlight_set:
@@ -1009,7 +1762,7 @@ def fceyn_compute_and_plot_edge_correlation(
 		y=y_vals,
 		s=node_sizes,
 		alpha=0.7,
-		c=[fceyn_node_color(u) for u in plotted_nodes],
+		c=[_node_color(u) for u in plotted_nodes],
 		edgecolor="white",
 		linewidth=0.5,
 	)
@@ -1084,25 +1837,5 @@ def fceyn_compute_and_plot_edge_correlation(
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
-	elif show is None or show:
+	else:
 		plt.show()
-
-
-def fceyn_plot_bipartite_layout_by_groups(*args, **kwargs):
-	"""Placeholder for bipartite layout plotting."""
-	return plt.figure()
-
-
-def fceyn_plot_bipartite_degree_distribution(*args, **kwargs):
-	"""Placeholder for bipartite degree distribution plotting."""
-	return plt.figure()
-
-
-def fceyn_plot_projection_by_groups(*args, **kwargs):
-	"""Placeholder for projection-by-groups plotting."""
-	return plt.figure()
-
-
-def fceyn_plot_edge_weight_correlation(*args, **kwargs):
-	"""Placeholder for edge-weight correlation plotting."""
-	return plt.figure()

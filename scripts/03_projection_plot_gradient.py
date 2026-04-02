@@ -1,5 +1,4 @@
-from snakemake.script import snakemake
-from src import fceyn_plot_projection_gradient
+from scripts import *
 import networkx as nx
 
 

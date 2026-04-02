@@ -1,6 +1,7 @@
-from snakemake.script import snakemake
-from src import fceyn_plot_biadjacency_heatmap
+from scripts import *
 import pandas as pd
+
+snakemake: any
 
 
 def main() -> None:

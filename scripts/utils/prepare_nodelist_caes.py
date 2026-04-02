@@ -1,9 +1,4 @@
-import os
-import sys
-
-sys.path.insert(0, os.getcwd())
-
-from src import fceyn_attach_group_characteristics, fceyn_compute_group_characteristics
+from scripts import *
 import pandas as pd
 
 

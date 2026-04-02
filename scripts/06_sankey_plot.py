@@ -1,5 +1,4 @@
-from snakemake.script import snakemake
-from src import fceyn_plot_sankey
+from scripts import *
 import pandas as pd
 
 

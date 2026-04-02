@@ -3,13 +3,20 @@ Data loading and cleaning utilities for the ENES occupational network analysis.
 """
 
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple
 import src.utils as ut
 import pandas as pd
-from src import *
+from src.plotting import (
+	color_map_caes,
+	color_map_ciuo,
+	color_letra_map_caes,
+	color_1digit_map_ciuo,
+	color_agrupation_map_caes,
+	color_ciuo3cat_map_ciuo,
+)
 
 
-def fceyn_load_enes_base(
+def load_enes_base(
 	enes_path: Path, caes_id: str, ciuo_id: str, max_caes_id: int
 ) -> pd.DataFrame:
 	"""Load and clean the base ENES data (person-level responses)."""
@@ -26,14 +33,14 @@ def fceyn_load_enes_base(
 	enes_df[caes_id] = enes_df[caes_id].astype(int)
 	enes_df[ciuo_id] = enes_df[ciuo_id].astype(int)
 
-	enes_df[caes_id] = enes_df[caes_id].apply(lambda x: ut.fun_desambiated_caes_id(x))
+	enes_df[caes_id] = enes_df[caes_id].apply(lambda x: ut.desambiated_caes_id(x))
 	enes_df[ciuo_id] = enes_df[ciuo_id].apply(
-		lambda x: ut.fun_desambiated_ciuo_id(x, max_caes_id)
+		lambda x: ut.desambiated_ciuo_id(x, max_caes_id)
 	)
 	return enes_df
 
 
-def fceyn_load_nodelist_caes(
+def load_nodelist_caes(
 	caes_path: Path,
 	caes_id: str,
 	caes_letra_col: str,
@@ -45,26 +52,26 @@ def fceyn_load_nodelist_caes(
 	"""Load CAES node metadata and normalize labels."""
 	caes_df = pd.read_csv(caes_path)
 	caes_df[caes_id] = caes_df[caes_id].astype(int)
-	caes_df[caes_id] = caes_df[caes_id].apply(lambda x: ut.fun_desambiated_caes_id(x))
+	caes_df[caes_id] = caes_df[caes_id].apply(lambda x: ut.desambiated_caes_id(x))
 	caes_df = caes_df.set_index(caes_id)
 	caes_df[caes_letra_col] = caes_df[caes_letra_col].apply(lambda x: x.split(";")[0])
 
-	color_map = fceyn_color_map_caes(caes_df.index.to_list())
+	color_map = color_map_caes(caes_df.index.to_list())
 	caes_df[caes_label_color_col] = caes_df.index.map(color_map)
 
-	color_map = fceyn_color_letra_map_caes(
+	color_map = color_letra_map_caes(
 		caes_df, letra_col=caes_letra_col, base_color_col=caes_label_color_col
 	)
 	caes_df[caes_letra_color_col] = caes_df[caes_letra_col].map(color_map)
 
-	color_map = fceyn_color_agrupation_map_caes(
+	color_map = color_agrupation_map_caes(
 		caes_df, ag_col=caes_ag_col, base_color_col=caes_letra_color_col
 	)
 	caes_df[caes_ag_color_col] = caes_df[caes_ag_col].map(color_map)
 	return caes_df
 
 
-def fceyn_load_nodelist_ciuo(
+def load_nodelist_ciuo(
 	ciuo_path: Path,
 	ciuo_id: str,
 	max_caes_id: int,
@@ -78,26 +85,26 @@ def fceyn_load_nodelist_ciuo(
 	ciuo_df = pd.read_csv(ciuo_path)
 	ciuo_df[ciuo_id] = ciuo_df[ciuo_id].astype(int)
 	ciuo_df[ciuo_id] = ciuo_df[ciuo_id].apply(
-		lambda x: ut.fun_desambiated_ciuo_id(x, max_caes_id)
+		lambda x: ut.desambiated_ciuo_id(x, max_caes_id)
 	)
 	ciuo_df = ciuo_df.set_index(ciuo_id)
 
-	color_map = fceyn_color_map_ciuo(ciuo_df.index.to_list(), max_caes_id=max_caes_id)
+	color_map = color_map_ciuo(ciuo_df.index.to_list(), max_caes_id=max_caes_id)
 	ciuo_df[ciuo_label_color_col] = ciuo_df.index.map(color_map)
 
-	color_map = fceyn_color_1digit_map_ciuo(
+	color_map = color_1digit_map_ciuo(
 		ciuo_df, letra_col=ciuo_letra_col, base_color_col=ciuo_label_color_col
 	)
 	ciuo_df[ciuo_letra_color_col] = ciuo_df[ciuo_letra_col].map(color_map)
 
-	color_map = fceyn_color_ciuo3cat_map_ciuo(
+	color_map = color_ciuo3cat_map_ciuo(
 		ciuo_df, cat_col=ciuo_3cat_col, base_color_col=ciuo_letra_color_col
 	)
 	ciuo_df[ciuo_3cat_color_col] = ciuo_df[ciuo_3cat_col].map(color_map)
 	return ciuo_df
 
 
-def fceyn_merge_enes_with_metadata(
+def merge_enes_with_metadata(
 	enes_df: pd.DataFrame,
 	caes_df: pd.DataFrame,
 	ciuo_df: pd.DataFrame,
@@ -130,22 +137,22 @@ def fceyn_merge_enes_with_metadata(
 	return merged
 
 
-def fceyn_get_dataset(data_config: dict) -> pd.DataFrame:
+def get_dataset(data_config: dict) -> pd.DataFrame:
 	"""Extract the dataset using the provided configuration."""
 
-	def fceyn_read_csv_auto(path_or_url):
+	def _read_csv_auto(path_or_url):
 		# Infer delimiter to support both ';' and ',' ENES sources.
 		return pd.read_csv(path_or_url, sep=None, engine="python")
 
 	if data_config["source"] is not None:
-		return fceyn_read_csv_auto(data_config["source"])
+		return _read_csv_auto(data_config["source"])
 	elif data_config["url"] is not None:
-		return fceyn_read_csv_auto(data_config["url"])
+		return _read_csv_auto(data_config["url"])
 	else:
 		raise ValueError("Data configuration must include either 'source' or 'url'.")
 
 
-def fceyn_load_dataset(
+def load_dataset(
 	enes_config: dict,
 	caes_config: dict,
 	ciuo_config: dict,
@@ -179,7 +186,7 @@ def fceyn_load_dataset(
 	max_caes_id = 10000
 
 	# Load base ENES dataset
-	enes_df = fceyn_get_dataset(enes_config)
+	enes_df = get_dataset(enes_config)
 
 	# Append extra datasets (e.g., 2021 survey) by renaming columns
 	if extra_enes_config:
@@ -191,7 +198,7 @@ def fceyn_load_dataset(
 				continue
 
 			try:
-				extra_df = fceyn_get_dataset(extra_enes_data)
+				extra_df = get_dataset(extra_enes_data)
 			except Exception as e:
 				print(
 					f"Failed to load extra ENES dataset from {extra_enes_data.get('source') or extra_enes_data.get('url')}: {e}"
@@ -226,13 +233,13 @@ def fceyn_load_dataset(
 	enes_df = enes_df.dropna(subset=[ciuo_id, caes_id])
 	enes_df[caes_id] = enes_df[caes_id].astype(int)
 	enes_df[ciuo_id] = enes_df[ciuo_id].astype(int)
-	enes_df[caes_id] = enes_df[caes_id].apply(lambda x: ut.fun_desambiated_caes_id(x))
+	enes_df[caes_id] = enes_df[caes_id].apply(lambda x: ut.desambiated_caes_id(x))
 	enes_df[ciuo_id] = enes_df[ciuo_id].apply(
-		lambda x: ut.fun_desambiated_ciuo_id(x, max_caes_id)
+		lambda x: ut.desambiated_ciuo_id(x, max_caes_id)
 	)
 
 	# Load and process node lists
-	caes_df = fceyn_load_nodelist_caes(
+	caes_df = load_nodelist_caes(
 		caes_config["source"],
 		caes_id,
 		caes_letra_col=caes_letra,
@@ -242,7 +249,7 @@ def fceyn_load_dataset(
 		caes_ag_color_col=caes_ag_color,
 	)
 
-	ciuo_df = fceyn_load_nodelist_ciuo(
+	ciuo_df = load_nodelist_ciuo(
 		ciuo_config["source"],
 		ciuo_id,
 		max_caes_id=max_caes_id,
@@ -254,7 +261,7 @@ def fceyn_load_dataset(
 	)
 
 	# Merge ENES with node metadata
-	enes = fceyn_merge_enes_with_metadata(enes_df, caes_df, ciuo_df, caes_id, ciuo_id)
+	enes = merge_enes_with_metadata(enes_df, caes_df, ciuo_df, caes_id, ciuo_id)
 
 	if enes.empty:
 		raise ValueError(
@@ -264,68 +271,7 @@ def fceyn_load_dataset(
 	return {"enes": enes, "caes_nodes": caes_df, "ciuo_nodes": ciuo_df}
 
 
-def fceyn_clean_data_enes(*args, **kwargs):
-	"""Clean ENES data by selecting columns and normalizing ids."""
-	df_enes = kwargs.get("df_enes")
-	id_caes = kwargs.get("id_caes")
-	id_ciuo = kwargs.get("id_ciuo")
-	id_1 = kwargs.get("id_1")
-	id_2 = kwargs.get("id_2")
-	features = kwargs.get("features") or {}
-
-	if df_enes is None:
-		raise ValueError("Missing df_enes for ENES cleaning.")
-	if id_caes is None or id_ciuo is None:
-		raise ValueError("Missing id_caes/id_ciuo for ENES cleaning.")
-
-	feature_cols = [col for col in features.values() if col]
-	base_cols = [id_1, id_2, id_caes, id_ciuo]
-	cols = [col for col in base_cols + feature_cols if col]
-
-	missing = [col for col in cols if col not in df_enes.columns]
-	if missing:
-		raise KeyError(f"Missing columns in ENES dataframe: {missing}")
-
-	clean = df_enes[cols].copy()
-	clean = clean.dropna(subset=[id_caes, id_ciuo])
-	clean[id_caes] = clean[id_caes].astype(int)
-	clean[id_ciuo] = clean[id_ciuo].astype(int)
-	return clean
-
-
-def fceyn_color_map_caes(*args, **kwargs):
-	"""Placeholder color map for CAES nodes."""
-	return {}
-
-
-def fceyn_color_letra_map_caes(*args, **kwargs):
-	"""Placeholder color map for CAES letra labels."""
-	return {}
-
-
-def fceyn_color_agrupation_map_caes(*args, **kwargs):
-	"""Placeholder color map for CAES agrupation labels."""
-	return {}
-
-
-def fceyn_color_map_ciuo(*args, **kwargs):
-	"""Placeholder color map for CIUO nodes."""
-	return {}
-
-
-def fceyn_color_1digit_map_ciuo(*args, **kwargs):
-	"""Placeholder color map for CIUO 1-digit labels."""
-	return {}
-
-
-def fceyn_color_ciuo3cat_map_ciuo(*args, **kwargs):
-	"""Placeholder color map for CIUO 3-category labels."""
-	return {}
-
-
-def fceyn_export_processed(
-	enes_df: pd.DataFrame, processed_path: Path, name: str
-) -> Path:
+def export_processed(enes_df: pd.DataFrame, processed_path: Path, name: str) -> Path:
 	"""
 	Persist the merged dataset to CSV for reuse by scripts.
 	"""
@@ -334,7 +280,7 @@ def fceyn_export_processed(
 	return processed_path / f"{name}.csv"
 
 
-def fceyn_insert_positions(
+def insert_positions(
 	nodelist_df: pd.DataFrame, positions: dict[str, list[float]]
 ) -> pd.DataFrame:
 	"""
@@ -344,3 +290,15 @@ def fceyn_insert_positions(
 
 	result = nodelist_df.drop(columns=["x", "y"], errors="ignore")
 	return result.join(pos_df[["x", "y"]], how="left")
+
+
+def load_positions(nodelist_df: pd.DataFrame) -> dict[str, Tuple[float, float]]:
+	"""Extract positions from a node list dataframe."""
+	if "x" not in nodelist_df.columns or "y" not in nodelist_df.columns:
+		return {}
+
+	valid_positions = nodelist_df[["x", "y"]].dropna(subset=["x", "y"])
+	return {
+		idx: (float(row["x"]), float(row["y"]))
+		for idx, row in valid_positions.iterrows()
+	}

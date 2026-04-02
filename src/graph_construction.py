@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 
 
-def fceyn_build_bipartite_graph(
+def build_bipartite_graph(
 	enes_df: pd.DataFrame,
 	caes_id: str,
 	ciuo_id: str,
@@ -46,7 +46,7 @@ def fceyn_build_bipartite_graph(
 	return graph
 
 
-def fceyn_build_biadjacency(
+def build_biadjacency(
 	enes_df: pd.DataFrame,
 	caes_col: str,
 	ciuo_col: str,
@@ -72,10 +72,16 @@ def fceyn_build_biadjacency(
 	return matrix
 
 
-def fceyn_generic_weighted_projected_graph(
-	graph: nx.Graph, target_partition: int, weight_function=None
+def generic_weighted_projected_graph(
+	graph: nx.Graph,
+	target_partition: int = None,
+	weight_function=None,
+	class_name: str = None,
 ) -> nx.Graph:
-	"""Weighted projection onto a bipartite partition using a custom weight function."""
+	"""Weighted projection using either a partition index or class name."""
+	target_partition = _resolve_partition(
+		target_partition=target_partition, class_name=class_name
+	)
 	nodes = [
 		node
 		for node in graph.nodes
@@ -84,7 +90,69 @@ def fceyn_generic_weighted_projected_graph(
 	return nx.bipartite.generic_weighted_projected_graph(graph, nodes, weight_function)
 
 
-def fceyn_dot_product_weight(G: nx.Graph, u: int, v: int) -> float:
+def _resolve_partition(target_partition: int = None, class_name: str = None) -> int:
+	"""Support both partition-index and class-name APIs."""
+	if target_partition is not None:
+		return target_partition
+	if class_name is None:
+		raise ValueError("Provide either target_partition or class_name.")
+	class_name = class_name.lower()
+	if class_name == "caes":
+		return 1
+	if class_name == "ciuo":
+		return 0
+	raise ValueError("class_name must be 'caes' or 'ciuo'.")
+
+
+def projected_graph(graph: nx.Graph, class_name: str) -> nx.Graph:
+	"""Unweighted projection onto caes or ciuo node sets."""
+	target_partition = _resolve_partition(class_name=class_name)
+	nodes = [
+		node
+		for node in graph.nodes
+		if graph.nodes[node].get("bipartite") == target_partition
+	]
+	return nx.bipartite.projected_graph(graph, nodes)
+
+
+def weighted_projected_graph(graph: nx.Graph, class_name: str) -> nx.Graph:
+	"""Weighted projection onto caes or ciuo node sets."""
+	target_partition = _resolve_partition(class_name=class_name)
+	nodes = [
+		node
+		for node in graph.nodes
+		if graph.nodes[node].get("bipartite") == target_partition
+	]
+	return nx.bipartite.weighted_projected_graph(graph, nodes)
+
+
+def generic_weighted_projected_graph_by_name(
+	graph: nx.Graph, class_name: str, weight_function=None
+) -> nx.Graph:
+	"""Backward-compatible class-name variant of generic weighted projection."""
+	target_partition = _resolve_partition(class_name=class_name)
+	return generic_weighted_projected_graph(
+		graph, target_partition=target_partition, weight_function=weight_function
+	)
+
+
+def hidalgo_proximity_weight(G: nx.Graph, u: int, v: int) -> float:
+	"""Minimum conditional probability proximity as in Hidalgo et al. (2007)."""
+	shared_features_len = len(set(G[u]).intersection(G[v]))
+	if shared_features_len == 0:
+		return 0.0
+
+	degree_u = G.degree[u]
+	degree_v = G.degree[v]
+	if degree_u == 0 or degree_v == 0:
+		return 0.0
+
+	prob_u_given_v = shared_features_len / degree_v
+	prob_v_given_u = shared_features_len / degree_u
+	return min(prob_u_given_v, prob_v_given_u)
+
+
+def dot_product_weight(G: nx.Graph, u: int, v: int) -> float:
 	"""Newman, M. E. J. (2001). Scientific collaboration networks. II. Shortest paths, weighted networks, and centrality.
 	Zhou, T., Ren, J., Medo, M., & Zhang, Y. C. (2007). Bipartite network projection and personal recommendation.
 	"""
@@ -95,7 +163,27 @@ def fceyn_dot_product_weight(G: nx.Graph, u: int, v: int) -> float:
 	)
 
 
-def fceyn_weighted_hidalgo_proximity_weight(
+def cosine_similarity_weight(G: nx.Graph, u: int, v: int) -> float:
+	"""Cosine similarity using edge weights on shared neighbors."""
+	norm_weight_u = 0.0
+	norm_weight_v = 0.0
+	shared_nodes = set(G[u]) & set(G[v])
+
+	for node in shared_nodes:
+		w_u = G[u][node].get("weight", 1)
+		w_v = G[v][node].get("weight", 1)
+		norm_weight_u += w_u**2
+		norm_weight_v += w_v**2
+
+	if norm_weight_u <= 0 or norm_weight_v <= 0:
+		return 0.0
+
+	return dot_product_weight(G, u, v) / (
+		np.sqrt(norm_weight_u) * np.sqrt(norm_weight_v)
+	)
+
+
+def weighted_hidalgo_proximity_weight(
 	G: nx.Graph, u: int, v: int, weight: str = "weight"
 ) -> float:
 	"""
@@ -136,7 +224,7 @@ def fceyn_weighted_hidalgo_proximity_weight(
 	return min(prob_u_given_v, prob_v_given_u)
 
 
-def fceyn_degree_sequences(
+def degree_sequences(
 	graph: nx.Graph, caes_partition: int = 1, ciuo_partition: int = 0
 ) -> Dict[str, list]:
 	"""Return degree lists for all nodes and each partition."""

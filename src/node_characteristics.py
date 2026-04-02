@@ -5,17 +5,23 @@ from typing import Iterable
 import pandas as pd
 
 
-def fceyn_to_numeric(series: pd.Series) -> pd.Series:
+def _to_numeric(series: pd.Series) -> pd.Series:
 	return pd.to_numeric(series, errors="coerce")
 
 
-def fceyn_compute_group_characteristics(
+def compute_group_characteristics(
 	enes_df: pd.DataFrame,
 	col_group: str = None,
 	group_col: str = None,
 	age_col: str = "v108",
 	sex_col: str = "v109",
 	income_col: str = "ITI",
+	education_col: str = "nivel_ed",
+	status_col: str = "estado",
+	category_col: str = "cat_ocup",
+	hours_col: str = "v206a",
+	weight_col: str = "f_calib3",
+	region_col: str = "region",
 	public_sector_col: str = "v188",
 ) -> pd.DataFrame:
 	"""Aggregate descriptive characteristics by group column."""
@@ -30,23 +36,64 @@ def fceyn_compute_group_characteristics(
 
 	cols_to_keep = [col_group] + [
 		col
-		for col in [age_col, sex_col, income_col, public_sector_col]
+		for col in [
+			age_col,
+			sex_col,
+			income_col,
+			education_col,
+			status_col,
+			category_col,
+			hours_col,
+			weight_col,
+			region_col,
+			public_sector_col,
+		]
 		if col in enes_df.columns
 	]
 	data = enes_df[cols_to_keep].copy()
 
-	for col in [age_col, sex_col, income_col, public_sector_col]:
+	for col in [
+		age_col,
+		sex_col,
+		income_col,
+		education_col,
+		status_col,
+		category_col,
+		hours_col,
+		weight_col,
+		region_col,
+		public_sector_col,
+	]:
 		if col in data.columns:
-			data[col] = fceyn_to_numeric(data[col])
+			data[col] = _to_numeric(data[col])
 
 	grouped = data.groupby(col_group, dropna=True)
 	features = pd.DataFrame(index=grouped.size().index)
 	features["n_obs"] = grouped.size()
 
+	if region_col in data.columns:
+		valid_region = data[data[region_col].notna()]
+		valid_grouped = valid_region.groupby(col_group, dropna=True)
+		for r in range(1, 9):
+			features[f"region_{r}_pct"] = valid_grouped[region_col].apply(
+				lambda s: (s == r).mean() * 100
+			)
+
+	if weight_col in data.columns:
+		valid_weight = data[data[weight_col].notna()]
+		valid_weight_grouped = valid_weight.groupby(col_group, dropna=True)
+		features["total_workers_weighted"] = valid_weight_grouped[weight_col].sum()
+
 	if age_col in data.columns:
 		valid_age = data[data[age_col].notna()]
 		valid_age_grouped = valid_age.groupby(col_group, dropna=True)
 		features["age_mean"] = valid_age_grouped[age_col].mean()
+		features["age_min"] = valid_age_grouped[age_col].min()
+		features["age_q1"] = valid_age_grouped[age_col].quantile(0.25)
+		features["age_median"] = valid_age_grouped[age_col].median()
+		features["age_q3"] = valid_age_grouped[age_col].quantile(0.75)
+		features["age_max"] = valid_age_grouped[age_col].max()
+		features["age_std"] = valid_age_grouped[age_col].std()
 
 	if income_col in data.columns:
 		valid_income = data[data[income_col].notna()]
@@ -69,6 +116,28 @@ def fceyn_compute_group_characteristics(
 			lambda s: (s == 1).mean() * 100
 		)
 
+	if hours_col in data.columns:
+		valid_hours = data[data[hours_col].notna()]
+		valid_hours_grouped = valid_hours.groupby(col_group, dropna=True)
+		features["mean_hours_worked"] = valid_hours_grouped[hours_col].mean()
+
+	if education_col in data.columns:
+		valid_edu = data[data[education_col].notna()]
+		valid_grouped = valid_edu.groupby(col_group, dropna=True)
+		features["higher_education_pct"] = valid_grouped[education_col].apply(
+			lambda s: (s >= 6).mean() * 100
+		)
+
+	if category_col in data.columns:
+		valid_cat = data[data[category_col].notna()]
+		valid_grouped = valid_cat.groupby(col_group, dropna=True)
+		features["self_employed_pct"] = valid_grouped[category_col].apply(
+			lambda s: (s == 3).mean() * 100
+		)
+		features["salaried_pct"] = valid_grouped[category_col].apply(
+			lambda s: (s == 2).mean() * 100
+		)
+
 	if public_sector_col in data.columns:
 		valid_pub = data[data[public_sector_col].notna()]
 		valid_grouped = valid_pub.groupby(col_group, dropna=True)
@@ -81,7 +150,7 @@ def fceyn_compute_group_characteristics(
 	return features
 
 
-def fceyn_attach_group_characteristics(
+def attach_group_characteristics(
 	nodelist_df: pd.DataFrame,
 	features_df: pd.DataFrame,
 	keep_columns: Iterable[str] | None = None,

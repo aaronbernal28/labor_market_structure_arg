@@ -1,9 +1,4 @@
-import os
-import sys
-
-sys.path.insert(0, os.getcwd())
-
-from src import fceyn_clean_data_enes
+from scripts import *
 import pandas as pd
 
 
@@ -14,9 +9,11 @@ def main() -> None:
 	URL = snakemake.config["datasets"][dataset]["url"]
 	FEATURES = snakemake.config["datasets"][dataset]["features"]
 
-	df_enes = pd.read_csv(SOURCE if SOURCE else URL, sep=";" if dataset == "enes_2019" else ",")
+	df_enes = pd.read_csv(
+		SOURCE if SOURCE else URL, sep=";" if dataset == "enes_2019" else ","
+	)
 	df_enes = fceyn_clean_data_enes(
-		df_enes=df_enes,
+		df_enes=df_enes,  ##
 		id_1=snakemake.config["datasets"][dataset]["id_1"],
 		id_2=snakemake.config["datasets"][dataset]["id_2"],
 		id_caes=snakemake.config["datasets"][dataset]["caes_id"],
