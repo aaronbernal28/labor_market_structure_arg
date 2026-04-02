@@ -1,42 +1,35 @@
 from scripts import *
 import pandas as pd
+snakemake: any
 
 
 def main() -> None:
-	df_enes = pd.read_csv(snakemake.input[0])
 	df_nodelist_caes = pd.read_csv(snakemake.input[1])
 	df_nodelist_ciuo = pd.read_csv(snakemake.input[2])
-	caes_id = snakemake.config["datasets"]["enes_2019"]["id_caes"]
-	ciuo_id = snakemake.config["datasets"]["enes_2019"]["id_ciuo"]
-	caes_meta_id = snakemake.config["metadata"]["nodelist_caes"]["id"]
-	ciuo_meta_id = snakemake.config["metadata"]["nodelist_ciuo"]["id"]
+	meta_caes = snakemake.config["metadata"]["nodelist_caes"]
+	meta_ciuo = snakemake.config["metadata"]["nodelist_ciuo"]
 
-	caes_counts = df_enes[caes_id].value_counts().rename("n_obs").reset_index()
-	caes_counts.columns = [caes_id, "n_obs"]
+	pl.plot_top_n_bar(
+		df=df_nodelist_caes,
+		label_col=meta_caes["label"],
+		val_col="n_obs",
+		color_col=meta_caes["label_color"],
+		title="Top sectors",
+		xlabel="Workers",
+		output_path=snakemake.output[0],
+		save=True,
+	)
 
-	df_nodelist_caes = pd.merge(
-		df_nodelist_caes,
-		caes_counts,
-		left_on=caes_meta_id,
-		right_on=caes_id,
-		how="left",
-	).fillna(0)
-
-	fig = lcd_plot_aed_top_sectors(df_nodelist_caes, title="Top sectors")
-	fig.savefig(snakemake.output[0], bbox_inches="tight")
-
-	ciuo_counts = df_enes[ciuo_id].value_counts().rename("n_obs").reset_index()
-	ciuo_counts.columns = [ciuo_id, "n_obs"]
-	df_nodelist_ciuo = pd.merge(
-		df_nodelist_ciuo,
-		ciuo_counts,
-		left_on=ciuo_meta_id,
-		right_on=ciuo_id,
-		how="left",
-	).fillna(0)
-
-	fig = lcd_plot_aed_top_occupations(df_nodelist_ciuo, title="Top occupations")
-	fig.savefig(snakemake.output[1], bbox_inches="tight")
+	pl.plot_top_n_bar(
+		df=df_nodelist_ciuo,
+		label_col=meta_ciuo["label"],
+		val_col="n_obs",
+		color_col=meta_ciuo["label_color"],
+		title="Top occupations",
+		xlabel="Workers",
+		output_path=snakemake.output[1],
+		save=True,
+	)
 
 
 if __name__ == "__main__":
