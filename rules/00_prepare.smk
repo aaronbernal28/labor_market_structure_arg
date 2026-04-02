@@ -26,7 +26,7 @@ rule prepare_enes_all:
 
 
 rule prepare_nodelist:
-	'''Add coloring information to the CAES nodelist.'''
+	'''Add coloring and features information to the nodelist infered from the one ENES dataset.'''
 	wildcard_constraints:
 		nodelist = "nodelist_caes|nodelist_ciuo",
 		dataset = "enes_2019|enes_2021|enes_all"

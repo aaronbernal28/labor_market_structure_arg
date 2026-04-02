@@ -1,5 +1,6 @@
 from scripts import *
 import pandas as pd
+snakemake: any
 
 
 def main() -> None:
