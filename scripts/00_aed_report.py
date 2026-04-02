@@ -6,8 +6,8 @@ def main() -> None:
 	df_enes = pd.read_csv(snakemake.input[0])
 	df_nodelist_caes = pd.read_csv(snakemake.input[1])
 	df_nodelist_ciuo = pd.read_csv(snakemake.input[2])
-	caes_id = snakemake.config["datasets"]["enes_2019"]["caes_id"]
-	ciuo_id = snakemake.config["datasets"]["enes_2019"]["ciuo_id"]
+	caes_id = snakemake.config["datasets"]["enes_2019"]["id_caes"]
+	ciuo_id = snakemake.config["datasets"]["enes_2019"]["id_ciuo"]
 	caes_meta_id = snakemake.config["metadata"]["nodelist_caes"]["id"]
 	ciuo_meta_id = snakemake.config["metadata"]["nodelist_ciuo"]["id"]
 
