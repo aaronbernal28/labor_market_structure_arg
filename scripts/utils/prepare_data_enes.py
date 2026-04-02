@@ -1,26 +1,28 @@
 from scripts import *
 import pandas as pd
+
 snakemake: any
 
 
 def main() -> None:
 	dataset = snakemake.params[0]
 
-	datasets_cfg = snakemake.config["datasets"]
-	default_dataset = datasets_cfg["default_enes"]
-	dataset_cfg = datasets_cfg[dataset]
-	default_cfg = datasets_cfg[default_dataset]
+	dataset_input = snakemake.config["datasets"][dataset]
+	dataset_default = snakemake.config["enes"]
+	default_cfg = snakemake.config["datasets"][dataset_default]
 
-	SOURCE = dataset_cfg["source"]
-	URL = dataset_cfg["url"]
-	ID_1 = dataset_cfg["id_1"]
-	ID_2 = dataset_cfg["id_2"]
-	ID_CAES = dataset_cfg["id_caes"]
-	ID_CIUO = dataset_cfg["id_ciuo"]
+	SOURCE = dataset_input["source"]
+	URL = dataset_input["url"]
+	ID_1 = dataset_input["id_1"]
+	ID_2 = dataset_input["id_2"]
+	ID_CAES = dataset_input["id_caes"]
+	ID_CIUO = dataset_input["id_ciuo"]
 
-	FEATURES = [dl.Feature(**feature) for feature in datasets_cfg["features"]]
+	FEATURES = [
+		dl.Feature(**feature) for feature in snakemake.config["datasets"]["features"]
+	]
 	feature_names = [feature.name for feature in FEATURES]
-	dataset_features = dataset_cfg.get("features", {})
+	dataset_features = dataset_input.get("features", {})
 	default_features = default_cfg.get("features", {})
 
 	df_enes = pd.read_csv(
@@ -49,7 +51,12 @@ def main() -> None:
 	for feature_name in feature_names:
 		source_col = dataset_features.get(feature_name)
 		target_col = default_features.get(feature_name)
-		if source_col and target_col and source_col != target_col and source_col in df_enes.columns:
+		if (
+			source_col
+			and target_col
+			and source_col != target_col
+			and source_col in df_enes.columns
+		):
 			rename_cols[source_col] = target_col
 
 	if rename_cols:
@@ -58,9 +65,13 @@ def main() -> None:
 	# Convert default feature source columns to canonical names from config datasets.features.
 	for feature_name in feature_names:
 		default_source_col = default_features.get(feature_name)
-		if default_source_col and default_source_col in df_enes.columns and default_source_col != feature_name:
+		if (
+			default_source_col
+			and default_source_col in df_enes.columns
+			and default_source_col != feature_name
+		):
 			df_enes = df_enes.rename(columns={default_source_col: feature_name})
-	
+
 	df_enes = dl.clean_enes_base_features(df_enes, FEATURES)
 
 	output_id_1 = default_cfg["id_1"]
@@ -71,7 +82,12 @@ def main() -> None:
 	if output_id_2 and output_id_2 not in df_enes.columns:
 		df_enes[output_id_2] = pd.NA
 
-	output_cols = [output_id_1, output_id_2, output_id_caes, output_id_ciuo] + feature_names
+	output_cols = [
+		output_id_1,
+		output_id_2,
+		output_id_caes,
+		output_id_ciuo,
+	] + feature_names
 	output_cols = [col for col in output_cols if col is not None]
 	for col in output_cols:
 		if col not in df_enes.columns:

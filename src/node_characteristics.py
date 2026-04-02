@@ -25,6 +25,13 @@ def compute_group_characteristics(
 	public_sector_col: str = "v188",
 ) -> pd.DataFrame:
 	"""Aggregate descriptive characteristics by group column."""
+	# Fallback to standardized column names if raw ENES names are missing.
+	if sex_col not in enes_df.columns and "sex_id" in enes_df.columns:
+		sex_col = "sex_id"
+	if public_sector_col not in enes_df.columns and "public_worker" in enes_df.columns:
+		public_sector_col = "public_worker"
+	if income_col not in enes_df.columns and "total_income" in enes_df.columns:
+		income_col = "total_income"
 	# Backward compatibility: accept either col_group or group_col.
 	if col_group is None:
 		col_group = group_col

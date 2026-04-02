@@ -24,11 +24,11 @@ rule all:
 			"images/00_aed_report/aed_{dataset}_top_occupations.png",
 			dataset=[DATASETS[0]],
 		),
-""" 
 		expand(
 			"images/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap_{dataset}.png",
 			dataset=[DATASETS[0]],
 		),
+"""
 		expand(
 			"images/02_bipartite_plot_by_groups/bipartite_layout_by_groups{dataset}_{logscale}_{layout}.png",
 			dataset=[DATASETS[0]],
@@ -87,9 +87,9 @@ rule all:
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''
 	input:
-		enes="data/processed/{dataset}.csv",
-		caes=lambda wc: f"data/processed/{METADATA[0]}_{wc.dataset}.csv",
-		ciuo=lambda wc: f"data/processed/{METADATA[1]}_{wc.dataset}.csv"
+		"data/processed/{dataset}.csv",
+		"data/processed/nodelist_caes_{dataset}.csv",
+		"data/processed/nodelist_ciuo_{dataset}.csv"
 	output:
 		"images/00_aed_report/aed_{dataset}_top_sectors.png",
 		"images/00_aed_report/aed_{dataset}_top_occupations.png"
@@ -101,8 +101,8 @@ rule _01_biadjacency_matrix_heatmap:
 	'''Cross tabular matrix on frequency in the ENES datasets.'''
 	input:
 		"data/processed/{dataset}.csv",
-		"data/processed/{METADATA[0]}.csv",
-		"data/processed/{METADATA[1]}.csv"
+		"data/processed/nodelist_caes_{dataset}.csv",
+		"data/processed/nodelist_ciuo_{dataset}.csv"
 	output:
 		"images/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap_{dataset}.png"
 	script:
@@ -167,8 +167,8 @@ rule _06_sankey_plot:
 	'''Sankey plot of communities.'''
 	input:
 		"data/processed/{dataset}.csv",
-		"data/processed/{METADATA[0]}.csv",
-		"data/processed/{METADATA[1]}.csv"
+		"data/processed/nodelist_caes_{dataset}.csv",
+		"data/processed/nodelist_ciuo_{dataset}.csv"
 	output:
 		"images/06_sankey_plot/sankey_plot_{dataset}.png"
 	script:

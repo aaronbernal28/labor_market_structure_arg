@@ -15,8 +15,10 @@ from src.plotting import (
 	color_ciuo3cat_map_ciuo,
 )
 
+
 class Feature:
 	"""Class to hold feature column names for the ENES dataset."""
+
 	def __init__(self, name: str, type: str, default: any):
 		self.name = name
 		self.type = type
@@ -27,7 +29,9 @@ def clean_enes_base_features(df: pd.DataFrame, features: List[Feature]) -> pd.Da
 	"""Clean and standardize feature columns in the ENES dataframe."""
 	for feature in features:
 		if feature.name in df.columns:
-			df[feature.name] = pd.to_numeric(df[feature.name], errors="coerce").fillna(feature.default)
+			df[feature.name] = pd.to_numeric(df[feature.name], errors="coerce").fillna(
+				feature.default
+			)
 		else:
 			df[feature.name] = feature.default
 		if feature.default is not None:
@@ -36,13 +40,13 @@ def clean_enes_base_features(df: pd.DataFrame, features: List[Feature]) -> pd.Da
 
 
 def lcd_load_enes_base(
-	df_enes :pd.DataFrame, 
+	df_enes: pd.DataFrame,
 	id_1: str,
 	id_2: str,
-	id_caes: str, 
+	id_caes: str,
 	id_ciuo: str,
 	features: List[Feature],
-	max_caes_id: int = 10000
+	max_caes_id: int = 10000,
 ) -> pd.DataFrame:
 
 	# Copy after filtering to avoid chained-assignment warnings in pandas.
@@ -50,11 +54,13 @@ def lcd_load_enes_base(
 	df_enes.loc[:, id_caes] = df_enes[id_caes].astype(int)
 	df_enes.loc[:, id_ciuo] = df_enes[id_ciuo].astype(int)
 
-	df_enes.loc[:, id_caes] = df_enes[id_caes].apply(lambda x: ut.desambiated_caes_id(x))
+	df_enes.loc[:, id_caes] = df_enes[id_caes].apply(
+		lambda x: ut.desambiated_caes_id(x)
+	)
 	df_enes.loc[:, id_ciuo] = df_enes[id_ciuo].apply(
 		lambda x: ut.desambiated_ciuo_id(x, max_caes_id)
 	)
-	
+
 	return df_enes
 
 

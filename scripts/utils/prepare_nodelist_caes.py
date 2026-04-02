@@ -1,5 +1,6 @@
 from scripts import *
 import pandas as pd
+
 snakemake: any
 
 
@@ -22,9 +23,9 @@ CHARACTERISTIC_COLUMNS = [
 def main() -> None:
 	df_enes = pd.read_csv(snakemake.input[0])
 	nodelist = snakemake.params[0]
-	metadata = snakemake.config["metadata"][nodelist]
+	metadata = snakemake.config[nodelist]
 	id = metadata["id"]
-	max_caes_id = snakemake.config["parameters"]["max_caes_id"]
+	max_caes_id = snakemake.config["max_caes_id"]
 
 	if nodelist == "nodelist_caes":
 		df_nodelist = dl.load_nodelist_caes(

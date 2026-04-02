@@ -1,15 +1,17 @@
+enes: "enes_2019"
+id_1: "nocues"
+id_2: "nhog"
+id_caes: "v182caes"
+id_ciuo: "v183ciuo"
+max_caes_id: 10000
+logscale: false
+
 paths:
   data_raw: data/raw
   data_processed: data/processed
   images: images
 
-parameters:
-  max_caes_id: 10000
-  logscale: false
-
 datasets:
-  default_enes: "enes_2019"
-  
   features:
     - name: "sex_id"
       type: "int"
@@ -46,26 +48,25 @@ datasets:
      public_worker: "M3_7" # en realidad es "M3_7"==1
      total_income: null
 
-metadata:
-  nodelist_caes:
-    source: data/raw/nodelist_caes.csv
-    id: "v182caes"
-    label: "caeslabel"
-    letra: "caesletra"
-    grupo: "caesag"
-    label_color: "caeslabel_color"
-    letra_color: "caesletra_color"
-    grupo_color: "caesag_color"
+nodelist_caes:
+  source: data/raw/nodelist_caes.csv
+  id: "v182caes"
+  label: "caeslabel"
+  letra: "caesletra"
+  grupo: "caesag"
+  label_color: "caeslabel_color"
+  letra_color: "caesletra_color"
+  grupo_color: "caesag_color"
 
-  nodelist_ciuo:
-    source: data/raw/nodelist_ciuo.csv
-    id: "v183ciuo"
-    label: "ciuolabel"
-    letra: "ciuo1diglabel"
-    grupo: "ciuo3cat"
-    label_color: "ciuolabel_color"
-    letra_color: "ciuo1diglabel_color"
-    grupo_color: "ciuo3cat_color"
+nodelist_ciuo:
+  source: data/raw/nodelist_ciuo.csv
+  id: "v183ciuo"
+  label: "ciuolabel"
+  letra: "ciuo1diglabel"
+  grupo: "ciuo3cat"
+  label_color: "ciuolabel_color"
+  letra_color: "ciuo1diglabel_color"
+  grupo_color: "ciuo3cat_color"
 
 colors:
   community_palette:
