@@ -22,7 +22,7 @@ def main() -> None:
 		how="left",
 	).fillna(0)
 
-	fig = fceyn_plot_aed_top_sectors(df_nodelist_caes, title="Top sectors")
+	fig = lcd_plot_aed_top_sectors(df_nodelist_caes, title="Top sectors")
 	fig.savefig(snakemake.output[0], bbox_inches="tight")
 
 	ciuo_counts = df_enes[ciuo_id].value_counts().rename("n_obs").reset_index()
@@ -35,7 +35,7 @@ def main() -> None:
 		how="left",
 	).fillna(0)
 
-	fig = fceyn_plot_aed_top_occupations(df_nodelist_ciuo, title="Top occupations")
+	fig = lcd_plot_aed_top_occupations(df_nodelist_ciuo, title="Top occupations")
 	fig.savefig(snakemake.output[1], bbox_inches="tight")
 
 

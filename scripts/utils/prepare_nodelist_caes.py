@@ -9,8 +9,8 @@ def main() -> None:
 	df_nodelist = pd.read_csv(metadata["source"])
 	id = metadata["id"]
 
-	new_features = fceyn_compute_group_characteristics(df_enes, id)
-	df_nodelist = fceyn_attach_group_characteristics(df_nodelist, new_features)
+	new_features = lcd_compute_group_characteristics(df_enes, id)
+	df_nodelist = lcd_attach_group_characteristics(df_nodelist, new_features)
 
 	df_nodelist.to_csv(snakemake.output[0], index=False)
 
