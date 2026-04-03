@@ -15,6 +15,7 @@ rule compute_communities:
 	params:
 		algorithm = "louvain",
 	output:
-		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos_{algorithm}.csv"
+		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos_{algorithm}.csv",
+		"images/03_communities/community_distribution_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_{algorithm}.png"
 	script:
 		"../scripts/utils/compute_communities.py"

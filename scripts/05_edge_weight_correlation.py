@@ -14,7 +14,9 @@ def _resolve_community_column(df: pd.DataFrame, preferred: str | None) -> str:
 			return candidate
 	raise KeyError(
 		"No community column found. Tried: "
-		+ ", ".join([c for c in [preferred, "community", "louvain", "leiden", "infomap"] if c])
+		+ ", ".join(
+			[c for c in [preferred, "community", "louvain", "leiden", "infomap"] if c]
+		)
 	)
 
 
@@ -26,7 +28,9 @@ def main() -> None:
 	algorithm = snakemake.wildcards.get("algorithm", None)
 
 	if not feature_name:
-		raise KeyError("No feature wildcard found (expected 'feature' or 'continuous_feature').")
+		raise KeyError(
+			"No feature wildcard found (expected 'feature' or 'continuous_feature')."
+		)
 
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})

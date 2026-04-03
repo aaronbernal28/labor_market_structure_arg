@@ -1,6 +1,7 @@
 from scripts import *
 import networkx as nx
 import pandas as pd
+import matplotlib.colors as mcolors
 
 snakemake: any
 
@@ -37,20 +38,37 @@ def main() -> None:
 	nodelist_df.to_csv(snakemake.output[0], index=False)
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
 
-	# TODO: Add community distribution plot
-	# pl.plot_stacked_by_group(
-	# nodelist_ciuo_df,
-	# group_col=group_col,
-	# community_map=communities_ciuo,
-	# title=None,
-	# output_path=snakemake.output[0],
-	# group_color_map=group_color_map,
-	# legend_title="1D categorias CIUO",
-	# figsize=cfg.STACKED_FIGSIZE,
-	# font_size=cfg.PLOT_FONT_SIZE,
-	# save=True,
-	# percentage=False
-	# )
+	group_col = snakemake.config[class_].get("letra")
+	group_color_col = snakemake.config[class_].get("letra_color")
+
+	nodelist_idx = nodelist_df.set_index(id_col)
+
+	group_color_map = None
+	if group_color_col and group_color_col in nodelist_idx.columns:
+		raw_group_color_map = (
+			nodelist_idx.groupby(group_col)[group_color_col].first().to_dict()
+		)
+		group_color_map = {}
+		for group_name, color_value in raw_group_color_map.items():
+			try:
+				parsed_color = utils.parse_color(color_value)
+				group_color_map[group_name] = mcolors.to_hex(parsed_color)
+			except (ValueError, SyntaxError, TypeError):
+				group_color_map[group_name] = "gray"
+
+	pl.plot_stacked_by_group(
+		df_index=nodelist_idx,
+		group_col=group_col,
+		community_map=communities_int,
+		title=f"{class_.upper()} - Distribucion por comunidad ({algorithm})",
+		output_path=snakemake.output[1],
+		group_color_map=group_color_map,
+		legend_title=group_col,
+		figsize=tuple(snakemake.config["figsizes"]["stacked"]),
+		font_size=int(snakemake.config["plot_font_size"]),
+		save=True,
+		percentage=False,
+	)
 
 
 if __name__ == "__main__":
