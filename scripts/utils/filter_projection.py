@@ -7,7 +7,7 @@ snakemake: any
 
 
 def main() -> None:
-	graph = nx.read_gexf(snakemake.input[0])
+	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	alpha = float(snakemake.wildcards["alpha"])
 	print(f"Filtering projection graph with alpha={alpha}...")
 

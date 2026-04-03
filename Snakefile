@@ -5,7 +5,7 @@ NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["dot_product", "weighted_hidalgo_weight"]
 ALGORITHMS = ["louvain"]
 VARIABLES = ["sex_id", "public_worker", "total_income"]
-DISCRETE_FEATURES = ["sex_id", "public_worker", "community"]
+DISCRETE_FEATURES = ["sex_id", "public_worker", "louvain"]
 CONTINUOUS_FEATURES = ["total_income", "sex_proportion", "public_worker_proportion"]
 
 LAYOUTS = ["spring_layout"]
@@ -130,11 +130,14 @@ rule _02_bipartite_plot_by_groups:
 
 
 rule _03_projection_plot_by_groups:
-	'''Plot projection graph from graph.'''
+	'''Plot projection graph from graph.
+	Example:
+	snakemake -j1 images/03_projection_plot_by_groups/projection_plot_by_groups_enes_all_false_ciuo_weighted_hidalgo_weight_1.0000_pos_louvain_louvain.png'''
 	input:
-		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.gexf"
+		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos_{algorithm}.csv",
+		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}.gexf"
 	output:
-		"images/03_projection_plot_by_groups/projection_plot_by_groups_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{discrete_feature}.png"
+		"images/03_projection_plot_by_groups/projection_plot_by_groups_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_pos_{algorithm}_{discrete_feature}.png"
 	script:
 		"scripts/03_projection_plot_by_groups.py"
 
@@ -142,9 +145,10 @@ rule _03_projection_plot_by_groups:
 rule _03_projection_plot_gradient:
 	'''Plot projection graph from graph.'''
 	input:
-		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.gexf"
+		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos.csv",
+		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}.gexf"
 	output:
-		"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{continuous_feature}.png"
+		"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_{algorithm}_{discrete_feature}.png"
 	script:
 		"scripts/03_projection_plot_gradient.py"
 

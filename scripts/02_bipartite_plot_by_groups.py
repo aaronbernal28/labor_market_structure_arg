@@ -6,7 +6,7 @@ snakemake: any
 
 
 def main() -> None:
-	bigraph = nx.read_gexf(snakemake.input[0])
+	bigraph = nx.read_gexf(snakemake.input[0], node_type=int)
 	caes_meta = snakemake.config["caes"]
 	ciuo_meta = snakemake.config["ciuo"]
 

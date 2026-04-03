@@ -1,15 +1,99 @@
 from scripts import *
 import networkx as nx
+import pandas as pd
+
+snakemake: any
 
 
 def main() -> None:
-	graph = nx.read_gexf(snakemake.input[0])
-	layout = getattr(snakemake.params, "layout", None) or snakemake.wildcards.layout
+	class_ = snakemake.wildcards["class_"]
+	id_col = snakemake.config[class_]["id"]
+	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
+	graph = nx.read_gexf(snakemake.input[1], node_type=int)
+	graph_nodes = set(graph.nodes())
+	plot_df = pos_df[pos_df[id_col].astype(int).isin(graph_nodes)].copy()
+	if plot_df.empty:
+		raise ValueError("No overlap between nodelist ids and projection graph nodes.")
+	pos = dl.load_positions(pos_df, id_col)
+	discrete_feature = snakemake.wildcards["discrete_feature"]
 
-	fig = lcd_plot_projection_by_groups(
-		graph, layout=layout, title=f"Projection by groups ({layout})"
+	if discrete_feature in plot_df.columns:
+		group_map = {
+			int(node): group
+			for node, group in plot_df.set_index(id_col)[discrete_feature]
+			.to_dict()
+			.items()
+		}
+	else:
+		raise ValueError(
+			f"Discrete feature '{discrete_feature}' not found in positions dataframe."
+		)
+
+	group_color_map = None
+	preferred_color_col = f"{discrete_feature}_color"
+	if preferred_color_col in plot_df.columns:
+		color_col = preferred_color_col
+	else:
+		color_col = next(
+			(
+				column
+				for column in plot_df.columns
+				if discrete_feature in column and column.endswith("_color")
+			),
+			None,
+		)
+
+	if color_col:
+		pairs = plot_df[[discrete_feature, color_col]].dropna().drop_duplicates()
+		group_color_map = dict(zip(pairs[discrete_feature], pairs[color_col]))
+
+	print(f"Using discrete feature '{discrete_feature}' for grouping.")
+	print(f"Group mapping: {set(group_map.values())}")
+	print(
+		f"Group color mapping: {set(group_color_map.values()) if group_color_map else 'None'}"
 	)
-	fig.savefig(snakemake.output[0], bbox_inches="tight")
+
+	if not group_color_map:
+		print(
+			f"Warning: No color mapping found for discrete feature '{discrete_feature}'. Using default colors."
+		)
+		labels = sorted(set(group_map.values()), key=str)
+		group_color_map = {label: f"C{idx}" for idx, label in enumerate(labels)}
+	if pos:
+		graph = nx.subgraph(graph, set(pos.keys()))
+	else:
+		print("Warning: No positions found; plotting without position filter.")
+
+	worker_counts = {
+		int(node): count
+		for node, count in plot_df.set_index(id_col)["n_obs"].to_dict().items()
+	}
+	FACTOR_NODE_SIZE = 0.6
+	NODE_SIZE_EXPONENT = 0.8
+	EDGE_ALPHA = 0.1
+	NODE_ALPHA = 0.7
+
+	figsize = snakemake.config["figsizes"]["projection"]
+	font_size = snakemake.config["plot_font_size"]
+
+	_ = pl.plot_projection_by_group(
+		graph,
+		group_map=group_map,
+		group_color_map=group_color_map,
+		title=None,
+		legend_title="Categorias",
+		figsize=figsize,
+		font_size=font_size,
+		output_path=snakemake.output[0],
+		save=True,
+		method="energy",
+		node_size_map=worker_counts,
+		factor_node_size=FACTOR_NODE_SIZE,
+		pos=pos,
+		node_size_exponent=NODE_SIZE_EXPONENT,
+		edge_alpha=EDGE_ALPHA,
+		node_alpha=NODE_ALPHA,
+	)
 
 
 if __name__ == "__main__":

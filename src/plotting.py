@@ -850,14 +850,15 @@ def plot_projection_by_group(
 	- pos: Optional precomputed positions for nodes (if None, will compute using spring layout).
 	- rotate: Whether to rotate the layout 90 degrees anticlockwise.
 	"""
-	assert set(group_color_map.keys()) <= set(group_map.values()), (
-		"Color map contains groups not present in group map."
-	)
-	assert set(graph.nodes()) <= set(group_map.keys()), (
-		"Graph contains nodes not present in group map."
-	)
+	if not set(group_color_map.keys()) >= set(group_map.values()):
+		print("Color map is missing groups present in group map.")
+	if not set(graph.nodes()) <= set(group_map.keys()):
+		print("Graph contains nodes not present in group map.")
 
 	# Get the largest connected component for layout
+	if graph.number_of_nodes() == 0:
+		print("Warning: Projection graph is empty; skipping plot.")
+		return {}
 	if not nx.is_connected(graph):
 		largest_cc = max(nx.connected_components(graph), key=len)
 		graph = graph.subgraph(largest_cc)

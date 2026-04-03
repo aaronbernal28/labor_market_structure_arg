@@ -329,7 +329,9 @@ def export_processed(enes_df: pd.DataFrame, processed_path: Path, name: str) -> 
 
 
 def insert_positions(
-	nodelist_df: pd.DataFrame, positions: dict[str, list[float]]
+	nodelist_df: pd.DataFrame,
+	positions: dict[int | str, list[float]],
+	id_col: str | None = None,
 ) -> pd.DataFrame:
 	"""
 	Insert precomputed positions into the node list dataframe for consistent plotting.
@@ -337,13 +339,30 @@ def insert_positions(
 	pos_df = pd.DataFrame.from_dict(positions, orient="index", columns=["x", "y"])
 
 	result = nodelist_df.drop(columns=["x", "y"], errors="ignore")
+	if id_col:
+		pos_df.index.name = id_col
+		if id_col in result.columns:
+			pos_df.index = pos_df.index.astype(result[id_col].dtype)
+		return result.merge(pos_df, on=id_col, how="left")
+
 	return result.join(pos_df[["x", "y"]], how="left")
 
 
-def load_positions(nodelist_df: pd.DataFrame) -> dict[str, Tuple[float, float]]:
+def load_positions(
+	nodelist_df: pd.DataFrame, id_col: str | None = None
+) -> dict[int | str, Tuple[float, float]]:
 	"""Extract positions from a node list dataframe."""
 	if "x" not in nodelist_df.columns or "y" not in nodelist_df.columns:
 		return {}
+
+	if id_col:
+		if id_col not in nodelist_df.columns:
+			raise KeyError(f"ID column '{id_col}' not found in node list dataframe.")
+		valid_positions = nodelist_df.dropna(subset=["x", "y"]).set_index(id_col)
+		return {
+			idx: (float(row["x"]), float(row["y"]))
+			for idx, row in valid_positions.iterrows()
+		}
 
 	valid_positions = nodelist_df[["x", "y"]].dropna(subset=["x", "y"])
 	return {

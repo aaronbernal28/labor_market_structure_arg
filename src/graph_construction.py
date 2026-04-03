@@ -244,3 +244,37 @@ def degree_sequences(
 		"caes": degrees_caes,
 		"ciuo": degrees_ciuo,
 	}
+
+
+def get_projection_positions(
+	graph: nx.Graph,
+	seed: int = 42,
+	spring_layout_iterations: int = 1000,
+	spring_layout_k: float = None,
+	rotate: bool = False,
+	method: str = "auto",
+) -> dict:
+	"""Calculate node positions for the projection graph using a force-directed layout."""
+	if not nx.is_connected(graph):
+		# Get the largest connected component for layout
+		largest_cc = max(nx.connected_components(graph), key=len)
+		graph = graph.subgraph(largest_cc)
+		print("Warning: Projection graph is not connected; using largest connected component for layout.")
+		print(f"Original graph had {graph.number_of_nodes()} nodes; largest component has {len(graph.nodes())} nodes.")
+
+	if method == "kamada_kawai":
+		pos = nx.kamada_kawai_layout(graph)
+	else:
+		pos = nx.spring_layout(
+			graph,
+			seed=seed,
+			k=spring_layout_k,
+			iterations=spring_layout_iterations,
+			threshold=1e-3,
+			method=method,
+		)
+
+	if rotate:
+		pos = {node: (-y, x) for node, (x, y) in pos.items()}
+
+	return pos

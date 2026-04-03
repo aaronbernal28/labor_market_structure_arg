@@ -9,10 +9,10 @@ def main() -> None:
 		snakemake.input[0],
 		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
 	)
-	caes_df = pd.read_csv(snakemake.input[1], dtype={"id": int})
-	ciuo_df = pd.read_csv(snakemake.input[2], dtype={"id": int})
 	caes_id = snakemake.config["caes"]["id"]
 	ciuo_id = snakemake.config["ciuo"]["id"]
+	caes_df = pd.read_csv(snakemake.input[1], dtype={caes_id: int})
+	ciuo_df = pd.read_csv(snakemake.input[2], dtype={ciuo_id: int})
 	letra_caes = snakemake.config["caes"]["letra"]
 	letra_ciuo = snakemake.config["ciuo"]["letra"]
 
