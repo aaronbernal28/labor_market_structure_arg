@@ -2,7 +2,7 @@ configfile: "config.yaml"
 
 DATASETS = ["enes_all", "enes_2019", "enes_2021"]
 METADATA = ["nodelist_caes", "nodelist_ciuo"]
-WEIGHTS = ["hidalgo"]
+WEIGHT_FUNCTIONS = ["dot_product", "weighted_hidalgo_weight"]
 ALGORITHMS = ["louvain"]
 VARIABLES = ["sex_id", "public_worker", "total_income"]
 DISCRETE_FEATURES = ["sex_id", "public_worker", "community"]
@@ -45,7 +45,7 @@ rule all:
 			"images/03_projection_plot_by_groups/projection_plot_by_groups_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{discrete_feature}.png",
 			dataset=[DATASETS[0]],
 			logscale=LOGSCALES,
-			weight=WEIGHTS,
+			weight=WEIGHT_FUNCTIONS,
 			algorithm=ALGORITHMS,
 			layout=LAYOUTS,
 			discrete_feature=DISCRETE_FEATURES,

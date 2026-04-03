@@ -136,7 +136,7 @@ def generic_weighted_projected_graph_by_name(
 	)
 
 
-def hidalgo_proximity_weight(G: nx.Graph, u: int, v: int) -> float:
+def hidalgo_weight(G: nx.Graph, u: int, v: int) -> float:
 	"""Minimum conditional probability proximity as in Hidalgo et al. (2007)."""
 	shared_features_len = len(set(G[u]).intersection(G[v]))
 	if shared_features_len == 0:
@@ -183,7 +183,7 @@ def cosine_similarity_weight(G: nx.Graph, u: int, v: int) -> float:
 	)
 
 
-def weighted_hidalgo_proximity_weight(
+def weighted_hidalgo_weight(
 	G: nx.Graph, u: int, v: int, weight: str = "weight"
 ) -> float:
 	"""

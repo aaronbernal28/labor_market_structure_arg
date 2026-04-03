@@ -7,4 +7,4 @@ rule bipartite_graph:
 	output:
 		"data/graphs/bipartite_{dataset}_{logscale}.gexf"
 	script:
-		"scripts/utils/build_bipartite.py"
+		"../scripts/utils/build_bipartite.py"

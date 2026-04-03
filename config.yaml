@@ -57,6 +57,7 @@ nodelist_caes:
   label_color: "caeslabel_color"
   letra_color: "caesletra_color"
   grupo_color: "caesag_color"
+  partition: 1
 
 nodelist_ciuo:
   source: data/raw/nodelist_ciuo.csv
@@ -67,6 +68,7 @@ nodelist_ciuo:
   label_color: "ciuolabel_color"
   letra_color: "ciuo1diglabel_color"
   grupo_color: "ciuo3cat_color"
+  partition: 0
 
 colors:
   community_palette:
