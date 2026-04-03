@@ -6,7 +6,7 @@ WEIGHT_FUNCTIONS = ["dot_product", "weighted_hidalgo_weight"]
 ALGORITHMS = ["louvain"]
 VARIABLES = ["sex_id", "public_worker", "total_income"]
 DISCRETE_FEATURES = ["sex_id", "public_worker", "louvain"]
-CONTINUOUS_FEATURES = ["total_income", "sex_proportion", "public_worker_proportion"]
+CONTINUOUS_FEATURES = ["total_income", "income_mean", "female_pct", "male_pct", "public_sector_pct"]
 
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
@@ -148,7 +148,7 @@ rule _03_projection_plot_gradient:
 		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos.csv",
 		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}.gexf"
 	output:
-		"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_{algorithm}_{discrete_feature}.png"
+		"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_pos_{discrete_feature}.png"
 	script:
 		"scripts/03_projection_plot_gradient.py"
 
