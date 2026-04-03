@@ -1748,21 +1748,36 @@ def compute_and_plot_edge_correlation(
 
 	# Plot
 	plt.figure(figsize=figsize)
-	node_sizes = [
+	raw_node_sizes_plot = [
 		float(
 			np.power(max(raw_node_sizes.get(u, 1.0), 0.0), node_size_exponent)
 			* factor_node_size
 		)
 		for u in plotted_nodes
 	]
+	node_colors = [_node_color(u) for u in plotted_nodes]
+
+	# Keep x/y/size/color arrays aligned after removing non-finite values.
+	filtered_points = [
+		(x, y, size, color)
+		for x, y, size, color in zip(x_vals, y_vals, raw_node_sizes_plot, node_colors)
+		if np.isfinite(x) and np.isfinite(y)
+	]
+	if len(filtered_points) < 2:
+		print(
+			f"Advertencia: no hay suficientes puntos finitos para calcular la correlacion de {title}."
+		)
+		return
+
+	x_vals, y_vals, node_sizes, node_colors = map(list, zip(*filtered_points))
 
 	# Scatter plot of node feature vs average neighbor feature, colored by community
-	sns.scatterplot(
+	plt.scatter(
 		x=x_vals,
 		y=y_vals,
 		s=node_sizes,
 		alpha=0.7,
-		c=[_node_color(u) for u in plotted_nodes],
+		c=node_colors,
 		edgecolor="white",
 		linewidth=0.5,
 	)

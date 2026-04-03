@@ -30,12 +30,13 @@ def main() -> None:
 		right_on=ciuo_id,
 		how="left",
 	)
+	logscale = getattr(snakemake.wildcards, "logscale", "false")
 
 	biadjacency = gc.build_biadjacency(
 		enes_df,
 		letra_caes,
 		letra_ciuo,
-		logscale=utils._as_bool(snakemake.wildcards["logscale"]),
+		logscale=utils._as_bool(logscale),
 	)
 
 	pl.plot_heatmap(biadjacency, output_path=snakemake.output[0], save=True)

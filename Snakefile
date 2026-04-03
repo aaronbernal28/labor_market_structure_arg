@@ -2,7 +2,7 @@ configfile: "config.yaml"
 
 DATASETS = ["enes_all"]
 NODELIST = ["caes", "ciuo"]
-WEIGHT_FUNCTIONS = ["dot_product", "weighted_hidalgo_weight"]
+WEIGHT_FUNCTIONS = ["dot_product_weight", "weighted_hidalgo_weight"]
 ALGORITHMS = ["louvain"]
 VARIABLES = ["sex_id", "public_worker", "total_income"]
 DISCRETE_FEATURES = ["grupo", "louvain"] # in nodelist data

@@ -13,6 +13,8 @@ def main() -> None:
 
 	feature = getattr(snakemake.wildcards, "continuous_feature", None)
 	if feature is None:
+		feature = getattr(snakemake.wildcards, "discrete_feature", None)
+	if feature is None:
 		raise ValueError("No feature wildcard found for projection gradient plot.")
 	if feature not in pos_df.columns:
 		raise ValueError(f"Feature '{feature}' not found in positions dataframe.")
