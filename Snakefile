@@ -1,17 +1,17 @@
 configfile: "config.yaml"
 
-DATASETS = ["enes_all", "enes_2019", "enes_2021"]
+DATASETS = ["enes_all"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["dot_product", "weighted_hidalgo_weight"]
 ALGORITHMS = ["louvain"]
 VARIABLES = ["sex_id", "public_worker", "total_income"]
-DISCRETE_FEATURES = ["sex_id", "public_worker", "louvain"]
-CONTINUOUS_FEATURES = ["total_income", "income_mean", "female_pct", "male_pct", "public_sector_pct"]
+DISCRETE_FEATURES = ["grupo", "louvain"] # in nodelist data
+CONTINUOUS_FEATURES = ["income_mean", "female_pct", "public_sector_pct"]
 
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
 LOGSCALES = ["false"]
-ALPHAS = ["0.0500","1.0000"]
+ALPHAS = ["0.05","1.00"]
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS),
@@ -25,68 +25,66 @@ rule all:
 	input:
 		expand(
 			"images/00_aed_report/aed_{dataset}_top_sectors.png",
-			dataset=[DATASETS[0]],
+			dataset=DATASETS,
 		),
 		expand(
 			"images/00_aed_report/aed_{dataset}_top_occupations.png",
-			dataset=[DATASETS[0]],
+			dataset=DATASETS,
 		),
 		expand(
 			"images/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap_{dataset}.png",
-			dataset=[DATASETS[0]],
+			dataset=DATASETS,
 		),
 		expand(
-			"images/02_bipartite_plot_by_groups/bipartite_layout_by_groups{dataset}_{logscale}_{layout}.png",
-			dataset=[DATASETS[0]],
+			"images/02_bipartite_plot_by_groups/bipartite_plot_by_groups_{dataset}_{logscale}.png",
+			dataset=DATASETS,
 			logscale=LOGSCALES,
-			layout=LAYOUTS,
 		),
 		expand(
-			"images/02_bipartite_plot_by_groups/bipartite_degree_dist_{dataset}_{logscale}_{layout}.png",
-			dataset=[DATASETS[0]],
+			"images/02_bipartite_plot_by_groups/bipartite_degree_dist_{dataset}_{logscale}.png",
+			dataset=DATASETS,
 			logscale=LOGSCALES,
-			layout=LAYOUTS,
 		),
 		expand(
-			"images/03_projection_plot_by_groups/projection_plot_by_groups_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{discrete_feature}.png",
-			dataset=[DATASETS[0]],
+			"images/03_projection_plot_by_groups/projection_plot_by_groups_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_pos_{algorithm}_{discrete_feature}.png",
+			dataset=DATASETS,
 			logscale=LOGSCALES,
-			weight=WEIGHT_FUNCTIONS,
+			class_=CLASSES,
+			weight_function=WEIGHT_FUNCTIONS,
+			alpha=ALPHAS,
 			algorithm=ALGORITHMS,
-			layout=LAYOUTS,
 			discrete_feature=DISCRETE_FEATURES,
 		),
 		expand(
-			"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{continuous_feature}.png",
-			dataset=[DATASETS[0]],
+			"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_pos_{discrete_feature}.png",
+			dataset=DATASETS,
 			logscale=LOGSCALES,
-			weight=WEIGHT_FUNCTIONS,
+			class_=CLASSES,
+			weight_function=WEIGHT_FUNCTIONS,
+			alpha=ALPHAS,
+			discrete_feature=CONTINUOUS_FEATURES,
+		),
+		expand(
+			"images/_07_alpha_sensitivity/filtered_alpha_sensitivity_{dataset}_{logscale}_{class_}_{weight_function}.png",
+			dataset=DATASETS,
+			class_=CLASSES,
+			logscale=LOGSCALES,
+			weight_function=WEIGHT_FUNCTIONS,
+		),
+		expand(
+			"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_pos_{algorithm}_{continuous_feature}.png",
+			dataset=DATASETS,
+			class_=CLASSES,
+			logscale=LOGSCALES,
+			weight_function=WEIGHT_FUNCTIONS,
 			algorithm=ALGORITHMS,
-			layout=LAYOUTS,
+			alpha=ALPHAS,
 			continuous_feature=CONTINUOUS_FEATURES,
 		),
 		expand(
-			"images/filter_projection/filter_projection_alpha_sensitivity_{dataset}_{logscale}_{class_}_{weight}_{algorithm}.png",
-			dataset=[DATASETS[0]],
-			class_=CLASSES,
-			logscale=LOGSCALES,
-			weight=WEIGHT_FUNCTIONS,
-			algorithm=ALGORITHMS,
-		),
-		expand(
-			"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class_}_{weight}_{algorithm}_{alpha}_{feature}.png",
-			dataset=[DATASETS[0]],
-			class_=CLASSES,
-			logscale=LOGSCALES,
-			weight=WEIGHT_FUNCTIONS,
-			algorithm=ALGORITHMS,
-			alpha=ALPHAS,
-			feature=VARIABLES,
-		),
-		expand(
 			"images/06_sankey_plot/sankey_plot_{dataset}.png",
-			dataset=[DATASETS[0]],
-		),
+			dataset=DATASETS,
+		)
 
 
 rule _00_aed_report:

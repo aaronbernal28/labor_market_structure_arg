@@ -11,9 +11,7 @@ def main() -> None:
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
 
-	feature = getattr(snakemake.wildcards, "continuous_feature", None) or getattr(
-		snakemake.wildcards, "discrete_feature", None
-	)
+	feature = getattr(snakemake.wildcards, "continuous_feature", None)
 	if feature is None:
 		raise ValueError("No feature wildcard found for projection gradient plot.")
 	if feature not in pos_df.columns:

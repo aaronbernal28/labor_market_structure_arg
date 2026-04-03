@@ -1,6 +1,7 @@
 from scripts import *
 import networkx as nx
 import pandas as pd
+import matplotlib.colors as mcolors
 
 snakemake: any
 
@@ -18,6 +19,14 @@ def main() -> None:
 	discrete_feature = snakemake.wildcards["discrete_feature"]
 
 	if discrete_feature in plot_df.columns:
+		group_map = {
+			int(node): group
+			for node, group in plot_df.set_index(id_col)[discrete_feature]
+			.to_dict()
+			.items()
+		}
+	elif snakemake.config[class_].get(discrete_feature, None) in plot_df.columns:
+		discrete_feature = snakemake.config[class_][discrete_feature]
 		group_map = {
 			int(node): group
 			for node, group in plot_df.set_index(id_col)[discrete_feature]
@@ -45,7 +54,14 @@ def main() -> None:
 
 	if color_col:
 		pairs = plot_df[[discrete_feature, color_col]].dropna().drop_duplicates()
-		group_color_map = dict(zip(pairs[discrete_feature], pairs[color_col]))
+		raw_group_color_map = dict(zip(pairs[discrete_feature], pairs[color_col]))
+		group_color_map = {}
+		for group_name, color_value in raw_group_color_map.items():
+			try:
+				parsed_color = utils.parse_color(color_value)
+				group_color_map[group_name] = mcolors.to_hex(parsed_color)
+			except (ValueError, SyntaxError, TypeError):
+				group_color_map[group_name] = "gray"
 
 	print(f"Using discrete feature '{discrete_feature}' for grouping.")
 	print(f"Group mapping: {set(group_map.values())}")
