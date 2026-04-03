@@ -259,8 +259,12 @@ def get_projection_positions(
 		# Get the largest connected component for layout
 		largest_cc = max(nx.connected_components(graph), key=len)
 		graph = graph.subgraph(largest_cc)
-		print("Warning: Projection graph is not connected; using largest connected component for layout.")
-		print(f"Original graph had {graph.number_of_nodes()} nodes; largest component has {len(graph.nodes())} nodes.")
+		print(
+			"Warning: Projection graph is not connected; using largest connected component for layout."
+		)
+		print(
+			f"Original graph had {graph.number_of_nodes()} nodes; largest component has {len(graph.nodes())} nodes."
+		)
 
 	if method == "kamada_kawai":
 		pos = nx.kamada_kawai_layout(graph)

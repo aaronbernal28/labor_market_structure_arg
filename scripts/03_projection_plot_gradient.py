@@ -25,7 +25,9 @@ def main() -> None:
 		raise ValueError("No overlap between nodelist ids and projection graph nodes.")
 
 	pos = dl.load_positions(pos_df, id_col)
-	node_values = pd.to_numeric(plot_df.set_index(id_col)[feature], errors="coerce").to_dict()
+	node_values = pd.to_numeric(
+		plot_df.set_index(id_col)[feature], errors="coerce"
+	).to_dict()
 	worker_counts = plot_df.set_index(id_col)["n_obs"].to_dict()
 
 	FACTOR_NODE_SIZE = 0.6

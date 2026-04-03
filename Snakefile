@@ -157,11 +157,14 @@ rule _04_walt_test:
 	'''Walt test on datasets enes_2019 vs enes_2021.'''
 	input:
 		"data/processed/enes_2019.csv",
-		"data/processed/enes_2021.csv"
+		"data/processed/enes_2021.csv",
+		"data/processed/nodelist_caes_enes_2021.csv", # irrelevant which enes dataset we use
+		"data/processed/nodelist_ciuo_enes_2021.csv"
 	output:
-		"images/04_walt_test/walt_test_bootstrap_se.csv",
-		"images/04_walt_test/walt_test_delta.csv",
-		"images/04_walt_test/walt_test_pvalue_detailed.csv"
+		"images/04_walt_test/walt_test_bootstrap_se.png",
+		"images/04_walt_test/walt_test_delta.png",
+		"images/04_walt_test/walt_test_pvalue_detailed.png",
+		"images/04_walt_test/walt_test_pvalue_summary.log"
 	script:
 		"scripts/04_walt_test.py"
 

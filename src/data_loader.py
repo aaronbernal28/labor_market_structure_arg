@@ -6,6 +6,9 @@ from pathlib import Path
 from typing import Dict, Tuple, List
 import src.utils as ut
 import pandas as pd
+import numpy as np
+from scipy import stats
+
 from src.plotting import (
 	color_map_caes,
 	color_map_ciuo,
@@ -369,3 +372,124 @@ def load_positions(
 		idx: (float(row["x"]), float(row["y"]))
 		for idx, row in valid_positions.iterrows()
 	}
+
+
+def wald_test_comparison_proportions(
+	df1, df2, caes_col, ciuo_col, rownames, colnames, alpha=0.05
+):
+	"""
+	Performs Wald test on proportions comparing two datasets with Bonferroni correction.
+
+	Args:
+		df1: DataFrame for dataset 1
+		df2: DataFrame for dataset 2
+		caes_col: Column name for CAES (industry)
+		ciuo_col: Column name for CIUO (occupation)
+		rownames: Row labels (CAES categories)
+		colnames: Column labels (CIUO categories)
+		alpha: Significance level (default 0.05)
+
+	Returns:
+		dict containing test results
+	"""
+	n1 = len(df1)
+	n2 = len(df2)
+
+	print(f"Sample sizes: n1={n1}, n2={n2}")
+
+	# Create contingency tables (counts for each cell)
+	# First, create a crosstab for each dataset
+	crosstab1 = pd.crosstab(df1[caes_col], df1[ciuo_col])
+	crosstab2 = pd.crosstab(df2[caes_col], df2[ciuo_col])
+
+	# Ensure both have the same index and columns (fill missing with 0)
+	all_caes = sorted(set(crosstab1.index) | set(crosstab2.index))
+	all_ciuo = sorted(set(crosstab1.columns) | set(crosstab2.columns))
+
+	crosstab1 = crosstab1.reindex(index=all_caes, columns=all_ciuo, fill_value=0)
+	crosstab2 = crosstab2.reindex(index=all_caes, columns=all_ciuo, fill_value=0)
+
+	# Filter to match the rownames and colnames provided
+	crosstab1 = crosstab1.reindex(index=rownames, columns=colnames, fill_value=0)
+	crosstab2 = crosstab2.reindex(index=rownames, columns=colnames, fill_value=0)
+
+	# Convert to numpy arrays
+	counts1 = crosstab1.to_numpy().astype(float)
+	counts2 = crosstab2.to_numpy().astype(float)
+
+	# Calculate proportions
+	p1 = counts1 / n1
+	p2 = counts2 / n2
+
+	# Estimate delta: delta_hat = p1_hat - p2_hat
+	delta_hat = p1 - p2
+
+	# Calculate variances (binomial variance for proportions)
+	# var(p_hat) = p(1-p) / n
+	var1 = p1 * (1 - p1) / n1
+	var2 = p2 * (1 - p2) / n2
+
+	# Standard error: SE(delta_hat) = sqrt(var1 + var2)
+	se = np.sqrt(var1 + var2)
+
+	# Avoid division by zero
+	se = np.where(se > 0, se, 1e-10)
+
+	# Wald statistic: W = delta_hat / SE(delta_hat)
+	W = delta_hat / se
+
+	# P-values (two-tailed test using normal approximation)
+	p_values = 2 * (1 - stats.norm.cdf(np.abs(W)))
+
+	# Bonferroni correction
+	d = delta_hat.size  # Total number of tests
+	bonferroni_threshold = alpha / d
+
+	# Reject H_0 if p_i < alpha/d
+	rejected = p_values < bonferroni_threshold
+
+	print("\n=== Wald Test Results (Proportions) ===")
+	print(f"Total number of tests (d): {d}")
+	print(f"Bonferroni threshold: {bonferroni_threshold:.2e}")
+	print(
+		f"Number of rejections: {np.sum(rejected)} ({100 * np.sum(rejected) / d:.2f}%)"
+	)
+	print(f"Mean |delta_hat|: {np.mean(np.abs(delta_hat)):.6f}")
+	print(f"Max |delta_hat|: {np.max(np.abs(delta_hat)):.6f}")
+	print(f"Mean p-value: {np.mean(p_values):.4f}")
+	print(f"Min p-value: {np.min(p_values):.2e}")
+
+	return {
+		"delta_hat": delta_hat,
+		"se": se,
+		"W": W,
+		"p_values": p_values,
+		"bonferroni_threshold": bonferroni_threshold,
+		"rejected": rejected,
+		"n1": n1,
+		"n2": n2,
+		"p1": p1,
+		"p2": p2,
+		"counts1": counts1,
+		"counts2": counts2,
+	}
+
+
+def bootstrap_se(df1, df2, caes_col, ciuo_col, rownames, colnames, B=1000, seed=28):
+	"""Estimate SE of delta_hat = p1 - p2 via bootstrap (B resamples)."""
+	deltas = np.zeros((B, len(rownames), len(colnames)))
+	for b in range(B):
+		s1 = df1.sample(n=len(df1), replace=True, random_state=seed + 2 * b)
+		s2 = df2.sample(n=len(df2), replace=True, random_state=seed + 2 * b + 1)
+		ct1 = (
+			pd.crosstab(s1[caes_col], s1[ciuo_col])
+			.reindex(index=rownames, columns=colnames, fill_value=0)
+			.to_numpy(dtype=float)
+		)
+		ct2 = (
+			pd.crosstab(s2[caes_col], s2[ciuo_col])
+			.reindex(index=rownames, columns=colnames, fill_value=0)
+			.to_numpy(dtype=float)
+		)
+		deltas[b] = ct1 / len(df1) - ct2 / len(df2)
+	return deltas.std(axis=0, ddof=1)
