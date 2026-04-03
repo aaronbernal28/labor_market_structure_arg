@@ -12,13 +12,13 @@ def main() -> None:
 	print(f"Filtering projection graph with alpha={alpha}...")
 
 	if alpha < 1.0:
-		raise NotImplementedError("Filtering with alpha < 1.0 is not implemented yet.")
+		backbone = gc.disparity_filter_backbone(graph, alpha=alpha)
+	else:
+		print("Alpha >= 1.0, skipping filtering and using original projection.")
+		backbone = graph
 
 	output_path = Path(snakemake.output[0])
-	nx.write_gexf(graph, output_path)
-
-	# fig = lcd_plot_alpha_sensitivity(graph, title="Alpha sensitivity")
-	# fig.savefig(snakemake.output[1], bbox_inches="tight")
+	nx.write_gexf(backbone, output_path)
 
 
 if __name__ == "__main__":

@@ -10,8 +10,8 @@ CONTINUOUS_FEATURES = ["total_income", "income_mean", "female_pct", "male_pct", 
 
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
-LOGSCALES = ["false", "true"]
-ALPHAS = ["1.0000"] # No filtering for now
+LOGSCALES = ["false"]
+ALPHAS = ["0.0500","1.0000"]
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS),
@@ -189,6 +189,17 @@ rule _06_sankey_plot:
 	script:
 		"scripts/06_sankey_plot.py"
 
+
+rule _07_alpha_sensitivity:
+	input:
+		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}.gexf"
+	output:
+		"images/_07_alpha_sensitivity/filtered_alpha_sensitivity_{dataset}_{logscale}_{class_}_{weight_function}.png"
+	params:
+		alpha=0.05,
+		algorithm="louvain"
+	script:
+		"scripts/07_alpha_sensitivity.py"
 
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"

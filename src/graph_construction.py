@@ -282,3 +282,61 @@ def get_projection_positions(
 		pos = {node: (-y, x) for node, (x, y) in pos.items()}
 
 	return pos
+
+
+def disparity_filter_backbone(
+	graph: nx.Graph,
+	alpha: float = 0.05,
+	mode: str = "or",
+	keep_isolates: bool = True,
+) -> nx.Graph:
+	"""Return a disparity-filtered backbone for a weighted undirected graph.
+
+	An edge is kept when its significance is below alpha in at least one endpoint
+	("or") or in both endpoints ("and").
+	"""
+	if mode not in {"or", "and"}:
+		raise ValueError("mode must be 'or' or 'and'.")
+	if alpha <= 0 or alpha > 1:
+		raise ValueError("alpha must be in (0, 1].")
+
+	if graph.number_of_nodes() == 0:
+		return nx.Graph()
+
+	# Use a plain graph and preserve existing graph-level attributes.
+	backbone = nx.Graph()
+	backbone.graph.update(graph.graph)
+
+	if keep_isolates:
+		backbone.add_nodes_from(graph.nodes(data=True))
+
+	strength = {
+		n: sum(float(d.get("weight", 1.0)) for _, _, d in graph.edges(n, data=True))
+		for n in graph.nodes()
+	}
+	degree = dict(graph.degree())
+
+	for u, v, data in graph.edges(data=True):
+		w = float(data.get("weight", 1.0))
+
+		def _alpha_endpoint(node: int, weight: float) -> float:
+			k = degree.get(node, 0)
+			s = strength.get(node, 0.0)
+			if k <= 1 or s <= 0:
+				return 0.0
+			p = max(0.0, min(1.0, weight / s))
+			return float((1.0 - p) ** (k - 1))
+
+		a_u = _alpha_endpoint(u, w)
+		a_v = _alpha_endpoint(v, w)
+
+		keep_edge = (a_u < alpha or a_v < alpha) if mode == "or" else (a_u < alpha and a_v < alpha)
+		if keep_edge:
+			backbone.add_edge(u, v, **data)
+
+	if not keep_isolates:
+		backbone.add_nodes_from(graph.nodes(data=True))
+		isolates = [n for n in backbone.nodes() if backbone.degree(n) == 0]
+		backbone.remove_nodes_from(isolates)
+
+	return backbone
