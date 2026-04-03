@@ -1781,13 +1781,13 @@ def compute_and_plot_edge_correlation(
 					color = color_map.get(node_id, LIGTHGRAY)
 					break
 			if color:
-				plt.scatter([], [], c=color, label=label_fn(community))
+				plt.scatter([], [], color=color, label=label_fn(community))
 	else:
 		unique_colors = sorted(
 			set(color_map.get(u, LIGTHGRAY) for u in plotted_nodes) - {LIGTHGRAY}
 		)
 		for color in unique_colors:
-			plt.scatter([], [], c=color, label=color)
+			plt.scatter([], [], color=color, label=color)
 
 	# Add regression line on top to show trend
 	sns.regplot(

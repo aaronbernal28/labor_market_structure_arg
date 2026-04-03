@@ -35,7 +35,6 @@ rule all:
 			"images/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap_{dataset}.png",
 			dataset=[DATASETS[0]],
 		),
-"""
 		expand(
 			"images/02_bipartite_plot_by_groups/bipartite_layout_by_groups{dataset}_{logscale}_{layout}.png",
 			dataset=[DATASETS[0]],
@@ -61,25 +60,25 @@ rule all:
 			"images/03_projection_plot_gradient/projection_plot_gradient_{dataset}_{logscale}_{weight}_{algorithm}_{layout}_{continuous_feature}.png",
 			dataset=[DATASETS[0]],
 			logscale=LOGSCALES,
-			weight=WEIGHTS,
+			weight=WEIGHT_FUNCTIONS,
 			algorithm=ALGORITHMS,
 			layout=LAYOUTS,
 			continuous_feature=CONTINUOUS_FEATURES,
 		),
 		expand(
-			"images/filter_projection/filter_projection_alpha_sensitivity_{dataset}_{logscale}_{class}_{weight}_{algorithm}.png",
+			"images/filter_projection/filter_projection_alpha_sensitivity_{dataset}_{logscale}_{class_}_{weight}_{algorithm}.png",
 			dataset=[DATASETS[0]],
-			class=CLASSES,
+			class_=CLASSES,
 			logscale=LOGSCALES,
-			weight=WEIGHTS,
+			weight=WEIGHT_FUNCTIONS,
 			algorithm=ALGORITHMS,
 		),
 		expand(
-			"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}_{feature}.png",
+			"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class_}_{weight}_{algorithm}_{alpha}_{feature}.png",
 			dataset=[DATASETS[0]],
-			class=CLASSES,
+			class_=CLASSES,
 			logscale=LOGSCALES,
-			weight=WEIGHTS,
+			weight=WEIGHT_FUNCTIONS,
 			algorithm=ALGORITHMS,
 			alpha=ALPHAS,
 			feature=VARIABLES,
@@ -88,7 +87,6 @@ rule all:
 			"images/06_sankey_plot/sankey_plot_{dataset}.png",
 			dataset=[DATASETS[0]],
 		),
-"""
 
 
 rule _00_aed_report:
@@ -172,9 +170,10 @@ rule _04_walt_test:
 rule _05_edge_weight_correlation:
 	'''Correlation between edge weights in projection graphs.'''
 	input:
-		"data/graphs/projection_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}.gexf"
+		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos_{algorithm}.csv", # get community class from colum louvain
+		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}.gexf" # extract edge weights from graph
 	output:
-		"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class}_{weight}_{algorithm}_{alpha}_{feature}.png"
+		"images/05_edge_weight_correlation/edge_weight_correlation_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_pos_{algorithm}_{continuous_feature}.png"
 	script:
 		"scripts/05_edge_weight_correlation.py"
 
