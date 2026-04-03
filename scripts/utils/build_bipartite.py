@@ -7,7 +7,10 @@ snakemake: any
 
 
 def main() -> None:
-	enes_df = pd.read_csv(snakemake.input[0])
+	enes_df = pd.read_csv(
+		snakemake.input[0],
+		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+	)
 
 	caes_id = snakemake.config["id_caes"]
 	ciuo_id = snakemake.config["id_ciuo"]
@@ -16,7 +19,7 @@ def main() -> None:
 		enes_df,
 		caes_id,
 		ciuo_id,
-		logscale=snakemake.config["logscale"],
+		logscale=snakemake.wildcards["logscale"],
 		caes_partition=snakemake.config["caes"]["partition"],
 		ciuo_partition=snakemake.config["ciuo"]["partition"],
 	)

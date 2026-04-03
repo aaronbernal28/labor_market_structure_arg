@@ -94,6 +94,9 @@ def main() -> None:
 			df_enes[col] = pd.NA
 	df_enes = df_enes[output_cols]
 
+	df_enes[output_id_caes] = df_enes[output_id_caes].astype(int)
+	df_enes[output_id_ciuo] = df_enes[output_id_ciuo].astype(int)
+
 	df_enes.to_csv(snakemake.output[0], index=False)
 
 

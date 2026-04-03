@@ -5,9 +5,12 @@ snakemake: any
 
 
 def main() -> None:
-	enes_df = pd.read_csv(snakemake.input[0])
-	caes_df = pd.read_csv(snakemake.input[1])
-	ciuo_df = pd.read_csv(snakemake.input[2])
+	enes_df = pd.read_csv(
+		snakemake.input[0],
+		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+	)
+	caes_df = pd.read_csv(snakemake.input[1], dtype={"id": int})
+	ciuo_df = pd.read_csv(snakemake.input[2], dtype={"id": int})
 	caes_id = snakemake.config["caes"]["id"]
 	ciuo_id = snakemake.config["ciuo"]["id"]
 	letra_caes = snakemake.config["caes"]["letra"]
@@ -32,7 +35,7 @@ def main() -> None:
 		enes_df,
 		letra_caes,
 		letra_ciuo,
-		logscale=snakemake.config["logscale"],
+		logscale=snakemake.wildcards["logscale"],
 	)
 
 	pl.plot_heatmap(biadjacency, output_path=snakemake.output[0], save=True)

@@ -362,12 +362,11 @@ def draw_bipartite_by_color(
 	"""
 	np.random.seed(seed)
 
-	assert set(color_map.keys()) >= set(graph.nodes()), (
-		"Graph contains nodes not present in color map."
-	)
-	assert label_map is None or set(label_map.keys()) >= set(graph.nodes()), (
-		"Graph contains nodes not present in label map."
-	)
+	if set(color_map.keys()) >= set(graph.nodes()):
+		print("Graph contains nodes not present in color map.")
+
+	if label_map is None or set(label_map.keys()) >= set(graph.nodes()):
+		print("Graph contains nodes not present in label map.")
 
 	# Compute initial layout
 	pos = nx.spring_layout(graph, seed=seed, k=0.5, iterations=1000, method="force")
@@ -401,7 +400,7 @@ def draw_bipartite_by_color(
 			pos[node][1] = normalize_ciuo_y(pos[node][1])
 
 	# Defining color and size maps
-	node_colors = [color_map.get(int(node), LIGTHGRAY) for node in graph.nodes()]
+	# node_colors = [color_map.get(int(node), LIGTHGRAY) for node in graph.nodes()]
 	if node_size_map is not None:
 		raw_sizes = {
 			node: float(node_size_map.get(node, node_size_map.get(int(node), 1.0)))

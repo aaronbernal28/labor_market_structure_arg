@@ -119,10 +119,12 @@ rule _01_biadjacency_matrix_heatmap:
 rule _02_bipartite_plot_by_groups:
 	'''Plot bipartite graph from graph.'''
 	input:
-		"data/graphs/bipartite_{dataset}_{logscale}.gexf"
+		"data/graphs/bipartite_{dataset}_{logscale}.gexf",
+		"data/processed/nodelist_caes_{dataset}.csv",
+		"data/processed/nodelist_ciuo_{dataset}.csv",
 	output:
-		"images/02_bipartite_plot_by_groups/bipartite_layout_by_groups{dataset}_{logscale}_{layout}.png",
-		"images/02_bipartite_plot_by_groups/bipartite_degree_dist_{dataset}_{logscale}_{layout}.png"
+		"images/02_bipartite_plot_by_groups/bipartite_plot_by_groups_{dataset}_{logscale}.png",
+		"images/02_bipartite_plot_by_groups/bipartite_degree_dist_{dataset}_{logscale}.png"
 	script:
 		"scripts/02_bipartite_plot_by_groups.py"
 

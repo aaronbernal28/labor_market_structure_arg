@@ -87,3 +87,11 @@ colors:
     - "navy"
     - "darkcyan"
 
+figsizes:
+  top_n_bar: [6, 4]
+  edge_correlation: [6, 6]
+  bipartite: [20, 6]
+  projection: [8, 8]
+  stacked: [12, 3.5]
+
+plot_font_size: 14

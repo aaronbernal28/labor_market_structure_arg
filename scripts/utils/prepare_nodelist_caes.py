@@ -21,7 +21,10 @@ CHARACTERISTIC_COLUMNS = [
 
 
 def main() -> None:
-	df_enes = pd.read_csv(snakemake.input[0])
+	df_enes = pd.read_csv(
+		snakemake.input[0],
+		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+	)
 	class_name = snakemake.params[0]
 	nodelist = snakemake.config[class_name]
 	id = nodelist["id"]
@@ -62,6 +65,8 @@ def main() -> None:
 		keep_columns=CHARACTERISTIC_COLUMNS,
 	)
 	df_nodelist = df_nodelist.reset_index()
+
+	df_nodelist[id] = df_nodelist[id].astype(int)
 
 	df_nodelist.to_csv(snakemake.output[0], index=False)
 
