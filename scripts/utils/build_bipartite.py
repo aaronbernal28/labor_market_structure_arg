@@ -17,8 +17,8 @@ def main() -> None:
 		caes_id,
 		ciuo_id,
 		logscale=snakemake.config["logscale"],
-		caes_partition=snakemake.config["nodelist_caes"]["partition"],
-		ciuo_partition=snakemake.config["nodelist_ciuo"]["partition"],
+		caes_partition=snakemake.config["caes"]["partition"],
+		ciuo_partition=snakemake.config["ciuo"]["partition"],
 	)
 
 	metric_results = metrics.summarize_graph(graph)

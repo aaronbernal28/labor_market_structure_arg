@@ -48,7 +48,7 @@ datasets:
      public_worker: "M3_7" # en realidad es "M3_7"==1
      total_income: null
 
-nodelist_caes:
+caes:
   source: data/raw/nodelist_caes.csv
   id: "v182caes"
   label: "caeslabel"
@@ -59,7 +59,7 @@ nodelist_caes:
   grupo_color: "caesag_color"
   partition: 1
 
-nodelist_ciuo:
+ciuo:
   source: data/raw/nodelist_ciuo.csv
   id: "v183ciuo"
   label: "ciuolabel"

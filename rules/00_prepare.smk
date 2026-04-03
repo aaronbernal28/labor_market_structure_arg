@@ -28,14 +28,14 @@ rule prepare_enes_all:
 rule prepare_nodelist:
 	'''Add coloring and features information to the nodelist infered from the one ENES dataset.'''
 	wildcard_constraints:
-		nodelist = "nodelist_caes|nodelist_ciuo",
+		class_ = "caes|ciuo",
 		dataset = "enes_2019|enes_2021|enes_all"
 	input:
 		"data/processed/{dataset}.csv"
 	output:
-		"data/processed/{nodelist}_{dataset}.csv"
+		"data/processed/nodelist_{class_}_{dataset}.csv"
 	params:
-		nodelist = lambda wildcards: wildcards.nodelist
+		class_ = lambda wildcards: wildcards.class_
 	script:
 		"../scripts/utils/prepare_nodelist_caes.py"
 	

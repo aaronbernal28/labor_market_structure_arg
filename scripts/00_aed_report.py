@@ -7,8 +7,8 @@ snakemake: any
 def main() -> None:
 	df_nodelist_caes = pd.read_csv(snakemake.input[1])
 	df_nodelist_ciuo = pd.read_csv(snakemake.input[2])
-	meta_caes = snakemake.config["nodelist_caes"]
-	meta_ciuo = snakemake.config["nodelist_ciuo"]
+	meta_caes = snakemake.config["caes"]
+	meta_ciuo = snakemake.config["ciuo"]
 
 	pl.plot_top_n_bar(
 		df=df_nodelist_caes,

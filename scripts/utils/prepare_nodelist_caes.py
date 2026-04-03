@@ -22,34 +22,34 @@ CHARACTERISTIC_COLUMNS = [
 
 def main() -> None:
 	df_enes = pd.read_csv(snakemake.input[0])
-	nodelist = snakemake.params[0]
-	metadata = snakemake.config[nodelist]
-	id = metadata["id"]
+	class_name = snakemake.params[0]
+	nodelist = snakemake.config[class_name]
+	id = nodelist["id"]
 	max_caes_id = snakemake.config["max_caes_id"]
 
-	if nodelist == "nodelist_caes":
+	if class_name == "caes":
 		df_nodelist = dl.load_nodelist_caes(
-			caes_path=metadata["source"],
-			caes_id=metadata["id"],
-			caes_letra_col=metadata["letra"],
-			caes_ag_col=metadata["grupo"],
-			caes_label_color_col=metadata["label_color"],
-			caes_letra_color_col=metadata["letra_color"],
-			caes_ag_color_col=metadata["grupo_color"],
+			caes_path=nodelist["source"],
+			caes_id=nodelist["id"],
+			caes_letra_col=nodelist["letra"],
+			caes_ag_col=nodelist["grupo"],
+			caes_label_color_col=nodelist["label_color"],
+			caes_letra_color_col=nodelist["letra_color"],
+			caes_ag_color_col=nodelist["grupo_color"],
 		)
-	elif nodelist == "nodelist_ciuo":
+	elif class_name == "ciuo":
 		df_nodelist = dl.load_nodelist_ciuo(
-			ciuo_path=metadata["source"],
-			ciuo_id=metadata["id"],
+			ciuo_path=nodelist["source"],
+			ciuo_id=nodelist["id"],
 			max_caes_id=max_caes_id,
-			ciuo_letra_col=metadata["letra"],
-			ciuo_3cat_col=metadata["grupo"],
-			ciuo_label_color_col=metadata["label_color"],
-			ciuo_letra_color_col=metadata["letra_color"],
-			ciuo_3cat_color_col=metadata["grupo_color"],
+			ciuo_letra_col=nodelist["letra"],
+			ciuo_3cat_col=nodelist["grupo"],
+			ciuo_label_color_col=nodelist["label_color"],
+			ciuo_letra_color_col=nodelist["letra_color"],
+			ciuo_3cat_color_col=nodelist["grupo_color"],
 		)
 	else:
-		raise ValueError(f"Unsupported nodelist type: {nodelist}")
+		raise ValueError(f"Unsupported nodelist type: {class_name}")
 
 	new_features = nc.compute_group_characteristics(enes_df=df_enes, col_group=id)
 	for col in CHARACTERISTIC_COLUMNS:

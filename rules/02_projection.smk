@@ -3,7 +3,7 @@ rule compute_projection:
 	input:
 		"data/graphs/bipartite_{dataset}_{logscale}.gexf"
 	wildcard_constraints:
-		class_ = "nodelist_caes|nodelist_ciuo",
+		class_ = "caes|ciuo",
 		weight_function = "dot_product|weighted_hidalgo_weight"
 	output:
 		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}.gexf"
@@ -20,5 +20,7 @@ rule filter_projection:
 		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}.gexf"
 	output:
 		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}.gexf"
+	params:
+		alpha = 1.000
 	script:
 		"../scripts/utils/filter_projection.py"

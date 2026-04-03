@@ -9,10 +9,10 @@ def main() -> None:
 	class_name = snakemake.params[0]
 	weight_function_name = snakemake.params[1]
 
-		
-	print(f"Building projection for class '{class_name}' using weight function '{weight_function_name}'...")
+	print(
+		f"Building projection for class '{class_name}' using weight function '{weight_function_name}'..."
+	)
 	weight_function = getattr(gc, weight_function_name)
-
 
 	projection = gc.generic_weighted_projected_graph(
 		graph,

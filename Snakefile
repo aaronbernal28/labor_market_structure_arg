@@ -1,7 +1,7 @@
 configfile: "config.yaml"
 
 DATASETS = ["enes_all", "enes_2019", "enes_2021"]
-METADATA = ["nodelist_caes", "nodelist_ciuo"]
+NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["dot_product", "weighted_hidalgo_weight"]
 ALGORITHMS = ["louvain"]
 VARIABLES = ["sex_id", "public_worker", "total_income"]
@@ -13,6 +13,13 @@ CLASSES = ["caes", "ciuo"]
 LOGSCALES = ["false"]
 ALPHAS = ["1.0000"] # No filtering for now
 
+wildcard_constraints:
+	dataset = "|".join(DATASETS),
+	class_ = "|".join(CLASSES),
+	logscale = "|".join(LOGSCALES),
+	weight_function = "|".join(WEIGHT_FUNCTIONS),
+	algorithm = "|".join(ALGORITHMS),
+	alpha = "|".join(ALPHAS)
 
 rule all:
 	input:

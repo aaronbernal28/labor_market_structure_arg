@@ -8,10 +8,10 @@ def main() -> None:
 	enes_df = pd.read_csv(snakemake.input[0])
 	caes_df = pd.read_csv(snakemake.input[1])
 	ciuo_df = pd.read_csv(snakemake.input[2])
-	caes_id = snakemake.config["nodelist_caes"]["id"]
-	ciuo_id = snakemake.config["nodelist_ciuo"]["id"]
-	letra_caes = snakemake.config["nodelist_caes"]["letra"]
-	letra_ciuo = snakemake.config["nodelist_ciuo"]["letra"]
+	caes_id = snakemake.config["caes"]["id"]
+	ciuo_id = snakemake.config["ciuo"]["id"]
+	letra_caes = snakemake.config["caes"]["letra"]
+	letra_ciuo = snakemake.config["ciuo"]["letra"]
 
 	enes_df = pd.merge(
 		enes_df,
