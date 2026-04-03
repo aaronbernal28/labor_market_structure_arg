@@ -10,6 +10,7 @@ def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	class_ = snakemake.wildcards["class_"]
 	dataset = snakemake.wildcards["dataset"]
+	seed = int(snakemake.config["seed"])
 
 	algorithm = snakemake.params["algorithm"].lower()
 
@@ -20,7 +21,7 @@ def main() -> None:
 			"Leiden is not implemented in src.communities yet. Use 'louvain'."
 		)
 
-	communities, modularity, best_resolution = algorithm_func(graph)
+	communities, modularity, best_resolution = algorithm_func(graph, seed=seed)
 	num_communities = len(set(communities.values()))
 	print(f"Modularity score: {modularity:.4f}")
 	print(f"Best resolution: {best_resolution:.3f}")

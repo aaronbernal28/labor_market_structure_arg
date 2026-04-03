@@ -10,6 +10,7 @@ snakemake: any
 def _sweep_alpha(
 	projection: nx.Graph,
 	alphas: np.ndarray,
+	seed: int,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 	"""Return arrays of (nodes_with_edges, edge_counts, clustering, modularity, nodes_largest_cc) for each alpha."""
 	nodes_with_edges = np.empty(len(alphas), dtype=float)
@@ -41,7 +42,7 @@ def _sweep_alpha(
 
 		if backbone.number_of_edges() > 0:
 			clustering_coeffs[i] = nx.average_clustering(backbone)
-			_, mod = comm.louvain_partition(backbone, seed=42)
+			_, mod = comm.louvain_partition(backbone, seed=seed)
 			modularities[i] = mod
 		else:
 			clustering_coeffs[i] = 0.0
@@ -56,6 +57,7 @@ def main() -> None:
 	output_path.parent.mkdir(parents=True, exist_ok=True)
 
 	reference_alpha = float(snakemake.params.get("alpha", 0.05))
+	seed = int(snakemake.config["seed"])
 	alphas = np.logspace(-4, 0, 30)
 	alphas = np.unique(np.append(alphas, reference_alpha))
 	alphas.sort()
@@ -66,7 +68,7 @@ def main() -> None:
 		clustering_coeffs,
 		modularities,
 		nodes_largest_cc,
-	) = _sweep_alpha(projection, alphas)
+	) = _sweep_alpha(projection, alphas, seed)
 
 	title = (
 		f"{snakemake.wildcards['dataset']} - "
