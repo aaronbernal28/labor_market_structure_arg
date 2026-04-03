@@ -81,7 +81,7 @@ def main() -> None:
 		degrees=degrees,
 		colors=colors,
 		output_path=snakemake.output[1],
-		logscale=str(snakemake.wildcards["logscale"]).lower() == "true",
+		logscale=utils._as_bool(snakemake.wildcards["logscale"]),
 	)
 
 

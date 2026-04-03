@@ -70,3 +70,16 @@ def desambiated_ciuo_id(id: int, max_caes_id: int = None) -> int:
 	Recover original CIUO ID from disambiguated ID.
 	"""
 	return id + _resolve_max_caes_id(max_caes_id)
+
+
+def _as_bool(value: object) -> bool:
+	"""Convert Snakemake wildcard values into strict booleans."""
+	if isinstance(value, bool):
+		return value
+	if isinstance(value, str):
+		v = value.strip().lower()
+		if v in {"true", "1", "yes", "y"}:
+			return True
+		if v in {"false", "0", "no", "n"}:
+			return False
+	raise ValueError(f"Invalid boolean value for logscale: {value!r}")

@@ -35,7 +35,7 @@ def main() -> None:
 		enes_df,
 		letra_caes,
 		letra_ciuo,
-		logscale=snakemake.wildcards["logscale"],
+		logscale=utils._as_bool(snakemake.wildcards["logscale"]),
 	)
 
 	pl.plot_heatmap(biadjacency, output_path=snakemake.output[0], save=True)

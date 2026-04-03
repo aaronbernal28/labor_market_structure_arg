@@ -4,7 +4,6 @@ id_2: "nhog"
 id_caes: "v182caes"
 id_ciuo: "v183ciuo"
 max_caes_id: 10000
-logscale: false
 
 paths:
   data_raw: data/raw
@@ -24,7 +23,7 @@ datasets:
       default: NaN
 
   enes_2019:
-    source: null
+    source: data/raw/base_enespersonas.csv
     url: "https://datasets.datos.mincyt.gob.ar/dataset/b0c0ae96-4028-4d0e-919a-c6830110f6b6/resource/421a7e29-7d15-4b69-a2e8-d7242b58b770/download/base_enespersonas.csv"
     id_1: "nocues"
     id_2: "nhog"

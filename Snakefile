@@ -10,7 +10,7 @@ CONTINUOUS_FEATURES = ["total_income", "income_mean", "female_pct", "male_pct", 
 
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
-LOGSCALES = ["false"]
+LOGSCALES = ["false", "true"]
 ALPHAS = ["1.0000"] # No filtering for now
 
 wildcard_constraints:

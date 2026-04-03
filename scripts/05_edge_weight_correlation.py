@@ -1,5 +1,6 @@
 from scripts import *
 import networkx as nx
+import matplotlib.pyplot as plt
 import pandas as pd
 
 snakemake: any
@@ -19,16 +20,23 @@ def _resolve_community_column(df: pd.DataFrame, preferred: str | None) -> str:
 
 def main() -> None:
 	class_ = snakemake.wildcards["class_"]
-	continuous_feature = snakemake.wildcards["continuous_feature"]
+	feature_name = snakemake.wildcards.get("feature") or snakemake.wildcards.get(
+		"continuous_feature"
+	)
 	algorithm = snakemake.wildcards.get("algorithm", None)
+
+	if not feature_name:
+		raise KeyError("No feature wildcard found (expected 'feature' or 'continuous_feature').")
 
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
+
+	# Cast nodes to int instantly to prevent string mismatch bugs
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
 
-	if continuous_feature not in pos_df.columns:
+	if feature_name not in pos_df.columns:
 		raise KeyError(
-			f"Continuous feature '{continuous_feature}' not found in {snakemake.input[0]}."
+			f"Continuous feature '{feature_name}' not found in {snakemake.input[0]}."
 		)
 
 	community_col = _resolve_community_column(pos_df, algorithm)
@@ -41,7 +49,7 @@ def main() -> None:
 		raise ValueError("No overlap between nodelist ids and projection graph nodes.")
 
 	feature_map = pd.to_numeric(
-		plot_df.set_index(id_col)[continuous_feature], errors="coerce"
+		plot_df.set_index(id_col)[feature_name], errors="coerce"
 	).to_dict()
 	community_map = (
 		pd.to_numeric(plot_df.set_index(id_col)[community_col], errors="coerce")
@@ -59,7 +67,7 @@ def main() -> None:
 
 	figsize = snakemake.config["figsizes"]["edge_correlation"]
 	font_size = snakemake.config["plot_font_size"]
-	default_title = f"{class_.upper()} - {continuous_feature}"
+	default_title = f"{class_.upper()} - {feature_name}"
 
 	pl.compute_and_plot_edge_correlation(
 		G=graph,
@@ -76,6 +84,8 @@ def main() -> None:
 		figsize=figsize,
 		font_size=font_size,
 	)
+
+	plt.close("all")
 
 
 if __name__ == "__main__":
