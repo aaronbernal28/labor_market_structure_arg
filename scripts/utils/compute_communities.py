@@ -13,6 +13,12 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	dataset = snakemake.wildcards["dataset"]
 	seed = int(snakemake.config["seed"])
+	
+	id_col = snakemake.config[class_]["id"]
+	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
+	if id_col not in nodelist_df.columns:
+		raise KeyError(f"Missing '{id_col}' column in {class_}_{dataset}.csv.")
+	graph = graph.subgraph(nodelist_df[id_col].unique()).copy()
 
 	algorithm = snakemake.wildcards["algorithm"].lower()
 
@@ -29,10 +35,7 @@ def main() -> None:
 	print(f"Best resolution: {best_resolution:.3f}")
 	print(f"Detected communities: {num_communities}")
 
-	id_col = snakemake.config[class_]["id"]
-	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
-	if id_col not in nodelist_df.columns:
-		raise KeyError(f"Missing '{id_col}' column in {class_}_{dataset}.csv.")
+
 
 	communities_int = {int(node): int(comm) for node, comm in communities.items()}
 	nodelist_df[algorithm] = (
