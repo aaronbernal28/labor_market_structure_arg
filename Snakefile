@@ -164,13 +164,13 @@ rule _04_walt_test:
 	input:
 		"data/processed/enes_2019.csv",
 		"data/processed/enes_2021.csv",
-		"data/processed/enes_2021/nodelist_caes.csv", # irrelevant which enes dataset we use
-		"data/processed/enes_2021/nodelist_ciuo.csv"
+		"data/processed/enes_all/nodelist_caes.csv", # irrelevant which enes dataset we use
+		"data/processed/enes_all/nodelist_ciuo.csv"
 	output:
-		"images/04_walt_test/walt_test_bootstrap_se.png",
-		"images/04_walt_test/walt_test_delta.png",
-		"images/04_walt_test/walt_test_pvalue_detailed.png",
-		"images/04_walt_test/walt_test_pvalue_summary.log"
+		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
+		"images/enes_all/04_walt_test/walt_test_delta.png",
+		"images/enes_all/04_walt_test/walt_test_pvalue_detailed.png",
+		"images/enes_all/04_walt_test/walt_test_pvalue_summary.log"
 	script:
 		"scripts/04_walt_test.py"
 
