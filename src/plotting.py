@@ -1195,9 +1195,10 @@ def plot_backbone_weight_histogram(
 	title_prefix: str,
 	output_path: Path,
 	save: bool = True,
+	figsize: tuple | None = None,
 ) -> None:
 	"""Plot overlapped histograms comparing original and backbone edge weights."""
-	fig, ax = plt.subplots()
+	fig, ax = plt.subplots(figsize=figsize)
 
 	sns.histplot(
 		original_weights,
@@ -1218,17 +1219,19 @@ def plot_backbone_weight_histogram(
 		label=f"Esqueleto ({len(backbone_weights)} aristas)",
 	)
 
-	ax.set_title(
-		f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (alpha={alpha})"
-	)
+	if title_prefix:
+		ax.set_title(
+			f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (alpha={alpha})"
+		)
+	
 	ax.set_xlabel("Peso de arista")
 	ax.set_ylabel("Frecuencia")
 	ax.set_yscale("log")
-	ax.set_ylim(bottom=1e-1)
+	#ax.set_ylim(bottom=1e-1)
 	ax.legend()
 
 	if save:
-		plt.savefig(output_path, dpi=300, bbox_inches="tight")
+		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
 	else:
 		plt.show()
@@ -1395,7 +1398,7 @@ def plot_top_n_bar(
 	plt.tight_layout()
 
 	if save:
-		plt.savefig(output_path, dpi=300, bbox_inches="tight")
+		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
 	else:
 		plt.show()
