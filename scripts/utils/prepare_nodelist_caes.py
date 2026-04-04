@@ -25,7 +25,7 @@ def main() -> None:
 		snakemake.input[0],
 		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
 	)
-	class_name = snakemake.params[0]
+	class_name = snakemake.wildcards["class_"]
 	nodelist = snakemake.config[class_name]
 	id = nodelist["id"]
 	max_caes_id = snakemake.config["max_caes_id"]

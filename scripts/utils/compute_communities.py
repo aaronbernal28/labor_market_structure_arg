@@ -12,7 +12,7 @@ def main() -> None:
 	dataset = snakemake.wildcards["dataset"]
 	seed = int(snakemake.config["seed"])
 
-	algorithm = snakemake.params["algorithm"].lower()
+	algorithm = snakemake.wildcards["algorithm"].lower()
 
 	if algorithm == "louvain":
 		algorithm_func = comm.best_louvain_partition_random

@@ -77,9 +77,5 @@ def _as_bool(value: object) -> bool:
 	if isinstance(value, bool):
 		return value
 	if isinstance(value, str):
-		v = value.strip().lower()
-		if v in {"true", "1", "yes", "y"}:
-			return True
-		if v in {"false", "0", "no", "n"}:
-			return False
+		return value != "non_logscale"
 	raise ValueError(f"Invalid boolean value for logscale: {value!r}")

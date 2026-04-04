@@ -1,21 +1,19 @@
 rule compute_positions:
 	input:
-		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}.gexf",
-		"data/processed/nodelist_{class_}_{dataset}.csv"
+		"data/graphs/{dataset}/{logscale}/{class_}/projection_{weight_function}_{alpha}.gexf",
+		"data/processed/{dataset}/nodelist_{class_}.csv"
 	output:
-		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos.csv"
+		"data/processed/{dataset}/{logscale}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv"
 	script:
 		"../scripts/utils/compute_positions.py"
 
 
 rule compute_communities:
 	input:
-		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}.gexf",
-		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos.csv"
-	params:
-		algorithm = "louvain",
+		"data/graphs/{dataset}/{logscale}/{class_}/projection_{weight_function}_{alpha}.gexf",
+		"data/processed/{dataset}/{logscale}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv"
 	output:
-		"data/processed/nodelist_{class_}_{dataset}_{logscale}_{weight_function}_{alpha}_pos_{algorithm}.csv",
-		"images/03_communities/community_distribution_{dataset}_{logscale}_{class_}_{weight_function}_{alpha}_{algorithm}.png"
+		"data/processed/{dataset}/{logscale}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
+		"images/{dataset}/{logscale}/{class_}/03_communities/community_distribution__{weight_function}_{alpha}_{algorithm}.png"
 	script:
 		"../scripts/utils/compute_communities.py"

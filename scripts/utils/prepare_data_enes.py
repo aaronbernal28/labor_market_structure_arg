@@ -5,7 +5,7 @@ snakemake: any
 
 
 def main() -> None:
-	dataset = snakemake.params[0]
+	dataset = snakemake.wildcards["dataset"]
 
 	dataset_input = snakemake.config["datasets"][dataset]
 	dataset_default = snakemake.config["enes"]
