@@ -1,0 +1,32 @@
+# Figure Properties
+figure.dpi : 100
+figure.facecolor : white
+figure.autolayout : True
+
+# Font Properties
+font.family : sans-serif
+font.size : 12.0
+
+# Axes Properties
+axes.titlesize : 12.0
+axes.labelsize : 11.0
+axes.spines.top : False
+axes.spines.right : False
+axes.linewidth : 1.0
+axes.grid : False
+
+# Tick Properties
+xtick.labelsize : 11.0
+ytick.labelsize : 11.0
+xtick.bottom : True
+ytick.left : True
+
+# Legend Properties
+legend.fontsize : 11.0
+legend.title_fontsize : 11.0
+legend.frameon : False
+
+# Scatter and Line Properties
+lines.linewidth : 1.5
+patch.linewidth : 0.5
+patch.edgecolor : white

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from scripts import *
+import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
@@ -58,6 +59,7 @@ def _sweep_alpha(
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	projection = nx.read_gexf(snakemake.input[0], node_type=int)
 	output_path = Path(snakemake.output[0])
 	output_path.parent.mkdir(parents=True, exist_ok=True)

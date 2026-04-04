@@ -1,4 +1,5 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 
@@ -6,6 +7,7 @@ snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	bigraph = nx.read_gexf(snakemake.input[0], node_type=int)
 	caes_meta = snakemake.config["caes"]
 	ciuo_meta = snakemake.config["ciuo"]
@@ -45,7 +47,7 @@ def main() -> None:
 			color_map_global[node_id] = utils.parse_color(color_value)
 
 	for node_id in bigraph.nodes():
-		if node_id not in color_map_global:
+		if node_id not in color_map_global: #TODO: remove uknown label in the plot
 			color_map_global[node_id] = pl.LIGTHGRAY
 		if node_id not in label_map_groups:
 			label_map_groups[node_id] = "Unknown"
@@ -63,7 +65,6 @@ def main() -> None:
 		title=None,
 		save=True,
 		figsize=snakemake.config["figsizes"]["bipartite"],
-		font_size=snakemake.config["plot_font_size"],
 		node_size_map=node_size_map_workers,
 		factor_node_size=0.6,
 		node_size_exponent=0.8,

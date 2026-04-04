@@ -1,4 +1,5 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import matplotlib.colors as mcolors
@@ -7,6 +8,7 @@ snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	class_ = snakemake.wildcards["class_"]
 	dataset = snakemake.wildcards["dataset"]
@@ -21,7 +23,7 @@ def main() -> None:
 			"Leiden is not implemented in src.communities yet. Use 'louvain'."
 		)
 
-	communities, modularity, best_resolution = algorithm_func(graph, seed=seed)
+	communities, modularity, best_resolution = algorithm_func(graph, seed=seed, n_samples=50)
 	num_communities = len(set(communities.values()))
 	print(f"Modularity score: {modularity:.4f}")
 	print(f"Best resolution: {best_resolution:.3f}")
@@ -39,8 +41,8 @@ def main() -> None:
 	nodelist_df.to_csv(snakemake.output[0], index=False)
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
 
-	group_col = snakemake.config[class_].get("letra")
-	group_color_col = snakemake.config[class_].get("letra_color")
+	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
+	group_color_col = snakemake.config[class_].get("letra_color" if class_ == "ciuo" else "grupo_color")
 
 	nodelist_idx = nodelist_df.set_index(id_col)
 
@@ -66,7 +68,6 @@ def main() -> None:
 		group_color_map=group_color_map,
 		legend_title=group_col,
 		figsize=tuple(snakemake.config["figsizes"]["stacked"]),
-		font_size=int(snakemake.config["plot_font_size"]),
 		save=True,
 		percentage=False,
 	)

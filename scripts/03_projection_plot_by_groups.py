@@ -1,4 +1,5 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import matplotlib.colors as mcolors
@@ -7,6 +8,7 @@ snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	class_ = snakemake.wildcards["class_"]
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
@@ -89,17 +91,13 @@ def main() -> None:
 	EDGE_ALPHA = 0.1
 	NODE_ALPHA = 0.7
 
-	figsize = snakemake.config["figsizes"]["projection"]
-	font_size = snakemake.config["plot_font_size"]
-
 	_ = pl.plot_projection_by_group(
 		graph,
 		group_map=group_map,
 		group_color_map=group_color_map,
 		title=None,
 		legend_title="Categorias",
-		figsize=figsize,
-		font_size=font_size,
+		figsize=snakemake.config["figsizes"]["projection"],
 		output_path=snakemake.output[0],
 		save=True,
 		method="energy",

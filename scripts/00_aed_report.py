@@ -1,10 +1,12 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import pandas as pd
 
 snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	meta_caes = snakemake.config["caes"]
 	meta_ciuo = snakemake.config["ciuo"]
 	df_nodelist_caes = pd.read_csv(snakemake.input[1], dtype={meta_caes["id"]: int})
@@ -17,6 +19,7 @@ def main() -> None:
 		color_col=meta_caes["label_color"],
 		title="Top sectors",
 		xlabel="Workers",
+		figsize=snakemake.config["figsizes"]["top_n_bar"],
 		output_path=snakemake.output[0],
 		save=True,
 	)
@@ -28,6 +31,7 @@ def main() -> None:
 		color_col=meta_ciuo["label_color"],
 		title="Top occupations",
 		xlabel="Workers",
+		figsize=snakemake.config["figsizes"]["top_n_bar"],
 		output_path=snakemake.output[1],
 		save=True,
 	)

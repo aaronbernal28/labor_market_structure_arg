@@ -28,8 +28,6 @@ import textwrap
 
 LIGTHGRAY = "#a8a8a8"
 
-plt.rcParams.update({"figure.dpi": 100, "savefig.dpi": 100})
-
 
 def _mean_edge_color(color_u, color_v):
 	"""Return the mean RGB color between two node colors."""
@@ -78,10 +76,10 @@ def plot_heatmap(
 	biadjacency: pd.DataFrame,
 	output_path: Path = None,
 	save: bool = True,
-	font_size: int = None,
+	figsize: tuple | None = None,
 ) -> None:
 	"""Plot heatmap of the bipartite adjacency matrix."""
-	plt.figure(figsize=(16, 10))
+	plt.figure(figsize=figsize)
 
 	# Text Wrapping Configuration
 	col_wrap_width = 15
@@ -100,34 +98,25 @@ def plot_heatmap(
 	values = biadjacency.to_numpy()
 	is_integer = np.issubdtype(values.dtype, np.integer)
 	fmt = "d" if is_integer else ".2f"
-	default_fontsize = font_size if font_size else 9
 	ax = sns.heatmap(
 		biadjacency,
 		annot=True,
 		fmt=fmt,
 		cmap="Greens",
 		cbar=False,
-		annot_kws={"fontsize": default_fontsize},
 	)
 
 	ax.xaxis.tick_top()  # Move ticks to top
 	ax.xaxis.set_label_position("top")
-	plt.xticks(rotation=0, fontsize=default_fontsize)
+	plt.xticks(rotation=0)
 
-	# Row labels: align LEFT (or RIGHT if font_size specified for single-char labels)
-	if font_size:
-		ax.set_yticklabels(
-			ax.get_yticklabels(), ha="right", rotation=0, fontsize=default_fontsize
-		)
-		ax.tick_params(axis="y", pad=20)
-	else:
-		ax.set_yticklabels(ax.get_yticklabels(), ha="left")
-		ax.tick_params(axis="y", pad=190)
+	# Row labels: align LEFT
+	ax.set_yticklabels(ax.get_yticklabels(), ha="left")
+	ax.tick_params(axis="y", pad=190)
 	ax.tick_params(left=False, top=False)
 
 	plt.xlabel("")
 	plt.ylabel("")
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -146,25 +135,16 @@ def _wrap_labels(df: pd.DataFrame) -> pd.DataFrame:
 	return wrapped
 
 
-def _style_heatmap_axes(ax, title: str, font_size: int = None) -> None:
+def _style_heatmap_axes(ax, title: str) -> None:
 	ax.xaxis.tick_top()
 	ax.xaxis.set_label_position("top")
-	default_fontsize = font_size if font_size else 9
-	title_fontsize = font_size + 2 if font_size else 11
-	plt.xticks(rotation=0, fontsize=default_fontsize)
-	if font_size:
-		ax.set_yticklabels(
-			ax.get_yticklabels(), ha="right", rotation=0, fontsize=default_fontsize
-		)
-		ax.tick_params(axis="y", pad=20)
-	else:
-		ax.set_yticklabels(ax.get_yticklabels(), ha="left")
-		ax.tick_params(axis="y", pad=190)
+	plt.xticks(rotation=0)
+	ax.set_yticklabels(ax.get_yticklabels(), ha="left")
+	ax.tick_params(axis="y", pad=190)
 	ax.tick_params(left=False, top=False)
 	ax.set_xlabel("")
 	ax.set_ylabel("")
-	ax.set_title(title, fontsize=title_fontsize, pad=12)
-	plt.tight_layout()
+	ax.set_title(title, pad=12)
 
 
 def plot_rejection_heatmap(
@@ -175,7 +155,7 @@ def plot_rejection_heatmap(
 	bonferroni_threshold: float,
 	output_path: Path,
 	save: bool = True,
-	font_size: int = None,
+	figsize: tuple | None = None,
 ) -> None:
 	"""Heatmap of p-values: black below Bonferroni threshold, YlOrRd above it."""
 	from matplotlib.colors import LinearSegmentedColormap, ListedColormap
@@ -207,8 +187,7 @@ def plot_rejection_heatmap(
 	all_colours = np.vstack([black_colours, rest_colours])
 	cmap = ListedColormap(all_colours)
 
-	default_fontsize = font_size if font_size else 11
-	fig, ax = plt.subplots(figsize=(16, 10))
+	fig, ax = plt.subplots(figsize=figsize)
 	sns.heatmap(
 		df,
 		ax=ax,
@@ -219,7 +198,6 @@ def plot_rejection_heatmap(
 		vmax=1,
 		cbar=True,
 		cbar_kws={"shrink": 0.35, "label": "p-valor"},
-		annot_kws={"fontsize": default_fontsize},
 		alpha=0.9,
 	)
 	# Mark the Bonferroni threshold on the colorbar
@@ -233,11 +211,10 @@ def plot_rejection_heatmap(
 		f"{bonferroni_threshold:.2e}",
 		va="center",
 		ha="left",
-		fontsize=7,
 		transform=cbar.ax.transData,
 		color="dimgray",
 	)
-	_style_heatmap_axes(ax, title, font_size)
+	_style_heatmap_axes(ax, title)
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -251,7 +228,7 @@ def plot_delta_heatmap(
 	colnames: Iterable[str],
 	output_path: Path,
 	save: bool = True,
-	font_size: int = None,
+	figsize: tuple | None = None,
 ) -> None:
 	"""Diverging heatmap showing delta_hat annotations in scientific notation."""
 
@@ -268,8 +245,7 @@ def plot_delta_heatmap(
 	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
 	abs_max = np.max(np.abs(delta_hat))
 	title = "Diferencia estimada delta = p(ENES 2019) - p(ESAyPP 2021)"
-	default_fontsize = font_size if font_size else 11
-	fig, ax = plt.subplots(figsize=(16, 10))
+	fig, ax = plt.subplots(figsize=figsize)
 	sns.heatmap(
 		df,
 		ax=ax,
@@ -280,9 +256,8 @@ def plot_delta_heatmap(
 		vmax=abs_max,
 		cbar=True,
 		cbar_kws={"shrink": 0.35, "label": "delta"},
-		annot_kws={"fontsize": default_fontsize},
 	)
-	_style_heatmap_axes(ax, title, font_size)
+	_style_heatmap_axes(ax, title)
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -296,7 +271,7 @@ def plot_bootstrap_se_heatmap(
 	colnames: Iterable[str],
 	output_path: Path,
 	save: bool = True,
-	font_size: int = None,
+	figsize: tuple | None = None,
 ) -> None:
 	"""Heatmap of bootstrap SE estimates (B=1000) for the delta proportions."""
 
@@ -312,8 +287,7 @@ def plot_bootstrap_se_heatmap(
 	df = _wrap_labels(df)
 	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
 	title = "Bootstrap SE de delta (B=1000)"
-	default_fontsize = font_size if font_size else 11
-	fig, ax = plt.subplots(figsize=(16, 10))
+	fig, ax = plt.subplots(figsize=figsize)
 	sns.heatmap(
 		df,
 		ax=ax,
@@ -322,9 +296,8 @@ def plot_bootstrap_se_heatmap(
 		cmap="YlOrRd",
 		cbar=True,
 		cbar_kws={"shrink": 0.35, "label": "SE bootstrap"},
-		annot_kws={"fontsize": default_fontsize},
 	)
-	_style_heatmap_axes(ax, title, font_size)
+	_style_heatmap_axes(ax, title)
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -342,9 +315,8 @@ def draw_bipartite_by_color(
 	shift_x: float = 0.5,
 	title: str = "",
 	save: bool = True,
-	figsize: tuple = (12, 8),
+	figsize: tuple | None = None,
 	edge_alpha: float = 0.9,
-	font_size: int = 9,
 	legend_marker_size: float = 11.0,
 	factor_node_size: float = 3.0,
 	node_size_map: Mapping[int, float] = None,
@@ -498,7 +470,6 @@ def draw_bipartite_by_color(
 			graph,
 			pos,
 			labels=label_map,
-			font_size=max(font_size - 1, 6),
 			font_color="black",
 			font_weight="bold",
 			horizontalalignment="left",
@@ -541,8 +512,6 @@ def draw_bipartite_by_color(
 			title="Ramas de actividad (CAES)",
 			loc="upper left",
 			bbox_to_anchor=(0.0, 1.0),
-			fontsize=max(font_size - 1, 6),
-			title_fontsize=font_size,
 			framealpha=0.85,
 			edgecolor="lightgray",
 			handlelength=1.2,
@@ -556,8 +525,6 @@ def draw_bipartite_by_color(
 			title="Ocupaciones (CIUO)",
 			loc="upper right",
 			bbox_to_anchor=(1.0, 1.0),
-			fontsize=max(font_size - 1, 6),
-			title_fontsize=font_size,
 			framealpha=0.85,
 			edgecolor="lightgray",
 			handlelength=1.2,
@@ -566,7 +533,7 @@ def draw_bipartite_by_color(
 		)
 
 	# Finalize plot
-	plt.title(title, fontsize=font_size + 1)
+	plt.title(title)
 	plt.axis("off")
 	plt.xlim(-1.4, 1.6)
 	if save:
@@ -586,7 +553,7 @@ def draw_bipartite_normal_layout_by_color(
 	top_n: int = 6,
 	title: str = "",
 	save: bool = True,
-	figsize: tuple = (16, 12),
+	figsize: tuple | None = None,
 	node_scale: float = 8.0,
 	edge_alpha: float = 0.35,
 	edge_lw: float = 0.15,
@@ -695,8 +662,6 @@ def draw_bipartite_normal_layout_by_color(
 			title="Ramas economicas\n(CAES)",
 			loc="upper left",
 			bbox_to_anchor=(0.0, 1.0),
-			fontsize=8.5,
-			title_fontsize=8.5,
 			framealpha=0.85,
 			edgecolor="lightgray",
 			handlelength=1.2,
@@ -710,8 +675,6 @@ def draw_bipartite_normal_layout_by_color(
 			title="Ocupaciones\n(CIUO)",
 			loc="upper right",
 			bbox_to_anchor=(1.0, 1.0),
-			fontsize=8.5,
-			title_fontsize=8.5,
 			framealpha=0.85,
 			edgecolor="lightgray",
 			handlelength=1.2,
@@ -720,8 +683,7 @@ def draw_bipartite_normal_layout_by_color(
 		)
 
 	ax.set_xlim(-1.25, 1.25)
-	ax.set_title(title, pad=12, fontsize=12)
-	plt.tight_layout()
+	ax.set_title(title, pad=12)
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -743,7 +705,7 @@ def plot_degree_histogram(
 	"""Plot degree distribution as scatter plot for discrete data or histogram for continuous data."""
 	created_fig = ax is None
 	if created_fig:
-		fig, ax = plt.subplots(figsize=(6, 5))
+		fig, ax = plt.subplots()
 
 	degrees_array = np.array(list(degrees))
 
@@ -777,8 +739,7 @@ def plot_degree_histogram(
 	ax.set_title(f"{title}\n<k> = {np.mean(degrees_array):.2f}")
 	ax.grid(True, alpha=0.3)
 
-	if created_fig:  # only do tight_layout if we created the figure
-		plt.tight_layout()
+	if created_fig:
 		if save and output_path is not None:
 			plt.savefig(output_path, bbox_inches="tight")
 			plt.close()
@@ -794,7 +755,7 @@ def plot_degree_histograms(
 	logscale: bool = False,
 ) -> None:
 	"""Plot degree histograms for all nodes, CAES nodes, and CIUO nodes."""
-	fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+	fig, axes = plt.subplots(1, 3)
 	configs = [
 		(degrees["all"], colors["all"], "Grados (todos los nodos)"),
 		(degrees["caes"], colors["caes"], "Grados CAES"),
@@ -802,7 +763,6 @@ def plot_degree_histograms(
 	]
 	for i, (values, color, title) in enumerate(configs):
 		plot_degree_histogram(values, color, title, ax=axes[i], logscale=logscale)
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -817,8 +777,7 @@ def plot_projection_by_group(
 	title: str,
 	legend_title: str,
 	output_path: Path = None,
-	figsize: tuple = (10, 10),
-	font_size: int = 11,
+	figsize: tuple | None = None,
 	seed: int = 42,
 	save: bool = True,
 	legend_label_fmt=None,
@@ -949,13 +908,11 @@ def plot_projection_by_group(
 
 	plt.legend(
 		title=legend_title,
-		fontsize=max(font_size - 2, 6),
-		title_fontsize=font_size,
 		loc="best",
 		borderaxespad=4.0,
 		framealpha=0.7,
 	)
-	plt.title(title, fontsize=font_size + 1)
+	plt.title(title)
 	plt.axis("off")
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
@@ -972,8 +929,7 @@ def plot_projection_gradient(
 	title: str,
 	colorbar_label: str = "Valor",
 	cmap: str = "viridis",
-	figsize: tuple = (10, 10),
-	font_size: int = 11,
+	figsize: tuple | None = None,
 	output_path: Path = None,
 	save: bool = True,
 	factor_node_size: float = 0.5,
@@ -1083,10 +1039,9 @@ def plot_projection_gradient(
 	sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
 	sm.set_array([])
 	cbar = fig.colorbar(sm, ax=ax, shrink=0.4, pad=-0.15)
-	cbar.set_label(colorbar_label, fontsize=font_size)
-	cbar.ax.tick_params(labelsize=max(font_size - 1, 6))
+	cbar.set_label(colorbar_label)
 
-	ax.set_title(title, fontsize=font_size + 1)
+	ax.set_title(title)
 	ax.axis("off")
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
@@ -1103,8 +1058,7 @@ def plot_stacked_by_group(
 	output_path: Path,
 	group_color_map: Dict[str, tuple] = None,
 	legend_title: str = None,
-	figsize: tuple = (16, 4),
-	font_size: int = 11,
+	figsize: tuple | None = None,
 	save: bool = True,
 	percentage: bool = True,
 ) -> None:
@@ -1128,23 +1082,24 @@ def plot_stacked_by_group(
 	# Build color list matching the column order
 	if group_color_map:
 		colors = [group_color_map.get(col, "gray") for col in ct.columns]
-		ax = ct.plot(
-			kind="barh", stacked=True, figsize=figsize, width=0.8, color=colors
-		)
+		plot_kwargs = {"kind": "barh", "stacked": True, "width": 0.8, "color": colors}
+		if figsize is not None:
+			plot_kwargs["figsize"] = figsize
+		ax = ct.plot(**plot_kwargs)
 	else:
-		ax = ct.plot(kind="barh", stacked=True, figsize=figsize, width=0.8)
+		plot_kwargs = {"kind": "barh", "stacked": True, "width": 0.8}
+		if figsize is not None:
+			plot_kwargs["figsize"] = figsize
+		ax = ct.plot(**plot_kwargs)
 
-	ax.set_xlabel("Porcentaje (%)" if percentage else "Conteo", fontsize=font_size)
-	ax.set_title(title, fontsize=font_size + 1)
-	ax.tick_params(axis="both", labelsize=font_size - 1)
+	ax.set_xlabel("Porcentaje (%)" if percentage else "Conteo")
+	ax.set_title(title)
 	ax.set_xlim(0, 100 if percentage else None)
 	legend_title = legend_title or group_col
 	ax.legend(
 		title=legend_title,
 		bbox_to_anchor=(1.05, 1),
 		loc="upper left",
-		fontsize=font_size - 2,
-		title_fontsize=font_size,
 	)
 
 	# Format y-axis labels as C0, C1, ...
@@ -1157,7 +1112,6 @@ def plot_stacked_by_group(
 	ax.spines["left"].set_visible(False)
 	ax.spines["bottom"].set_visible(False)
 
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -1178,7 +1132,7 @@ def plot_distance_histogram(
 	finite = values[np.isfinite(values) & (values > 0)]
 	inf_count = np.isinf(values).sum()
 
-	plt.figure(figsize=(8, 5))
+	plt.figure()
 	counts, bin_edges, _ = plt.hist(finite, bins=bins, alpha=0.8, color="steelblue")
 	if include_infinite and inf_count > 0:
 		bin_width = bin_edges[1] - bin_edges[0] if len(bin_edges) > 1 else 1.0
@@ -1189,7 +1143,6 @@ def plot_distance_histogram(
 	plt.ylabel("Frecuencia")
 	plt.title(f"{title}\nfinito={len(finite)} | inf={inf_count}")
 	plt.grid(True, alpha=0.3)
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -1209,7 +1162,7 @@ def plot_distance_heatmap(
 	data[np.isinf(data)] = np.nan
 	mask = np.isnan(data)
 
-	plt.figure(figsize=(10, 8))
+	plt.figure()
 	ax = sns.heatmap(data, cmap="mako", mask=mask, cbar=True)
 	if labels:
 		ax.set_xticks(np.arange(len(labels)) + 0.5)
@@ -1218,18 +1171,14 @@ def plot_distance_heatmap(
 			[f"{i:02d}" for i in range(len(labels))],
 			rotation=45,
 			ha="right",
-			fontsize=6,
 		)
-		ax.set_yticklabels(
-			[f"{i:02d}" for i in range(len(labels))], rotation=0, fontsize=6
-		)
-		ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=6)
-		ax.set_yticklabels(labels, rotation=0, fontsize=6)
+		ax.set_yticklabels([f"{i:02d}" for i in range(len(labels))], rotation=0)
+		ax.set_xticklabels(labels, rotation=45, ha="right")
+		ax.set_yticklabels(labels, rotation=0)
 	else:
 		ax.set_xticks([])
 		ax.set_yticks([])
 	plt.title(title)
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -1246,7 +1195,7 @@ def plot_backbone_weight_histogram(
 	save: bool = True,
 ) -> None:
 	"""Plot overlapped histograms comparing original and backbone edge weights."""
-	fig, ax = plt.subplots(figsize=(10, 6))
+	fig, ax = plt.subplots()
 
 	sns.histplot(
 		original_weights,
@@ -1276,7 +1225,6 @@ def plot_backbone_weight_histogram(
 	ax.set_ylim(bottom=1e-1)
 	ax.legend()
 
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, dpi=300, bbox_inches="tight")
 		plt.close()
@@ -1294,7 +1242,7 @@ def plot_persistence_diagrams(
 	if plot_diagrams is None:
 		raise ImportError("persim is required for plot_persistence_diagrams.")
 
-	plt.figure(figsize=(8, 6))
+	plt.figure()
 	plot_diagrams(diagrams, show=False)
 	plt.title(title)
 	if save:
@@ -1321,7 +1269,7 @@ def plot_persistence_barcodes(
 		for birth, death in dgm:
 			gudhi_diagrams.append((dim, (float(birth), float(death))))
 
-	plt.figure(figsize=(8, 6))
+	plt.figure()
 	gudhi.plot_persistence_barcode(gudhi_diagrams)
 	plt.title(title)
 	if save:
@@ -1403,8 +1351,7 @@ def plot_top_n_bar(
 	title: str,
 	xlabel: str,
 	top_n: int = 15,
-	figsize: tuple = (12, 8),
-	font_size: int = 11,
+	figsize: tuple | None = None,
 	output_path: Path = None,
 	save: bool = True,
 ) -> None:
@@ -1430,10 +1377,9 @@ def plot_top_n_bar(
 		palette=palette_by_label,
 		legend=False,
 	)
-	plt.title(title, fontsize=font_size + 1)
-	plt.xlabel(xlabel, fontsize=font_size)
-	plt.ylabel("", fontsize=font_size)
-	ax.tick_params(axis="both", labelsize=font_size - 1)
+	plt.title(title)
+	plt.xlabel(xlabel)
+	plt.ylabel("")
 
 	ax.xaxis.set_major_formatter(
 		plt.FuncFormatter(lambda x, loc: "{:,}".format(int(x)))
@@ -1445,7 +1391,6 @@ def plot_top_n_bar(
 	ax.spines["left"].set_visible(False)
 	ax.spines["bottom"].set_visible(False)
 
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, dpi=300, bbox_inches="tight")
 		plt.close()
@@ -1462,7 +1407,7 @@ def plot_exploratory_analysis(
 	def plot_scatter(
 		x_col, y_col, xlabel, ylabel, filename, hue_col=None, hue_label=None
 	):
-		fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+		fig, axes = plt.subplots(1, 2)
 
 		if x_col in caes_nodes.columns and y_col in caes_nodes.columns:
 			kwargs = {
@@ -1522,7 +1467,6 @@ def plot_exploratory_analysis(
 					title="Total Workers", bbox_to_anchor=(1.05, 1), loc="upper left"
 				)
 
-		plt.tight_layout()
 		plt.savefig(output_dir / filename, bbox_inches="tight")
 		plt.close()
 
@@ -1598,7 +1542,7 @@ def plot_alpha_sensitivity(
 	reference_alpha: vertical reference line (default 0.05).
 	save: if True save to file, else show interactively.
 	"""
-	fig, ax = plt.subplots(figsize=(7, 6))
+	fig, ax = plt.subplots()
 
 	color_nodes = "steelblue"
 	color_edges = "coral"
@@ -1659,9 +1603,9 @@ def plot_alpha_sensitivity(
 	)
 	lines.append(vline)
 
-	ax.legend(handles=lines, fontsize=10)
-	ax.set_title(title, fontsize=13)
-	ax.set_xlabel("Alfa", fontsize=12)
+	ax.legend(handles=lines)
+	ax.set_title(title)
+	ax.set_xlabel("Alfa")
 	ax.tick_params(axis="y")
 	ax.set_ylim(0, 1.05)
 	if logscale:
@@ -1670,7 +1614,6 @@ def plot_alpha_sensitivity(
 	else:
 		ax.set_xlim(0, 1)
 
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
@@ -1695,8 +1638,7 @@ def compute_and_plot_edge_correlation(
 	node_size_exponent: float = 1.0,
 	save: bool = True,
 	perfect_line: bool = True,
-	figsize: tuple = (9, 8),
-	font_size: int = 11,
+	figsize: tuple | None = None,
 ) -> None:
 	# Only keep nodes that have finite feature values
 	valid_nodes = {node for node, val in feature_map.items() if np.isfinite(val)}
@@ -1851,19 +1793,14 @@ def compute_and_plot_edge_correlation(
 		f"{title}\nAsortatividad (Pearson r): {pearson_r:.4f} (p={p_value:.4e})"
 		if title
 		else None,
-		fontsize=font_size + 1,
 	)
-	plt.xlabel("X_i", fontsize=font_size)
-	plt.ylabel("Y_i", fontsize=font_size)
-	plt.xticks(fontsize=font_size - 1)
-	plt.yticks(fontsize=font_size - 1)
+	plt.xlabel("X_i")
+	plt.ylabel("Y_i")
 	plt.xlim(axis_min, axis_max)
 	plt.ylim(axis_min, axis_max)
-	sns.despine()
-	plt.legend(fontsize=font_size - 1)
+	plt.legend()
 
 	# Generate Assortativity Scatter Plot (Node value vs Average Neighbor Value)
-	plt.tight_layout()
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()

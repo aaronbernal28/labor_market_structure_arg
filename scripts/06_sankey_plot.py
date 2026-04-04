@@ -1,4 +1,5 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.graph_objects as go
 import re
@@ -7,6 +8,7 @@ snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	caes_id = snakemake.config["caes"]["id"]
 	ciuo_id = snakemake.config["ciuo"]["id"]
 	letra_caes = snakemake.config["caes"]["grupo"]
@@ -128,7 +130,6 @@ def main() -> None:
 	)
 	fig.update_layout(
 		title_text="Sankey: CIUO (1er dígito) → CAES (1er letra)",
-		font_size=12,
 		width=1200,
 		height=800,
 	)

@@ -1,10 +1,12 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import pandas as pd
 
 snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	df_2019 = pd.read_csv(
 		snakemake.input[0],
 		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
@@ -91,14 +93,13 @@ def main() -> None:
 	rownames_plot = [label.split(".")[0] for label in rownames]
 	colnames_plot = [label.split(".")[0] for label in colnames]
 
-	font_size = snakemake.config.get("plot_font_size", 11)
 	pl.plot_bootstrap_se_heatmap(
 		se_boot,
 		rownames_plot,
 		colnames_plot,
 		snakemake.output[0],
 		save=True,
-		font_size=font_size,
+		figsize=tuple(snakemake.config["figsizes"]["heatmap"]),
 	)
 	pl.plot_delta_heatmap(
 		test_results["delta_hat"],
@@ -106,7 +107,7 @@ def main() -> None:
 		colnames_plot,
 		snakemake.output[1],
 		save=True,
-		font_size=font_size,
+		figsize=tuple(snakemake.config["figsizes"]["heatmap"]),
 	)
 	pl.plot_rejection_heatmap(
 		test_results["p_values"],
@@ -116,7 +117,7 @@ def main() -> None:
 		test_results["bonferroni_threshold"],
 		snakemake.output[2],
 		save=True,
-		font_size=font_size,
+		figsize=tuple(snakemake.config["figsizes"]["heatmap"]),
 	)
 
 	rows = []

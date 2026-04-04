@@ -1,10 +1,12 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import pandas as pd
 
 snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	enes_df = pd.read_csv(
 		snakemake.input[0],
 		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
@@ -38,7 +40,12 @@ def main() -> None:
 		logscale=False,
 	)
 
-	pl.plot_heatmap(biadjacency, output_path=snakemake.output[0], save=True)
+	pl.plot_heatmap(
+		biadjacency,
+		output_path=snakemake.output[0],
+		save=True,
+		figsize=tuple(snakemake.config["figsizes"]["heatmap"]),
+	)
 
 
 if __name__ == "__main__":

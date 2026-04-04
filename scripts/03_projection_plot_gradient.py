@@ -1,4 +1,5 @@
 from scripts import *
+import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 
@@ -6,6 +7,7 @@ snakemake: any
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	class_ = snakemake.wildcards["class_"]
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
@@ -35,15 +37,17 @@ def main() -> None:
 	EDGE_ALPHA = 0.1
 	NODE_ALPHA = 0.7
 
+	cmaps = snakemake.config.get("cmaps", {})
+	cmap_name = cmaps.get(feature, cmaps.get("default", "viridis"))
+
 	pl.plot_projection_gradient(
 		graph,
 		pos=pos,
 		node_values=node_values,
 		title=None,
 		colorbar_label=feature,
-		cmap="viridis",
+		cmap=str(cmap_name),
 		figsize=snakemake.config["figsizes"]["projection"],
-		font_size=snakemake.config["plot_font_size"],
 		output_path=snakemake.output[0],
 		save=True,
 		node_size_map=worker_counts,

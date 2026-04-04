@@ -21,6 +21,7 @@ def _resolve_community_column(df: pd.DataFrame, preferred: str | None) -> str:
 
 
 def main() -> None:
+	plt.style.use("src/styles/publication.mplstyle")
 	class_ = snakemake.wildcards["class_"]
 	feature_name = snakemake.wildcards.get("feature") or snakemake.wildcards.get(
 		"continuous_feature"
@@ -69,8 +70,6 @@ def main() -> None:
 		for node_id, community in community_map.items()
 	}
 
-	figsize = snakemake.config["figsizes"]["edge_correlation"]
-	font_size = snakemake.config["plot_font_size"]
 	default_title = f"{class_.upper()} - {feature_name}"
 
 	pl.compute_and_plot_edge_correlation(
@@ -85,8 +84,7 @@ def main() -> None:
 		perfect_line=False,
 		factor_node_size=1.2,
 		node_size_exponent=0.8,
-		figsize=figsize,
-		font_size=font_size,
+		figsize=snakemake.config["figsizes"]["edge_correlation"],
 	)
 
 	plt.close("all")
