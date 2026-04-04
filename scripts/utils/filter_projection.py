@@ -20,6 +20,15 @@ def main() -> None:
 	output_path = Path(snakemake.output[0])
 	nx.write_gexf(backbone, output_path)
 
+	pl.plot_backbone_weight_histogram(
+		original_weights=[d['weight'] for _, _, d in graph.edges(data=True)],
+		backbone_weights=[d['weight'] for _, _, d in backbone.edges(data=True)],
+		alpha=alpha,
+		title_prefix=None,
+		output_path=Path(snakemake.output[1]),
+		save=True,
+		figsize=tuple(snakemake.config["figsizes"]["histogram"]),
+	)
 
 if __name__ == "__main__":
 	main()

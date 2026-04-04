@@ -95,6 +95,7 @@ figsizes:
   projection: [8, 8]
   stacked: [12, 3.5]
   heatmap: [16, 10]
+  histogram: [8, 6]
 
 # Colormaps for continuous-feature projection plots.
 cmaps:

@@ -13,6 +13,7 @@ rule filter_projection:
 	input:
 		"data/graphs/{dataset}/{logscale}/{class_}/projection_{weight_function}.gexf"
 	output:
-		"data/graphs/{dataset}/{logscale}/{class_}/projection_{weight_function}_{alpha}.gexf"
+		"data/graphs/{dataset}/{logscale}/{class_}/projection_{weight_function}_{alpha}.gexf",
+		"images/{dataset}/{logscale}/{class_}/backbone_weight_histogram_{weight_function}_{alpha}.png"
 	script:
 		"../scripts/utils/filter_projection.py"
