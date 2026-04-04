@@ -192,7 +192,7 @@ rule _07_alpha_sensitivity:
 	input:
 		"data/graphs/projection_{dataset}_{logscale}_{class_}_{weight_function}.gexf"
 	output:
-		"images/_07_alpha_sensitivity/filtered_alpha_sensitivity_{dataset}_{logscale}_{class_}_{weight_function}.png"
+		"images/07_alpha_sensitivity/filtered_alpha_sensitivity_{dataset}_{logscale}_{class_}_{weight_function}.png"
 	params:
 		alpha=0.05,
 		algorithm="louvain"
