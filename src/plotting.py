@@ -483,12 +483,13 @@ def draw_bipartite_by_color(
 	if label_map is not None:
 		for node in graph.nodes():
 			node_id = int(node)
-			lbl = label_map.get(node_id, str(node_id))
-			color = color_map.get(node_id, LIGTHGRAY)
-			if graph.nodes[node].get("bipartite") == ut.get_class_index("caes"):
-				caes_groups[lbl] = color
-			else:
-				ciuo_groups[lbl] = color
+			if node_id in label_map:
+				lbl = label_map[node_id]
+				color = color_map.get(node_id, LIGTHGRAY)
+				if graph.nodes[node].get("bipartite") == ut.get_class_index("caes"):
+					caes_groups[lbl] = color
+				else:
+					ciuo_groups[lbl] = color
 
 	def _make_handles(groups, marker_shape="o"):
 		ms = float(legend_marker_size) if legend_marker_size is not None else 11.0
@@ -1390,6 +1391,7 @@ def plot_top_n_bar(
 	ax.spines["right"].set_visible(False)
 	ax.spines["left"].set_visible(False)
 	ax.spines["bottom"].set_visible(False)
+	plt.tight_layout()
 
 	if save:
 		plt.savefig(output_path, dpi=300, bbox_inches="tight")

@@ -129,7 +129,7 @@ def main() -> None:
 		]
 	)
 	fig.update_layout(
-		title_text="Sankey: CIUO (1er dígito) → CAES (1er letra)",
+		title_text=None,
 		width=1200,
 		height=800,
 	)

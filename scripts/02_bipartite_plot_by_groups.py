@@ -29,9 +29,8 @@ def main() -> None:
 	for _, row in caes_df.iterrows():
 		node_id = int(row[caes_id_col])
 		group_label = row.get(caes_group_col, None)
-		label_map_groups[node_id] = (
-			"Unknown" if pd.isna(group_label) else str(group_label)
-		)
+		if not pd.isna(group_label):
+			label_map_groups[node_id] = str(group_label)
 		color_value = row.get(caes_group_color_col, None)
 		if pd.notna(color_value):
 			color_map_global[node_id] = utils.parse_color(color_value)
@@ -39,18 +38,15 @@ def main() -> None:
 	for _, row in ciuo_df.iterrows():
 		node_id = int(row[ciuo_id_col])
 		group_label = row.get(ciuo_group_col, None)
-		label_map_groups[node_id] = (
-			"Unknown" if pd.isna(group_label) else str(group_label)
-		)
+		if not pd.isna(group_label):
+			label_map_groups[node_id] = str(group_label)
 		color_value = row.get(ciuo_group_color_col, None)
 		if pd.notna(color_value):
 			color_map_global[node_id] = utils.parse_color(color_value)
 
 	for node_id in bigraph.nodes():
-		if node_id not in color_map_global: #TODO: remove uknown label in the plot
+		if node_id not in color_map_global:
 			color_map_global[node_id] = pl.LIGTHGRAY
-		if node_id not in label_map_groups:
-			label_map_groups[node_id] = "Unknown"
 
 	caes_worker_counts = caes_df.set_index(caes_id_col)["n_obs"].to_dict()
 	ciuo_worker_counts = ciuo_df.set_index(ciuo_id_col)["n_obs"].to_dict()
