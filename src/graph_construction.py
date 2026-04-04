@@ -330,7 +330,11 @@ def disparity_filter_backbone(
 		a_u = _alpha_endpoint(u, w)
 		a_v = _alpha_endpoint(v, w)
 
-		keep_edge = (a_u < alpha or a_v < alpha) if mode == "or" else (a_u < alpha and a_v < alpha)
+		keep_edge = (
+			(a_u < alpha or a_v < alpha)
+			if mode == "or"
+			else (a_u < alpha and a_v < alpha)
+		)
 		if keep_edge:
 			backbone.add_edge(u, v, **data)
 

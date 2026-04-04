@@ -48,7 +48,13 @@ def _sweep_alpha(
 			clustering_coeffs[i] = 0.0
 			modularities[i] = 0.0
 
-	return nodes_with_edges, edge_counts, clustering_coeffs, modularities, nodes_largest_cc
+	return (
+		nodes_with_edges,
+		edge_counts,
+		clustering_coeffs,
+		modularities,
+		nodes_largest_cc,
+	)
 
 
 def main() -> None:

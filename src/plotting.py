@@ -1698,8 +1698,8 @@ def compute_and_plot_edge_correlation(
 	figsize: tuple = (9, 8),
 	font_size: int = 11,
 ) -> None:
-	# Only keep nodes that have the feature
-	valid_nodes = set(feature_map.keys())
+	# Only keep nodes that have finite feature values
+	valid_nodes = {node for node, val in feature_map.items() if np.isfinite(val)}
 
 	x_vals_map = {}
 	y_vals_map = {u: [] for u in valid_nodes}
@@ -1710,13 +1710,14 @@ def compute_and_plot_edge_correlation(
 			# Undirected, we add both (u,v) and (v,u) to make it symmetric
 			w = data.get("weight", 0.0)
 
-			x_vals_map[u] = feature_map[u]
-			y_vals_map[u].append(feature_map[v])
-			edge_weights[u].append(w)
+			if np.isfinite(feature_map[u]) and np.isfinite(feature_map[v]):
+				x_vals_map[u] = feature_map[u]
+				y_vals_map[u].append(feature_map[v])
+				edge_weights[u].append(w)
 
-			x_vals_map[v] = feature_map[v]
-			y_vals_map[v].append(feature_map[u])
-			edge_weights[v].append(w)
+				x_vals_map[v] = feature_map[v]
+				y_vals_map[v].append(feature_map[u])
+				edge_weights[v].append(w)
 
 	x_vals = []
 	y_vals = []
@@ -1781,9 +1782,23 @@ def compute_and_plot_edge_correlation(
 		edgecolor="white",
 		linewidth=0.5,
 	)
+	axis_min = float(min(min(x_vals), min(y_vals)))
+	axis_max = float(max(max(x_vals), max(y_vals)))
+	axis_range = axis_max - axis_min
+	axis_padding = 0.05 * axis_range if axis_range > 0 else 1.0
+	axis_min -= axis_padding
+	axis_max += axis_padding
+
+	axis_min = min(axis_min, -3)  # Ensure we have a negative range
+	axis_max = max(axis_max, 103)  # Ensure we have a positive range
+
 	if perfect_line:
 		plt.plot(
-			[0, 100], [0, 100], "k--", label="y=x (Asortatividad perfecta)", alpha=0.5
+			[axis_min, axis_max],
+			[axis_min, axis_max],
+			"k--",
+			label="y=x (Asortatividad perfecta)",
+			alpha=0.5,
 		)
 
 	# Add a legend for the communities
@@ -1842,8 +1857,8 @@ def compute_and_plot_edge_correlation(
 	plt.ylabel("Y_i", fontsize=font_size)
 	plt.xticks(fontsize=font_size - 1)
 	plt.yticks(fontsize=font_size - 1)
-	plt.xlim(-3, 103)
-	plt.ylim(-3, 103)
+	plt.xlim(axis_min, axis_max)
+	plt.ylim(axis_min, axis_max)
 	sns.despine()
 	plt.legend(fontsize=font_size - 1)
 

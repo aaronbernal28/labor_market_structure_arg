@@ -218,6 +218,7 @@ main.bbl
 main.synctex(busy)
 
 data/processed/
+data/raw/
 data/graphs/
 images/
 data/raw/base_enespersonas_2021.csv

@@ -9,6 +9,7 @@ seed: 45
 paths:
   data_raw: data/raw
   data_processed: data/processed
+  data_graphs: data/graphs
   images: images
 
 datasets:
