@@ -927,7 +927,9 @@ def plot_projection_by_group(
 	if all_numeric:
 		ordered_groups = [
 			group
-			for _, group in sorted(zip(numeric_groups, groups), key=lambda pair: pair[0])
+			for _, group in sorted(
+				zip(numeric_groups, groups), key=lambda pair: pair[0]
+			)
 		]
 	else:
 		ordered_groups = sorted(groups, key=lambda value: str(value).lower())
@@ -935,7 +937,9 @@ def plot_projection_by_group(
 	for group in ordered_groups:
 		if all_numeric:
 			pad = len(str(int(max(numeric_groups))))
-			plt.scatter([], [], color=group_color_map[group], label=label_f(group, pad=pad))
+			plt.scatter(
+				[], [], color=group_color_map[group], label=label_f(group, pad=pad)
+			)
 		else:
 			plt.scatter([], [], color=group_color_map[group], label=group)
 
@@ -1254,11 +1258,11 @@ def plot_backbone_weight_histogram(
 		ax.set_title(
 			f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (alpha={alpha})"
 		)
-	
+
 	ax.set_xlabel("Peso de arista")
 	ax.set_ylabel("Frecuencia")
 	ax.set_yscale("log")
-	#ax.set_ylim(bottom=1e-1)
+	# ax.set_ylim(bottom=1e-1)
 	ax.legend()
 
 	if save:
@@ -1782,10 +1786,15 @@ def compute_and_plot_edge_correlation(
 	if community_map is not None:
 		pad = len(str(int(max(community_map.values()))))
 		for node_id, node_community in community_map.items():
-			if node_community in sorted(highlight_set) :
-				plt.scatter([], [], color=color_map.get(node_id, LIGTHGRAY), label=ut.label_fn(node_community, pad))
+			if node_community in sorted(highlight_set):
+				plt.scatter(
+					[],
+					[],
+					color=color_map.get(node_id, LIGTHGRAY),
+					label=ut.label_fn(node_community, pad),
+				)
 				highlight_set.remove(node_community)  # Avoid duplicate legend entries
-	
+
 	# Add regression line on top to show trend
 	sns.regplot(
 		x=x_vals,

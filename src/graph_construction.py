@@ -21,6 +21,7 @@ def get_weight_function(weight_function_name: str):
 		return cosine_similarity_weight
 	raise ValueError(f"Unknown weight function '{weight_function_name}'.")
 
+
 def build_bipartite_graph(
 	enes_df: pd.DataFrame,
 	caes_id: str,

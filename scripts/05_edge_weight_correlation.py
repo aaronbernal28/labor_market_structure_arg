@@ -65,6 +65,7 @@ def main() -> None:
 	node_size_map = plot_df.set_index(id_col)["n_obs"].to_dict()
 
 	from seaborn import hls_palette
+
 	palette = hls_palette(len(set(community_map.values())), l=0.6).as_hex()
 	color_map = {
 		node_id: palette[community % len(palette)] if community >= 0 else "gray"

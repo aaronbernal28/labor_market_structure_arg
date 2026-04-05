@@ -59,6 +59,7 @@ rule all:
 			alpha=ALPHAS,
 			discrete_feature=CONTINUOUS_FEATURES,
 		),
+		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
 		expand(
 			"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}.png",
 			dataset=DATASETS,

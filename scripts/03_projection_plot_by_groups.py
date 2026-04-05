@@ -76,6 +76,7 @@ def main() -> None:
 			f"Warning: No color mapping found for discrete feature '{discrete_feature}'. Using default colors."
 		)
 		from seaborn import hls_palette
+
 		unique_groups = sorted(set(group_map.values()))
 		palette = hls_palette(len(unique_groups), l=0.6).as_hex()
 		group_color_map = {

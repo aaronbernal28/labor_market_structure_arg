@@ -13,7 +13,7 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	dataset = snakemake.wildcards["dataset"]
 	seed = int(snakemake.config["seed"])
-	
+
 	id_col = snakemake.config[class_]["id"]
 	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
 	if id_col not in nodelist_df.columns:
@@ -44,8 +44,6 @@ def main() -> None:
 	print(f"Best {param_label}: {best_parameter:.3f}")
 	print(f"Detected communities: {num_communities}")
 
-
-
 	communities_int = {int(node): int(comm) for node, comm in communities.items()}
 	nodelist_df["community"] = (
 		nodelist_df[id_col].astype(int).map(communities_int).fillna(-1).astype(int)
@@ -54,7 +52,9 @@ def main() -> None:
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
 
 	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
-	group_color_col = snakemake.config[class_].get("letra_color" if class_ == "ciuo" else "grupo_color")
+	group_color_col = snakemake.config[class_].get(
+		"letra_color" if class_ == "ciuo" else "grupo_color"
+	)
 
 	nodelist_idx = nodelist_df.set_index(id_col)
 
