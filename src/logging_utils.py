@@ -38,7 +38,9 @@ def add_snakemake_overview(lines: list[str], snakemake: object) -> None:
 	)
 
 
-def add_dataframe_info(lines: list[str], label: str, row_count: int, column_count: int) -> None:
+def add_dataframe_info(
+	lines: list[str], label: str, row_count: int, column_count: int
+) -> None:
 	_add_block(
 		lines,
 		label,
@@ -49,7 +51,9 @@ def add_dataframe_info(lines: list[str], label: str, row_count: int, column_coun
 	)
 
 
-def add_graph_metrics(lines: list[str], label: str, metrics: Mapping[str, object]) -> None:
+def add_graph_metrics(
+	lines: list[str], label: str, metrics: Mapping[str, object]
+) -> None:
 	entries = [
 		f"Node count: {metrics.get('node_count')}",
 		f"Edge count: {metrics.get('edge_count')}",
@@ -73,7 +77,9 @@ def add_notes(lines: list[str], title: str, notes: Sequence[str]) -> None:
 	_add_block(lines, title, notes)
 
 
-def write_log(lines: Sequence[str], log_path: str | Path | None, mirror_stdout: bool = True) -> None:
+def write_log(
+	lines: Sequence[str], log_path: str | Path | None, mirror_stdout: bool = True
+) -> None:
 	text = "\n".join(lines).rstrip() + "\n"
 	if mirror_stdout:
 		print(text, end="")

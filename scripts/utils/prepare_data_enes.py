@@ -123,6 +123,16 @@ def main() -> None:
 			f"Features: {', '.join(feature_names)}",
 		],
 	)
+	log.add_notes(
+		log_lines,
+		"SIZE",
+		[
+			f"max_caes: {df_enes[output_id_caes].max()}",
+			f"min_caes: {df_enes[output_id_caes].min()}",
+			f"max_ciuo: {df_enes[output_id_ciuo].max()}",
+			f"min_ciuo: {df_enes[output_id_ciuo].min()}",
+		],
+	)
 	log.add_dataframe_info(
 		log_lines,
 		"OUTPUT DATA",

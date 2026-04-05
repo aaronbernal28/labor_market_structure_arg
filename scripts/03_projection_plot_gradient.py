@@ -71,8 +71,12 @@ def main() -> None:
 			f"Class: {class_}",
 			f"Feature: {feature}",
 			f"Non-null values: {int(values_series.notna().sum())}",
-			f"Min value: {values_series.min():.4f}" if values_series.notna().any() else "Min value: N/A",
-			f"Max value: {values_series.max():.4f}" if values_series.notna().any() else "Max value: N/A",
+			f"Min value: {values_series.min():.4f}"
+			if values_series.notna().any()
+			else "Min value: N/A",
+			f"Max value: {values_series.max():.4f}"
+			if values_series.notna().any()
+			else "Max value: N/A",
 		],
 	)
 	log.add_dataframe_info(

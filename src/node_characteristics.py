@@ -16,7 +16,7 @@ def compute_group_characteristics(
 	age_col: str = "v108",
 	sex_col: str = "v109",
 	income_col: str = "ITI",
-	education_col: str = "nivel_ed",
+	nivel_ed_col: str = "nivel_ed",
 	status_col: str = "estado",
 	category_col: str = "cat_ocup",
 	hours_col: str = "v206a",
@@ -26,6 +26,8 @@ def compute_group_characteristics(
 ) -> pd.DataFrame:
 	"""Aggregate descriptive characteristics by group column."""
 	# Fallback to standardized column names if raw ENES names are missing.
+	if age_col not in enes_df.columns and "age" in enes_df.columns:
+		age_col = "age"
 	if sex_col not in enes_df.columns and "sex_id" in enes_df.columns:
 		sex_col = "sex_id"
 	if public_sector_col not in enes_df.columns and "public_worker" in enes_df.columns:
@@ -47,7 +49,7 @@ def compute_group_characteristics(
 			age_col,
 			sex_col,
 			income_col,
-			education_col,
+			nivel_ed_col,
 			status_col,
 			category_col,
 			hours_col,
@@ -63,7 +65,7 @@ def compute_group_characteristics(
 		age_col,
 		sex_col,
 		income_col,
-		education_col,
+		nivel_ed_col,
 		status_col,
 		category_col,
 		hours_col,
@@ -128,12 +130,10 @@ def compute_group_characteristics(
 		valid_hours_grouped = valid_hours.groupby(col_group, dropna=True)
 		features["mean_hours_worked"] = valid_hours_grouped[hours_col].mean()
 
-	if education_col in data.columns:
-		valid_edu = data[data[education_col].notna()]
+	if nivel_ed_col in data.columns:
+		valid_edu = data[data[nivel_ed_col].notna()]
 		valid_grouped = valid_edu.groupby(col_group, dropna=True)
-		features["higher_education_pct"] = valid_grouped[education_col].apply(
-			lambda s: (s >= 6).mean() * 100
-		)
+		features["nivel_ed_mean"] = valid_grouped[nivel_ed_col].mean()
 
 	if category_col in data.columns:
 		valid_cat = data[data[category_col].notna()]

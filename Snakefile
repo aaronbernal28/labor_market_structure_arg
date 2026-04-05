@@ -5,7 +5,7 @@ DATASETS = ["enes_all"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo"] # "unweighted_hidalgo", "dot_product", "cosine_similarity"
 ALGORITHMS = ["louvain"]#, "infomap"]
-#VARIABLES = ["sex_id", "public_worker", "total_income"]
+#VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
 CONTINUOUS_FEATURES = ["female_pct"] # in nodelist data
 

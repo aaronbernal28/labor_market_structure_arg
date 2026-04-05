@@ -56,6 +56,8 @@ def lcd_load_enes_base(
 	df_enes = df_enes.dropna(subset=[id_ciuo, id_caes]).copy()
 	df_enes.loc[:, id_caes] = df_enes[id_caes].astype(int)
 	df_enes.loc[:, id_ciuo] = df_enes[id_ciuo].astype(int)
+	df_enes = df_enes[df_enes[id_caes] < 9999]  # Invalid nodes
+	df_enes = df_enes[df_enes[id_ciuo] < 9999]
 
 	df_enes.loc[:, id_caes] = df_enes[id_caes].apply(
 		lambda x: ut.desambiated_caes_id(x)

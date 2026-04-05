@@ -6,17 +6,15 @@ snakemake: any
 
 CHARACTERISTIC_COLUMNS = [
 	"n_obs",
-	"total_workers_weighted",
 	"income_mean",
-	"income_min",
 	"income_q1",
 	"income_median",
 	"income_q3",
-	"income_max",
-	"income_std",
 	"female_pct",
 	"male_pct",
 	"public_sector_pct",
+	"nivel_ed_mean",
+	"age_mean",
 ]
 
 

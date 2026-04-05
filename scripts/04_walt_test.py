@@ -202,9 +202,7 @@ def main() -> None:
 		)
 	else:
 		log_lines.append("")
-		log_lines.append(
-			"No pairs rejected (all p-values above Bonferroni threshold)."
-		)
+		log_lines.append("No pairs rejected (all p-values above Bonferroni threshold).")
 
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)

@@ -23,18 +23,15 @@ def _resolve_community_column(df: pd.DataFrame, preferred: str | None) -> str:
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 	class_ = snakemake.wildcards["class_"]
-	feature_name = snakemake.wildcards.get("feature") or snakemake.wildcards.get(
-		"continuous_feature"
-	)
+	feature_name = snakemake.wildcards.get("continuous_feature", None)
 	algorithm = snakemake.wildcards.get("algorithm", None)
-
+	community_col = _resolve_community_column(pos_df, algorithm)
 	if not feature_name:
-		raise KeyError(
-			"No feature wildcard found (expected 'feature' or 'continuous_feature')."
-		)
+		raise KeyError("No feature wildcard found (expected 'continuous_feature').")
 
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
+	pos_df = pos_df.dropna(subset=[id_col, community_col])
 
 	# Cast nodes to int instantly to prevent string mismatch bugs
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
@@ -45,7 +42,6 @@ def main() -> None:
 			f"Continuous feature '{feature_name}' not found in {snakemake.input[0]}."
 		)
 
-	community_col = _resolve_community_column(pos_df, algorithm)
 	if "n_obs" not in pos_df.columns:
 		raise KeyError(f"Column 'n_obs' not found in {snakemake.input[0]}.")
 
@@ -57,12 +53,9 @@ def main() -> None:
 	feature_map = pd.to_numeric(
 		plot_df.set_index(id_col)[feature_name], errors="coerce"
 	).to_dict()
-	community_map = (
-		pd.to_numeric(plot_df.set_index(id_col)[community_col], errors="coerce")
-		.fillna(-1)
-		.astype(int)
-		.to_dict()
-	)
+	community_map = pd.to_numeric(
+		plot_df.set_index(id_col)[community_col], errors="coerce"
+	).to_dict()
 	node_size_map = plot_df.set_index(id_col)["n_obs"].to_dict()
 
 	from seaborn import hls_palette

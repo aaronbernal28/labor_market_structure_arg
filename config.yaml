@@ -23,6 +23,12 @@ datasets:
     - name: "total_income"
       type: "float"
       default: NaN
+    - name: "age"
+      type: "int"
+      default: NaN
+    - name: "nivel_ed"
+      type: "float"
+      default: NaN
 
   enes_2019:
     source: data/raw/base_enespersonas.csv
@@ -35,6 +41,8 @@ datasets:
       sex_id: "v109"
       public_worker: "v188" # en realidad es "v188"==1
       total_income: "ITI"
+      age: "v108"
+      nivel_ed: "nivel_ed" # < 11
 
   enes_2021:
     source: data/raw/base_enespersonas_2021.csv
@@ -48,6 +56,8 @@ datasets:
      sex_id: "SEXO"
      public_worker: "M3_7" # en realidad es "M3_7"==1
      total_income: null
+     age: null
+     nivel_ed: null
 
 caes:
   source: data/raw/nodelist_caes.csv

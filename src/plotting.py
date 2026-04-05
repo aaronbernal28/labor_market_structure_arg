@@ -911,37 +911,11 @@ def plot_projection_by_group(
 			alpha=edge_alpha,
 		)
 
-	# Create legend in deterministic sorted order.
-	def _to_float_or_none(value):
-		if isinstance(value, (int, float, np.integer, np.floating)):
-			return float(value)
-		try:
-			return float(str(value))
-		except (TypeError, ValueError):
-			return None
-
-	label_f = legend_label_fmt or ut.label_fn
 	groups = list(group_color_map.keys())
-	numeric_groups = [_to_float_or_none(group) for group in groups]
-	all_numeric = all(group is not None for group in numeric_groups)
-	if all_numeric:
-		ordered_groups = [
-			group
-			for _, group in sorted(
-				zip(numeric_groups, groups), key=lambda pair: pair[0]
-			)
-		]
-	else:
-		ordered_groups = sorted(groups, key=lambda value: str(value).lower())
+	ordered_groups = sorted(groups, key=lambda value: str(value).lower())
 
 	for group in ordered_groups:
-		if all_numeric:
-			pad = len(str(int(max(numeric_groups))))
-			plt.scatter(
-				[], [], color=group_color_map[group], label=label_f(group, pad=pad)
-			)
-		else:
-			plt.scatter([], [], color=group_color_map[group], label=group)
+		plt.scatter([], [], color=group_color_map[group], label=group)
 
 	plt.legend(
 		title=legend_title,
@@ -1103,7 +1077,6 @@ def plot_stacked_by_group(
 	df_index_copy = df_index.copy()
 	df_index_copy["community"] = df_index_copy.index.map(community_map)
 	df_index_copy = df_index_copy.dropna(subset=["community"])
-	df_index_copy["community"] = df_index_copy["community"].astype(int)
 
 	# Create crosstab and normalize if needed
 	if percentage:
@@ -1784,14 +1757,13 @@ def compute_and_plot_edge_correlation(
 		)
 	# Add a legend for the communities
 	if community_map is not None:
-		pad = len(str(int(max(community_map.values()))))
 		for node_id, node_community in community_map.items():
 			if node_community in sorted(highlight_set):
 				plt.scatter(
 					[],
 					[],
 					color=color_map.get(node_id, LIGTHGRAY),
-					label=ut.label_fn(node_community, pad),
+					label=node_community,
 				)
 				highlight_set.remove(node_community)  # Avoid duplicate legend entries
 
@@ -1840,3 +1812,45 @@ def compute_and_plot_edge_correlation(
 		plt.close()
 	else:
 		plt.show()
+
+
+def plot_community_boxplots(
+	df_nodes: pd.DataFrame,
+	metrics_dict: dict,
+	class_: str,
+	algorithm: str,
+	output_path: str,
+):
+	"""Create a stacked horizontal boxplot for community metrics."""
+	plot_cols = {
+		col: title for col, title in metrics_dict.items() if col in df_nodes.columns
+	}
+	if not plot_cols:
+		return
+
+	n_cols = len(plot_cols)
+	fig, axes = plt.subplots(n_cols, 1, figsize=(10, 4 * n_cols), sharey=True)
+	if n_cols == 1:
+		axes = [axes]
+
+	for ax, (col, title) in zip(axes, plot_cols.items()):
+		sns.boxplot(
+			data=df_nodes,
+			x=col,
+			y=df_nodes["community"].astype(str),
+			orient="h",
+			ax=ax,
+			hue=df_nodes["community"].astype(str),
+			palette="dark:steelblue",
+			legend=False,
+			order=sorted(df_nodes["community"].unique(), reverse=True),
+		)
+		ax.set_title(
+			f"{class_.upper()} - {title} Distribution by Community ({algorithm})"
+		)
+		ax.set_xlabel(title)
+		ax.set_ylabel("Community")
+
+	plt.tight_layout()
+	plt.savefig(output_path, bbox_inches="tight")
+	plt.close()

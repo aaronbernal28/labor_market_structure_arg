@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import matplotlib.colors as mcolors
+import numpy as np
 
 snakemake: any
 
@@ -64,10 +65,12 @@ def main() -> None:
 	)
 	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
 
-	communities_int = {int(node): int(comm) for node, comm in communities.items()}
-	nodelist_df["community"] = (
-		nodelist_df[id_col].astype(int).map(communities_int).fillna(-1).astype(int)
-	)
+	communities_int = {
+		int(node): utils.label_fn(comm, len(str(num_communities)))
+		for node, comm in communities.items()
+	}
+	nodelist_df["community"] = nodelist_df[id_col].astype(int).map(communities_int)
+	nodelist_df = nodelist_df.dropna(subset=["community"])
 	nodelist_df.to_csv(snakemake.output[0], index=False)
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
 	log.add_dataframe_info(
@@ -76,10 +79,87 @@ def main() -> None:
 		row_count=len(nodelist_df),
 		column_count=len(nodelist_df.columns),
 	)
+
+	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
+
+	for comm_id, group in nodelist_df.groupby("community"):
+		metrics_list = []
+		metrics_list.append(f"Size: {len(group)}")
+
+		# Total workers weighted
+		if "total_workers_weighted" in group.columns:
+			tot_workers = group["total_workers_weighted"].sum()
+			metrics_list.append(f"Total workers (weighted): {tot_workers:,.0f}")
+		else:
+			tot_workers = None
+
+		# Dominant groups
+		if group_col and group_col in group.columns:
+			dominant_groups = group[group_col].value_counts().head(3)
+			group_str = ", ".join(
+				[f"{idx} ({count})" for idx, count in dominant_groups.items()]
+			)
+			metrics_list.append(f"Dominant groups (by count): {group_str}")
+
+			if tot_workers is not None:
+				dominant_groups_w = (
+					group.groupby(group_col)["total_workers_weighted"]
+					.sum()
+					.sort_values(ascending=False)
+					.head(3)
+				)
+				group_w_str = ", ".join(
+					[f"{idx} ({val:,.0f})" for idx, val in dominant_groups_w.items()]
+				)
+				metrics_list.append(f"Dominant groups (by workers): {group_w_str}")
+
+		def _compute_means(col):
+			if col not in group.columns:
+				return None, None
+			valid = group[group[col].notna()]
+			if valid.empty:
+				return None, None
+
+			unweighted = valid[col].mean()
+
+			weighted = None
+			if tot_workers is not None and "total_workers_weighted" in valid.columns:
+				valid_weight = valid["total_workers_weighted"]
+				if valid_weight.sum() > 0:
+					weighted = np.average(valid[col], weights=valid_weight)
+
+			return unweighted, weighted
+
+		cols_to_avg = {
+			"female_pct": "Female %",
+			"public_sector_pct": "Public Sector %",
+		}
+
+		for col, prefix in cols_to_avg.items():
+			unw, w = _compute_means(col)
+			if unw is not None:
+				w_str = f" | Weighted: {w:.2f}" if w is not None else ""
+				metrics_list.append(f"Mean {prefix}: {unw:.2f}{w_str}")
+
+		log.add_notes(log_lines, f"COMMUNITY {comm_id} METRICS", metrics_list)
+
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 
-	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
+	cols_to_boxplot = {
+		"income_mean": "Income",
+		"nivel_ed_mean": "Education",
+		"age_mean": "Age",
+	}
+
+	pl.plot_community_boxplots(
+		df_nodes=nodelist_df,
+		metrics_dict=cols_to_boxplot,
+		class_=class_,
+		algorithm=algorithm,
+		output_path=snakemake.output[2],
+	)
+
 	group_color_col = snakemake.config[class_].get(
 		"letra_color" if class_ == "ciuo" else "grupo_color"
 	)

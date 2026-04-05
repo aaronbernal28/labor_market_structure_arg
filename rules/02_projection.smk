@@ -5,7 +5,7 @@ rule compute_projection:
 	output:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	log:
-		"data/graphs/{dataset}/{class_}/compute_projection_{weight_function}.log"
+		"images/{dataset}/{class_}/compute_projection_{weight_function}.log"
 	script:
 		"../scripts/utils/build_projection.py"
 

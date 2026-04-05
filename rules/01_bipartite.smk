@@ -7,6 +7,6 @@ rule bipartite_graph:
 	output:
 		"data/graphs/{dataset}/bipartite.gexf"
 	log:
-		"data/graphs/{dataset}/bipartite_graph.log"
+		"images/{dataset}/bipartite_graph.log"
 	script:
 		"../scripts/utils/build_bipartite.py"

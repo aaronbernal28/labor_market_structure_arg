@@ -230,3 +230,4 @@ data/raw/base_enespersonas.csv
 ruff.toml
 scripts/deprecated/
 .snakemake/
+logcat_old.txt
