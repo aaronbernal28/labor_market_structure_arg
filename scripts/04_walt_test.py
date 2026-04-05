@@ -143,6 +143,19 @@ def main() -> None:
 
 	pvalue_detailed = pd.DataFrame(rows).sort_values("p_value", ascending=True)
 
+	total_tests = len(rownames) * len(colnames)
+
+	def _sig_stars(p_value: float) -> str:
+		if p_value < 0.001 / total_tests:
+			return "***"
+		if p_value < 0.01 / total_tests:
+			return "**"
+		if p_value < 0.05 / total_tests:
+			return "*"
+		return ""
+
+	pvalue_detailed["sig"] = pvalue_detailed["p_value"].map(_sig_stars)
+
 	log_lines = []
 	log_lines.append("=" * 60)
 	log_lines.append("WALD TEST SUMMARY")
@@ -153,7 +166,7 @@ def main() -> None:
 	log_lines.append(f"Rows 2021: {len(df_2021)}")
 	log_lines.append(f"CAES categories: {len(rownames)}")
 	log_lines.append(f"CIUO categories: {len(colnames)}")
-	log_lines.append(f"Total tests: {len(rownames) * len(colnames)}")
+	log_lines.append(f"Total tests: {total_tests}")
 	log_lines.append(f"Alpha: {alpha}")
 	log_lines.append(
 		f"Bonferroni threshold: {test_results['bonferroni_threshold']:.2e}"
@@ -161,33 +174,29 @@ def main() -> None:
 	log_lines.append(
 		f"Rejected pairs: {int(test_results['rejected'].sum())} ({100 * test_results['rejected'].mean():.2f}%)"
 	)
-	log_lines.append(f"Bootstrap B: {bootstrap_B}")
-	log_lines.append("")
-	log_lines.append("Top 20 smallest p-values:")
 	log_lines.append(
-		pvalue_detailed[
-			[caes_col, ciuo_col, "p_value", "rejected", "delta_hat", "se_boot"]
-		]
-		.head(20)
-		.to_string(index=False)
+		"Significance stars (Bonferroni-style): *** p < 0.001/d, ** p < 0.01/d, * p < 0.05/d"
 	)
+	log_lines.append(f"Bootstrap B: {bootstrap_B}")
 
-	if int(test_results["rejected"].sum()) > 0:
+	rejected_count = int(test_results["rejected"].sum())
+	if rejected_count > 0:
+		rejected_df = pvalue_detailed.loc[
+			pvalue_detailed["rejected"],
+			[caes_col, ciuo_col, "delta_hat", "se_boot", "p_value", "sig"],
+		].sort_values([caes_col, ciuo_col], ascending=True, kind="mergesort")
+
 		log_lines.append("")
-		log_lines.append("Rejected pairs (up to 100 rows):")
+		log_lines.append("REJECTED PAIRS (NULL HYPOTHESIS REJECTED):")
+		log_lines.append(rejected_df.to_string(index=False))
+		log_lines.append("")
 		log_lines.append(
-			pvalue_detailed.loc[
-				pvalue_detailed["rejected"],
-				[
-					caes_col,
-					ciuo_col,
-					"p_value",
-					"delta_hat",
-					"se_boot",
-				],
-			]
-			.head(100)
-			.to_string(index=False)
+			"Note: Significance stars indicate levels of significance after Bonferroni correction."
+		)
+	else:
+		log_lines.append("")
+		log_lines.append(
+			"No pairs rejected (all p-values above Bonferroni threshold)."
 		)
 
 	log_text = "\n".join(log_lines) + "\n"
