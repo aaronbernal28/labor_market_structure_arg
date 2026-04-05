@@ -4,9 +4,9 @@ configfile: "config.yaml"
 DATASETS = ["enes_all"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["weighted_hidalgo_weight"]
-ALGORITHMS = ["louvain"]
+ALGORITHMS = ["louvain", "infomap"]
 VARIABLES = ["sex_id", "public_worker", "total_income"]
-DISCRETE_FEATURES = ["grupo", "louvain"] # in nodelist data
+DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
 CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct"]
 
 LAYOUTS = ["spring_layout"]
@@ -83,7 +83,7 @@ rule all:
 			continuous_feature=CONTINUOUS_FEATURES,
 		),
 		expand(
-			"images/{dataset}/{logscale}/{class_}/03_communities/community_distribution__{weight_function}_{alpha}_{algorithm}.png",
+			"images/{dataset}/{logscale}/{class_}/03_communities/community_distribution_{weight_function}_{alpha}_{algorithm}.png",
 			dataset=DATASETS,
 			logscale=LOGSCALES,
 			class_=CLASSES,
@@ -138,7 +138,7 @@ rule _02_bipartite_plot_by_groups:
 rule _03_projection_plot_by_groups:
 	'''Plot projection graph from graph.
 	Example:
-	snakemake -j1 images/03_projection_plot_by_groups/projection_plot_by_groups_enes_all_false_ciuo_weighted_hidalgo_weight_1.0000_pos_louvain_louvain.png'''
+	snakemake -j1 images/03_projection_plot_by_groups/projection_plot_by_groups_enes_all_false_ciuo_weighted_hidalgo_weight_1.0000_pos_louvain_community.png'''
 	input:
 		"data/processed/{dataset}/{logscale}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
 		"data/graphs/{dataset}/{logscale}/{class_}/projection_{weight_function}_{alpha}.gexf"

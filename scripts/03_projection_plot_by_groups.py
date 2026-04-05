@@ -75,8 +75,13 @@ def main() -> None:
 		print(
 			f"Warning: No color mapping found for discrete feature '{discrete_feature}'. Using default colors."
 		)
-		labels = sorted(set(group_map.values()), key=str)
-		group_color_map = {label: f"C{idx}" for idx, label in enumerate(labels)}
+		from seaborn import hls_palette
+		unique_groups = sorted(set(group_map.values()))
+		palette = hls_palette(len(unique_groups), l=0.6).as_hex()
+		group_color_map = {
+			group: palette[i % len(palette)] for i, group in enumerate(unique_groups)
+		}
+
 	if pos:
 		graph = nx.subgraph(graph, set(pos.keys()))
 	else:
@@ -96,7 +101,7 @@ def main() -> None:
 		group_map=group_map,
 		group_color_map=group_color_map,
 		title=None,
-		legend_title="Categorias",
+		legend_title=discrete_feature,
 		figsize=snakemake.config["figsizes"]["projection"],
 		output_path=snakemake.output[0],
 		save=True,

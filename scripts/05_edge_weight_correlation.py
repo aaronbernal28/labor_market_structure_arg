@@ -64,7 +64,8 @@ def main() -> None:
 	)
 	node_size_map = plot_df.set_index(id_col)["n_obs"].to_dict()
 
-	palette = snakemake.config["colors"]["community_palette"]
+	from seaborn import hls_palette
+	palette = hls_palette(len(set(community_map.values())), l=0.6).as_hex()
 	color_map = {
 		node_id: palette[community % len(palette)] if community >= 0 else "gray"
 		for node_id, community in community_map.items()
@@ -78,6 +79,7 @@ def main() -> None:
 		color_map=color_map,
 		community_map=community_map,
 		node_size_map=node_size_map,
+		highlight_communities=set(community_map.values()),
 		title=default_title,
 		output_path=snakemake.output[0],
 		save=True,

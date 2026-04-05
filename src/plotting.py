@@ -29,6 +29,18 @@ import textwrap
 LIGTHGRAY = "#a8a8a8"
 
 
+def sort_labels():
+	handles, labels = plt.gca().get_legend_handles_labels()
+	sorted_pairs = sorted(zip(labels, handles), key=lambda x: x[0])
+	sorted_labels, sorted_handles = zip(*sorted_pairs)
+
+	plt.legend(sorted_handles, sorted_labels)
+
+
+def label_fn(c, pad=2):
+	return f"C{str(c).zfill(pad)}" if isinstance(c, int) else str(c)
+
+
 def _mean_edge_color(color_u, color_v):
 	"""Return the mean RGB color between two node colors."""
 	rgb_u = np.asarray(mcolors.to_rgb(color_u), dtype=float)
@@ -903,10 +915,29 @@ def plot_projection_by_group(
 			alpha=edge_alpha,
 		)
 
-	# Create legend
-	label_fn = legend_label_fmt or (lambda g: g)
-	for group, color in group_color_map.items():
-		plt.scatter([], [], color=color, label=label_fn(group))
+	# Create legend in deterministic sorted order.
+	def _to_float_or_none(value):
+		if isinstance(value, (int, float, np.integer, np.floating)):
+			return float(value)
+		try:
+			return float(str(value))
+		except (TypeError, ValueError):
+			return None
+
+	label_f = legend_label_fmt or label_fn
+	groups = list(group_color_map.keys())
+	numeric_groups = [_to_float_or_none(group) for group in groups]
+	all_numeric = all(group is not None for group in numeric_groups)
+	if all_numeric:
+		ordered_groups = [
+			group
+			for _, group in sorted(zip(numeric_groups, groups), key=lambda pair: pair[0])
+		]
+	else:
+		ordered_groups = sorted(groups, key=lambda value: str(value).lower())
+
+	for group in ordered_groups:
+		plt.scatter([], [], color=group_color_map[group], label=label_f(group))
 
 	plt.legend(
 		title=legend_title,
@@ -1639,7 +1670,6 @@ def compute_and_plot_edge_correlation(
 	community_map: dict = None,
 	highlight_communities: Iterable[int] = None,
 	node_size_map: dict = None,
-	legend_label_fmt=None,
 	factor_node_size: float = 1.0,
 	node_size_exponent: float = 1.0,
 	save: bool = True,
@@ -1750,23 +1780,12 @@ def compute_and_plot_edge_correlation(
 		)
 
 	# Add a legend for the communities
-	if highlight_set and community_map is not None:
-		label_fn = legend_label_fmt or (lambda c: f"C{c}")
-		for community in sorted(highlight_set):
-			color = None
-			for node_id, node_community in community_map.items():
-				if node_community == community:
-					color = color_map.get(node_id, LIGTHGRAY)
-					break
-			if color:
-				plt.scatter([], [], color=color, label=label_fn(community))
-	else:
-		unique_colors = sorted(
-			set(color_map.get(u, LIGTHGRAY) for u in plotted_nodes) - {LIGTHGRAY}
-		)
-		for color in unique_colors:
-			plt.scatter([], [], color=color, label=color)
-
+	if community_map is not None:
+		for node_id, node_community in community_map.items():
+			if node_community in sorted(highlight_set) :
+				plt.scatter([], [], color=color_map.get(node_id, LIGTHGRAY), label=label_fn(node_community, len(max(community_map.values()))))
+				highlight_set.remove(node_community)  # Avoid duplicate legend entries
+				
 	# Add regression line on top to show trend
 	sns.regplot(
 		x=x_vals,
@@ -1804,7 +1823,7 @@ def compute_and_plot_edge_correlation(
 	plt.ylabel("Y_i")
 	plt.xlim(axis_min, axis_max)
 	plt.ylim(axis_min, axis_max)
-	plt.legend()
+	sort_labels()
 
 	# Generate Assortativity Scatter Plot (Node value vs Average Neighbor Value)
 	if save:

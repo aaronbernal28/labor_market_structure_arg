@@ -24,21 +24,30 @@ def main() -> None:
 
 	if algorithm == "louvain":
 		algorithm_func = comm.best_louvain_partition_random
+		param_label = "resolution"
+	elif algorithm == "leiden":
+		algorithm_func = comm.best_leiden_partition_random
+		param_label = "resolution"
+	elif algorithm == "infomap":
+		algorithm_func = comm.best_infomap_partition_random
+		param_label = "markov_time"
 	else:
 		raise NotImplementedError(
-			"Leiden is not implemented in src.communities yet. Use 'louvain'."
+			"Unsupported algorithm. Use one of: louvain, leiden, infomap."
 		)
 
-	communities, modularity, best_resolution = algorithm_func(graph, seed=seed, n_samples=50)
+	communities, modularity, best_parameter = algorithm_func(
+		graph, seed=seed, n_samples=50
+	)
 	num_communities = len(set(communities.values()))
 	print(f"Modularity score: {modularity:.4f}")
-	print(f"Best resolution: {best_resolution:.3f}")
+	print(f"Best {param_label}: {best_parameter:.3f}")
 	print(f"Detected communities: {num_communities}")
 
 
 
 	communities_int = {int(node): int(comm) for node, comm in communities.items()}
-	nodelist_df[algorithm] = (
+	nodelist_df["community"] = (
 		nodelist_df[id_col].astype(int).map(communities_int).fillna(-1).astype(int)
 	)
 	nodelist_df.to_csv(snakemake.output[0], index=False)

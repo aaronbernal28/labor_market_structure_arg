@@ -14,6 +14,6 @@ rule compute_communities:
 		"data/processed/{dataset}/{logscale}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv"
 	output:
 		"data/processed/{dataset}/{logscale}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
-		"images/{dataset}/{logscale}/{class_}/03_communities/community_distribution__{weight_function}_{alpha}_{algorithm}.png"
+		"images/{dataset}/{logscale}/{class_}/03_communities/community_distribution_{weight_function}_{alpha}_{algorithm}.png"
 	script:
 		"../scripts/utils/compute_communities.py"
