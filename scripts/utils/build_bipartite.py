@@ -19,7 +19,7 @@ def main() -> None:
 		enes_df,
 		caes_id,
 		ciuo_id,
-		logscale=utils._as_bool(snakemake.wildcards["logscale"]),
+		logscale=False,
 		caes_partition=snakemake.config["caes"]["partition"],
 		ciuo_partition=snakemake.config["ciuo"]["partition"],
 	)

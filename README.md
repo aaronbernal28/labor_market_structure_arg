@@ -112,7 +112,7 @@ snakemake -j8
 Force a single output rebuild:
 
 ```bash
-snakemake -j1 -F images/05_edge_weight_correlation/edge_weight_correlation_enes_all_false_caes_weighted_hidalgo_weight_1.00_pos_louvain_income_mean.png
+snakemake -j1 -F images/05_edge_weight_correlation/_enes_all_false_caes_weighted_hidalgo_weight_1.00_pos_louvain_income_mean.png
 ```
 
 ### DAG visualization:

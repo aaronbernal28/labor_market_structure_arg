@@ -2,6 +2,10 @@ import ast
 from functools import lru_cache
 
 
+def label_fn(c, pad=2):
+	return f"C{str(int(c)).zfill(pad)}" if isinstance(c, int) else str(c)
+
+
 @lru_cache(maxsize=1000)
 def parse_color_from_string(color_str: str):
 	parsed = ast.literal_eval(color_str)
