@@ -8,6 +8,19 @@ import pandas as pd
 import numpy as np
 
 
+def get_weight_function(weight_function_name: str):
+	"""Map weight function name to actual function."""
+	weight_function_name = weight_function_name.lower()
+	if weight_function_name == "hidalgo":
+		return weighted_hidalgo_weight
+	if weight_function_name == "unweighted_hidalgo":
+		return unweighted_hidalgo_weight
+	if weight_function_name == "dot_product":
+		return dot_product_weight
+	if weight_function_name == "cosine":
+		return cosine_similarity_weight
+	raise ValueError(f"Unknown weight function '{weight_function_name}'.")
+
 def build_bipartite_graph(
 	enes_df: pd.DataFrame,
 	caes_id: str,
@@ -136,7 +149,7 @@ def generic_weighted_projected_graph_by_name(
 	)
 
 
-def hidalgo_weight(G: nx.Graph, u: int, v: int) -> float:
+def unweighted_hidalgo_weight(G: nx.Graph, u: int, v: int) -> float:
 	"""Minimum conditional probability proximity as in Hidalgo et al. (2007)."""
 	shared_features_len = len(set(G[u]).intersection(G[v]))
 	if shared_features_len == 0:

@@ -3,11 +3,11 @@ configfile: "config.yaml"
 
 DATASETS = ["enes_all"]
 NODELIST = ["caes", "ciuo"]
-WEIGHT_FUNCTIONS = ["weighted_hidalgo_weight"]
-ALGORITHMS = ["louvain", "infomap"]
-VARIABLES = ["sex_id", "public_worker", "total_income"]
+WEIGHT_FUNCTIONS = ["hidalgo"] # "unweighted_hidalgo", "dot_product", "cosine_similarity"
+ALGORITHMS = ["louvain"]#, "infomap"]
+#VARIABLES = ["sex_id", "public_worker", "total_income"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
-CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct"]
+CONTINUOUS_FEATURES = ["female_pct"] # in nodelist data
 
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
