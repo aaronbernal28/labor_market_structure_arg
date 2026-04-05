@@ -97,6 +97,41 @@ def main() -> None:
 	df_enes[output_id_caes] = df_enes[output_id_caes].astype(int)
 	df_enes[output_id_ciuo] = df_enes[output_id_ciuo].astype(int)
 
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("PREPARE ENES DATA")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"SOURCE",
+		[
+			f"Dataset: {dataset}",
+			f"Source: {SOURCE}",
+			f"URL: {URL}",
+			f"ID_1: {ID_1}",
+			f"ID_2: {ID_2}",
+			f"ID_CAES: {ID_CAES}",
+			f"ID_CIUO: {ID_CIUO}",
+		],
+	)
+	log.add_notes(
+		log_lines,
+		"FEATURES",
+		[
+			f"Feature count: {len(feature_names)}",
+			f"Features: {', '.join(feature_names)}",
+		],
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"OUTPUT DATA",
+		row_count=len(df_enes),
+		column_count=len(df_enes.columns),
+	)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
+
 	df_enes.to_csv(snakemake.output[0], index=False)
 
 

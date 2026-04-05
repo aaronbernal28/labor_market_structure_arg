@@ -44,12 +44,40 @@ def main() -> None:
 	print(f"Best {param_label}: {best_parameter:.3f}")
 	print(f"Detected communities: {num_communities}")
 
+	graph_metrics = metrics.summarize_graph(graph)
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("COMMUNITY DETECTION")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"PARAMETERS",
+		[
+			f"Class: {class_}",
+			f"Algorithm: {algorithm}",
+			f"Seed: {seed}",
+			f"Best {param_label}: {best_parameter:.3f}",
+			f"Modularity: {modularity:.4f}",
+			f"Detected communities: {num_communities}",
+		],
+	)
+	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+
 	communities_int = {int(node): int(comm) for node, comm in communities.items()}
 	nodelist_df["community"] = (
 		nodelist_df[id_col].astype(int).map(communities_int).fillna(-1).astype(int)
 	)
 	nodelist_df.to_csv(snakemake.output[0], index=False)
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
+	log.add_dataframe_info(
+		log_lines,
+		"NODELIST WITH COMMUNITIES",
+		row_count=len(nodelist_df),
+		column_count=len(nodelist_df.columns),
+	)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
 
 	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
 	group_color_col = snakemake.config[class_].get(

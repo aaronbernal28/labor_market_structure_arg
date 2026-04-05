@@ -6,5 +6,7 @@ rule bipartite_graph:
 		"data/processed/{dataset}/nodelist_ciuo.csv"
 	output:
 		"data/graphs/{dataset}/bipartite.gexf"
+	log:
+		"data/graphs/{dataset}/bipartite_graph.log"
 	script:
 		"../scripts/utils/build_bipartite.py"

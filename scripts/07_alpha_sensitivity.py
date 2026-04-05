@@ -63,6 +63,7 @@ def main() -> None:
 	projection = nx.read_gexf(snakemake.input[0], node_type=int)
 	output_path = Path(snakemake.output[0])
 	output_path.parent.mkdir(parents=True, exist_ok=True)
+	graph_metrics = metrics.summarize_graph(projection)
 
 	reference_alpha = float(snakemake.params.get("alpha", 0.05))
 	seed = int(snakemake.config["seed"])
@@ -99,6 +100,27 @@ def main() -> None:
 	)
 
 	print(f"Saved alpha sensitivity plot to {output_path}.")
+
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("ALPHA SENSITIVITY")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"SWEEP SETTINGS",
+		[
+			f"Reference alpha: {reference_alpha}",
+			f"Alpha min: {alphas.min():.6f}",
+			f"Alpha max: {alphas.max():.6f}",
+			f"Alpha count: {len(alphas)}",
+			f"Modularity min: {modularities.min():.4f}",
+			f"Modularity max: {modularities.max():.4f}",
+		],
+	)
+	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
 
 
 if __name__ == "__main__":

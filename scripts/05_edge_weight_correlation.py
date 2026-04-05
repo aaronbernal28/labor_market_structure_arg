@@ -38,6 +38,7 @@ def main() -> None:
 
 	# Cast nodes to int instantly to prevent string mismatch bugs
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
+	graph_metrics = metrics.summarize_graph(graph)
 
 	if feature_name not in pos_df.columns:
 		raise KeyError(
@@ -89,6 +90,31 @@ def main() -> None:
 		node_size_exponent=0.8,
 		figsize=snakemake.config["figsizes"]["edge_correlation"],
 	)
+
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("EDGE WEIGHT CORRELATION")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"PLOT SETTINGS",
+		[
+			f"Class: {class_}",
+			f"Feature: {feature_name}",
+			f"Community column: {community_col}",
+			f"Communities: {len(set(community_map.values()))}",
+		],
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"NODELIST POSITIONS",
+		row_count=len(pos_df),
+		column_count=len(pos_df.columns),
+	)
+	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
 
 	plt.close("all")
 

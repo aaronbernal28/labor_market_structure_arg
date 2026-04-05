@@ -156,28 +156,35 @@ def main() -> None:
 
 	pvalue_detailed["sig"] = pvalue_detailed["p_value"].map(_sig_stars)
 
-	log_lines = []
+	log_lines: list[str] = []
 	log_lines.append("=" * 60)
 	log_lines.append("WALD TEST SUMMARY")
 	log_lines.append("=" * 60)
-	log_lines.append(f"Input 2019: {snakemake.input[0]}")
-	log_lines.append(f"Input 2021: {snakemake.input[1]}")
-	log_lines.append(f"Rows 2019: {len(df_2019)}")
-	log_lines.append(f"Rows 2021: {len(df_2021)}")
-	log_lines.append(f"CAES categories: {len(rownames)}")
-	log_lines.append(f"CIUO categories: {len(colnames)}")
-	log_lines.append(f"Total tests: {total_tests}")
-	log_lines.append(f"Alpha: {alpha}")
-	log_lines.append(
-		f"Bonferroni threshold: {test_results['bonferroni_threshold']:.2e}"
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"DATA OVERVIEW",
+		[
+			f"Input 2019: {snakemake.input[0]}",
+			f"Input 2021: {snakemake.input[1]}",
+			f"Rows 2019: {len(df_2019)}",
+			f"Rows 2021: {len(df_2021)}",
+			f"CAES categories: {len(rownames)}",
+			f"CIUO categories: {len(colnames)}",
+			f"Total tests: {total_tests}",
+		],
 	)
-	log_lines.append(
-		f"Rejected pairs: {int(test_results['rejected'].sum())} ({100 * test_results['rejected'].mean():.2f}%)"
+	log.add_notes(
+		log_lines,
+		"PARAMETERS",
+		[
+			f"Alpha: {alpha}",
+			f"Bonferroni threshold: {test_results['bonferroni_threshold']:.2e}",
+			f"Rejected pairs: {int(test_results['rejected'].sum())} ({100 * test_results['rejected'].mean():.2f}%)",
+			"Significance stars (Bonferroni-style): *** p < 0.001/d, ** p < 0.01/d, * p < 0.05/d",
+			f"Bootstrap B: {bootstrap_B}",
+		],
 	)
-	log_lines.append(
-		"Significance stars (Bonferroni-style): *** p < 0.001/d, ** p < 0.01/d, * p < 0.05/d"
-	)
-	log_lines.append(f"Bootstrap B: {bootstrap_B}")
 
 	rejected_count = int(test_results["rejected"].sum())
 	if rejected_count > 0:
@@ -199,10 +206,8 @@ def main() -> None:
 			"No pairs rejected (all p-values above Bonferroni threshold)."
 		)
 
-	log_text = "\n".join(log_lines) + "\n"
-	print(log_text)
-	with open(snakemake.output[3], "w", encoding="utf-8") as f:
-		f.write(log_text)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
 
 
 if __name__ == "__main__":

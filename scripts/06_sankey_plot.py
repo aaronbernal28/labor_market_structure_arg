@@ -136,6 +136,43 @@ def main() -> None:
 
 	fig.write_image(str(snakemake.output[0]), scale=2)
 
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("SANKEY PLOT")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_dataframe_info(
+		log_lines,
+		"ENES DATA",
+		row_count=len(enes_df),
+		column_count=len(enes_df.columns),
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"CAES NODELIST",
+		row_count=len(caes_df),
+		column_count=len(caes_df.columns),
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"CIUO NODELIST",
+		row_count=len(ciuo_df),
+		column_count=len(ciuo_df.columns),
+	)
+	log.add_notes(
+		log_lines,
+		"FLOW SUMMARY",
+		[
+			f"Biadjacency rows: {biadj.shape[0]}",
+			f"Biadjacency columns: {biadj.shape[1]}",
+			f"Flows: {len(flows)}",
+			f"Left labels: {len(left_labels)}",
+			f"Right labels: {len(right_labels)}",
+		],
+	)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
+
 
 if __name__ == "__main__":
 	main()

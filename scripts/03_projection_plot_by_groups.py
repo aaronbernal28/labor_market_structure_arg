@@ -13,6 +13,7 @@ def main() -> None:
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
+	graph_metrics = metrics.summarize_graph(graph)
 	graph_nodes = set(graph.nodes())
 	plot_df = pos_df[pos_df[id_col].astype(int).isin(graph_nodes)].copy()
 	if plot_df.empty:
@@ -114,6 +115,30 @@ def main() -> None:
 		edge_alpha=EDGE_ALPHA,
 		node_alpha=NODE_ALPHA,
 	)
+
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("PROJECTION PLOT BY GROUPS")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"PLOT SETTINGS",
+		[
+			f"Class: {class_}",
+			f"Discrete feature: {discrete_feature}",
+			f"Groups: {len(set(group_map.values()))}",
+		],
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"NODELIST POSITIONS",
+		row_count=len(pos_df),
+		column_count=len(pos_df.columns),
+	)
+	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
 
 
 if __name__ == "__main__":

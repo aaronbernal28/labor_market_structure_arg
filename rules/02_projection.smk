@@ -4,6 +4,8 @@ rule compute_projection:
 		"data/graphs/{dataset}/bipartite.gexf"
 	output:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
+	log:
+		"data/graphs/{dataset}/{class_}/compute_projection_{weight_function}.log"
 	script:
 		"../scripts/utils/build_projection.py"
 
@@ -15,5 +17,7 @@ rule filter_projection:
 	output:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
 		"images/{dataset}/{class_}/backbone_weight_histogram_{weight_function}_{alpha}.png"
+	log:
+		"images/{dataset}/{class_}/backbone_weight_histogram_{weight_function}_{alpha}.log"
 	script:
 		"../scripts/utils/filter_projection.py"

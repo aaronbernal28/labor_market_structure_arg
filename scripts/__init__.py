@@ -5,6 +5,7 @@ import src.metrics as metrics
 import src.node_characteristics as nc
 import src.plotting as pl
 import src.utils as utils
+import src.logging_utils as log
 
 
-__all__ = ["comm", "dl", "gc", "metrics", "nc", "pl", "utils"]
+__all__ = ["comm", "dl", "gc", "metrics", "nc", "pl", "utils", "log"]

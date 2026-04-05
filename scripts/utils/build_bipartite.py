@@ -27,6 +27,21 @@ def main() -> None:
 	metric_results = metrics.summarize_graph(graph)
 	metrics.log_graph_metrics("Bipartite graph", metric_results)
 
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("BIPARTITE GRAPH")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_dataframe_info(
+		log_lines,
+		"ENES DATA",
+		row_count=len(enes_df),
+		column_count=len(enes_df.columns),
+	)
+	log.add_graph_metrics(log_lines, "Bipartite graph metrics", metric_results)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
+
 	graph_path = Path(snakemake.output[0])
 	nx.write_gexf(graph, graph_path)
 

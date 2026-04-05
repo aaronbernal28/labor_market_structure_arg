@@ -10,12 +10,32 @@ def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	alpha = float(snakemake.wildcards["alpha"])
 	print(f"Filtering projection graph with alpha={alpha}...")
+	input_metrics = metrics.summarize_graph(graph)
 
 	if alpha < 1.0:
 		backbone = gc.disparity_filter_backbone(graph, alpha=alpha)
 	else:
 		print("Alpha >= 1.0, skipping filtering and using original projection.")
 		backbone = graph
+
+	backbone_metrics = metrics.summarize_graph(backbone)
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("FILTER PROJECTION")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"PARAMETERS",
+		[
+			f"Alpha: {alpha}",
+			f"Filtering applied: {alpha < 1.0}",
+		],
+	)
+	log.add_graph_metrics(log_lines, "Input projection metrics", input_metrics)
+	log.add_graph_metrics(log_lines, "Backbone metrics", backbone_metrics)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
 
 	output_path = Path(snakemake.output[0])
 	nx.write_gexf(backbone, output_path)

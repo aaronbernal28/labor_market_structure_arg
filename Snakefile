@@ -98,6 +98,8 @@ rule _00_aed_report:
 	output:
 		"images/{dataset}/00_aed_report/aed_top_sectors.png",
 		"images/{dataset}/00_aed_report/aed_top_occupations.png"
+	log:
+		"images/{dataset}/00_aed_report/aed_report.log"
 	script:
 		"scripts/00_aed_report.py"
 
@@ -110,6 +112,8 @@ rule _01_biadjacency_matrix_heatmap:
 		"data/processed/{dataset}/nodelist_ciuo.csv"
 	output:
 		"images/{dataset}/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap.png"
+	log:
+		"images/{dataset}/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap.log"
 	script:
 		"scripts/01_biadjacency_matrix_heatmap.py"
 
@@ -123,6 +127,8 @@ rule _02_bipartite_plot_by_groups:
 	output:
 		"images/{dataset}/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
 		"images/{dataset}/02_bipartite_plot_by_groups/bipartite_degree_dist.png"
+	log:
+		"images/{dataset}/02_bipartite_plot_by_groups/bipartite_plot_by_groups.log"
 	script:
 		"scripts/02_bipartite_plot_by_groups.py"
 
@@ -136,6 +142,8 @@ rule _03_projection_plot_by_groups:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf"
 	output:
 		"images/{dataset}/{class_}/03_projection_plot_by_groups/_{weight_function}_{alpha}_pos_{algorithm}_{discrete_feature}.png"
+	log:
+		"images/{dataset}/{class_}/03_projection_plot_by_groups/_{weight_function}_{alpha}_pos_{algorithm}_{discrete_feature}.log"
 	script:
 		"scripts/03_projection_plot_by_groups.py"
 
@@ -147,6 +155,8 @@ rule _03_projection_plot_gradient:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf"
 	output:
 		"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{discrete_feature}.png"
+	log:
+		"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{discrete_feature}.log"
 	script:
 		"scripts/03_projection_plot_gradient.py"
 
@@ -161,7 +171,8 @@ rule _04_walt_test:
 	output:
 		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
 		"images/enes_all/04_walt_test/walt_test_delta.png",
-		"images/enes_all/04_walt_test/walt_test_pvalue_detailed.png",
+		"images/enes_all/04_walt_test/walt_test_pvalue_detailed.png"
+	log:
 		"images/enes_all/04_walt_test/walt_test_pvalue_summary.log"
 	script:
 		"scripts/04_walt_test.py"
@@ -174,6 +185,8 @@ rule _05_edge_weight_correlation:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf" # extract edge weights from graph
 	output:
 		"images/{dataset}/{class_}/05_edge_weight_correlation/_{weight_function}_{alpha}_pos_{algorithm}_{continuous_feature}.png"
+	log:
+		"images/{dataset}/{class_}/05_edge_weight_correlation/_{weight_function}_{alpha}_pos_{algorithm}_{continuous_feature}.log"
 	script:
 		"scripts/05_edge_weight_correlation.py"
 
@@ -186,6 +199,8 @@ rule _06_sankey_plot:
 		"data/processed/{dataset}/nodelist_ciuo.csv"
 	output:
 		"images/{dataset}/06_sankey_plot/sankey_plot.png"
+	log:
+		"images/{dataset}/06_sankey_plot/sankey_plot.log"
 	script:
 		"scripts/06_sankey_plot.py"
 
@@ -198,6 +213,8 @@ rule _07_alpha_sensitivity:
 	params:
 		alpha=0.30,
 		algorithm="louvain"
+	log:
+		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}.log"
 	script:
 		"scripts/07_alpha_sensitivity.py"
 

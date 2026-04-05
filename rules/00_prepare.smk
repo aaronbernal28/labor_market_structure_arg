@@ -8,6 +8,8 @@ rule prepare_data_enes:
 		dataset = "enes_2019|enes_2021"
 	output:
 		"data/processed/{dataset}.csv"
+	log:
+		"data/processed/{dataset}/prepare_data_enes.log"
 	script:
 		"../scripts/utils/prepare_data_enes.py"
 
@@ -19,6 +21,8 @@ rule prepare_enes_all:
 		"data/processed/enes_2021.csv"
 	output:
 		"data/processed/enes_all.csv"
+	log:
+		"data/processed/enes_all/prepare_enes_all.log"
 	script:
 		"../scripts/utils/prepare_data_enes_all.py"
 
@@ -29,6 +33,8 @@ rule prepare_nodelist:
 		"data/processed/{dataset}.csv"
 	output:
 		"data/processed/{dataset}/nodelist_{class_}.csv"
+	log:
+		"data/processed/{dataset}/nodelist_{class_}.log"
 	script:
 		"../scripts/utils/prepare_nodelist_caes.py"
 	

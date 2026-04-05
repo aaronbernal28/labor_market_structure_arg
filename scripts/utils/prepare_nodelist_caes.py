@@ -68,6 +68,35 @@ def main() -> None:
 
 	df_nodelist[id] = df_nodelist[id].astype(int)
 
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("PREPARE NODELIST")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"SETTINGS",
+		[
+			f"Class: {class_name}",
+			f"ID column: {id}",
+			f"Characteristic columns: {len(CHARACTERISTIC_COLUMNS)}",
+		],
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"ENES DATA",
+		row_count=len(df_enes),
+		column_count=len(df_enes.columns),
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"NODELIST OUTPUT",
+		row_count=len(df_nodelist),
+		column_count=len(df_nodelist.columns),
+	)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
+
 	df_nodelist.to_csv(snakemake.output[0], index=False)
 
 

@@ -81,6 +81,39 @@ def main() -> None:
 		logscale=False,
 	)
 
+	graph_metrics = metrics.summarize_graph(bigraph)
+	caes_groups = set(caes_df[caes_group_col].dropna().astype(str).unique())
+	ciuo_groups = set(ciuo_df[ciuo_group_col].dropna().astype(str).unique())
+
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("BIPARTITE PLOT BY GROUPS")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_dataframe_info(
+		log_lines,
+		"CAES NODELIST",
+		row_count=len(caes_df),
+		column_count=len(caes_df.columns),
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"CIUO NODELIST",
+		row_count=len(ciuo_df),
+		column_count=len(ciuo_df.columns),
+	)
+	log.add_notes(
+		log_lines,
+		"GROUP SUMMARY",
+		[
+			f"CAES groups: {len(caes_groups)}",
+			f"CIUO groups: {len(ciuo_groups)}",
+		],
+	)
+	log.add_graph_metrics(log_lines, "Bipartite graph metrics", graph_metrics)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
+
 
 if __name__ == "__main__":
 	main()
