@@ -42,7 +42,7 @@ def _sweep_alpha(
 			nodes_largest_cc[i] = 0.0
 
 		if backbone.number_of_edges() > 0:
-			clustering_coeffs[i] = nx.average_clustering(backbone)
+			clustering_coeffs[i] = nx.average_clustering(backbone, weight="weight")
 			_, mod = comm.louvain_partition(backbone, seed=seed)
 			modularities[i] = mod
 		else:

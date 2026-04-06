@@ -1548,7 +1548,7 @@ def plot_alpha_sensitivity(
 	alphas: 1-D array of alpha values in (0, 1).
 	nodes_with_edges: fraction of nodes that have at least one edge at each alpha.
 	edge_counts: fraction of edges retained at each alpha.
-	clustering_coefficients: average clustering coefficient at each alpha.
+	clustering_coefficients: Average clustering coefficient ponderado at each alpha.
 	title: plot title (typically the network name).
 	output_path: destination file path.
 	modularities: Louvain modularity at each alpha (optional).
@@ -1581,7 +1581,7 @@ def plot_alpha_sensitivity(
 		color=color_clust,
 		linewidth=2,
 		linestyle=":",
-		label="Coef. de clustering prom.",
+		label="Coef. de clustering prom. ponderado",
 	)
 
 	lines = [l1, l2, l3]

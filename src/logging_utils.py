@@ -64,9 +64,9 @@ def add_graph_metrics(
 		f"Average weighted degree: {metrics.get('avg_weighted_degree'):.2f}"
 		if metrics.get("avg_weighted_degree") is not None
 		else "Average weighted degree: N/A",
-		f"Average clustering coefficient: {metrics.get('avg_clustering'):.4f}"
+		f"Average clustering coefficient ponderado: {metrics.get('avg_clustering'):.4f}"
 		if metrics.get("avg_clustering") is not None
-		else "Average clustering coefficient: N/A",
+		else "Average clustering coefficient ponderado: N/A",
 		f"Diameter (largest component): {metrics.get('diameter')}",
 		f"Connected components: {metrics.get('connected_components')}",
 	]

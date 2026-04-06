@@ -41,7 +41,8 @@ def summarize_graph(graph: nx.Graph) -> Dict[str, MetricValue]:
 		"self_loops": nx.number_of_selfloops(graph),
 		"avg_degree": average_degree(graph),
 		"avg_weighted_degree": average_degree(graph, weight="weight"),
-		"avg_clustering": nx.average_clustering(graph, weight="weight")
+		"avg_clustering": nx.average_clustering(graph),
+		"avg_weighted_clustering": nx.average_clustering(graph, weight="weight")
 		if graph.number_of_nodes() > 0
 		else 0.0,
 		"connected_components": nx.number_connected_components(graph),
@@ -57,7 +58,8 @@ def log_graph_metrics(label: str, metrics: Dict[str, MetricValue]) -> None:
 	print(f"Loop count: {metrics['self_loops']}")
 	print(f"Average degree: {metrics['avg_degree']:.2f}")
 	print(f"Average weighted degree: {metrics['avg_weighted_degree']:.2f}")
-	print(f"Average clustering coefficient: {metrics['avg_clustering']:.4f}")
+	print(f"Average clustering coefficient ponderado: {metrics['avg_clustering']:.4f}")
+	print(f"Average weighted clustering coefficient: {metrics['avg_weighted_clustering']:.4f}")
 	diameter = metrics.get("diameter")
 	diameter_display = diameter if diameter is not None else "N/A"
 	print(f"Diameter (largest component): {diameter_display}")
