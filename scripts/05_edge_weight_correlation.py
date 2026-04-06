@@ -25,12 +25,12 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	feature_name = snakemake.wildcards.get("continuous_feature", None)
 	algorithm = snakemake.wildcards.get("algorithm", None)
-	community_col = _resolve_community_column(pos_df, algorithm)
 	if not feature_name:
 		raise KeyError("No feature wildcard found (expected 'continuous_feature').")
 
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
+	community_col = _resolve_community_column(pos_df, algorithm)
 	pos_df = pos_df.dropna(subset=[id_col, community_col])
 
 	# Cast nodes to int instantly to prevent string mismatch bugs
@@ -50,19 +50,15 @@ def main() -> None:
 	if plot_df.empty:
 		raise ValueError("No overlap between nodelist ids and projection graph nodes.")
 
-	feature_map = pd.to_numeric(
-		plot_df.set_index(id_col)[feature_name], errors="coerce"
-	).to_dict()
-	community_map = pd.to_numeric(
-		plot_df.set_index(id_col)[community_col], errors="coerce"
-	).to_dict()
+	feature_map = plot_df.set_index(id_col)[feature_name].to_dict()
+	community_map = plot_df.set_index(id_col)[community_col].to_dict()
 	node_size_map = plot_df.set_index(id_col)["n_obs"].to_dict()
 
 	from seaborn import hls_palette
 
 	palette = hls_palette(len(set(community_map.values())), l=0.6).as_hex()
 	color_map = {
-		node_id: palette[community % len(palette)] if community >= 0 else "gray"
+		node_id: palette[int(community.split("C")[-1]) % len(palette)]
 		for node_id, community in community_map.items()
 	}
 
