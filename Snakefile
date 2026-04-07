@@ -3,15 +3,15 @@ configfile: "config.yaml"
 
 DATASETS = ["enes_all"]
 NODELIST = ["caes", "ciuo"]
-WEIGHT_FUNCTIONS = ["hidalgo"] # "unweighted_hidalgo", "dot_product", "cosine_similarity"
-ALGORITHMS = ["louvain"]#, "infomap"]
+WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
+ALGORITHMS = ["louvain", "infomap"]
 #VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
 CONTINUOUS_FEATURES = ["female_pct"] # in nodelist data
 
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
-ALPHAS = ["0.30","1.00"]
+ALPHAS = ["0.30","1.00", "0.0046", "0.0086"]
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS),
@@ -61,10 +61,11 @@ rule all:
 		),
 		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
 		expand(
-			"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}.png",
+			"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.png",
 			dataset=DATASETS,
 			class_=CLASSES,
 			weight_function=WEIGHT_FUNCTIONS,
+			algorithm=ALGORITHMS,
 		),
 		expand(
 			"images/{dataset}/{class_}/05_edge_weight_correlation/_{weight_function}_{alpha}_pos_{algorithm}_{continuous_feature}.png",
@@ -209,12 +210,9 @@ rule _07_alpha_sensitivity:
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	output:
-		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}.png"
-	params:
-		alpha=0.30,
-		algorithm="louvain"
+		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.png"
 	log:
-		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}.log"
+		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.log"
 	script:
 		"scripts/07_alpha_sensitivity.py"
 

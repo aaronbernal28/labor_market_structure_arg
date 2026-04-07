@@ -12,8 +12,20 @@ def _sweep_alpha(
 	projection: nx.Graph,
 	alphas: np.ndarray,
 	seed: int,
+	algorithm: str = "louvain",
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 	"""Return arrays of (nodes_with_edges, edge_counts, clustering, modularity, nodes_largest_cc) for each alpha."""
+	if algorithm == "louvain":
+		algorithm_func = comm.best_louvain_partition_random
+	elif algorithm == "leiden":
+		algorithm_func = comm.best_leiden_partition_random
+	elif algorithm == "infomap":
+		algorithm_func = comm.best_infomap_partition_random
+	else:
+		raise NotImplementedError(
+			"Unsupported algorithm. Use one of: louvain, leiden, infomap."
+		)
+
 	nodes_with_edges = np.empty(len(alphas), dtype=float)
 	edge_counts = np.empty(len(alphas), dtype=float)
 	clustering_coeffs = np.empty(len(alphas), dtype=float)
@@ -43,7 +55,7 @@ def _sweep_alpha(
 
 		if backbone.number_of_edges() > 0:
 			clustering_coeffs[i] = nx.average_clustering(backbone, weight="weight")
-			_, mod = comm.louvain_partition(backbone, seed=seed)
+			_, mod, _ = algorithm_func(backbone, seed=seed, n_samples=10)
 			modularities[i] = mod
 		else:
 			clustering_coeffs[i] = 0.0
@@ -64,11 +76,10 @@ def main() -> None:
 	output_path = Path(snakemake.output[0])
 	output_path.parent.mkdir(parents=True, exist_ok=True)
 	graph_metrics = metrics.summarize_graph(projection)
+	algorithm = snakemake.wildcards['algorithm']
 
-	reference_alpha = float(snakemake.params.get("alpha", 0.05))
 	seed = int(snakemake.config["seed"])
 	alphas = np.logspace(-4, 0, 30)
-	alphas = np.unique(np.append(alphas, reference_alpha))
 	alphas.sort()
 
 	(
@@ -77,7 +88,16 @@ def main() -> None:
 		clustering_coeffs,
 		modularities,
 		nodes_largest_cc,
-	) = _sweep_alpha(projection, alphas, seed)
+	) = _sweep_alpha(projection, alphas, seed, algorithm=algorithm)
+
+	# Find the minimum alpha where nodes in largest CC > 95%
+	reference_alpha = None
+	for i, a in enumerate(alphas):
+		if nodes_largest_cc[i] > 0.95:
+			reference_alpha = a
+			break
+	if reference_alpha is None:
+		reference_alpha = alphas[-1]
 
 	title = (
 		f"{snakemake.wildcards['dataset']} - "

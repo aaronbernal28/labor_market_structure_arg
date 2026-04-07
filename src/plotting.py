@@ -1591,7 +1591,7 @@ def plot_alpha_sensitivity(
 			modularities,
 			color=color_mod,
 			linewidth=2,
-			label="Modularidad (Louvain - relativa)",
+			label="Modularidad",
 		)
 		lines.append(l4)
 
