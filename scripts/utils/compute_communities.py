@@ -73,75 +73,54 @@ def main() -> None:
 	nodelist_df = nodelist_df.dropna(subset=["community"])
 	nodelist_df.to_csv(snakemake.output[0], index=False)
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
-	log.add_dataframe_info(
-		log_lines,
-		"NODELIST WITH COMMUNITIES",
-		row_count=len(nodelist_df),
-		column_count=len(nodelist_df.columns),
-	)
-
 	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
 
+	def _fmt_number(value: float | None) -> str:
+		if value is None or pd.isna(value):
+			return "NA"
+		return f"{value:.2f}"
+
+	def _mean_or_none(df: pd.DataFrame, col: str) -> float | None:
+		if col not in df.columns:
+			return None
+		series = df[col].dropna()
+		if series.empty:
+			return None
+		return float(series.mean())
+
+	def _median_or_none(df: pd.DataFrame, col: str) -> float | None:
+		if col not in df.columns:
+			return None
+		series = df[col].dropna()
+		if series.empty:
+			return None
+		return float(series.median())
+
+	rows: list[str] = []
+	rows.append(
+		"Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median \\\\"  # noqa: E501
+	)
 	for comm_id, group in nodelist_df.groupby("community"):
-		metrics_list = []
-		metrics_list.append(f"Size: {len(group)}")
+		if len(group) <= 1:
+			continue
 
-		# Total workers weighted
-		if "total_workers_weighted" in group.columns:
-			tot_workers = group["total_workers_weighted"].sum()
-			metrics_list.append(f"Total workers (weighted): {tot_workers:,.0f}")
-		else:
-			tot_workers = None
-
-		# Dominant groups
+		dominant_groups_str = "NA"
 		if group_col and group_col in group.columns:
 			dominant_groups = group[group_col].value_counts().head(3)
-			group_str = ", ".join(
+			dominant_groups_str = ", ".join(
 				[f"{idx} ({count})" for idx, count in dominant_groups.items()]
 			)
-			metrics_list.append(f"Dominant groups (by count): {group_str}")
 
-			if tot_workers is not None:
-				dominant_groups_w = (
-					group.groupby(group_col)["total_workers_weighted"]
-					.sum()
-					.sort_values(ascending=False)
-					.head(3)
-				)
-				group_w_str = ", ".join(
-					[f"{idx} ({val:,.0f})" for idx, val in dominant_groups_w.items()]
-				)
-				metrics_list.append(f"Dominant groups (by workers): {group_w_str}")
+		female_mean = _mean_or_none(group, "female_pct")
+		public_mean = _mean_or_none(group, "public_sector_pct")
+		age_median = _median_or_none(group, "age_median")
+		income_median = _median_or_none(group, "income_median")
 
-		def _compute_means(col):
-			if col not in group.columns:
-				return None, None
-			valid = group[group[col].notna()]
-			if valid.empty:
-				return None, None
+		rows.append( # Formato para latex table
+			f"{comm_id} & {dominant_groups_str} & { _fmt_number(female_mean) } & { _fmt_number(public_mean) } & { _fmt_number(age_median) } & { _fmt_number(income_median) } \\\\"
+		)
 
-			unweighted = valid[col].mean()
-
-			weighted = None
-			if tot_workers is not None and "total_workers_weighted" in valid.columns:
-				valid_weight = valid["total_workers_weighted"]
-				if valid_weight.sum() > 0:
-					weighted = np.average(valid[col], weights=valid_weight)
-
-			return unweighted, weighted
-
-		cols_to_avg = {
-			"female_pct": "Female %",
-			"public_sector_pct": "Public Sector %",
-		}
-
-		for col, prefix in cols_to_avg.items():
-			unw, w = _compute_means(col)
-			if unw is not None:
-				w_str = f" | Weighted: {w:.2f}" if w is not None else ""
-				metrics_list.append(f"Mean {prefix}: {unw:.2f}{w_str}")
-
-		log.add_notes(log_lines, f"COMMUNITY {comm_id} METRICS", metrics_list)
+	log.add_notes(log_lines, "NODELIST WITH COMMUNITIES", rows)
 
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)

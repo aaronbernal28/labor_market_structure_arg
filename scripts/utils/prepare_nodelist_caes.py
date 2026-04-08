@@ -15,6 +15,7 @@ CHARACTERISTIC_COLUMNS = [
 	"public_sector_pct",
 	"nivel_ed_mean",
 	"age_mean",
+	"age_median",
 ]
 
 

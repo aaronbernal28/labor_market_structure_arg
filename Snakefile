@@ -7,7 +7,7 @@ WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
 ALGORITHMS = ["louvain", "infomap"]
 #VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
-CONTINUOUS_FEATURES = ["female_pct"] # in nodelist data
+CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "income_mean", "nivel_ed_mean", "age_mean"] # in nodelist data
 
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
