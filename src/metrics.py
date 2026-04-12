@@ -59,7 +59,9 @@ def log_graph_metrics(label: str, metrics: Dict[str, MetricValue]) -> None:
 	print(f"Average degree: {metrics['avg_degree']:.2f}")
 	print(f"Average weighted degree: {metrics['avg_weighted_degree']:.2f}")
 	print(f"Average clustering coefficient ponderado: {metrics['avg_clustering']:.4f}")
-	print(f"Average weighted clustering coefficient: {metrics['avg_weighted_clustering']:.4f}")
+	print(
+		f"Average weighted clustering coefficient: {metrics['avg_weighted_clustering']:.4f}"
+	)
 	diameter = metrics.get("diameter")
 	diameter_display = diameter if diameter is not None else "N/A"
 	print(f"Diameter (largest component): {diameter_display}")

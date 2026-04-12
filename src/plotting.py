@@ -6,16 +6,8 @@ from pathlib import Path
 from typing import Dict, Iterable, Mapping
 import src.utils as ut
 
-try:
-	from persim import plot_diagrams
-except ImportError:  # Optional dependency for TDA plots.
-	plot_diagrams = None
-
-try:
-	import gudhi
-except ImportError:  # Optional dependency for barcode plots.
-	gudhi = None
-
+from persim import plot_diagrams
+import gudhi
 import matplotlib.patches as patches
 import matplotlib.path as mpath
 import matplotlib.pyplot as plt
@@ -25,6 +17,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import textwrap
+from scipy import stats
 
 LIGTHGRAY = "#a8a8a8"
 
@@ -167,8 +160,7 @@ def plot_rejection_heatmap(
 	figsize: tuple | None = None,
 ) -> None:
 	"""Heatmap of p-values: black below Bonferroni threshold, YlOrRd above it."""
-	from matplotlib.colors import LinearSegmentedColormap, ListedColormap
-	import matplotlib.ticker as ticker
+	from matplotlib.colors import ListedColormap
 
 	# Smart formatting: hide extreme values, automatic scientific notation for others
 	def format_pvalue(v):
@@ -1633,9 +1625,6 @@ def plot_alpha_sensitivity(
 		plt.close()
 	else:
 		plt.show()
-
-
-from scipy import stats
 
 
 def compute_and_plot_edge_correlation(

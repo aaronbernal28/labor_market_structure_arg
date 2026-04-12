@@ -76,7 +76,7 @@ def main() -> None:
 	output_path = Path(snakemake.output[0])
 	output_path.parent.mkdir(parents=True, exist_ok=True)
 	graph_metrics = metrics.summarize_graph(projection)
-	algorithm = snakemake.wildcards['algorithm']
+	algorithm = snakemake.wildcards["algorithm"]
 
 	seed = int(snakemake.config["seed"])
 	alphas = np.logspace(-4, 0, 30)

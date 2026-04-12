@@ -1,11 +1,9 @@
 """Topological data analysis functions."""
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 # import kmapper as km
 from ripser import ripser
-from sklearn.cluster import DBSCAN
 
 
 def compute_persistence(distance_matrix, maxdim=2, thresh=np.inf, coeff=2):

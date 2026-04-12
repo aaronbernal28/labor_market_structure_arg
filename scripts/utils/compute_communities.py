@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import matplotlib.colors as mcolors
-import numpy as np
 
 snakemake: any
 
@@ -116,8 +115,8 @@ def main() -> None:
 		age_median = _median_or_none(group, "age_median")
 		income_median = _median_or_none(group, "income_median")
 
-		rows.append( # Formato para latex table
-			f"{comm_id} & {dominant_groups_str} & { _fmt_number(female_mean) } & { _fmt_number(public_mean) } & { _fmt_number(age_median) } & { _fmt_number(income_median) } \\\\"
+		rows.append(  # Formato para latex table
+			f"{comm_id} & {dominant_groups_str} & {_fmt_number(female_mean)} & {_fmt_number(public_mean)} & {_fmt_number(age_median)} & {_fmt_number(income_median)} \\\\"
 		)
 
 	log.add_notes(log_lines, "NODELIST WITH COMMUNITIES", rows)
