@@ -216,6 +216,18 @@ rule _07_alpha_sensitivity:
 	script:
 		"scripts/07_alpha_sensitivity.py"
 
+
+rule _08_persistence_diagram:
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
+	output:
+		"images/{dataset}/{class_}/08_persistence_diagram/_{weight_function}.png"
+	#log:
+	#	"images/{dataset}/{class_}/08_persistence_diagram/_{weight_function}.log"
+	script:
+		"scripts/08_persistence_diagram.py"
+
+
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
 include: "rules/02_projection.smk"

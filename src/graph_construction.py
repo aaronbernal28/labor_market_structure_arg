@@ -298,6 +298,18 @@ def get_projection_positions(
 	return pos
 
 
+def disparity_alpha_endpoint(k: int, strength: float, weight: float) -> float:
+	"""Compute disparity-filter endpoint significance.
+
+	This is the endpoint-level significance used by the disparity filter for weighted
+	undirected graphs.
+	"""
+	if k <= 1 or strength <= 0:
+		return 0.0
+	p = max(0.0, min(1.0, weight / strength))
+	return float((1.0 - p) ** (k - 1))
+
+
 def disparity_filter_backbone(
 	graph: nx.Graph,
 	alpha: float = 0.05,
@@ -332,17 +344,8 @@ def disparity_filter_backbone(
 
 	for u, v, data in graph.edges(data=True):
 		w = float(data.get("weight", 1.0))
-
-		def _alpha_endpoint(node: int, weight: float) -> float:
-			k = degree.get(node, 0)
-			s = strength.get(node, 0.0)
-			if k <= 1 or s <= 0:
-				return 0.0
-			p = max(0.0, min(1.0, weight / s))
-			return float((1.0 - p) ** (k - 1))
-
-		a_u = _alpha_endpoint(u, w)
-		a_v = _alpha_endpoint(v, w)
+		a_u = disparity_alpha_endpoint(degree.get(u, 0), strength.get(u, 0.0), w)
+		a_v = disparity_alpha_endpoint(degree.get(v, 0), strength.get(v, 0.0), w)
 
 		keep_edge = (
 			(a_u < alpha or a_v < alpha)

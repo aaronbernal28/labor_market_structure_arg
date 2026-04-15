@@ -1127,29 +1127,46 @@ def plot_distance_histogram(
 	bins: int = 30,
 	title: str = "Histograma de distancias",
 	include_infinite: bool = True,
+	ax=None,
 	save: bool = True,
 ) -> None:
-	"""Plot histogram of finite distances from a distance matrix."""
+	"""Plot histogram of finite distances from a distance matrix.
+
+	If `ax` is provided, the plot is drawn onto that axis and the function will not
+	save/show/close figures.
+	"""
 	values = np.asarray(distance_matrix, dtype=float).ravel()
 	finite = values[np.isfinite(values) & (values > 0)]
 	inf_count = np.isinf(values).sum()
 
-	plt.figure()
-	counts, bin_edges, _ = plt.hist(finite, bins=bins, alpha=0.8, color="steelblue")
+	created_fig = False
+	if ax is None:
+		fig, ax = plt.subplots()
+		created_fig = True
+	counts, bin_edges, _ = ax.hist(finite, bins=bins, alpha=0.8, color="steelblue")
 	if include_infinite and inf_count > 0:
 		bin_width = bin_edges[1] - bin_edges[0] if len(bin_edges) > 1 else 1.0
 		inf_x = bin_edges[-1] + bin_width
-		plt.bar([inf_x], [inf_count], width=bin_width * 0.8, color="tomato", alpha=0.8)
-		plt.xticks(list(plt.xticks()[0]) + [inf_x], list(plt.xticks()[0]) + ["inf"])
-	plt.xlabel("Distancia")
-	plt.ylabel("Frecuencia")
-	plt.title(f"{title}\nfinito={len(finite)} | inf={inf_count}")
-	plt.grid(True, alpha=0.3)
-	if save:
-		plt.savefig(output_path, bbox_inches="tight")
-		plt.close()
-	else:
-		plt.show()
+		ax.bar(
+			[inf_x],
+			[inf_count],
+			width=bin_width * 0.8,
+			color="tomato",
+			alpha=0.8,
+		)
+		ticks, tick_labels = ax.get_xticks(), [str(x) for x in ax.get_xticks()]
+		ax.set_xticks(list(ticks) + [inf_x])
+		ax.set_xticklabels(tick_labels + ["inf"])
+	ax.set_xlabel("Distancia")
+	ax.set_ylabel("Frecuencia")
+	ax.set_title(f"{title}\nfinito={len(finite)} | inf={inf_count}")
+	ax.grid(True, alpha=0.3)
+	if created_fig:
+		if save:
+			fig.savefig(output_path, bbox_inches="tight")
+			plt.close(fig)
+		else:
+			plt.show()
 
 
 def plot_distance_heatmap(
@@ -1157,15 +1174,23 @@ def plot_distance_heatmap(
 	output_path: Path = None,
 	title: str = "Matriz de distancias",
 	labels: Iterable[str] = None,
+	ax=None,
 	save: bool = True,
 ) -> None:
-	"""Plot heatmap for a distance matrix (infinite distances are masked)."""
+	"""Plot heatmap for a distance matrix (infinite distances are masked).
+
+	If `ax` is provided, the plot is drawn onto that axis and the function will not
+	save/show/close figures.
+	"""
 	data = np.asarray(distance_matrix, dtype=float).copy()
 	data[np.isinf(data)] = np.nan
 	mask = np.isnan(data)
 
-	plt.figure()
-	ax = sns.heatmap(data, cmap="mako", mask=mask, cbar=True)
+	created_fig = False
+	if ax is None:
+		fig, ax = plt.subplots()
+		created_fig = True
+	ax = sns.heatmap(data, cmap="mako", mask=mask, cbar=True, ax=ax)
 	if labels:
 		ax.set_xticks(np.arange(len(labels)) + 0.5)
 		ax.set_yticks(np.arange(len(labels)) + 0.5)
@@ -1180,12 +1205,13 @@ def plot_distance_heatmap(
 	else:
 		ax.set_xticks([])
 		ax.set_yticks([])
-	plt.title(title)
-	if save:
-		plt.savefig(output_path, bbox_inches="tight")
-		plt.close()
-	else:
-		plt.show()
+	ax.set_title(title)
+	if created_fig:
+		if save:
+			fig.savefig(output_path, bbox_inches="tight")
+			plt.close(fig)
+		else:
+			plt.show()
 
 
 def plot_backbone_weight_histogram(
@@ -1241,47 +1267,79 @@ def plot_persistence_diagrams(
 	diagrams,
 	title: str = "Persistence Diagrams",
 	output_path: Path = None,
+	ax=None,
 	save: bool = True,
 ):
-	"""Plot persistence diagrams."""
+	"""Plot persistence diagrams.
+
+	If `ax` is provided, the plot is drawn onto that axis and the function will not
+	save/show/close figures.
+	"""
 	if plot_diagrams is None:
 		raise ImportError("persim is required for plot_persistence_diagrams.")
 
-	plt.figure()
+	created_fig = False
+	if ax is None:
+		fig, ax = plt.subplots()
+		created_fig = True
+	plt.sca(ax)
 	plot_diagrams(diagrams, show=False)
-	plt.title(title)
-	if save:
-		plt.savefig(output_path)
-		plt.close()
-	else:
-		plt.show()
+	ax.set_title(title)
+	if created_fig:
+		if save:
+			fig.savefig(output_path)
+			plt.close(fig)
+		else:
+			plt.show()
 
 
 def plot_persistence_barcodes(
 	diagrams,
 	title: str = "Persistence Barcodes",
 	output_path: Path = None,
+	ax=None,
 	save: bool = True,
 ) -> None:
-	"""Plot persistence barcodes using GUDHI."""
+	"""Plot persistence barcodes using GUDHI.
+
+	If `ax` is provided, the plot is drawn onto that axis and the function will not
+	save/show/close figures.
+	"""
 	if gudhi is None:
 		raise ImportError("gudhi is required for plot_persistence_barcodes.")
+
+	finite_deaths: list[float] = []
+	for dgm in diagrams:
+		for _, death in dgm:
+			if np.isfinite(death):
+				finite_deaths.append(float(death))
+	clip_value = (max(finite_deaths) if finite_deaths else 1.0) * 1.05
 
 	gudhi_diagrams = []
 	for dim, dgm in enumerate(diagrams):
 		if len(dgm) == 0:
 			continue
 		for birth, death in dgm:
-			gudhi_diagrams.append((dim, (float(birth), float(death))))
+			b = float(birth)
+			d = float(death)
+			if not np.isfinite(b):
+				continue
+			if not np.isfinite(d):
+				d = float(clip_value)
+			gudhi_diagrams.append((dim, (b, d)))
 
-	plt.figure()
-	gudhi.plot_persistence_barcode(gudhi_diagrams)
-	plt.title(title)
-	if save:
-		plt.savefig(output_path)
-		plt.close()
-	else:
-		plt.show()
+	created_fig = False
+	if ax is None:
+		fig, ax = plt.subplots()
+		created_fig = True
+	gudhi.plot_persistence_barcode(persistence=gudhi_diagrams, axes=ax)
+	ax.set_title(title)
+	if created_fig:
+		if save:
+			fig.savefig(output_path)
+			plt.close(fig)
+		else:
+			plt.show()
 
 
 import matplotlib as mpl
