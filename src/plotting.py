@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Iterable, Mapping
 import src.utils as ut
 
-from persim import plot_diagrams
+from persim import plot_diagrams as persim_plot_diagrams
 import gudhi
 import matplotlib.patches as patches
 import matplotlib.path as mpath
@@ -1275,7 +1275,7 @@ def plot_persistence_diagrams(
 	If `ax` is provided, the plot is drawn onto that axis and the function will not
 	save/show/close figures.
 	"""
-	if plot_diagrams is None:
+	if persim_plot_diagrams is None:
 		raise ImportError("persim is required for plot_persistence_diagrams.")
 
 	created_fig = False
@@ -1283,7 +1283,7 @@ def plot_persistence_diagrams(
 		fig, ax = plt.subplots()
 		created_fig = True
 	plt.sca(ax)
-	plot_diagrams(diagrams, show=False)
+	persim_plot_diagrams(diagrams, show=False)
 	ax.set_title(title)
 	if created_fig:
 		if save:

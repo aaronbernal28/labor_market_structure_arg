@@ -32,9 +32,12 @@ def _sweep_alpha(
 	modularities = np.empty(len(alphas), dtype=float)
 	nodes_largest_cc = np.empty(len(alphas), dtype=float)
 
+	disparity_graph = gc.get_disparity_graph(projection) # Precompute disparity graph once for efficiency
+	
 	for i, alpha in enumerate(alphas):
+		# FIXME: This is inefficient since it recomputes the disparity graph each time. Refactor to compute once and pass in.
 		backbone = gc.disparity_filter_backbone(
-			projection,
+			disparity_graph=disparity_graph,
 			alpha=float(alpha),
 			mode="or",
 			keep_isolates=True,
@@ -79,7 +82,7 @@ def main() -> None:
 	algorithm = snakemake.wildcards["algorithm"]
 
 	seed = int(snakemake.config["seed"])
-	alphas = np.logspace(-4, 0, 30)
+	alphas = np.logspace(-10, 0, 50)
 	alphas.sort()
 
 	(
