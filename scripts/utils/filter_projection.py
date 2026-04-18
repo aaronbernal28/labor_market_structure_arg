@@ -52,7 +52,9 @@ def main() -> None:
 
 	pl.plot_backbone_weight_histogram(
 		original_weights=[d["weight"] for _, _, d in graph.edges(data=True)],
-		backbone_weights=[d["weight"] for _, _, d in backbone_undirected.edges(data=True)],
+		backbone_weights=[
+			d["weight"] for _, _, d in backbone_undirected.edges(data=True)
+		],
 		alpha=alpha,
 		title_prefix=None,
 		output_path=Path(snakemake.output[1]),

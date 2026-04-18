@@ -269,13 +269,13 @@ def get_projection_positions(
 	method: str = "auto",
 ) -> dict:
 	"""Calculate node positions for the projection graph using a force-directed layout.
-	
+
 	Handles both undirected and directed graphs (converts directed to undirected as needed).
 	"""
 	# Convert to undirected if needed (e.g., for directed graphs from disparity_filter_backbone)
 	if isinstance(graph, nx.DiGraph):
 		graph = nx.to_undirected(graph)
-	
+
 	if not nx.is_connected(graph):
 		# Get the largest connected component for layout
 		largest_cc = max(nx.connected_components(graph), key=len)
@@ -317,11 +317,8 @@ def disparity_alpha_endpoint(k: int, strength: float, weight: float) -> float:
 	return float((1.0 - p) ** (k - 1))
 
 
-def get_disparity_graph(
-	graph_in: nx.Graph
-) -> nx.DiGraph:
-	"""Return a disparity backbone as a directed graph.
-	"""
+def get_disparity_graph(graph_in: nx.Graph) -> nx.DiGraph:
+	"""Return a disparity backbone as a directed graph."""
 	if graph_in.number_of_nodes() == 0:
 		return nx.DiGraph()
 
@@ -340,8 +337,8 @@ def get_disparity_graph(
 		a_uv = disparity_alpha_endpoint(degree.get(u, 0), strength.get(u, 0.0), w_uv)
 		a_vu = disparity_alpha_endpoint(degree.get(v, 0), strength.get(v, 0.0), w_uv)
 
-		graph_out.add_edge(u, v, alpha=a_uv)
-		graph_out.add_edge(v, u, alpha=a_vu)
+		graph_out.add_edge(u, v, alpha=a_uv, weight=w_uv)
+		graph_out.add_edge(v, u, alpha=a_vu, weight=w_uv)
 
 	return graph_out
 
@@ -355,11 +352,11 @@ def disparity_filter_backbone(
 ) -> nx.Graph:
 	"""Return a disparity-filtered backbone as an undirected graph.
 
-	For each edge in the input undirected graph, the significance of 
+	For each edge in the input undirected graph, the significance of
 	individual endpoints is checked:
 	- Edge u -> v is significant if a_uv < alpha
 	- Edge v -> u is significant if a_vu < alpha
-	
+
 	With mode="or", at least one direction must pass.
 	With mode="and", both directions must pass.
 	"""
@@ -367,7 +364,7 @@ def disparity_filter_backbone(
 		raise ValueError("mode must be 'or' or 'and'.")
 	if alpha <= 0 or alpha > 1:
 		raise ValueError("alpha must be in (0, 1].")
-	
+
 	if original_graph is None and disparity_graph is None:
 		raise ValueError("Provide at least one of original_graph or disparity_graph.")
 
@@ -383,19 +380,24 @@ def disparity_filter_backbone(
 
 	for u, v in disparity_graph.to_undirected().edges():
 		# Determine which directions pass the threshold
-		u_to_v_passes = disparity_graph.get_edge_data(u, v, default={}).get("alpha", 1) < alpha
-		v_to_u_passes = disparity_graph.get_edge_data(v, u, default={}).get("alpha", 1) < alpha
+		u_to_v_passes = (
+			disparity_graph.get_edge_data(u, v, default={}).get("alpha", 1) < alpha
+		)
+		v_to_u_passes = (
+			disparity_graph.get_edge_data(v, u, default={}).get("alpha", 1) < alpha
+		)
 
 		if mode == "or":
 			# Keep edge if at least one direction passes
 			if u_to_v_passes or v_to_u_passes:
-				edge_data = disparity_graph.get_edge_data(u, v, default=disparity_graph.get_edge_data(v, u))
-				backbone.add_edge(u, v, **edge_data)
+				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 1)
+				# print(f"Keeping edge ({u}, {v}) with data w_uv={w_uv}, a_uv={disparity_graph.get_edge_data(u, v, default={}).get('alpha', 'N/A')}, a_vu={disparity_graph.get_edge_data(v, u, default={}).get('alpha', 'N/A')}")
+				backbone.add_edge(u, v, weight=w_uv)
 		else:  # mode == "and"
 			# Keep edge only if both directions pass
 			if u_to_v_passes and v_to_u_passes:
-				edge_data = disparity_graph.get_edge_data(u, v, default=disparity_graph.get_edge_data(v, u))
-				backbone.add_edge(u, v, **edge_data)
+				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 1)
+				backbone.add_edge(u, v, weight=w_uv)
 
 	if not keep_isolates:
 		isolates = [n for n in backbone.nodes() if backbone.degree(n) == 0]

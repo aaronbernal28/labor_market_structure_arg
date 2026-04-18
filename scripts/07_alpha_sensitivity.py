@@ -32,8 +32,10 @@ def _sweep_alpha(
 	modularities = np.empty(len(alphas), dtype=float)
 	nodes_largest_cc = np.empty(len(alphas), dtype=float)
 
-	disparity_graph = gc.get_disparity_graph(projection) # Precompute disparity graph once for efficiency
-	
+	disparity_graph = gc.get_disparity_graph(
+		projection
+	)  # Precompute disparity graph once for efficiency
+
 	for i, alpha in enumerate(alphas):
 		# FIXME: This is inefficient since it recomputes the disparity graph each time. Refactor to compute once and pass in.
 		backbone = gc.disparity_filter_backbone(
@@ -76,13 +78,11 @@ def _sweep_alpha(
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 	projection = nx.read_gexf(snakemake.input[0], node_type=int)
-	output_path = Path(snakemake.output[0])
-	output_path.parent.mkdir(parents=True, exist_ok=True)
 	graph_metrics = metrics.summarize_graph(projection)
 	algorithm = snakemake.wildcards["algorithm"]
 
 	seed = int(snakemake.config["seed"])
-	alphas = np.logspace(-10, 0, 50)
+	alphas = np.logspace(-10, 0, 60)
 	alphas.sort()
 
 	(
@@ -114,7 +114,7 @@ def main() -> None:
 		edge_counts=edge_counts,
 		clustering_coefficients=clustering_coeffs,
 		title=title,
-		output_path=output_path,
+		output_path=Path(snakemake.output[0]),
 		modularities=modularities,
 		nodes_largest_cc=nodes_largest_cc,
 		reference_alpha=reference_alpha,
@@ -122,7 +122,7 @@ def main() -> None:
 		logscale=True,
 	)
 
-	print(f"Saved alpha sensitivity plot to {output_path}.")
+	print(f"Saved alpha sensitivity plot to {Path(snakemake.output[0])}.")
 
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)
