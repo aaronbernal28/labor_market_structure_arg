@@ -1,0 +1,8 @@
+builtins = ["snakemake"]
+exclude = ["scripts/deprecated"]
+
+[format]
+indent-style = "tab"
+
+[lint]
+ignore = ["W191", "E111", "E114", "E117", "D206", "F403", "F405"]
