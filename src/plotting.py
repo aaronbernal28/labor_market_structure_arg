@@ -606,7 +606,7 @@ def draw_bipartite_normal_layout_by_color(
 		graph.edges(),
 		key=lambda e: pos[e[1]][1],  # sort by target y → reduces colour mixing
 	)
-	weights = [graph[u][v].get("weight", 1.0) for u, v in edges_sorted]
+	weights = [graph[u][v].get("weight", 0.0) for u, v in edges_sorted]
 	max_weight = max(weights) if weights else 0.0
 	for u, v in edges_sorted:
 		start, end = pos[u], pos[v]
@@ -619,7 +619,7 @@ def draw_bipartite_normal_layout_by_color(
 		)
 		color_u = color_map.get(int(u), LIGTHGRAY)
 		color_v = color_map.get(int(v), LIGTHGRAY)
-		w = graph[u][v].get("weight", 1.0)
+		w = graph[u][v].get("weight", 0.0)
 		alpha = _edge_alpha_from_weight(w, max_weight, alpha_max=edge_alpha)
 		edge_color = _edge_rgba_from_node_colors(color_u, color_v, alpha)
 		ax.add_patch(
@@ -863,7 +863,7 @@ def plot_projection_by_group(
 	if len(edges) > 0:
 		edge_data = next(iter(graph.edges(data=True)))[-1]
 		if "weight" in edge_data:
-			weights = [graph[u][v].get("weight", 1.0) for u, v in edges]
+			weights = [graph[u][v].get("weight", 0.0) for u, v in edges]
 			max_weight = max(weights) if max(weights) > 0 else 1.0
 			edge_widths = [0.1 + 1.9 * (w / max_weight) for w in weights]
 			edge_alphas = [
@@ -990,7 +990,7 @@ def plot_projection_gradient(
 	if len(edges) > 0:
 		edge_data = next(iter(subgraph.edges(data=True)))[-1]
 		if "weight" in edge_data:
-			weights = [subgraph[u][v].get("weight", 1.0) for u, v in edges]
+			weights = [subgraph[u][v].get("weight", 0.0) for u, v in edges]
 			max_weight = max(weights) if max(weights) > 0 else 1.0
 			edge_widths = [0.1 + 1.9 * (w / max_weight) for w in weights]
 			edge_alphas = [

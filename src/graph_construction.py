@@ -172,7 +172,7 @@ def dot_product_weight(G: nx.Graph, u: int, v: int) -> float:
 	"""
 	shared_nodes = set(G[u]).intersection(G[v])
 	return sum(
-		G[u][node].get("weight", 1) * G[v][node].get("weight", 1)
+		G[u][node].get("weight", 0.0) * G[v][node].get("weight", 0.0)
 		for node in shared_nodes
 	)
 
@@ -184,8 +184,8 @@ def cosine_similarity_weight(G: nx.Graph, u: int, v: int) -> float:
 	shared_nodes = set(G[u]) & set(G[v])
 
 	for node in shared_nodes:
-		w_u = G[u][node].get("weight", 1)
-		w_v = G[v][node].get("weight", 1)
+		w_u = G[u][node].get("weight", 0.0)
+		w_v = G[v][node].get("weight", 0.0)
 		norm_weight_u += w_u**2
 		norm_weight_v += w_v**2
 
@@ -327,7 +327,7 @@ def get_disparity_graph(graph_in: nx.Graph) -> nx.DiGraph:
 	graph_out.graph.update(graph_in.graph)
 
 	strength = {
-		n: sum(float(d.get("weight", 1.0)) for _, _, d in graph_in.edges(n, data=True))
+		n: sum(float(d.get("weight", 0.0)) for _, _, d in graph_in.edges(n, data=True))
 		for n in graph_in.nodes()
 	}
 	degree = dict(graph_in.degree())
@@ -390,13 +390,13 @@ def disparity_filter_backbone(
 		if mode == "or":
 			# Keep edge if at least one direction passes
 			if u_to_v_passes or v_to_u_passes:
-				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 1)
+				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 0.0)
 				# print(f"Keeping edge ({u}, {v}) with data w_uv={w_uv}, a_uv={disparity_graph.get_edge_data(u, v, default={}).get('alpha', 'N/A')}, a_vu={disparity_graph.get_edge_data(v, u, default={}).get('alpha', 'N/A')}")
 				backbone.add_edge(u, v, weight=w_uv)
 		else:  # mode == "and"
 			# Keep edge only if both directions pass
 			if u_to_v_passes and v_to_u_passes:
-				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 1)
+				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 0.0)
 				backbone.add_edge(u, v, weight=w_uv)
 
 	if not keep_isolates:

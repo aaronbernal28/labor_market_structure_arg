@@ -245,7 +245,7 @@ def infomap_partition(
 		im.add_node(node_id)
 
 	for u, v, data in graph.edges(data=True):
-		weight = float(data.get("weight", 1.0))
+		weight = float(data.get("weight", 0.0))
 		im.add_link(node_to_id[u], node_to_id[v], weight)
 
 	im.run()
