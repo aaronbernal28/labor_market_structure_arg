@@ -1849,8 +1849,11 @@ def compute_and_plot_edge_correlation(
 	)
 	plt.xlabel("X_i")
 	plt.ylabel("Y_i")
-	plt.xlim(axis_min, axis_max)
-	plt.ylim(axis_min, axis_max)
+	# Set y-limits to be the same as x-limits to maintain a square aspect ratio
+	print(
+		f"Axis limits: x=({axis_min:.2f}, {axis_max:.2f}), y=({axis_min:.2f}, {axis_max:.2f})"
+	)
+	plt.ylim(plt.xlim())
 	sort_labels()
 
 	# Generate Assortativity Scatter Plot (Node value vs Average Neighbor Value)

@@ -83,3 +83,15 @@ def _as_bool(value: object) -> bool:
 	if isinstance(value, str):
 		return value != "non_logscale"
 	raise ValueError(f"Invalid boolean value for logscale: {value!r}")
+
+
+def get_top_communities(community_map: dict[int, str], top_n: int = 5) -> set[str]:
+	"""Identify the top N communities by node count."""
+	if top_n <= 0 or top_n >= len(set(community_map.values())):
+		return set(community_map.values())
+
+	from collections import Counter
+
+	community_counts = Counter(community_map.values())
+	top_communities = {c for c, _ in community_counts.most_common(top_n)}
+	return top_communities

@@ -53,6 +53,7 @@ def main() -> None:
 	feature_map = plot_df.set_index(id_col)[feature_name].to_dict()
 	community_map = plot_df.set_index(id_col)[community_col].to_dict()
 	node_size_map = plot_df.set_index(id_col)["n_obs"].to_dict()
+	highlight_communities = utils.get_top_communities(community_map, top_n=8)
 
 	from seaborn import hls_palette
 
@@ -70,7 +71,7 @@ def main() -> None:
 		color_map=color_map,
 		community_map=community_map,
 		node_size_map=node_size_map,
-		highlight_communities=set(community_map.values()),
+		highlight_communities=highlight_communities,
 		title=default_title,
 		output_path=snakemake.output[0],
 		save=True,
