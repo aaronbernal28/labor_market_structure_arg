@@ -13,13 +13,17 @@ CLASSES = ["caes", "ciuo"]
 ALPHA_CAES = ["1.00", "0.0043"]
 ALPHA_CIUO = ["1.00", "0.0093"]
 ALPHAS = ["0.30","1.00"] + ALPHA_CAES + ALPHA_CIUO
+TOPO_METHOD = ["shortest_path", "disparity_filtration"]
+
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS),
 	class_ = "|".join(CLASSES),
 	weight_function = "|".join(WEIGHT_FUNCTIONS),
 	algorithm = "|".join(ALGORITHMS),
-	alpha = "|".join(ALPHAS)
+	alpha = "|".join(ALPHAS),
+	topo_method = "|".join(TOPO_METHOD)
+
 
 rule all:
 	input:
@@ -74,9 +78,10 @@ rule all:
 			continuous_feature=CONTINUOUS_FEATURES,
 		),
 		expand(
-			"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}.png",
+			"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}.png",
 			weight_function=["hidalgo"],
 			class_=CLASSES,
+			topo_method=TOPO_METHOD,
 		),
 
 
@@ -211,7 +216,7 @@ rule _08_persistence_diagram:
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	output:
-		"images/{dataset}/{class_}/08_persistence_diagram/_{weight_function}.png"
+		"images/{dataset}/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}.png"
 	#log:
 	#	"images/{dataset}/{class_}/08_persistence_diagram/_{weight_function}.log"
 	script:

@@ -333,7 +333,7 @@ def get_disparity_graph(graph_in: nx.Graph) -> nx.DiGraph:
 	degree = dict(graph_in.degree())
 
 	for u, v, data in graph_in.edges(data=True):
-		w_uv = float(data.get("weight", 1.0))
+		w_uv = float(data.get("weight", 0.0))
 		a_uv = disparity_alpha_endpoint(degree.get(u, 0), strength.get(u, 0.0), w_uv)
 		a_vu = disparity_alpha_endpoint(degree.get(v, 0), strength.get(v, 0.0), w_uv)
 
@@ -404,3 +404,91 @@ def disparity_filter_backbone(
 		backbone.remove_nodes_from(isolates)
 
 	return backbone
+
+
+def compute_distance_matrix(graph: nx.Graph, method: str) -> np.ndarray:
+	"""Compute a distance matrix for the given graph and method."""
+	if method == "disparity_filtration":
+		return get_disparity_distance_matrix(graph)
+	elif method == "shortest_path":
+		return get_shortest_path_distance_matrix(graph)
+	else:
+		raise ValueError(f"Unknown distance matrix method '{method}'.")
+
+
+def _build_betas(size: int = 100) -> np.ndarray:
+	"""Return a strictly increasing beta grid including 0 and 1."""
+	betas = np.concatenate(([0.0], np.logspace(-6, 0, size-2)))
+	betas = np.unique(betas)
+	betas.sort()
+	if betas[0] != 0.0:
+		betas = np.concatenate(([0.0], betas))
+	# Ensure 1.0 is present and is the last endpoint
+	if betas[-1] != 1.0:
+		betas = np.concatenate((betas, [1.0]))
+		betas = np.unique(betas)
+		betas.sort()
+	betas[-1] = 1.0
+	return betas
+
+
+def _edge_distance_from_alpha(alpha_min: float, betas: np.ndarray) -> int:
+	"""Compute d(u,v) = min{k : alpha < beta_k} with inclusive last beta."""
+	k_max = len(betas) - 1
+	# First index where beta_k > alpha_min
+	k = int(np.searchsorted(betas, float(alpha_min), side="right"))
+	# Inclusive behavior at beta_K = 1 for alpha=1
+	return min(k, k_max)
+
+
+def get_disparity_distance_matrix(graph: nx.Graph) -> np.ndarray:
+	"""Compute a distance matrix for the given graph and method."""
+	betas = _build_betas(size=100)
+	k_max = len(betas) - 1
+	default_distance = float(k_max + 1)
+
+	nodes = sorted(graph.nodes())
+	node_index = {node: i for i, node in enumerate(nodes)}
+	n_nodes = len(nodes)
+
+	distance_matrix = np.full((n_nodes, n_nodes), default_distance, dtype=float)
+	np.fill_diagonal(distance_matrix, 0.0)
+
+	disparity_graph = get_disparity_graph(graph)
+
+	for u, v in graph.edges():
+		a_uv = float(disparity_graph.edges[u, v].get("alpha", 1.0))
+		a_vu = float(disparity_graph.edges[v, u].get("alpha", 1.0))
+		alpha_min = min(a_uv, a_vu)
+		d_uv = float(_edge_distance_from_alpha(alpha_min, betas))
+		i = node_index[u]
+		j = node_index[v]
+		distance_matrix[i, j] = d_uv
+		distance_matrix[j, i] = d_uv
+
+	#distance_matrix = np.log1p(distance_matrix)  # Log-transform to compress scale and handle infinite distances
+
+	return distance_matrix
+
+
+def convert_weights_to_costs(graph: nx.Graph) -> nx.Graph:
+	"""Convert edge weights to costs for distance calculations."""
+	cost_graph = graph.copy()
+	for u, v, data in graph.edges(data=True):
+		weight = float(data.get("weight", 0.0))
+		cost = float(-np.log(weight)) if weight > 0 else float("inf")
+		# NOTE: if weight is zero, cost becomes infinite
+		# If weight is one, cost becomes zero (as expected for a perfect match)
+		cost_graph.add_edge(u, v, cost=cost)
+	return cost_graph
+
+
+def get_shortest_path_distance_matrix(graph: nx.Graph) -> np.ndarray:
+	"""Compute a distance matrix for the given graph and method."""
+	cost_graph = convert_weights_to_costs(graph)
+	nodes = sorted(cost_graph.nodes())
+	distance_matrix = nx.floyd_warshall_numpy(cost_graph, nodelist=nodes, weight="cost")
+	print("Shortest path distance matrix computed.")
+	print(f"Distance matrix shape: {distance_matrix.shape}")
+	print(f"Distance matrix sample:\n{distance_matrix[:5, :5]}")
+	return distance_matrix

@@ -12,6 +12,7 @@ import matplotlib.patches as patches
 import matplotlib.path as mpath
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import matplotlib as mpl
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -1332,7 +1333,10 @@ def plot_persistence_barcodes(
 	if ax is None:
 		fig, ax = plt.subplots()
 		created_fig = True
-	gudhi.plot_persistence_barcode(persistence=gudhi_diagrams, axes=ax)
+	# Convert colormap to a list that can be indexed by dimension
+	cmap = mpl.colormaps["tab10"]
+	colormap_list = [cmap(i) for i in range(len(cmap.colors))]
+	gudhi.plot_persistence_barcode(persistence=gudhi_diagrams, axes=ax, colormap=colormap_list)
 	ax.set_title(title)
 	if created_fig:
 		if save:
@@ -1340,9 +1344,6 @@ def plot_persistence_barcodes(
 			plt.close(fig)
 		else:
 			plt.show()
-
-
-import matplotlib as mpl
 
 
 def color_map_caes(caes_nodes: Iterable[str]) -> Dict[int, str]:
