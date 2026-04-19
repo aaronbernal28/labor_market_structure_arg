@@ -11,7 +11,7 @@ snakemake: any
 
 def _build_betas() -> np.ndarray:
 	"""Return a strictly increasing beta grid including 0 and 1."""
-	betas = np.concatenate(([0.0], np.logspace(-4, 0, 200)))
+	betas = np.concatenate(([0.0], np.logspace(-10, 0, 100)))
 	betas = np.unique(betas)
 	betas.sort()
 	if betas[0] != 0.0:
@@ -38,9 +38,6 @@ def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
-	output_path = Path(snakemake.output[0])
-	output_path.parent.mkdir(parents=True, exist_ok=True)
-
 	betas = _build_betas()
 	k_max = len(betas) - 1
 	default_distance = float(k_max + 1)
@@ -49,21 +46,15 @@ def main() -> None:
 	node_index = {node: i for i, node in enumerate(nodes)}
 	n_nodes = len(nodes)
 
-	# Pre-compute endpoint stats (same as disparity filter)
-	strength = {
-		n: sum(float(d.get("weight", 1.0)) for _, _, d in graph.edges(n, data=True))
-		for n in graph.nodes()
-	}
-	degree = dict(graph.degree())
-
 	# Build a fully finite matrix (per preference: non-edges use a large constant)
 	distance_matrix = np.full((n_nodes, n_nodes), default_distance, dtype=float)
 	np.fill_diagonal(distance_matrix, 0.0)
 
-	for u, v, data in graph.edges(data=True):
-		w = float(data.get("weight", 1.0))
-		a_uv = gc.disparity_alpha_endpoint(degree.get(u, 0), strength.get(u, 0.0), w)
-		a_vu = gc.disparity_alpha_endpoint(degree.get(v, 0), strength.get(v, 0.0), w)
+	disparity_graph = gc.get_disparity_graph(graph)
+
+	for u, v in graph.edges():
+		a_uv = float(disparity_graph.edges[u, v].get("alpha", 1.0))
+		a_vu = float(disparity_graph.edges[v, u].get("alpha", 1.0))
 		alpha_min = min(a_uv, a_vu)
 		d_uv = float(_edge_distance_from_alpha(alpha_min, betas))
 		i = node_index[u]
@@ -115,32 +106,23 @@ def main() -> None:
 		save=False,
 	)
 
-	try:
-		pl.plot_persistence_diagrams(
-			diagrams,
-			title="Persistence diagrams",
-			ax=axs[1, 0],
-			save=False,
-		)
-	except ImportError as exc:
-		axs[1, 0].axis("off")
-		axs[1, 0].text(0.01, 0.5, f"Missing dependency for diagrams:\n{exc}")
+	pl.plot_persistence_diagrams(
+		diagrams,
+		title="Persistence diagrams",
+		ax=axs[1, 0],
+		save=False,
+	)
 
-	try:
-		pl.plot_persistence_barcodes(
-			diagrams,
-			title="Persistence barcodes",
-			ax=axs[1, 1],
-			save=False,
-		)
-	except ImportError as exc:
-		axs[1, 1].axis("off")
-		axs[1, 1].text(0.01, 0.5, f"Missing dependency for barcodes:\n{exc}")
+	pl.plot_persistence_barcodes(
+		diagrams,
+		title="Persistence barcodes",
+		ax=axs[1, 1],
+		save=False,
+	)
 
 	plt.tight_layout()
-	fig.savefig(output_path, bbox_inches="tight")
+	fig.savefig(Path(snakemake.output[0]), bbox_inches="tight")
 	plt.close(fig)
-	print(f"Saved persistence summary figure to {output_path}")
 
 
 if __name__ == "__main__":

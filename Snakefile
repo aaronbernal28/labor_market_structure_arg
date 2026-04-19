@@ -73,11 +73,11 @@ rule all:
 			alpha_ciuo=ALPHA_CIUO,
 			continuous_feature=CONTINUOUS_FEATURES,
 		),
-		#expand(
-		#	"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}.png",
-		#	weight_function=["hidalgo"],
-		#	class_=CLASSES,
-		#),
+		expand(
+			"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}.png",
+			weight_function=["hidalgo"],
+			class_=CLASSES,
+		),
 
 
 rule _00_aed_report:
