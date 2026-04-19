@@ -5,7 +5,7 @@ matplotlib==3.10.8
 seaborn==0.13.2
 openpyxl==3.1.5
 scipy==1.17.1
-plotly==6.6.0
+plotly==6.6.0 #NOTE: requiere sudo apt install chromium, descomentar rule 06_ si no
 kaleido==1.2.0
 snakemake==9.19.0
 scikit-learn==1.8.0

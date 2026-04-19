@@ -1,17 +1,18 @@
 configfile: "config.yaml"
 
 
-DATASETS = ["enes_all"]
+DATASETS = ["enes_all", "enes_2019", "enes_2021"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
 ALGORITHMS = ["louvain", "infomap"]
-#VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
+VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
 CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "income_mean", "nivel_ed_mean", "age_mean"] # in nodelist data
-
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
-ALPHAS = ["0.30","1.00", "0.0046", "0.0086"]
+ALPHA_CAES = ["1.00", "0.0043"]
+ALPHA_CIUO = ["1.00", "0.0093"]
+ALPHAS = ["0.30","1.00"] + ALPHA_CAES + ALPHA_CIUO
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS),
@@ -22,72 +23,61 @@ wildcard_constraints:
 
 rule all:
 	input:
+		"images/enes_all/00_aed_report/aed_top_sectors.png",
+		"images/enes_all/00_aed_report/aed_top_occupations.png",
+		"images/enes_all/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap.png",
+		"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
+		"images/enes_all/02_bipartite_plot_by_groups/bipartite_degree_dist.png",
+		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
 		expand(
-			"images/{dataset}/00_aed_report/aed_top_sectors.png",
+			"images/enes_all/06_sankey_plot/sankey_plot.png",
 			dataset=DATASETS,
 		),
 		expand(
-			"images/{dataset}/00_aed_report/aed_top_occupations.png",
-			dataset=DATASETS,
-		),
-		expand(
-			"images/{dataset}/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap.png",
-			dataset=DATASETS,
-		),
-		expand(
-			"images/{dataset}/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
-			dataset=DATASETS,
-		),
-		expand(
-			"images/{dataset}/02_bipartite_plot_by_groups/bipartite_degree_dist.png",
-			dataset=DATASETS,
-		),
-		expand(
-			"images/{dataset}/{class_}/03_projection_plot_by_groups/_{weight_function}_{alpha}_pos_{algorithm}_{discrete_feature}.png",
-			dataset=DATASETS,
+			"images/enes_all/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.png",
 			class_=CLASSES,
-			weight_function=WEIGHT_FUNCTIONS,
-			alpha=ALPHAS,
-			algorithm=ALGORITHMS,
+			weight_function=["hidalgo"],
+			algorithm=["louvain"],
+		),
+		expand(
+			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm}_{discrete_feature}.png",
+			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm}_{discrete_feature}.png"],
+			weight_function=["hidalgo"],
+			alpha_caes=ALPHA_CAES,
+			alpha_ciuo=ALPHA_CIUO,
+			algorithm=["louvain"],
 			discrete_feature=DISCRETE_FEATURES,
 		),
 		expand(
-			"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{discrete_feature}.png",
-			dataset=DATASETS,
-			class_=CLASSES,
-			weight_function=WEIGHT_FUNCTIONS,
-			alpha=ALPHAS,
+			["images/enes_all/caes/03_projection_plot_gradient/_{weight_function}_{alpha_caes}_pos_{discrete_feature}.png",
+			"images/enes_all/ciuo/03_projection_plot_gradient/_{weight_function}_{alpha_ciuo}_pos_{discrete_feature}.png"],
+			weight_function=["hidalgo"],
+			alpha_caes=ALPHA_CAES,
+			alpha_ciuo=ALPHA_CIUO,
 			discrete_feature=CONTINUOUS_FEATURES,
 		),
-		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
 		expand(
-			"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.png",
-			dataset=DATASETS,
-			class_=CLASSES,
-			weight_function=WEIGHT_FUNCTIONS,
-			algorithm=ALGORITHMS,
+			["images/enes_all/caes/03_communities/_distribution_{weight_function}_{alpha_caes}_{algorithm}.png",
+			"images/enes_all/ciuo/03_communities/_distribution_{weight_function}_{alpha_ciuo}_{algorithm}.png"],
+			weight_function=["hidalgo"],
+			alpha_caes=ALPHA_CAES,
+			alpha_ciuo=ALPHA_CIUO,
+			algorithm=["louvain"],
 		),
 		expand(
-			"images/{dataset}/{class_}/05_edge_weight_correlation/_{weight_function}_{alpha}_pos_{algorithm}_{continuous_feature}.png",
-			dataset=DATASETS,
-			class_=CLASSES,
-			weight_function=WEIGHT_FUNCTIONS,
-			algorithm=ALGORITHMS,
-			alpha=ALPHAS,
+			["images/enes_all/caes/05_edge_weight_correlation/_{weight_function}_{alpha_caes}_pos_{algorithm}_{continuous_feature}.png",
+			"images/enes_all/ciuo/05_edge_weight_correlation/_{weight_function}_{alpha_ciuo}_pos_{algorithm}_{continuous_feature}.png"],
+			weight_function=["hidalgo"],
+			algorithm=["louvain"],
+			alpha_caes=ALPHA_CAES,
+			alpha_ciuo=ALPHA_CIUO,
 			continuous_feature=CONTINUOUS_FEATURES,
 		),
-		expand(
-			"images/{dataset}/{class_}/03_communities/_distribution_{weight_function}_{alpha}_{algorithm}.png",
-			dataset=DATASETS,
-			class_=CLASSES,
-			weight_function=WEIGHT_FUNCTIONS,
-			alpha=ALPHAS,
-			algorithm=ALGORITHMS,
-		),
-		expand(
-			"images/{dataset}/06_sankey_plot/sankey_plot.png",
-			dataset=DATASETS,
-		)
+		#expand(
+		#	"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}.png",
+		#	weight_function=["hidalgo"],
+		#	class_=CLASSES,
+		#),
 
 
 rule _00_aed_report:
