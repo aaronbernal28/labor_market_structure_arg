@@ -7,3 +7,8 @@ openpyxl==3.1.5
 scipy==1.17.1
 plotly==6.6.0
 kaleido==1.2.0
+snakemake==9.19.0
+scikit-learn==1.8.0
+ripser==0.6.14
+gudhi==3.12.0
+infomap==2.9.2

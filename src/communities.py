@@ -7,16 +7,12 @@ from typing import Any, Dict, List, Tuple
 import networkx as nx
 from networkx.algorithms.community import (
 	girvan_newman,
-	leiden_communities,
+	# leiden_communities,
 	louvain_communities,
 	modularity,
 )
 import numpy as np
-
-try:
-	from infomap import Infomap
-except ImportError:
-	Infomap = None
+from infomap import Infomap
 
 
 def louvain_partition(
