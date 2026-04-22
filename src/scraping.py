@@ -19,9 +19,15 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_indec_links(url: str, _depth: int = 0) -> List[Dict[str, str]] | None:
+def get_indec_links(
+	url: str,
+	*,
+	request_kwargs: Mapping[str, Any] | None = None,
+	_depth: int = 0,
+) -> List[Dict[str, str]] | None:
 	try:
-		response = requests.get(url, timeout=30)
+		kwargs: dict[str, Any] = dict(request_kwargs or {})
+		response = requests.get(url, timeout=30, **kwargs)
 		response.raise_for_status()
 		soup = BeautifulSoup(response.text, "html.parser")
 
@@ -67,7 +73,11 @@ def get_indec_links(url: str, _depth: int = 0) -> List[Dict[str, str]] | None:
 			if view:
 				view_url = f"https://www.indec.gob.ar/{str(view).lstrip('/')}"
 				if view_url != url:
-					fallback = get_indec_links(view_url, _depth=_depth + 1)
+					fallback = get_indec_links(
+						view_url,
+						request_kwargs=request_kwargs,
+						_depth=_depth + 1,
+					)
 					if fallback:
 						return fallback
 

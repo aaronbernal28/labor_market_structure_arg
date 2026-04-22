@@ -14,7 +14,7 @@ ALPHA_CAES = ["1.00", "0.0043"]
 ALPHA_CIUO = ["1.00", "0.0093"]
 ALPHAS = ["0.30","1.00"] + ALPHA_CAES + ALPHA_CIUO
 TOPO_METHOD = ["shortest_path", "disparity_filtration"]
-
+EPH_YEARS = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS),
