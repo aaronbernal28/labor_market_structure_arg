@@ -35,12 +35,14 @@ datasets:
     url: "https://datasets.datos.mincyt.gob.ar/dataset/b0c0ae96-4028-4d0e-919a-c6830110f6b6/resource/421a7e29-7d15-4b69-a2e8-d7242b58b770/download/base_enespersonas.csv"
     id_1: "nocues"
     id_2: "nhog"
+    id_3: "miembro"
     id_caes: "v182caes"
     id_ciuo: "v183ciuo"
+    id_cno: "v183cno"
     features:
       sex_id: "v109"
       public_worker: "v188" # en realidad es "v188"==1
-      total_income: "ITI"
+      total_income: "ITI" # Ingreso total individual
       age: "v108"
       nivel_ed: "nivel_ed" # < 11
 
@@ -50,14 +52,32 @@ datasets:
     year: 2021
     id_1: "CUEST"
     id_2: null
+    id_3: null
     id_caes: "CAES_num"
     id_ciuo: "CIUO_encuestado"
+    id_cno: null
     features:
      sex_id: "SEXO"
      public_worker: "M3_7" # en realidad es "M3_7"==1
      total_income: null
      age: null
      nivel_ed: null
+
+    eph_generic:
+      source: data/raw/eph/*
+      url: "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/*"
+      id_1: "CODUSU"
+      id_2: "NRO_HOGAR"
+      id_3: "COMPONENTE"
+      id_caes: "PP04B_COD" # o "PP04B COD"
+      id_ciuo: null
+      id_cno: "PP04D_COD" # o "PP04D COD"
+      features:
+        sex_id: "PP03G_COD"
+        public_worker: "CH04"
+        total_income: "P47T" # Ingreso total individual
+        age: "CH06"
+        nivel_ed: "CH12" # < 10
 
 caes:
   source: data/raw/nodelist_caes.csv
