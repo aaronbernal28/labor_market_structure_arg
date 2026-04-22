@@ -41,6 +41,8 @@ rule prepare_nodelist:
 
 rule import_eph_data:
 	'''Scrape INDEC bases page and download EPH resources (side effects), writing a single audit log.'''
+	resources:
+		limited_slots = 7
 	wildcard_constraints:
 		year = "|".join(EPH_YEARS)
 	output:
@@ -50,7 +52,5 @@ rule import_eph_data:
 
 
 rule import_eph_data_all:
-	"""snakemake -Fj7 import_eph_data_all
-	No more than 7 threads to avoid overloading memory and CPU."""
 	input:
 		expand("data/raw/eph/import_eph_data_{year}.log", year=EPH_YEARS)
