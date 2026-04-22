@@ -1336,7 +1336,9 @@ def plot_persistence_barcodes(
 	# Convert colormap to a list that can be indexed by dimension
 	cmap = mpl.colormaps["tab10"]
 	colormap_list = [cmap(i) for i in range(len(cmap.colors))]
-	gudhi.plot_persistence_barcode(persistence=gudhi_diagrams, axes=ax, colormap=colormap_list)
+	gudhi.plot_persistence_barcode(
+		persistence=gudhi_diagrams, axes=ax, colormap=colormap_list
+	)
 	ax.set_title(title)
 	if created_fig:
 		if save:

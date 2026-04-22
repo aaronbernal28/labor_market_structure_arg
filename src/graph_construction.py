@@ -390,13 +390,17 @@ def disparity_filter_backbone(
 		if mode == "or":
 			# Keep edge if at least one direction passes
 			if u_to_v_passes or v_to_u_passes:
-				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 0.0)
+				w_uv = disparity_graph.get_edge_data(u, v, default={}).get(
+					"weight", 0.0
+				)
 				# print(f"Keeping edge ({u}, {v}) with data w_uv={w_uv}, a_uv={disparity_graph.get_edge_data(u, v, default={}).get('alpha', 'N/A')}, a_vu={disparity_graph.get_edge_data(v, u, default={}).get('alpha', 'N/A')}")
 				backbone.add_edge(u, v, weight=w_uv)
 		else:  # mode == "and"
 			# Keep edge only if both directions pass
 			if u_to_v_passes and v_to_u_passes:
-				w_uv = disparity_graph.get_edge_data(u, v, default={}).get("weight", 0.0)
+				w_uv = disparity_graph.get_edge_data(u, v, default={}).get(
+					"weight", 0.0
+				)
 				backbone.add_edge(u, v, weight=w_uv)
 
 	if not keep_isolates:
@@ -418,7 +422,7 @@ def compute_distance_matrix(graph: nx.Graph, method: str) -> np.ndarray:
 
 def _build_betas(size: int = 100) -> np.ndarray:
 	"""Return a strictly increasing beta grid including 0 and 1."""
-	betas = np.concatenate(([0.0], np.logspace(-6, 0, size-2)))
+	betas = np.concatenate(([0.0], np.logspace(-6, 0, size - 2)))
 	betas = np.unique(betas)
 	betas.sort()
 	if betas[0] != 0.0:
@@ -466,7 +470,7 @@ def get_disparity_distance_matrix(graph: nx.Graph) -> np.ndarray:
 		distance_matrix[i, j] = d_uv
 		distance_matrix[j, i] = d_uv
 
-	#distance_matrix = np.log1p(distance_matrix)  # Log-transform to compress scale and handle infinite distances
+	# distance_matrix = np.log1p(distance_matrix)  # Log-transform to compress scale and handle infinite distances
 
 	return distance_matrix
 
