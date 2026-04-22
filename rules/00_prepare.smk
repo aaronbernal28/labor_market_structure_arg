@@ -37,4 +37,11 @@ rule prepare_nodelist:
 		"data/processed/{dataset}/nodelist_{class_}.log"
 	script:
 		"../scripts/utils/prepare_nodelist_caes.py"
-	
+
+
+rule import_eph_data:
+	'''Scrape INDEC bases page and download EPH resources (side effects), writing a single audit log.'''
+	output:
+		"data/raw/eph/import_eph_data.log"
+	script:
+		"../scripts/utils/import_eph_data.py"
