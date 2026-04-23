@@ -1,9 +1,7 @@
 rule bipartite_graph:
 	'''Build bipartite graph from ENES datasets.'''
 	input:
-		"data/processed/{dataset}.csv",
-		"data/processed/{dataset}/nodelist_caes.csv",
-		"data/processed/{dataset}/nodelist_ciuo.csv"
+		"data/processed/{dataset}.csv"
 	output:
 		"data/graphs/{dataset}/bipartite.gexf"
 	log:

@@ -9,41 +9,47 @@ def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 	df_2019 = pd.read_csv(
 		snakemake.input[0],
-		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+		dtype={
+			snakemake.config["caes"]["id"]: int,
+			snakemake.config["ciuo"]["id"]: int,
+		},
 	)
 	df_2021 = pd.read_csv(
 		snakemake.input[1],
-		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+		dtype={
+			snakemake.config["caes"]["id"]: int,
+			snakemake.config["ciuo"]["id"]: int,
+		},
 	)
 	nodelist_caes = pd.read_csv(
-		snakemake.input[2], dtype={snakemake.config["id_caes"]: int}
+		snakemake.input[2], dtype={snakemake.config["caes"]["id"]: int}
 	)
 	nodelist_ciuo = pd.read_csv(
-		snakemake.input[3], dtype={snakemake.config["id_ciuo"]: int}
+		snakemake.input[3], dtype={snakemake.config["ciuo"]["id"]: int}
 	)
 
 	df_2019 = df_2019.merge(
 		nodelist_caes,
-		left_on=snakemake.config["id_caes"],
-		right_on=snakemake.config["id_caes"],
+		left_on=snakemake.config["caes"]["id"],
+		right_on=snakemake.config["caes"]["id"],
 		how="left",
 	)
 	df_2019 = df_2019.merge(
 		nodelist_ciuo,
-		left_on=snakemake.config["id_ciuo"],
-		right_on=snakemake.config["id_ciuo"],
+		left_on=snakemake.config["ciuo"]["id"],
+		right_on=snakemake.config["ciuo"]["id"],
 		how="left",
 	)
 	df_2021 = df_2021.merge(
 		nodelist_caes,
-		left_on=snakemake.config["id_caes"],
-		right_on=snakemake.config["id_caes"],
+		left_on=snakemake.config["caes"]["id"],
+		right_on=snakemake.config["caes"]["id"],
 		how="left",
 	)
 	df_2021 = df_2021.merge(
 		nodelist_ciuo,
-		left_on=snakemake.config["id_ciuo"],
-		right_on=snakemake.config["id_ciuo"],
+		left_on=snakemake.config["ciuo"]["id"],
+		right_on=snakemake.config["ciuo"]["id"],
 		how="left",
 	)
 

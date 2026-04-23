@@ -22,7 +22,10 @@ CHARACTERISTIC_COLUMNS = [
 def main() -> None:
 	df_enes = pd.read_csv(
 		snakemake.input[0],
-		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+		dtype={
+			snakemake.config["caes"]["id"]: int,
+			snakemake.config["ciuo"]["id"]: int,
+		},
 	)
 	class_name = snakemake.wildcards["class_"]
 	nodelist = snakemake.config[class_name]

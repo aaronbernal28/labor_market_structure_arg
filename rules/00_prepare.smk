@@ -51,6 +51,20 @@ rule import_eph_data:
 		"../scripts/utils/import_eph_data.py"
 
 
-rule import_eph_data_all:
+EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
+
+rule prepare_data_eph:
+	'''
+	Prepare one raw EPH CSV into a processed per-file CSV.
+	'''
 	input:
-		expand("data/raw/eph/import_eph_data_{year}.log", year=EPH_YEARS)
+		"data/raw/eph/{eph_file}.csv"
+	output:
+		"data/processed/eph/{eph_file}.csv"
+	script:
+		"../scripts/utils/prepare_data_eph.py"
+
+
+rule prepare_eph_all:
+	input:
+		expand("data/processed/eph/{eph_file}.csv", eph_file=EPH_FILES)

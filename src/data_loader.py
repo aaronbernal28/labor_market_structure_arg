@@ -42,6 +42,61 @@ def clean_enes_base_features(df: pd.DataFrame, features: List[Feature]) -> pd.Da
 	return df
 
 
+def _normalize_code_series(series: pd.Series) -> pd.Series:
+	"""Parse occupational/activity codes that may arrive as floats or dotted strings."""
+	raw = series.astype(str).str.strip()
+	normalized = raw.copy()
+
+	# Values like 9.0.0.0.0 use multiple dots as separators; remove non-digits first.
+	multi_dot_mask = raw.str.count(r"\\.") > 1
+	normalized.loc[multi_dot_mask] = raw.loc[multi_dot_mask].str.replace(
+		r"\D", "", regex=True
+	)
+
+	return pd.to_numeric(normalized, errors="coerce")
+
+
+def lcd_load_eph_base(
+	df_eph: pd.DataFrame,
+	id_caes: str,
+	id_cno: str,
+	id_1: str | None = None,
+	id_2: str | None = None,
+	id_3: str | None = None,
+	features: List[Feature] | None = None,
+	max_caes_id: int = 10000,
+) -> pd.DataFrame:
+	# Keep optional args in signature for parity with ENES-style loaders.
+	_ = (id_1, id_2, id_3, features)
+
+	df_eph = df_eph.dropna(subset=[id_caes, id_cno]).copy()
+
+	raw_cno = df_eph[id_cno].astype(str).str.strip()
+	df_eph = df_eph[~raw_cno.isin(["9.0.0.0.0", "0.0.0.0.0"])].copy()
+
+	df_eph.loc[:, id_caes] = _normalize_code_series(df_eph[id_caes])
+	df_eph.loc[:, id_cno] = _normalize_code_series(df_eph[id_cno])
+	df_eph = df_eph.dropna(subset=[id_caes, id_cno]).copy()
+
+	df_eph.loc[:, id_caes] = df_eph[id_caes].astype(int)
+	df_eph.loc[:, id_cno] = df_eph[id_cno].astype(int)
+
+	# Keep valid code bounds only.
+	df_eph = df_eph[df_eph[id_caes] < 9999]
+	df_eph = df_eph[df_eph[id_cno] < 100000]
+
+	df_eph.loc[:, id_caes] = df_eph[id_caes].apply(lambda x: ut.desambiated_caes_id(x))
+	df_eph.loc[:, id_cno] = df_eph[id_cno].apply(
+		lambda x: ut.desambiated_ciuo_id(x, max_caes_id=max_caes_id)
+	)
+
+	# Keep output dtypes explicit.
+	df_eph.loc[:, id_caes] = df_eph[id_caes].astype(int)
+	df_eph.loc[:, id_cno] = df_eph[id_cno].astype(int)
+
+	return df_eph
+
+
 def lcd_load_enes_base(
 	df_enes: pd.DataFrame,
 	id_1: str,

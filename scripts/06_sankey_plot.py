@@ -16,7 +16,10 @@ def main() -> None:
 
 	enes_df = pd.read_csv(
 		snakemake.input[0],
-		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+		dtype={
+			snakemake.config["caes"]["id"]: int,
+			snakemake.config["ciuo"]["id"]: int,
+		},
 	)
 	caes_df = pd.read_csv(snakemake.input[1], dtype={caes_id: int})
 	ciuo_df = pd.read_csv(snakemake.input[2], dtype={ciuo_id: int})
@@ -24,14 +27,14 @@ def main() -> None:
 	enes_df = pd.merge(
 		enes_df,
 		caes_df[[caes_id, letra_caes]],
-		left_on=snakemake.config["id_caes"],
+		left_on=snakemake.config["caes"]["id"],
 		right_on=caes_id,
 		how="left",
 	)
 	enes_df = pd.merge(
 		enes_df,
 		ciuo_df[[ciuo_id, letra_ciuo]],
-		left_on=snakemake.config["id_ciuo"],
+		left_on=snakemake.config["ciuo"]["id"],
 		right_on=ciuo_id,
 		how="left",
 	)

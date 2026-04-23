@@ -9,11 +9,11 @@ snakemake: any
 def main() -> None:
 	enes_df = pd.read_csv(
 		snakemake.input[0],
-		dtype={snakemake.config["id_caes"]: int, snakemake.config["id_ciuo"]: int},
+		dtype={snakemake.config["caes"]["id"]: int, snakemake.config["ciuo"]["id"]: int},
 	)
 
-	caes_id = snakemake.config["id_caes"]
-	ciuo_id = snakemake.config["id_ciuo"]
+	caes_id = snakemake.config["caes"]["id"]
+	ciuo_id = snakemake.config["ciuo"]["id"]
 
 	graph = gc.build_bipartite_graph(
 		enes_df,

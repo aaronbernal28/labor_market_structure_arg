@@ -1,8 +1,6 @@
 enes: "enes_2019"
 id_1: "nocues"
 id_2: "nhog"
-id_caes: "v182caes"
-id_ciuo: "v183ciuo"
 max_caes_id: 10000
 seed: 45
 
@@ -63,21 +61,21 @@ datasets:
      age: null
      nivel_ed: null
 
-    eph_generic:
-      source: data/raw/eph/*
-      url: "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/*"
-      id_1: "CODUSU"
-      id_2: "NRO_HOGAR"
-      id_3: "COMPONENTE"
-      id_caes: "PP04B_COD" # o "PP04B COD"
-      id_ciuo: null
-      id_cno: "PP04D_COD" # o "PP04D COD"
-      features:
-        sex_id: "PP03G_COD"
-        public_worker: "CH04"
-        total_income: "P47T" # Ingreso total individual
-        age: "CH06"
-        nivel_ed: "CH12" # < 10
+  eph_generic:
+    source: data/raw/eph/*
+    url: "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/*"
+    id_1: "CODUSU"
+    id_2: "NRO_HOGAR"
+    id_3: "COMPONENTE"
+    id_caes: "PP04B_COD" # o "PP04B COD"
+    id_ciuo: null
+    id_cno: "PP04D_COD" # o "PP04D COD"
+    features:
+      sex_id: "PP03G_COD"
+      public_worker: "CH04"
+      total_income: "P47T" # Ingreso total individual
+      age: "CH06"
+      nivel_ed: "CH12" # < 10
 
 caes:
   source: data/raw/nodelist_caes.csv
@@ -99,6 +97,17 @@ ciuo:
   label_color: "ciuolabel_color"
   letra_color: "ciuo1diglabel_color"
   grupo_color: "ciuo3cat_color"
+  partition: 0
+
+cno:
+  source: null
+  id: "v183cno"
+  label: null
+  letra: null
+  grupo: null
+  label_color: null
+  letra_color: null
+  grupo_color: null
   partition: 0
 
 figsizes:

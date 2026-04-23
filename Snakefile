@@ -10,6 +10,7 @@ DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
 CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "income_mean", "nivel_ed_mean", "age_mean"] # in nodelist data
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
+CLASSES_ALL = ["caes", "ciuo", "cno"]
 ALPHA_CAES = ["1.00", "0.0043"]
 ALPHA_CIUO = ["1.00", "0.0093"]
 ALPHAS = ["0.30","1.00"] + ALPHA_CAES + ALPHA_CIUO
