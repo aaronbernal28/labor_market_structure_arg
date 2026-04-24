@@ -1688,6 +1688,161 @@ def plot_alpha_sensitivity(
 		plt.show()
 
 
+def plot_alpha_sensitivity_multi_series(
+	alphas: np.ndarray,
+	series_labels: list[str],
+	*,
+	nodes_with_edges: np.ndarray,
+	edge_counts: np.ndarray,
+	clustering_coefficients: np.ndarray,
+	modularities: np.ndarray,
+	nodes_largest_cc: np.ndarray,
+	title: str,
+	output_path: Path,
+	reference_alphas: np.ndarray | None = None,
+	save: bool = True,
+	logscale: bool = True,
+	max_cbar_ticks: int = 10,
+) -> None:
+	"""Plot alpha-sensitivity curves for multiple series.
+
+	This overlays the same 5 metrics as :func:`plot_alpha_sensitivity` for many
+	input graphs (e.g. multiple EPH files). Each metric uses a colormap family,
+	where shade encodes chronological order of the series.
+	"""
+	fig, ax = plt.subplots()
+
+	if len(series_labels) == 0:
+		raise ValueError("series_labels must be non-empty")
+
+	n_series = len(series_labels)
+	for arr_name, arr in {
+		"nodes_with_edges": nodes_with_edges,
+		"edge_counts": edge_counts,
+		"clustering_coefficients": clustering_coefficients,
+		"modularities": modularities,
+		"nodes_largest_cc": nodes_largest_cc,
+	}.items():
+		if arr.shape != (n_series, len(alphas)):
+			raise ValueError(
+				f"{arr_name} must have shape (n_series, n_alphas) = ({n_series}, {len(alphas)}); got {arr.shape}"
+			)
+
+	if reference_alphas is not None and len(reference_alphas) != n_series:
+		raise ValueError(
+			"reference_alphas must be None or have length equal to series_labels"
+		)
+
+	norm = mpl.colors.Normalize(vmin=0, vmax=max(1, n_series - 1))
+
+	metric_specs = [
+		{
+			"label": "Nodos",
+			"data": nodes_with_edges,
+			"cmap": mpl.cm.Blues,
+			"linestyle": "-",
+		},
+		{
+			"label": "Aristas",
+			"data": edge_counts,
+			"cmap": mpl.cm.Oranges,
+			"linestyle": "--",
+		},
+		{
+			"label": "Coef. de clustering prom. ponderado",
+			"data": clustering_coefficients,
+			"cmap": mpl.cm.Greens,
+			"linestyle": ":",
+		},
+		{
+			"label": "Modularidad",
+			"data": modularities,
+			"cmap": mpl.cm.Purples,
+			"linestyle": "-",
+		},
+		{
+			"label": "Nodos (mayor CC)",
+			"data": nodes_largest_cc,
+			"cmap": mpl.cm.Reds,
+			"linestyle": "-.",
+		},
+	]
+
+	proxy_lines = []
+	for spec in metric_specs:
+		cmap = spec["cmap"]
+		for i in range(n_series):
+			color = cmap(norm(i))
+			ax.plot(
+				alphas,
+				spec["data"][i, :],
+				color=color,
+				linewidth=1.4,
+				linestyle=spec["linestyle"],
+				alpha=0.9,
+			)
+		# Proxy for metric legend (use darkest shade)
+		proxy_lines.append(
+			mpl.lines.Line2D(
+				[0],
+				[0],
+				color=cmap(norm(n_series - 1)),
+				linewidth=2,
+				linestyle=spec["linestyle"],
+				label=spec["label"],
+			)
+		)
+
+	# Optional: per-series reference alpha as light vertical lines
+	if reference_alphas is not None:
+		ref_cmap = mpl.cm.Greys
+		for i, ref in enumerate(reference_alphas):
+			if not np.isfinite(ref):
+				continue
+			ax.axvline(
+				x=float(ref),
+				color=ref_cmap(norm(i)),
+				linestyle="--",
+				linewidth=0.8,
+				alpha=0.22,
+			)
+
+	# Metric legend only (avoid giant eph_file legend)
+	ax.legend(handles=proxy_lines, loc="best")
+
+	# Colorbar encodes series order (chronological index)
+	sm = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.Greys)
+	sm.set_array([])
+	cbar = fig.colorbar(sm, ax=ax, pad=0.02)
+	cbar.set_label("EPH (orden cronológico)")
+
+	max_ticks = max(2, int(max_cbar_ticks))
+	n_ticks = min(n_series, max_ticks)
+	if n_series == 1:
+		tick_idx = np.array([0], dtype=int)
+	else:
+		tick_idx = np.unique(
+			np.round(np.linspace(0, n_series - 1, n_ticks)).astype(int)
+		)
+	cbar.set_ticks(tick_idx)
+	cbar.set_ticklabels([series_labels[i] for i in tick_idx])
+
+	ax.set_title(title)
+	ax.set_xlabel("Alfa")
+	ax.set_ylim(0, 1.05)
+	if logscale:
+		ax.set_xlim(float(np.min(alphas)), 1.0)
+		ax.set_xscale("log")
+	else:
+		ax.set_xlim(0, 1)
+
+	if save:
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
 def compute_and_plot_edge_correlation(
 	G: nx.Graph,
 	feature_map: dict,

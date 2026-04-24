@@ -86,6 +86,12 @@ rule all:
 			class_=CLASSES,
 			topo_method=TOPO_METHOD,
 		),
+		expand(
+			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png",
+			class_=["caes", "cno"],
+			weight_function=["hidalgo"],
+			algorithm=["louvain"],
+		),
 
 
 rule _00_aed_report:
@@ -224,6 +230,29 @@ rule _08_persistence_diagram:
 	#	"images/{dataset}/{class_}/08_persistence_diagram/_{weight_function}.log"
 	script:
 		"scripts/08_persistence_diagram.py"
+
+
+rule _09_alpha_sensitivity_eph:
+	"""Alpha-sensitivity sweep across all EPH projection graphs.
+
+	Produces a single combined plot per (class_, weight_function, algorithm), overlaying
+	all EPH series with colormap gradients.
+	"""
+	wildcard_constraints:
+		class_ = "caes|cno"
+	input:
+		lambda wildcards: expand(
+			"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf",
+			eph_file=EPH_FILES,
+			class_=wildcards.class_,
+			weight_function=wildcards.weight_function,
+		)
+	output:
+		"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png"
+	log:
+		"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.log"
+	script:
+		"scripts/09_alpha_sensitivity_eph.py"
 
 
 include: "rules/00_prepare.smk"
