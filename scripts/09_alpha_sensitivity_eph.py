@@ -111,6 +111,7 @@ def main() -> None:
 	graph_metrics: dict[str, dict] = {}
 
 	for i, eph_file in enumerate(eph_files_sorted):
+		# NOTE: this block must be ruled to improve efficiency and take advantage of parallelization
 		projection_path = eph_to_path[eph_file]
 		projection = nx.read_gexf(projection_path, node_type=int)
 		graph_metrics[eph_file] = metrics.summarize_graph(projection)
