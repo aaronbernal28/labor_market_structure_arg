@@ -9,22 +9,19 @@ snakemake: any
 def main() -> None:
 	enes_df = pd.read_csv(
 		snakemake.input[0],
-		dtype={
-			snakemake.config["caes"]["id"]: int,
-			snakemake.config["ciuo"]["id"]: int,
-		},
+		dtype={snakemake.config["caes"]["id"]: int, snakemake.config["cno"]["id"]: int},
 	)
 
 	caes_id = snakemake.config["caes"]["id"]
-	ciuo_id = snakemake.config["ciuo"]["id"]
+	cno_id = snakemake.config["cno"]["id"]
 
 	graph = gc.build_bipartite_graph(
 		enes_df,
 		caes_id,
-		ciuo_id,
+		cno_id,
 		logscale=False,
 		caes_partition=snakemake.config["caes"]["partition"],
-		ciuo_partition=snakemake.config["ciuo"]["partition"],
+		ciuo_partition=snakemake.config["cno"]["partition"],
 	)
 
 	metric_results = metrics.summarize_graph(graph)

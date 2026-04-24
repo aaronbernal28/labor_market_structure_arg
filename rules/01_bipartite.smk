@@ -8,3 +8,14 @@ rule bipartite_graph:
 		"images/{dataset}/bipartite_graph.log"
 	script:
 		"../scripts/utils/build_bipartite.py"
+
+rule bipartite_graph_eph:
+	'''Build bipartite graph from ENES datasets.'''
+	input:
+		"data/processed/eph/{eph_file}.csv"
+	output:
+		"data/graphs/eph/{eph_file}/bipartite_eph.gexf"
+	log:
+		"images/eph/{eph_file}/bipartite_graph.log"
+	script:
+		"../scripts/utils/build_bipartite_eph.py"

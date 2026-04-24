@@ -10,6 +10,20 @@ rule compute_projection:
 		"../scripts/utils/build_projection.py"
 
 
+rule compute_projection_eph:
+	'''Build projection graph from EPH bipartite graph based on caes or cno.'''
+	wildcard_constraints:
+		class_ = "caes|cno"
+	input:
+		"data/graphs/eph/{eph_file}/bipartite_eph.gexf"
+	output:
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
+	log:
+		"images/eph/{eph_file}/{class_}/compute_projection_{weight_function}.log"
+	script:
+		"../scripts/utils/build_projection.py"
+
+
 rule filter_projection:
 	'''Filter projection graph by degree.'''
 	input:

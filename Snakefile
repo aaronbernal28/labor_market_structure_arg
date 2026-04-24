@@ -16,6 +16,7 @@ ALPHA_CIUO = ["1.00", "0.0093"]
 ALPHAS = ["0.30","1.00"] + ALPHA_CAES + ALPHA_CIUO
 TOPO_METHOD = ["shortest_path", "disparity_filtration"]
 EPH_YEARS = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS),
@@ -23,7 +24,8 @@ wildcard_constraints:
 	weight_function = "|".join(WEIGHT_FUNCTIONS),
 	algorithm = "|".join(ALGORITHMS),
 	alpha = "|".join(ALPHAS),
-	topo_method = "|".join(TOPO_METHOD)
+	topo_method = "|".join(TOPO_METHOD),
+	eph_file = "|".join(EPH_FILES)
 
 
 rule all:

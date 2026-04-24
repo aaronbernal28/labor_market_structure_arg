@@ -51,8 +51,6 @@ rule import_eph_data:
 		"../scripts/utils/import_eph_data.py"
 
 
-EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
-
 rule prepare_data_eph:
 	'''
 	Prepare one raw EPH CSV into a processed per-file CSV.

@@ -82,7 +82,7 @@ def main() -> None:
 			rename_cols[source_col] = feature_name
 
 	id_caes_out = snakemake.config["caes"]["id"]
-	id_cno_out = snakemake.config["id_cno"]
+	id_cno_out = snakemake.config["cno"]["id"]
 
 	rename_cols[id_caes] = id_caes_out
 	rename_cols[id_cno] = id_cno_out
