@@ -1,10 +1,12 @@
 from scripts import *
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	dataset = snakemake.wildcards["dataset"]
 
 	dataset_input = snakemake.config["datasets"][dataset]

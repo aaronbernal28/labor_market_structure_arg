@@ -1,5 +1,6 @@
 from scripts import *
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
@@ -26,6 +27,7 @@ def _resolve_feature_source(
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	dataset_cfg = snakemake.config["datasets"]["eph_generic"]
 
 	id_1 = dataset_cfg["id_1"]

@@ -4,12 +4,15 @@ from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 	projection = nx.read_gexf(snakemake.input[0], node_type=int)
 	graph_metrics = metrics.summarize_graph(projection)
 	algorithm = snakemake.wildcards["algorithm"]

@@ -3,12 +3,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.graph_objects as go
 import re
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 	caes_id = snakemake.config["caes"]["id"]
 	ciuo_id = snakemake.config["ciuo"]["id"]
 	letra_caes = snakemake.config["caes"]["grupo"]

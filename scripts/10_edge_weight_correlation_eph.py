@@ -7,12 +7,15 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: Any
 
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 
 	class_ = snakemake.wildcards["class_"]
 	weight_function = snakemake.wildcards["weight_function"]

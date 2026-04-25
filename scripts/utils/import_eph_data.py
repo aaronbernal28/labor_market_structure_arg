@@ -10,6 +10,7 @@ import requests
 
 import src.scraping as scraping
 import src.logging_utils as log
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: Any
 
@@ -92,6 +93,7 @@ def _filter_by_year(
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	output_log_path = Path(snakemake.output[0])
 	year_target = str(snakemake.wildcards.get("year"))
 	year_target_2digit = year_target[2:] if len(year_target) == 4 else year_target

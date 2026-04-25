@@ -3,16 +3,18 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import matplotlib.colors as mcolors
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	class_ = snakemake.wildcards["class_"]
 	dataset = snakemake.wildcards["dataset"]
-	seed = int(snakemake.config["seed"])
 
 	id_col = snakemake.config[class_]["id"]
 	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})

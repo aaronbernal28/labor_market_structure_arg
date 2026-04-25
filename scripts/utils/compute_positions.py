@@ -1,15 +1,17 @@
 from scripts import *
 import networkx as nx
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	class_ = snakemake.wildcards["class_"]
 	id_col = snakemake.config[class_]["id"]
-	seed = int(snakemake.config["seed"])
 	dataset_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
 	input_metrics = metrics.summarize_graph(graph)
 

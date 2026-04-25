@@ -5,6 +5,7 @@ from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: Any
 
@@ -24,6 +25,8 @@ def _reference_alpha_from_lcc(
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 
 	algorithm = snakemake.wildcards["algorithm"]
 	class_ = snakemake.wildcards["class_"]

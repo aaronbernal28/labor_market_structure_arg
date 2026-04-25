@@ -1,5 +1,6 @@
 from scripts import *
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
@@ -20,6 +21,7 @@ CHARACTERISTIC_COLUMNS = [
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	df_enes = pd.read_csv(
 		snakemake.input[0],
 		dtype={

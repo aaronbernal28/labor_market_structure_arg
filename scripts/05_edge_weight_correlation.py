@@ -2,6 +2,7 @@ from scripts import *
 import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
@@ -22,6 +23,8 @@ def _resolve_community_column(df: pd.DataFrame, preferred: str | None) -> str:
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 	class_ = snakemake.wildcards["class_"]
 	feature_name = snakemake.wildcards.get("continuous_feature", None)
 	algorithm = snakemake.wildcards.get("algorithm", None)

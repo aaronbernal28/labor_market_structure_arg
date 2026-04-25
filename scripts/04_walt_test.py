@@ -1,12 +1,15 @@
 from scripts import *
 import matplotlib.pyplot as plt
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	seed = get_seed_from_config(snakemake.config)
+	initialize_seeds(seed)
 	df_2019 = pd.read_csv(
 		snakemake.input[0],
 		dtype={
@@ -93,6 +96,7 @@ def main() -> None:
 		rownames,
 		colnames,
 		B=bootstrap_B,
+		seed=seed,
 	)
 
 	# Extract first digit labels for better readability in plots

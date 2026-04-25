@@ -2,11 +2,13 @@ from pathlib import Path
 from scripts import *
 import networkx as nx
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	enes_df = pd.read_csv(
 		snakemake.input[0],
 		dtype={

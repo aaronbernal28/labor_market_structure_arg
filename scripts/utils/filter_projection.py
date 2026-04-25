@@ -2,11 +2,13 @@ from pathlib import Path
 from scripts import *
 import networkx as nx
 from scripts import *
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	alpha = float(snakemake.wildcards["alpha"])
 	print(f"Filtering projection graph with alpha={alpha}...")

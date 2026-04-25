@@ -1,10 +1,12 @@
 from scripts import *
 import networkx as nx
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	graph = nx.read_gexf(snakemake.input[0])
 	class_name = snakemake.wildcards["class_"]
 	weight_function_name = snakemake.wildcards["weight_function"]

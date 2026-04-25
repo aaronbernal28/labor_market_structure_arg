@@ -1,10 +1,12 @@
 from scripts import *
 import pandas as pd
+from src.seeding import initialize_seeds, get_seed_from_config
 
 snakemake: any
 
 
 def main() -> None:
+	initialize_seeds(get_seed_from_config(snakemake.config))
 	df_2019 = pd.read_csv(snakemake.input[0])
 	df_2021 = pd.read_csv(snakemake.input[1])
 	df = pd.concat([df_2019, df_2021], ignore_index=True)
