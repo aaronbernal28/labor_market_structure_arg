@@ -220,7 +220,7 @@ def main() -> None:
 			pdf_errors += 1
 			log_lines.append(f"PDF download error: url={pdf_url} | error={exc!r}")
 
-	# ---- Download ZIPs in-memory, export usu_individual_*.xlsx to CSV (side effects) ----
+	# ---- Download ZIPs in-memory, export usu_individual_*.xls(x) to CSV (side effects) ----
 	zip_processed = 0
 	zip_errors = 0
 	xlsx_exported = 0
@@ -247,18 +247,17 @@ def main() -> None:
 				log_lines.append(f"ZIP members count: {len(namelist)}")
 				log_lines.append(f"ZIP members preview (cap 500): {preview!r}")
 
-				# Match on basename, case-insensitive.
+				# Match on basename, case-insensitive. Support both .xls and .xlsx
 				matched_members: list[str] = []
 				for name in namelist:
 					base = Path(name).name
 					base_lower = base.lower()
-					if base_lower.startswith("usu_individual_") and base_lower.endswith(
-						".xlsx"
-					):
+					is_excel = base_lower.endswith(".xls") or base_lower.endswith(".xlsx")
+					if base_lower.startswith("usu_individual_") and is_excel:
 						matched_members.append(name)
 
 				log_lines.append(
-					f"Matched usu_individual_*.xlsx members: {matched_members!r}"
+					f"Matched usu_individual_*.xls(x) members: {matched_members!r}"
 				)
 
 				for member in matched_members:
@@ -266,7 +265,11 @@ def main() -> None:
 						with zf.open(member) as f:
 							df = pd.read_excel(f)
 						csv_name = Path(member).name
-						csv_name = csv_name[: -len(".xlsx")] + ".csv"
+						# Remove .xls or .xlsx extension and add .csv
+						if csv_name.lower().endswith(".xlsx"):
+							csv_name = csv_name[: -len(".xlsx")] + ".csv"
+						elif csv_name.lower().endswith(".xls"):
+							csv_name = csv_name[: -len(".xls")] + ".csv"
 						csv_path = dest_dir / csv_name
 						df.to_csv(csv_path, index=False, encoding="utf-8")
 						xlsx_exported += 1

@@ -51,6 +51,12 @@ rule import_eph_data:
 		"../scripts/utils/import_eph_data.py"
 
 
+rule import_eph_data_all:
+	'''Download EPH data for all configured years.'''
+	input:
+		expand("data/raw/eph/import_eph_data_{year}.log", year=EPH_YEARS)
+
+
 rule prepare_data_eph:
 	'''
 	Prepare one raw EPH CSV into a processed per-file CSV.
