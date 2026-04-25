@@ -255,6 +255,33 @@ rule _09_alpha_sensitivity_eph:
 		"scripts/09_alpha_sensitivity_eph.py"
 
 
+rule _10_edge_weight_correlation_eph:
+	"""Time-series assortativity (Pearson r) across EPH waves.
+
+	Produces a single combined plot per (class_, weight_function, feature), overlaying
+	unfiltered projections plus disparity-filtered backbones for a small alpha grid.
+	"""
+	wildcard_constraints:
+		class_ = "caes|cno"
+	input:
+		projections=lambda wildcards: expand(
+			"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf",
+			eph_file=EPH_FILES,
+			class_=wildcards.class_,
+			weight_function=wildcards.weight_function,
+		),
+		processed=lambda wildcards: expand(
+			"data/processed/eph/{eph_file}.csv",
+			eph_file=EPH_FILES,
+		),
+	output:
+		"images/eph/{class_}/10_edge_weight_correlation/_{weight_function}_{feature}.png"
+	log:
+		"images/eph/{class_}/10_edge_weight_correlation/_{weight_function}_{feature}.log"
+	script:
+		"scripts/10_edge_weight_correlation_eph.py"
+
+
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
 include: "rules/02_projection.smk"

@@ -1858,7 +1858,11 @@ def compute_and_plot_edge_correlation(
 	perfect_line: bool = True,
 	figsize: tuple | None = None,
 ) -> None:
-	# Only keep nodes that have finite feature values
+	"""Scatter of node feature vs weighted average-neighbor feature.
+
+	This function also prints and embeds the Pearson correlation (assortativity)
+	computed on the plotted points.
+	"""
 	valid_nodes = {node for node, val in feature_map.items() if np.isfinite(val)}
 
 	x_vals_map = {}
@@ -2020,6 +2024,64 @@ def compute_and_plot_edge_correlation(
 		plt.close()
 	else:
 		plt.show()
+
+
+def compute_edge_assortativity_pearson(
+	G: nx.Graph,
+	feature_map: Mapping,
+	*,
+	weight_attr: str = "weight",
+) -> tuple[float, float, int]:
+	"""Return Pearson assortativity between $x_i$ and weighted neighbor mean $y_i$.
+
+	Definition (matches compute_and_plot_edge_correlation):
+	- $x_i$ is the node feature value.
+	- $\bar y_i$ is the weighted average of neighbor feature values, where weights
+	  are taken from edge attribute `weight_attr`.
+
+	Returns (pearson_r, p_value, n_points). If fewer than 2 valid points exist,
+	returns (nan, nan, n_points).
+	"""
+	# Only keep nodes that have finite feature values
+	valid_nodes = {node for node, val in feature_map.items() if np.isfinite(val)}
+
+	x_vals_map: dict = {}
+	y_vals_map: dict = {u: [] for u in valid_nodes}
+	edge_weights: dict = {u: [] for u in valid_nodes}
+
+	for u, v, data in G.edges(data=True):
+		if u in valid_nodes and v in valid_nodes:
+			w = data.get(weight_attr, 0.0)
+			if np.isfinite(feature_map[u]) and np.isfinite(feature_map[v]):
+				x_vals_map[u] = feature_map[u]
+				y_vals_map[u].append(feature_map[v])
+				edge_weights[u].append(w)
+
+				x_vals_map[v] = feature_map[v]
+				y_vals_map[v].append(feature_map[u])
+				edge_weights[v].append(w)
+
+	x_vals: list[float] = []
+	y_vals: list[float] = []
+	for u in x_vals_map:
+		if not y_vals_map[u]:
+			continue
+		x = float(x_vals_map[u])
+		y = float(np.average(y_vals_map[u], weights=edge_weights[u]))
+		if np.isfinite(x) and np.isfinite(y):
+			x_vals.append(x)
+			y_vals.append(y)
+
+	n_points = int(len(x_vals))
+	if n_points < 2:
+		return (float("nan"), float("nan"), n_points)
+
+	try:
+		pearson_r, p_value = stats.pearsonr(x_vals, y_vals)
+		return (float(pearson_r), float(p_value), n_points)
+	except Exception:
+		# scipy can fail on constant inputs or other numerical edge cases
+		return (float("nan"), float("nan"), n_points)
 
 
 def plot_community_boxplots(

@@ -1,67 +1,12 @@
-from dataclasses import dataclass
 from pathlib import Path
-import re
+from typing import Any
 
 from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-snakemake: any
-
-
-@dataclass(frozen=True)
-class EphKey:
-	year: int
-	period: int
-	raw: str
-
-
-def _parse_eph_file_key(eph_file: str) -> EphKey | None:
-	"""Parse EPH filename into a sortable (year, period) key.
-
-	Supports common patterns such as:
-	- usu_individual_T222 -> year=2022, period=2
-	- usu_individual_T225 -> year=2025, period=2
-	- usu_individual_t117_ult -> year=2017, period=1
-
-	Returns None if it cannot infer a chronological key.
-	"""
-	# Look for T{period}{yy} or t{period}{yy}
-	m = re.search(r"[Tt]([1-4])([0-9]{2})", eph_file)
-	if not m:
-		return None
-	period = int(m.group(1))
-	yy = int(m.group(2))
-	year = 2000 + yy if yy < 100 else yy
-	return EphKey(year=year, period=period, raw=eph_file)
-
-
-def _sort_eph_files(eph_files: list[str]) -> list[str]:
-	parsed: list[tuple[int, int, str]] = []
-	fallback: list[str] = []
-	for name in eph_files:
-		k = _parse_eph_file_key(name)
-		if k is None:
-			fallback.append(name)
-		else:
-			parsed.append((k.year, k.period, k.raw))
-
-	parsed_sorted = [raw for _, _, raw in sorted(parsed)]
-	fallback_sorted = sorted(fallback)
-	return parsed_sorted + fallback_sorted
-
-
-def _extract_eph_file_from_path(path: Path) -> str:
-	# Expected: data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf
-	parts = list(path.parts)
-	try:
-		i = parts.index("eph")
-	except ValueError:
-		return path.parent.parent.name
-	if i + 1 < len(parts):
-		return parts[i + 1]
-	return path.parent.parent.name
+snakemake: Any
 
 
 def _reference_alpha_from_lcc(
@@ -89,14 +34,14 @@ def main() -> None:
 	alphas.sort()
 
 	input_paths = [Path(p) for p in snakemake.input]
-	eph_files_raw = [_extract_eph_file_from_path(p) for p in input_paths]
+	eph_files_raw = [utils.extract_eph_file_from_path(p) for p in input_paths]
 
 	# Ensure unique mapping eph_file -> path (keep first occurrence)
-	eph_to_path: dict[str, Path] = {}
+	eph_to_path = {}
 	for eph_file, p in zip(eph_files_raw, input_paths, strict=False):
 		eph_to_path.setdefault(eph_file, p)
 
-	eph_files_sorted = _sort_eph_files(list(eph_to_path.keys()))
+	eph_files_sorted = utils.sort_eph_files(list(eph_to_path.keys()))
 
 	n_series = len(eph_files_sorted)
 	n_alphas = len(alphas)

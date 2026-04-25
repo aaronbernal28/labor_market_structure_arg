@@ -1,5 +1,81 @@
 import ast
+from dataclasses import dataclass
 from functools import lru_cache
+from pathlib import Path
+import re
+from datetime import date
+
+
+@dataclass(frozen=True)
+class EphKey:
+	year: int
+	period: int
+	time_numeric: float
+	time_date: date
+	label: str
+	raw: str
+
+
+def eph_quarter_start_date(year: int, period: int) -> date:
+	"""Map EPH quarter to a calendar date at quarter start."""
+	if period not in {1, 2, 3, 4}:
+		raise ValueError(f"Invalid EPH period {period}. Expected one of 1..4.")
+	month = 1 + 3 * (period - 1)
+	return date(int(year), int(month), 1)
+
+
+def parse_eph_file_key(eph_file: str) -> EphKey | None:
+	"""Parse EPH filename into a sortable key and date representations."""
+	m = re.search(r"[Tt]([1-4])([0-9]{2})", eph_file)
+	if not m:
+		return None
+	period = int(m.group(1))
+	yy = int(m.group(2))
+	year = 2000 + yy if yy < 100 else yy
+	time_numeric = float(year) + float(period - 1) / 4.0
+	time_date = eph_quarter_start_date(year, period)
+	label = f"{year}-T{period}"
+	return EphKey(
+		year=year,
+		period=period,
+		time_numeric=time_numeric,
+		time_date=time_date,
+		label=label,
+		raw=eph_file,
+	)
+
+
+def sort_eph_files(eph_files: list[str]) -> list[str]:
+	"""Sort EPH filenames by inferred (year, quarter), then append unparsed names."""
+	parsed: list[tuple[int, int, str]] = []
+	fallback: list[str] = []
+	for name in eph_files:
+		k = parse_eph_file_key(name)
+		if k is None:
+			fallback.append(name)
+		else:
+			parsed.append((k.year, k.period, k.raw))
+
+	parsed_sorted = [raw for _, _, raw in sorted(parsed)]
+	fallback_sorted = sorted(fallback)
+	return parsed_sorted + fallback_sorted
+
+
+def extract_eph_file_from_path(path: Path) -> str:
+	"""Extract EPH series folder from expected projection path layout."""
+	parts = list(path.parts)
+	try:
+		i = parts.index("eph")
+	except ValueError:
+		return path.parent.parent.name
+	if i + 1 < len(parts):
+		return parts[i + 1]
+	return path.parent.parent.name
+
+
+def ensure_parent_dir(path: Path) -> None:
+	"""Create parent directory for an output file path if missing."""
+	path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def label_fn(c, pad=2):
@@ -58,7 +134,7 @@ def _resolve_max_caes_id(max_caes_id: int | None) -> int:
 		) from exc
 
 
-def original_ciuo_id(id: int, max_caes_id: int = None) -> int:
+def original_ciuo_id(id: int, max_caes_id: int | None = None) -> int:
 	"""
 	Recover original CIUO ID from disambiguated ID.
 	"""
@@ -69,7 +145,7 @@ def desambiated_caes_id(id: int) -> int:
 	return id
 
 
-def desambiated_ciuo_id(id: int, max_caes_id: int = None) -> int:
+def desambiated_ciuo_id(id: int, max_caes_id: int | None = None) -> int:
 	"""
 	Recover original CIUO ID from disambiguated ID.
 	"""
