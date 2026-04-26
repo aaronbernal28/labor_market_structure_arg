@@ -1,0 +1,595 @@
+v183cno,cnolabel,v183ciuo_2digits
+49.3.1.1,"Trabajadores sin operación de maquinarias de las FFAA, Gendarmería y Prefectura con calificación profesional",01
+49.3.3.1,"Operadores de sistemas y/o equipos informatizados de las FFAA, Gendarmería y Prefectura con calificación profesional",01
+49.3.1.2,"Trabajadores sin operación de maquinarias de las FFAA, Gendarmería y Prefectura con calificación técnica",02
+49.3.2.2,"Operadores de maquinaria y/o equipos electromecánicos de las FFAA, Gendarmería y Prefectura con calificación operativa",02
+49.3.3.2,"Operadores de sistemas y/o equipos informatizados de las FFAA, Gendarmería y Prefectura con calificación técnica",02
+49.3.1.3,"Trabajadores sin operación de maquinarias de las FFAA, Gendarmería y Prefectura con calificación operativa",03
+49.3.1.4,"Trabajadores sin operación de maquinarias de las FFAA, Gendarmería y Prefectura no calificados",03
+49.3.2.3,"Operadores de maquinaria y/o equipos electromecánicos de las FFAA, Gendarmería y Prefectura con calificación técnica",03
+49.3.3.3,"Operadores de sistemas y/o equipos informatizados de las FFAA, Gendarmería y Prefectura con calificación operativa",03
+00.0.0.1,"Funcionarios del poder ejecutivo nacional, provincial, municipal y/o departamental con calificación profesional",11
+01.0.0.1,"Funcionarios del poder legislativo nacional, provincial, municipal y/o departamental con calificación profesional",11
+04.0.0.1,Directivos de instituciones sociales con calificación profesional,11
+56.1.1.1,Cuenta propia sin operación de maquinarias de los servicios de limpieza doméstica con calificación profesional,12
+03.0.0.1,"Directivos de organismos, empresas e instituciones estatales con calificación profesional",13
+05.0.0.1,Directivos de pequeñas y microempresas (patrones de 1 a 5 personas) con calificación profesional,13
+06.0.0.1,Directivos de medianas empresas privadas productoras de bienes y/o servicios (6 a 40 personas) con calificación profesional,13
+07.0.0.1,Directivos de grandes empresas privadas productoras de bienes y/o servicios (41 personas y más) con calificación profesional,13
+57.1.1.1,Cuenta propia sin operación de maquinarias del cuidado y la atención de las personas con calificación profesional,13
+65.1.1.1,Cuenta propia sin operación de maquinarias de la caza con calificación profesional,13
+05.0.0.2,Directivos de pequeñas y microempresas (patrones de 1 a 5 personas) con calificación técnica,14
+51.1.1.1,Cuenta propia sin operación de maquinarias del deporte con calificación profesional,14
+51.2.0.1,Jefes del deporte con calificación profesional,14
+52.1.1.1,Cuenta propia sin operación de maquinarias de la recreación con calificación profesional,14
+53.1.1.1,Cuenta propia sin operación de maquinarias de servicios gastronómicos con calificación profesional,14
+58.1.1.1,Cuenta propia sin operación de maquinarias de otras ocupaciones de los servicios sociales varios con calificación profesional,14
+42.1.1.1,Cuenta propia sin operación de maquinarias de la investigación científica y tecnológica con calificación profesional,2(2)
+42.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de la investigación científica y tecnológica con calificación profesional,2(2)
+42.2.0.1,Jefes de la investigación científica y tecnológica con calificación profesional,2(2)
+42.3.1.1,Trabajadores sin operación de maquinarias de la investigación científica y tecnológica con calificación profesional,2(2)
+43.1.1.1,Cuenta propia sin operación de maquinarias de la asesoría y consultoría con calificación profesional,2(2)
+43.2.0.1,Jefes de la asesoría y consultoría con calificación profesional,2(2)
+43.3.1.1,Trabajadores de la asesoría y consultoría con calificación profesional,2(2)
+34.1.1.1,Cuenta propia sin operación de maquinarias del transporte con calificación profesional,21
+34.1.2.1,Cuenta propia con operación de maquinarias y/o equipos electromecánicos del transporte con profesional,21
+34.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados del transporte con calificación profesional,21
+34.2.0.1,Jefes de servicios de transporte con calificación profesional,21
+34.3.1.1,Trabajadores sin operación de maquinarias del transporte con calificación profesional,21
+34.3.2.1,Conductores y operadores de maquinaria y/o equipos electromecánicos del transporte con calificación profesional,21
+34.3.3.1,Operadores de sistemas y/o equipos informatizados o paneles de control del transporte con calificación profesional,21
+35.1.1.1,Cuenta propia sin operación de maquinarias de las telecomunicaciones con calificación profesional,21
+35.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de las telecomunicaciones con calificación profesional,21
+35.2.0.1,Jefes de las telecomunicaciones con calificación profesional,21
+35.3.1.1,Trabajadores sin operación de maquinarias de las telecomunicaciones con calificación profesional,21
+36.1.1.1,Cuenta propia sin operación de maquinarias del almacenaje con calificación profesional,21
+36.3.1.1,Trabajadores sin operación de maquinarias del almacenaje con calificación profesional,21
+60.1.1.1,Cuenta propia sin operación de maquinarias de la producción agrícola con calificación profesional,21
+60.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción agrícola con calificación profesional,21
+60.2.0.1,Jefes de la producción agrícola con calificación profesional,21
+60.3.1.1,Trabajadores sin operación de maquinarias de la producción agrícola con calificación profesional,21
+60.3.3.1,Operadores de sistemas y/o equipos informatizados de la producción agrícola con calificación profesional,21
+61.3.1.1,Trabajadores sin operación de maquinarias de la producción ganadera con calificación profesional,21
+62.1.1.1,Cuenta propia sin operación de maquinarias de la producción forestal con calificación profesional,21
+62.2.0.1,Jefes de la producción forestal con calificación profesional,21
+62.3.1.1,Trabajadores sin operación de maquinarias de la producción forestal con calificación profesional,21
+63.1.1.1,Cuenta propia sin operación de maquinarias de la producción apícola - avícola y de otras especies menores con calificación profesional,21
+63.3.1.1,Trabajadores sin operación de maquinarias de la producción apícola - avícola y de otras especies menores con calificación profesional,21
+64.1.1.1,Cuenta propia sin operación de maquinarias de la producción pesquera con calificación profesional,21
+64.3.1.1,Trabajadores sin operación de maquinarias de la producción pesquera con calificación profesional,21
+70.1.1.1,Cuenta propia sin operación de maquinarias de la producción extractiva con calificación profesional,21
+70.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción extractiva con calificación profesional,21
+70.2.0.1,Jefes de la producción extractiva con calificación profesional,21
+70.3.1.1,Trabajadores sin operación de maquinarias de la producción extractiva con calificación profesional,21
+70.3.3.1,Operadores de sistemas y/o equipos informatizados de la producción extractiva con calificación profesional,21
+71.1.1.1,"Cuenta propia sin operación de maquinarias de la producción de energía, agua y gas con calificación profesional",21
+71.2.0.1,"Jefes de la producción con calificación profesional de energía, agua y gas con calificación profesional",21
+71.3.1.1,"Trabajadores sin operación de maquinarias de la producción de energía, agua y gas con calificación profesional",21
+72.1.1.1,"Cuenta propia sin operación de maquinarias de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación profesional",21
+72.1.3.1,"Cuenta propia con operación de sistemas y/o equipos informatizados de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación profesional",21
+72.2.0.1,"Jefes de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación profesional",21
+72.3.1.1,"Trabajadores sin operación de maquinarias de la construcción edilicia, de obras de infraestructura y de redes de distribución de  energía, agua potable, gas, telefonía y petróleo con calificación profesional",21
+72.3.3.1,"Operadores de sistemas y/o equipos informatizados de la construcción edilicia, de obras de infraestructura y de la distribución",21
+80.1.1.1,"de energía, agua potable, gas, telefonía y petróleo con calificación técnica",21
+80.2.0.1,Cuenta propia con operación de maquinaria y/o equipos electromecánica de la producción industrial y artesanal con calificación operativa,21
+80.3.1.1,Jefes de la producción industrial y artesanal con calificación profesional,21
+82.1.1.1,Operadores de sistemas y/o equipos informatizados de la producción de software con calificación profesional,21
+90.1.1.1,Operadores de maquinaria y/o equipos electromecánicos de la reparación de bienes de consumo no calificados,21
+90.1.2.1,Cuenta propia sin operación de maquinarias de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación técnica,21
+90.2.0.1,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación técnica,21
+90.3.1.1,Jefes de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación profesional,21
+90.3.3.1,Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes no calificados,21
+91.1.1.1,Operadores de maquinaria y/o equipos electromecánicos de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes no calificados,21
+91.1.3.1,Cuenta propia sin operación de maquinarias del desarrollo tecnológico productivo con calificación profesional,21
+91.2.0.1,Cuenta propia sin operación de maquinarias del desarrollo tecnológico productivo con calificación técnica,21
+91.3.1.1,Cuenta propia con operación de sistemas y/o equipos informatizados del desarrollo tecnológico productivo con calificación profesional,21
+91.3.3.1,Trabajadores sin operación de maquinarias del desarrollo tecnológico con calificación profesional,21
+92.1.1.1,Trabajadores sin operación de maquinarias del desarrollo tecnológico con calificación técnica,21
+92.1.3.1,Cuenta propia sin operación de maquinarias de la instalación y mantenimiento de maquinaria equipos y sistemas de la prestación de servicios con calificación profesional,21
+92.2.0.1,Cuenta propia sin operación de maquinarias de la instalación y mantenimiento de maquinaria equipos y sistemas de la prestación de servicios con calificación operativa,21
+92.3.1.1,Jefes de la instalación y mantenimiento de maquinaria y equipos de la prestación de servicios con calificación profesional,21
+92.3.3.1,"Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinaria, equipos y sistemas de la prestación de servicios no calificados",21
+30.1.1.1,Cuenta propia sin operación de maquinarias de la comercialización directa (tradicional y telefónicos) con calificación profesional,22
+30.2.0.1,Jefes de la comercialización directa (tradicional y telefónicos) con calificación profesional,22
+30.3.1.1,Vendedores y trabajadores sin operación de maquinarias de comercialización directa (tradicional y telefónicos) con calificación profesional,22
+40.1.1.1,Cuenta propia sin operación de maquinarias de la salud y sanidad con calificación profesional,22
+40.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de la salud y la sanidad con calificación profesional,22
+40.2.0.1,Jefes de salud y sanidad con calificación profesional,22
+40.3.1.1,Trabajadores sin operación de maquinarias de salud y sanidad con calificación profesional,22
+40.3.3.1,Operadores de sistemas y/o equipos informatizados y de panel de la salud y sanidad con calificación profesional,22
+44.1.1.1,"Cuenta propia sin operación de maquinarias de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación profesional",22
+44.1.3.1,"Cuenta propia con operación de sistemas y/o equipos informatizados de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación profesional",22
+44.2.0.1,"Jefes de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación profesional",22
+44.3.1.1,"Trabajadores sin operación de maquinarias de prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación profesional",22
+61.1.1.1,Cuenta propia sin operación de maquinarias de la producción ganadera con calificación profesional,22
+61.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción ganadera con calificación profesional,22
+61.2.0.1,Jefes de la producción ganadera con calificación profesional,22
+41.1.1.1,Cuenta propia sin operación de maquinarias de la educación con calificación profesional,23
+41.1.1.2,Cuenta propia sin operación de maquinarias de la educación con calificación técnica,23
+41.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de la educación con calificación profesional,23
+41.2.0.1,Jefes de la educación con calificación profesional,23
+41.2.0.2,Jefes de la educación con calificación técnica,23
+41.3.1.1,Trabajadores sin operación de maquinarias de la educación con calificación profesional,23
+41.3.1.2,Trabajadores sin operación de maquinarias de la educación con calificación técnica,23
+41.3.3.2,Operadores de sistemas y/o equipos informatizados de la educación con calificación técnica,23
+10.1.1.1,"Cuenta propia sin operación de maquinarias de la gestión administrativa, planificación y control de gestión con calificación profesional",24
+10.2.0.1,"Jefes de gestión administrativa, de planificación, y control de gestión con calificación profesional",24
+10.3.1.1,"Trabajadores sin operación de maquinarias de gestión administrativa, de planificación y control de gestión con calificación profesional",24
+10.3.3.1,"Operadores de sistemas y/o equipos informatizados de las ocupaciones de la administración, planificación y control de gestión con calificación profesional",24
+20.1.1.1,"Ocupación de la gestión presupuestaria, contable y financiera con calificación profesional",24
+20.2.0.1,"Jefes de gestión presupuestaria, contable y financiera con calificación profesional",24
+20.3.1.1,"Trabajadores sin operación de maquinarias de la gestión presupuestaria, contable y financiera con calificación profesional",24
+20.3.3.1,"Operadores de sistemas y/o equipos informatizados de la gestión presupuestaria, contable y financiera con calificación profesional",24
+31.1.1.1,"Ocupaciones de corretaje comercial, venta domiciliaria, viajantes y promotores con calificación profesional",24
+31.1.3.1,"Cuenta propia con operación de sistemas y/o equipos informatizados viajantes, corredores comerciales, vendedores domiciliarios y promotores con calificación profesional",24
+31.3.1.1,"Trabajadores sin operación de maquinarias, viajantes, corredores y promotores comerciales con calificación profesional",24
+32.1.1.1,Cuenta propia sin operación de maquinarias de la comercialización indirecta con calificación profesional,24
+32.2.0.1,Jefes de comercialización indirecta con calificación profesional,24
+32.3.1.1,Trabajadores sin operación de maquinarias de la comercialización indirecta con calificación profesional,24
+32.3.3.1,Operadores de sistemas y/o equipos informatizados de la comercialización indirecta con calificación profesional,24
+54.1.1.1,Cuenta propia sin operación de maquinarias de los servicios de alojamiento y turismo con calificación profesional,24
+54.3.1.1,Trabajadores sin operación de maquinarias del alojamiento y turismo con calificación profesional,24
+47.1.1.1,Cuenta propia sin operación de maquinarias de los servicios de vigilancia y seguridad civil con calificación profesional,25
+47.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados de los servicios de vigilancia y seguridad civil con calificación profesional,25
+47.2.0.1,Jefes de los servicios de vigilancia y seguridad civil con calificación profesional,25
+47.3.3.1,Operadores de sistemas y/o equipos informatizados de los servicios de vigilancia y seguridad civil con calificación profesional,25
+81.1.3.1,Operadores de maquinaria y/o equipos electromecánicos de la producción industrial y artesanal no calificados,25
+81.2.0.1,Cuenta propia de la producción de software con calificación profesional,25
+81.3.3.1,Jefes de la producción de software con calificación profesional,25
+02.0.0.1,"Funcionarios del poder judicial federal, nacional, provincial, municipal y/o departamental con calificación profesional",26
+11.1.1.1,Cuenta propia sin operación de maquinarias de la gestión jurídico legal con calificación profesional,26
+11.2.0.1,Jefes de la gestión jurídico legal con calificación profesional,26
+11.3.1.1,Trabajadores sin operación de maquinarias de la gestión jurídico legal con calificación profesional,26
+45.1.1.1,Cuenta propia sin operación de maquinarias de la comunicación de masas con calificación profesional,26
+45.1.1.2,Cuenta propia sin operación de maquinarias de la comunicación de masas con calificación técnica,26
+45.1.2.1,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la comunicación de masas con calificación profesional,26
+45.2.0.1,Jefes de la comunicación de masas con calificación profesional,26
+45.2.0.2,Jefes de la comunicación de masas con calificación étnica,26
+45.3.1.1,Trabajadores sin operación de maquinarias de la comunicación de masas con calificación profesional,26
+45.3.1.2,Trabajadores sin operación de maquinarias de la comunicación de masas con calificación técnica,26
+46.1.1.1,"Cuenta propia sin operación de maquinarias de los servicios sociales, comunales, políticos, gremiales y religiosos con calificación profesional",26
+46.1.1.2,"Cuenta propia sin operación de maquinarias de los servicios sociales, comunales, políticos, gremiales y religiosos con calificación técnica",26
+46.2.0.1,"Jefe de los servicios sociales, comunales, políticos, gremiales y religiosos con calificación profesional",26
+46.3.1.1,"Trabajadores sin operación de maquinarias de servicios sociales, comunales, políticos, gremiales y religiosos con calificación profesional",26
+50.1.1.1,Cuenta propia sin operación de maquinarias del arte con calificación profesional,26
+50.1.3.1,Cuenta propia con operación de sistemas y/o equipos informatizados del arte con calificación profesional,26
+50.2.0.1,Jefes del arte con calificación profesional,26
+50.3.1.1,Trabajadores sin operación de maquinarias del arte con calificación profesional,26
+50.3.3.1,Operadores de sistemas y/o equipos informatizados del arte con calificación profesional,26
+42.1.1.2,Cuenta propia sin operación de maquinarias de la investigación científica y tecnológica con calificación técnica,3(2)
+42.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la investigación científica y tecnológica con calificación operativa,3(2)
+42.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la investigación científica y tecnológica con calificación técnica,3(2)
+42.1.3.3,Cuenta propia con operación de sistemas y/o equipos informatizados de la investigación científica y tecnológica con calificación operativa,3(2)
+42.2.0.2,Jefes de la investigación científica y tecnológica con calificación técnica,3(2)
+42.3.1.2,Trabajadores sin operación de maquinarias de la investigación científica y tecnológica con calificación técnica,3(2)
+42.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la investigación científica y tecnológica con calificación operativa,3(2)
+42.3.3.2,Operadores de sistemas y/o equipos informatizados de la investigación científica y tecnológica con calificación técnica,3(2)
+42.3.3.3,Operadores de sistemas y/o equipos informatizados de la investigación científica y tecnológica con calificación operativa,3(2)
+43.1.1.2,Cuenta propia sin operación de maquinarias de la asesoría y consultoría con calificación técnica,3(2)
+43.1.3.2,cuenta propia con operación de sistemas y/o equipos informatizados de la asesoría y consultoría con calificación técnica,3(2)
+43.3.1.2,Trabajadores de la asesoría y consultoría con calificación técnica,3(2)
+34.1.1.2,Cuenta propia sin operación de maquinarias del transporte con calificación técnica,31
+34.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos del transporte con técnica,31
+34.2.0.2,Jefes de servicios de transporte con calificación técnica,31
+34.3.1.2,Trabajadores sin operación de maquinarias del transporte con calificación técnica,31
+34.3.2.2,Conductores y operadores de maquinaria y/o equipos electromecánicos del transporte con calificación técnica,31
+34.3.3.2,Operadores de sistemas y/o equipos informatizados o paneles de control del transporte con calificación técnica,31
+36.1.1.2,Cuenta propia sin operación de maquinarias del almacenaje con calificación técnica,31
+36.2.0.2,Jefes del almacenaje con calificación técnica,31
+36.3.1.2,Trabajadores sin operación de maquinarias del almacenaje con calificación técnica,31
+36.3.3.2,Operadores de sistemas y/o equipos informatizados del almacenaje con calificación técnica,31
+44.1.2.2,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación técnica",31
+44.1.3.2,"Cuenta propia con operación de sistemas y/o equipos informatizados de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación técnica",31
+44.3.2.2,"Operadores de maquinarias y/o equipos electromecánicos de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación técnica",31
+44.3.2.3,"Operadores de maquinarias y/o equipos electromecánicos de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación operativa",31
+44.3.3.2,"Operadores de sistemas y/o equipos informatizados de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación técnica",31
+44.3.3.3,"Operadores de sistemas y/o equipos informatizados de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación operativa",31
+61.1.1.2,Cuenta propia sin operación de maquinarias de la producción ganadera con calificación técnica,31
+61.3.1.2,Trabajadores sin operación de maquinarias de la producción ganadera con calificación técnica,31
+62.1.1.2,Cuenta propia sin operación de maquinarias de la producción forestal con calificación técnica,31
+62.3.1.2,Trabajadores sin operación de maquinarias de la producción forestal con calificación técnica,31
+63.1.1.2,Cuenta propia sin operación de maquinarias de la producción apícola - avícola y de otras especies menores con calificación técnica,31
+63.3.1.2,Trabajadores sin operación de maquinarias de la producción apícola - avícola y de otras especies menores con calificación técnica,31
+64.1.1.2,Cuenta propia sin operación de maquinarias de la producción pesquera con calificación técnica,31
+64.2.0.2,Jefes de la producción pesquera con calificación técnica,31
+64.3.1.2,Trabajadores sin operación de maquinarias de la producción pesquera con calificación técnica,31
+65.1.1.2,Cuenta propia sin operación de maquinarias de la caza con calificación técnica,31
+70.1.1.2,Cuenta propia sin operación de maquinarias de la producción extractiva con calificación técnica,31
+70.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción extractiva con calificación técnica,31
+70.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción extractiva con calificación técnica,31
+70.2.0.2,Jefes de la producción extractiva con calificación técnica,31
+70.2.0.3,Jefes de la producción extractiva con calificación operativa,31
+70.3.1.2,Trabajadores sin operación de maquinarias de la producción extractiva con calificación técnica,31
+70.3.2.2,Operadores de maquinaria y/o equipos electromecánicos de la producción extractiva con calificación técnica,31
+70.3.3.2,Operadores de sistemas y/o equipos informatizados de la producción extractiva con calificación técnica,31
+71.1.1.2,"Cuenta propia sin operación de maquinarias de la producción de energía, agua y gas con calificación técnica",31
+71.1.1.3,"Cuenta propia sin operación de maquinarias de la producción de energía, agua y gas con calificación operativa",31
+71.1.2.2,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción de energía, agua y gas con calificación técnica",31
+71.1.2.3,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción de energía, agua y gas con calificación operativa",31
+71.1.3.3,"Cuenta propia con operación de sistemas y/o equipos informatizados de la producción de energía, agua y gas con calificación operativa ",31
+71.2.0.2,"Jefes de la producción con calificación profesional de energía, agua y gas con calificación técnica",31
+71.2.0.3,"Jefes de la producción con calificación profesional de energía, agua y gas con calificación operativa",31
+71.3.1.2,"Trabajadores sin operación de maquinarias de la producción de energía, agua y gas con calificación técnica",31
+71.3.1.3,"Trabajadores sin operación de maquinarias de la producción de energía, agua y gas con calificación operativa",31
+71.3.2.2,"Operadores de maquinaria y/o equipos electromecánicos de la producción de energía, agua y gas con calificación técnica",31
+71.3.2.3,"Operadores de maquinaria y/o equipos electromecánicos de la producción de energía, agua y gas con calificación operativa",31
+71.3.3.2,"Operadores de sistemas y/o equipos informatizados de la producción de energía, agua y gas con calificación técnica",31
+71.3.3.3,"Operadores de sistemas y/o equipos informatizados de la producción de energía, agua y gas con calificación operativa",31
+72.1.1.2,"Cuenta propia sin operación de maquinarias de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación técnica",31
+72.2.0.2,"Jefes de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación técnica",31
+72.2.0.3,"Jefes de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación operativa",31
+72.3.1.2,"Trabajadores sin operación de maquinarias de la construcción edilicia, de obras de infraestructura y de redes de distribución de  energía, agua potable, gas, telefonía y petróleo con calificación técnica",31
+72.3.3.2,"de energía, agua potable, gas, telefonía y petróleo con calificación profesional",31
+80.1.3.2,Cuenta propia sin operación de maquinarias de la producción industrial y artesanal con calificación técnica,31
+80.2.0.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción industrial y artesanal con calificación técnica,31
+80.2.0.3,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción industrial y artesanal con calificación operativa,31
+80.3.1.2,Jefes de la producción industrial y artesanal con calificación técnica,31
+80.3.2.2,Trabajadores sin operación de maquinarias de la producción industrial y artesanal con calificación técnica,31
+80.3.3.2,Operadores de maquinaria y/o equipos electromecánicos de la producción industrial y artesanal con calificación técnica,31
+82.1.3.2,Cuenta propia sin operación de maquinarias de la reparación de bienes de consumo con calificación técnica,31
+82.2.0.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la reparación de bienes de consumo con calificación operativa,31
+82.3.3.2,Trabajadores sin operación de maquinarias de la reparación de bienes de consumo no calificados,31
+90.1.1.2,Operadores de sistemas y/o equipos informatizados de la reparación de bienes de consumo con calificación técnica,31
+90.1.2.2,Cuenta propia sin operación de maquinarias de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación operativa,31
+90.2.0.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación operativa,31
+90.3.1.2,Jefes de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación técnica,31
+90.3.3.2,Operadores de maquinaria y/o equipos electromecánicos de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación operativa,31
+91.1.1.2,Operadores de sistemas y/o equipos informatizados de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación profesional,31
+91.1.2.3,Operadores de sistemas y/o equipos informatizados de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación técnica,31
+91.2.0.2,Cuenta propia sin operación de maquinarias del desarrollo tecnológico productivo con calificación operativa,31
+91.3.1.2,Jefes del desarrollo tecnológico productivo con calificación profesional,31
+91.3.1.3,Jefes del desarrollo tecnológico productivo con calificación técnica,31
+92.2.0.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la instalación y mantenimiento de maquinaria equipos y sistemas de la prestación de servicios con calificación profesional,31
+40.1.1.2,Cuenta propia sin operación de maquinarias de la salud y sanidad con calificación técnica,32
+40.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la salud y la sanidad con calificación técnica,32
+40.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la salud y la sanidad con calificación técnica,32
+40.2.0.2,Jefes de salud y sanidad con calificación técnica,32
+40.3.1.2,Trabajadores sin operación de maquinarias de salud y sanidad con calificación técnica,32
+40.3.2.2,Operadores de maquinaria y/o equipos electromecánicos de la salud y sanidad con calificación técnica,32
+40.3.3.2,Operadores de sistemas y/o equipos informatizados y de panel de la salud y sanidad con calificación técnica,32
+44.1.1.2,"Cuenta propia sin operación de maquinarias de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación técnica",32
+10.1.1.2,"Cuenta propia sin operación de maquinarias de la gestión administrativa, planificación y control de gestión con calificación técnica",33
+10.1.2.2,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la gestión administrativa, planificación y control de gestión con calificación técnica",33
+10.1.3.2,"Cuenta propia con operación de sistemas y/o equipos informatizados de la gestión administrativa, planificación y control de gestión con calificación técnica",33
+10.2.0.2,"Jefes de gestión administrativa, de planificación, y control de gestión con calificación técnica",33
+10.3.1.2,"Trabajadores sin operación de maquinarias de gestión administrativa, de planificación y control de gestión con calificación técnica",33
+10.3.3.2,"Operadores de sistemas y/o equipos informatizados de las ocupaciones de la administración, planificación y control de gestión con calificación técnica",33
+11.3.3.2,Operadores de sistemas y/o equipos informatizados de las ocupaciones jurídico legales con calificación técnica,33
+20.1.1.2,"Ocupación de la gestión presupuestaria, contable y financiera con calificación técnica",33
+20.1.2.2,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la gestión presupuestaria, contable y financiera con calificación técnica",33
+20.1.3.2,"Cuenta propia con operación de maquinarias y/o equipos informatizados de la gestión presupuestaria, contable y financiera con calificación técnica",33
+20.2.0.2,"Jefes de gestión presupuestaria, contable y financiera con calificación técnica",33
+20.3.1.2,"Trabajadores sin operación de maquinarias de la gestión presupuestaria, contable y financiera con calificación técnica",33
+20.3.3.2,"Operadores de sistemas y/o equipos informatizados de la gestión presupuestaria, contable y financiera con calificación técnica",33
+30.1.1.2,Cuenta propia sin operación de maquinarias de la comercialización directa (tradicional y telefónicos) con calificación técnica,33
+30.2.0.2,Jefes de la comercialización directa (tradicional y telefónicos) con calificación técnica,33
+30.3.1.2,Vendedores y trabajadores sin operación de maquinarias de comercialización directa (tradicional y telefónicos) con calificación técnica,33
+30.3.3.2,Operadores de sistemas y/o equipos informatizados de la comercialización directa (tradicional y telefónicos) con calificación técnica,33
+31.1.1.2,"Ocupaciones de corretaje comercial, venta domiciliaria, viajantes y promotores con calificación técnica",33
+31.2.0.2,Jefes de viajantes/ corredores y promotores comerciales con calificación técnica,33
+31.3.1.2,"Trabajadores sin operación de maquinarias, viajantes, corredores y promotores comerciales con calificación técnica",33
+32.1.1.2,Cuenta propia sin operación de maquinarias de la comercialización indirecta con calificación técnica,33
+32.2.0.2,Jefes de comercialización indirecta con calificación técnico,33
+32.3.1.2,Trabajadores sin operación de maquinarias de la comercialización indirecta con calificación técnica,33
+32.3.3.2,Operadores de sistemas y/o equipos informatizados de la comercialización indirecta con calificación técnica,33
+47.1.1.2,Cuenta propia sin operación de maquinarias de los servicios de vigilancia y seguridad civil con calificación técnica,33
+47.2.0.2,Jefes de los servicios de vigilancia y seguridad civil con calificación técnica,33
+47.3.1.2,Trabajadores sin operación de maquinarias de los servicios de vigilancia y seguridad civil con calificación técnica,33
+48.3.3.2,Operadores de sistemas y/o equipos informatizados de los servicios de policía con calificación técnica,33
+11.1.1.2,Cuenta propia sin operación de maquinarias de la gestión jurídico legal con calificación técnica,34
+11.2.0.2,Jefes de la gestión jurídico legal con calificación técnica,34
+11.3.1.2,Trabajadores sin operación de maquinarias de la gestión jurídico legal con calificación técnica,34
+46.1.3.2,"Cuenta propia con operación de sistemas y/o equipos informatizados de los servicios sociales, comunales, políticos, gremiales y religiosos con calificación técnica",34
+46.2.0.2,"Jefe de los servicios sociales, comunales, políticos, gremiales y religiosos con calificación técnica",34
+46.2.0.3,"Jefe de los servicios sociales, comunales, políticos, gremiales y religiosos con calificación operativa",34
+46.3.1.2,"Trabajadores sin operación de maquinarias de servicios sociales, comunales, políticos, gremiales y religiosos con calificación técnica",34
+46.3.1.3,"Trabajadores sin operación de maquinarias de servicios sociales, comunales, políticos, gremiales y religiosos con calificación operativa",34
+50.1.1.2,Cuenta propia sin operación de maquinarias del arte con calificación técnica,34
+50.1.1.3,Cuenta propia sin operación de maquinarias del arte con calificación operativa,34
+50.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos del arte con calificación técnica,34
+50.2.0.2,Jefes del arte con calificación técnica,34
+50.3.1.2,Trabajadores sin operación de maquinarias del arte con calificación técnica,34
+50.3.1.3,Trabajadores sin operación de maquinarias del arte con calificación operativa,34
+50.3.2.2,Operadores de maquinaria y/o equipos electromecánicos del arte con calificación técnica,34
+51.1.1.2,Cuenta propia sin operación de maquinarias del deporte con calificación técnica,34
+51.2.0.2,Jefes del deporte con calificación técnica,34
+51.3.1.2,Trabajadores sin operación de maquinarias del deporte con calificación técnica,34
+51.3.2.2,Operadores de maquinaria y/o equipos electromecánicos del deporte con calificación técnica,34
+51.3.3.2,Operadores de sistemas y/o equipos informatizados del deporte con calificación técnica,34
+52.1.1.2,Cuenta propia sin operación de maquinarias de la recreación con calificación técnica,34
+52.1.2.2,Cuenta propia con operación de máquinas y/o equipos electromecánicas de la recreación con calificación técnica,34
+52.1.2.3,Cuenta propia con operación de máquinas y/o equipos electromecánicas de la recreación con calificación operativa,34
+52.1.3.3,Cuenta propia con operación de máquinas y/o equipos informatizados de la recreación con calificación operativa,34
+52.2.0.2,Jefes de la recreación con calificación técnica,34
+52.3.1.2,Trabajadores sin operación de maquinarias de la recreación con calificación técnica,34
+52.3.2.2,Operadores de maquinarias y/o equipos electromecánicos de la recreación con calificación técnica,34
+52.3.2.3,Operadores de maquinarias y/o equipos electromecánicos de la recreación con calificación operativa,34
+52.3.3.3,Operadores de sistemas y/o equipos informatizados de la recreación con calificación operativa,34
+53.1.1.2,Cuenta propia sin operación de maquinarias de servicios gastronómicos con calificación técnica,34
+53.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatiza dos de servicios gastronómicos con calificación técnica,34
+53.2.0.2,Jefes de servicios gastronómicos con calificación técnica,34
+53.3.1.2,Trabajadores sin operación de maquinarias de servicios gastronómicos con calificación técnica,34
+58.1.1.2,Cuenta propia sin operación de maquinarias de otras ocupaciones de los servicios sociales varios con calificación técnica,34
+58.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de otras ocupaciones de los servicios sociales varios con calificación operativa,34
+58.2.0.2,Jefes de otras ocupaciones de los servicios sociales varios con calificación técnica,34
+58.3.1.2,Trabajadores sin operación de maquinarias de otros servicios con calificación técnica,34
+35.1.1.2,Cuenta propia sin operación de maquinarias de las telecomunicaciones con calificación técnica,35
+35.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de las telecomunicaciones con calificación técnica,35
+35.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatizados de las telecomunicaciones con calificación técnica,35
+35.2.0.2,Jefes de las telecomunicaciones con calificación técnica,35
+35.3.1.2,Trabajadores sin operación de maquinarias de las telecomunicaciones con calificación técnica,35
+35.3.2.2,Operadores de maquinaria y equipos electromecánicos de las telecomunicaciones con calificación técnica,35
+35.3.3.2,Operadores de equipos y sistemas informatizados de telecomunicaciones con calificación técnica,35
+45.1.1.3,Cuenta propia sin operación de maquinarias de la comunicación de masas con calificación operativa,35
+45.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la comunicación de masas con calificación técnica,35
+45.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la comunicación de masas con calificación operativa,35
+45.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la comunicación de masas con calificación técnica,35
+45.1.3.3,Cuenta propia con operación de sistemas y/o equipos informatizados de la comunicación de masas con calificación operativa,35
+45.3.1.3,Trabajadores sin operación de maquinarias de la comunicación de masas con calificación operativa,35
+45.3.2.2,Operadores de maquinaria y/o equipos electromecánicos de la comunicación de masas con calificación técnica,35
+45.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la comunicación de masas con calificación operativa,35
+45.3.3.2,Operadores de sistemas y/o equipos informatizados de la comunicación de masas con calificación técnica,35
+45.3.3.3,Operadores de sistemas y/o equipos informatizados de la comunicación de masas con calificación operativa,35
+47.3.2.2,Operadores de maquinaria y/o equipos electromecánicos de los servicios de vigilancia y seguridad civil con calificación técnica,35
+47.3.3.2,Operadores de sistemas y/o equipos informatizados de los servicios de vigilancia y seguridad civil con calificación técnica,35
+48.3.2.2,Operadores de maquinaria y/o equipos electromecánicos de los servicios de policía con calificación técnica,35
+48.3.3.1,Operadores de sistemas y/o equipos informatizados de los servicios de policía con calificación profesional,35
+50.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatizados del arte con calificación técnica,35
+50.3.3.2,Operadores de sistemas y/o equipos informatizados del arte con calificación técnica,35
+58.3.3.2,Operadores de sistemas  y/o equipos informatizados de otras ocupaciones de los servicios sociales varios con calificación técnica,35
+81.1.3.2,Operadores de sistemas y/o equipos informatizados de la  producción industrial y artesanal con calificación técnica,35
+81.2.0.2,Cuenta propia de la producción de software con calificación técnica,35
+81.3.3.2,Jefes de la producción de software con calificación técnica,35
+92.1.1.2,Trabajadores sin operación de maquinarias del desarrollo tecnológico con calificación operativa,35
+92.1.3.2,Cuenta propia sin operación de maquinarias de la instalación y mantenimiento de maquinaria equipos y sistemas de la prestación de servicios con calificación técnica,35
+92.3.1.2,Jefes de la instalación y mantenimiento de maquinaria y equipos de la prestación de servicios con calificación técnica,35
+92.3.3.2,"Operadores de maquinaria y/o equipos electromecánicos de la instalación y mantenimiento de maquinaria, equipos y sistemas de la prestación de servicios con calificación operativa",35
+10.1.1.3,"Cuenta propia sin operación de maquinarias de la gestión administrativa, planificación y control de gestión con calificación operativa",41
+10.1.2.3,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la gestión administrativa, planificación y control de gestión con calificación operativa",41
+10.1.3.3,"Cuenta propia con operación de sistemas y/o equipos informatizados de la gestión administrativa, planificación y control de gestión con calificación operativa",41
+10.2.0.3,"Jefes de gestión administrativa, de planificación, y control de gestión con calificación operativa",41
+10.3.1.3,"Trabajadores sin operación de maquinarias de gestión administrativa, de planificación y control de gestión con calificación operativa",41
+10.3.3.3,"Operadores de sistemas y/o equipos informatizados de las ocupaciones de la administración, planificación y control de gestión con calificación operativa",41
+11.1.1.3,Cuenta propia sin operación de maquinarias de la gestión jurídico legal con calificación operativa,41
+11.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la gestión jurídico legal con calificación operativa,41
+11.2.0.3,Jefes de la gestión jurídico legal con calificación operativa,41
+11.3.1.3,Trabajadores sin operación de maquinarias de la gestión jurídico legal con calificación operativa,41
+11.3.1.4,Trabajadores sin operación de maquinarias de la gestión jurídico legal no calificados,41
+11.3.3.3,Operadores de sistemas y/o equipos informatizados de las ocupaciones jurídico legales con calificación operativa,41
+81.1.3.3,Operadores de sistemas y/o equipos informatizados de la  producción industrial y artesanal con calificación operativa,41
+81.2.0.3,Cuenta propia de la producción de software con calificación operativa,41
+81.3.3.3,Jefes de la producción de software con calificación operativa,41
+20.1.1.3,"Ocupación de la gestión presupuestaria, contable y financiera con calificación operativa",42
+20.2.0.3,"Jefes de gestión presupuestaria, contable y financiera con calificación operativa",42
+35.3.2.3,Operadores de maquinaria y equipos electromecánicos de las telecomunicaciones con calificación operativa,42
+42.1.1.3,Cuenta propia sin operación de maquinarias de la investigación científica y tecnológica con calificación operativa,42
+42.3.1.3,Trabajadores sin operación de maquinarias de la investigación científica y tecnológica con calificación operativa,42
+52.2.0.3,Jefes de la recreación con calificación operativa,42
+52.3.1.3,Trabajadores sin operación de maquinarias de la recreación con calificación operativa,42
+54.1.1.3,Cuenta propia sin operación de maquinarias de los servicios de alojamiento y turismo con calificación operativa,42
+54.2.0.2,Jefes del alojamiento y turismo con calificación operativa,42
+54.3.1.3,Trabajadores sin operación de maquinarias del alojamiento y turismo con calificación operativa,42
+54.3.2.3,Operadores de maquinaria y/o equipos electromecánicos del alojamiento y turismo con calificación operativa,42
+20.1.3.3,"Cuenta propia con operación de maquinarias y/o equipos informatizados de la gestión presupuestaria, contable y financiera con calificación operativa",43
+20.3.3.3,"Operadores de sistemas y/o equipos informatizados de la gestión presupuestaria, contable y financiera con calificación operativa",43
+34.1.1.3,Cuenta propia sin operación de maquinarias del transporte con calificación operativa,43
+34.2.0.3,Jefes de servicios de transporte con calificación operativa,43
+34.3.1.3,Trabajadores sin operación de maquinarias del transporte con calificación operativa,43
+36.1.1.3,Cuenta propia sin operación de maquinarias del almacenaje con calificación operativa,43
+36.2.0.3,Jefes del almacenaje con calificación operativa,43
+36.3.1.3,Trabajadores sin operación de maquinarias del almacenaje con calificación operativa,43
+36.3.3.3,Operadores de sistemas y/o equipos informatizados del almacenaje con calificación operativa,43
+35.1.1.3,Cuenta propia sin operación de maquinarias de las telecomunicaciones con calificación operativa,44
+35.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de las telecomunicaciones con calificación operativa,44
+35.1.3.3,Cuenta propia con operación de sistemas y/o equipos informatizados de las telecomunicaciones con calificación operativa,44
+35.2.0.3,Jefes de las telecomunicaciones con calificación operativa,44
+35.3.1.3,Trabajadores sin operación de maquinarias de las telecomunicaciones con calificación operativa,44
+35.3.1.4,Trabajadores sin operación de maquinarias de las telecomunicaciones no calificados,44
+35.3.3.3,Operadores de equipos y sistemas informatizados de telecomunicaciones con calificación operativa,44
+43.3.1.3,Trabajadores de la asesoría y consultoría con calificación operativa,44
+46.1.1.3,"Cuenta propia sin operación de maquinarias de los servicios sociales, comunales, políticos, gremiales y religiosos con calificación operativa",51
+51.1.1.3,Cuenta propia sin operación de maquinarias del deporte con calificación operativa,51
+51.2.0.3,Jefes del deporte con calificación operativa,51
+51.3.1.3,Trabajadores sin operación de maquinarias del deporte con calificación operativa,51
+53.1.1.3,Cuenta propia sin operación de maquinarias de servicios gastronómicos con calificación operativa,51
+53.2.0.3,Jefes de servicios gastronómicos con calificación operativa,51
+53.3.1.3,Trabajadores sin operación de maquinarias de servicios gastronómicos con calificación operativa,51
+53.3.2.3,Operadores de maquinarias y/o equipos electromecánicos de servicios gastronómico con calificación operativa,51
+54.1.1.2,Cuenta propia sin operación de maquinarias de los servicios de alojamiento y turismo con calificación técnica,51
+54.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de los servicios de alojamiento y turismo con calificación operativa,51
+54.3.1.2,Trabajadores sin operación de maquinarias del alojamiento y turismo con calificación técnica,51
+55.1.1.3,Cuenta propia sin operación de maquinarias de los servicios domésticos con calificación operativa,51
+55.2.0.3,Jefe de los servicios domésticos con calificación operativa,51
+56.2.0.2,Jefes de los servicios de limpieza no doméstica con calificación técnica,51
+56.2.0.3,Jefes de los servicios de limpieza no doméstica con calificación operativa,51
+56.3.1.3,Trabajadores sin operación de maquinarias de servicios de limpieza no doméstica con calificación operativa,51
+57.1.1.2,Cuenta propia sin operación de maquinarias del cuidado y la atención de las personas con calificación técnica,51
+57.1.1.3,Cuenta propia sin operación de maquinarias del cuidado y la atención de las personas con calificación operativa,51
+57.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos del cuidado y la atención de las personas con calificación operativa,51
+57.2.0.2,Jefes de los servicios del cuidad y la atención de las personas con calificación técnica,51
+57.2.0.3,Jefes de los servicios del cuidad y la atención de las personas con calificación operativa,51
+57.3.1.2,Trabajadores sin operación de maquinarias del cuidado y la atención de las personas con calificación técnica,51
+57.3.1.3,Trabajadores sin operación de maquinarias del cuidado y la atención de las personas con calificación operativa,51
+57.3.2.3,Operadores de maquinaria y/o equipos electromecánicos del cuidado y la atención de las personas con calificación operativa,51
+57.3.3.3,Operadores de sistemas y/o equipos informatizados del cuidado y la atención de las personas con calificación operativa,51
+58.2.0.3,Jefes de otras ocupaciones de los servicios sociales varios con calificación operativa,51
+20.3.1.3,"Trabajadores sin operación de maquinarias de la gestión presupuestaria, contable y financiera con calificación operativa",52
+30.1.1.3,Cuenta propia sin operación de maquinarias de la comercialización directa (tradicional y telefónicos) con calificación operativa,52
+30.1.3.3,Cuenta propia con operación de sistemas y/o equipos informatizados de la comercialización directa (tradicional y telefónicos) con calificación operativa,52
+30.2.0.3,Jefes de la comercialización directa (tradicional y telefónicos) con calificación operativa,52
+30.3.1.3,Vendedores y trabajadores sin operación de maquinarias de comercialización directa (tradicional y telefónicos) con calificación operativa,52
+30.3.1.4,Vendedores y trabajadores sin operación de maquinarias de comercialización directa (tradicional y telefónicos) no calificados,52
+30.3.2.3,Operadores de maquinarias y/o equipos electromecánicos de la comercialización directa (tradicional y telefónicos) con calificación operativa,52
+30.3.3.3,Operadores de sistemas y/o equipos informatizados de la comercialización directa (tradicional y telefónicos) con calificación operativa,52
+31.1.1.3,"Ocupaciones de corretaje comercial, venta domiciliaria, viajantes y promotores con calificación operativa",52
+31.2.0.3,Jefes de viajantes/ corredores y promotores comerciales con calificación operativa,52
+31.3.1.3,"Trabajadores sin operación de maquinarias, viajantes, corredores y promotores comerciales con calificación operativa",52
+31.3.1.4,"Trabajadores sin operación de maquinarias, viajantes, corredores y promotores comerciales no calificados",52
+32.1.1.3,Cuenta propia sin operación de maquinarias de la comercialización indirecta con calificación operativa,52
+32.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la comercialización indirecta con calificación operativa,52
+32.2.0.3,Jefes de comercialización indirecta con calificación operativa,52
+32.3.1.3,Trabajadores sin operación de maquinarias de la comercialización indirecta con calificación operativa,52
+32.3.1.4,Trabajadores sin operación de maquinarias de la comercialización indirecta no calificados,52
+32.3.2.3,Operadores de maquinarias y/o equipos electromecánicos de la comercialización indirecta con calificación operativa,52
+33.2.0.3,Jefes de la comercialización ambulante y callejera con calificación operativa,52
+33.3.1.4,Vendedores y trabajadores sin operación de maquinarias de la comercialización ambulante y callejera no calificados,52
+40.1.1.3,Cuenta propia sin operación de maquinarias de la salud y sanidad con calificación operativa,53
+40.2.0.3,Jefes de salud y sanidad con calificación operativa,53
+40.3.1.3,Trabajadores sin operación de maquinarias de salud y sanidad con calificación operativa,53
+40.3.1.4,Trabajadores sin operación de maquinarias de salud y sanidad no calificados,53
+40.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la salud y sanidad con calificación operativa,53
+41.1.1.3,Cuenta propia sin operación de maquinarias de la educación con calificación operativa,53
+41.2.0.3,Jefes de la educación con calificación operativa,53
+41.3.1.3,Trabajadores sin operación de maquinarias de la educación con calificación operativa,53
+41.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la educación con calificación operativa,53
+41.3.3.3,Operadores de sistemas y/o equipos informatizados de la educación con calificación operativa,53
+52.1.1.3,Cuenta propia sin operación de maquinarias de la recreación con calificación operativa,53
+57.3.1.4,Trabajadores sin operación de maquinarias del cuidado y la atención de las personas no calificados,53
+44.2.0.2,"Jefes de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación técnica",54
+44.2.0.3,"Jefes de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación operativa",54
+44.3.1.2,"Trabajadores sin operación de maquinarias de prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación técnica",54
+44.3.1.3,"Trabajadores sin operación de maquinarias de prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación operativa",54
+47.1.1.3,Cuenta propia sin operación de maquinarias de los servicios de vigilancia y seguridad civil con calificación operativa,54
+47.2.0.3,Jefes de los servicios de vigilancia y seguridad civil con calificación operativa,54
+47.3.1.3,Trabajadores sin operación de maquinarias de los servicios de vigilancia y seguridad civil con calificación operativo,54
+47.3.1.4,Trabajadores sin operación de maquinarias de los servicios de vigilancia y seguridad civil no calificados,54
+47.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de los servicios de vigilancia y seguridad civil con calificación operativa,54
+47.3.3.3,Operadores de sistemas y/o equipos informatizados de los servicios de vigilancia y seguridad civil con calificación operativa,54
+48.3.1.1,Trabajadores sin operación de maquinarias de servicios policiales con calificación profesional,54
+48.3.1.2,Trabajadores sin operación de maquinarias de servicios policiales con calificación técnica,54
+48.3.1.3,Trabajadores sin operación de maquinarias de servicios policiales con calificación operativa,54
+48.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de los servicios de policía con calificación operativa,54
+48.3.3.3,Operadores de sistemas y/o equipos informatizados de los servicios de policía con calificación operativa,54
+60.1.1.2,Cuenta propia sin operación de maquinarias de la producción agrícola con calificación técnica,61
+60.1.1.3,Cuenta propia sin operación de maquinarias de la producción agrícola con calificación operativa,61
+60.2.0.2,Jefes de la producción agrícola con calificación técnica,61
+60.2.0.3,Jefes de la producción agrícola con calificación operativa,61
+60.3.1.2,Trabajadores sin operación de maquinarias de la producción agrícola con calificación técnica,61
+60.3.1.3,Trabajadores sin operación de maquinarias de la producción agrícola con calificación operativa,61
+61.1.1.3,Cuenta propia sin operación de maquinarias de la producción ganadera con calificación operativa,61
+61.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción ganadera con calificación operativa,61
+61.1.3.3,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción ganadera con calificación operativa,61
+61.2.0.2,Jefes de la producción ganadera con calificación técnica,61
+61.2.0.3,Jefes de la producción ganadera con calificación operativa,61
+61.3.1.3,Trabajadores sin operación de maquinarias de la producción ganadera con calificación operativa,61
+61.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la producción ganadera con calificación operativa,61
+62.2.0.2,Jefes de la producción forestal con calificación técnica,61
+63.1.1.3,Cuenta propia sin operación de maquinarias de la producción apícola - avícola y de otras especies menores con calificación operativa,61
+63.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción apícola - avícola y de otras especies menores con calificación operativa,61
+63.2.0.2,Jefes de la producción apícola - avícola y de otras especies menores con calificación técnica,61
+63.2.0.3,Jefes de la producción apícola - avícola y de otras especies menores con calificación operativa,61
+63.3.1.3,Trabajadores sin operación de maquinarias de la producción apícola - avícola y de otras especies menores con calificación operativa,61
+63.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la producción apícola - avícola y de otras especies menores con calificación operativa,61
+63.3.3.3,"Operadores de sistemas, equipos y/o paneles informatizados de la producción de apicultura, avicultura y de otras especies menores con calificación operativa",61
+62.1.1.3,Cuenta propia sin operación de maquinarias de la producción forestal con calificación operativa,62
+62.2.0.3,Jefes de la producción forestal con calificación operativa,62
+62.3.1.3,Trabajadores sin operación de maquinarias de la producción forestal con calificación operativa,62
+64.1.1.3,Cuenta propia sin operación de maquinarias de la producción pesquera con calificación operativa,62
+64.2.0.3,Jefes de la producción pesquera con calificación operativa,62
+64.3.1.3,Trabajadores sin operación de maquinarias de la producción pesquera con calificación operativa,62
+64.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la producción pesquera con calificación operativa,62
+65.1.1.3,Cuenta propia sin operación de maquinarias de la caza con calificación operativa,62
+65.3.1.3,Trabajadores sin operación de maquinarias de la caza con calificación operativa,62
+80.1.1.3,"de energía, agua potable, gas, telefonía y petróleo con calificación operativa",7(2)
+80.3.1.3,Jefes de la producción industrial y artesanal con calificación operativa,7(2)
+70.1.1.3,Cuenta propia sin operación de maquinarias de la producción extractiva con calificación operativa,71
+72.1.1.3,"Cuenta propia sin operación de maquinarias de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación operativa",71
+72.3.1.3,"Trabajadores sin operación de maquinarias de la construcción edilicia, de obras de infraestructura y de redes de distribución de  energía, agua potable, gas, telefonía y petróleo con calificación operativa",71
+82.1.1.3,Operadores de sistemas y/o equipos informatizados de la producción de software con calificación operativa,72
+82.1.3.3,Cuenta propia sin operación de maquinarias de la reparación de bienes de consumo con calificación operativa,72
+82.2.0.3,Cuenta propia con operación de sistemas y/o equipos informatizados de la reparación de bienes de consumo con calificación técnica,72
+82.3.1.3,Jefes de la reparación de bienes de consumo con calificación técnica,72
+82.3.3.3,Operadores de maquinaria y/o equipos electromecánicos de la reparación de bienes de consumo con calificación operativa,72
+90.1.1.3,Operadores de sistemas y/o equipos informatizados de la reparación de bienes de consumo con calificación operativa,72
+90.1.2.3,Cuenta propia sin operación de maquinarias de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación profesional,72
+90.2.0.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación profesional,72
+90.3.1.3,Jefes de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación operativa,72
+90.3.2.3,Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación técnica,72
+92.1.1.3,Operadores de sistemas y/o equipos informatizados de ocupaciones del desarrollo tecnológico productivo con calificación profesional,72
+92.2.0.3,Cuenta propia con operación de sistemas y/o equipos informatizados de la instalación y mantenimiento de maquinaria equipos y sistemas de la prestación de servicios con calificación técnica,72
+92.3.1.3,Jefes de la instalación y mantenimiento de maquinaria y equipos de la prestación de servicios con calificación operativa,72
+92.3.2.3,"Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinaria, equipos y sistemas de la prestación de servicios con calificación técnica",72
+80.1.1.2,"Operadores de sistemas y/o equipos informatizados de la construcción edilicia, de obras de infraestructura y de la distribución",73
+82.1.1.2,Operadores de sistemas y/o equipos informatizados de la producción de software con calificación técnica,74
+82.3.1.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la reparación de bienes de consumo con calificación operativa,74
+44.1.1.3,"Cuenta propia sin operación de maquinarias de la prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología con calificación operativa",75
+82.1.2.3,Cuenta propia sin operación de maquinarias de la reparación de bienes de consumo con calificación profesional,75
+82.3.2.3,Trabajadores sin operación de maquinarias de la reparación de bienes de consumo con calificación técnica,75
+80.1.2.3,Cuenta propia sin operación de maquinarias de la producción industrial y artesanal con calificación profesional,8 (2)
+80.1.3.3,Cuenta propia sin operación de maquinarias de la producción industrial y artesanal con calificación operativa,8(2)
+80.3.2.3,Trabajadores sin operación de maquinarias de la producción industrial y artesanal con calificación operativa,8(2)
+80.3.3.3,Operadores de maquinaria y/o equipos electromecánicos de la producción industrial y artesanal con calificación operativa,8(2)
+56.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de los servicios de limpieza doméstica con calificación operativa,81
+56.3.2.3,Operadores de maquinaria/equipos electromecánicos de la limpieza no doméstica con calificación operativa,81
+56.3.2.4,Operadores de maquinaria/equipos electromecánicos de la limpieza no doméstica no calificados,81
+70.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción extractiva con calificación operativa,81
+70.3.1.3,Trabajadores sin operación de maquinarias de la producción extractiva con calificación operativa,81
+70.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la producción extractiva con calificación operativa,81
+70.3.3.3,Operadores de sistemas y/o equipos informatizados de la producción extractiva con calificación operativa,81
+34.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos del transporte con operativa,83
+34.3.2.3,Conductores y operadores de maquinaria y/o equipos electromecánicos del transporte con calificación operativa,83
+36.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos del almacenaje con calificación operativa,83
+36.3.2.3,Operadores de maquinarias y/o equipos electromecánicos del almacenaje con calificación operativa,83
+58.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de otras ocupaciones de los servicios sociales varios con calificación técnica,83
+58.3.3.3,Operadores de sistemas  y/o equipos informatizados de otras ocupaciones de los servicios sociales varios con calificación operativa,83
+60.1.2.2,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción agrícola con calificación técnica,83
+60.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción agrícola con calificación operativa,83
+60.1.3.2,Cuenta propia con operación de sistemas y/o equipos informatizados de la producción agrícola con calificación técnica,83
+60.3.2.2,Operadores de maquinaria y/o equipos electromecánicos de la producción agrícola con calificación técnica,83
+60.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la producción agrícola con calificación operativa,83
+62.1.2.3,Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la producción forestal con calificación operativa,83
+62.3.2.2,Operadores de maquinaria y/o equipos electromecánicos de la producción forestal con calificación técnica,83
+62.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de la producción forestal con calificación operativa,83
+62.3.3.2,Operadores de sistemas y/o equipos informatizados de la producción forestal con calificación técnica,83
+72.1.2.2,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la construcción edilicia y de obras de  infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación técnica",83
+72.1.2.3,"Cuenta propia con operación de maquinarias y/o equipos electromecánicos de la construcción edilicia y de obras de  infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación operativa",83
+72.1.3.2,"Cuenta propia con operación de sistemas y/o equipos informatizados de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo con calificación técnica",83
+72.3.2.2,"Operadores de maquinaria y/o equipos electromecánicos de la construcción edilicia, de obras de infraestructura y de la distribución de energía, agua potable, gas, telefonía y petróleo con calificación técnica",83
+72.3.2.3,"Operadores de maquinaria y/o equipos electromecánicos de la construcción edilicia, de obras de infraestructura y de la distribución de energía, agua potable, gas, telefonía y petróleo con calificación operativa",83
+72.3.3.3,"Operadores de sistemas y/o equipos informatizados de la construcción edilicia, de obras de infraestructura y de la distribución",83
+55.3.1.3,Trabajadores sin operación de maquinarias del servicio doméstico con calificación operativa,91
+55.3.1.4,Trabajadores sin operación de maquinarias del servicio doméstico no calificados,91
+56.1.1.3,Cuenta propia sin operación de maquinarias de los servicios de limpieza doméstica con calificación operativa,91
+56.1.1.4,Cuenta propia sin operación de maquinarias de los servicios de limpieza doméstica no calificados,91
+56.3.1.4,Trabajadores sin operación de maquinarias de servicios de limpieza no doméstica no calificados,91
+58.1.1.3,Cuenta propia sin operación de maquinarias de otras ocupaciones de los servicios sociales varios con calificación operativa,92
+58.3.1.3,Trabajadores sin operación de maquinarias de otros servicios con calificación operativa,92
+58.3.2.3,Operadores de maquinaria y/o equipos electromecánicos de otras ocupaciones de los servicios sociales varios con calificación operativa,92
+60.1.1.4,Cuenta propia sin operación de maquinarias de la producción agrícola no calificados,92
+60.3.1.4,Trabajadores sin operación de maquinarias de la producción agrícola no calificados,92
+60.3.2.4,Operadores de maquinaria y/o equipos electromecánicos de la producción agrícola no calificados,92
+61.3.1.4,Trabajadores sin operación de maquinarias de la producción ganadera no calificados,92
+62.3.1.4,Trabajadores sin operación de maquinarias de la producción forestal no calificados,92
+62.3.2.4,Operadores de maquinaria y/o equipos electromecánicos de la producción forestal no calificados,92
+63.3.1.4,Trabajadores sin operación de maquinarias de la producción apícola - avícola y de otras especies menores no calificados,92
+64.3.1.4,Trabajadores sin operación de maquinarias de la producción pesquera no calificados,92
+65.3.1.4,Trabajadores sin operación de maquinarias de la caza no calificados,92
+34.3.1.4,Trabajadores sin operación de maquinarias del transporte no calificados,93
+36.1.1.4,Cuenta propia sin operación de maquinarias del almacenaje no calificados,93
+36.3.1.4,Trabajadores sin operación de maquinarias del almacenaje no calificados,93
+36.3.2.4,Operadores de maquinarias y/o equipos electromecánicos del almacenaje no calificados,93
+70.3.1.4,Trabajadores sin operación de maquinarias de la producción extractiva no calificados,93
+71.3.1.4,"Trabajadores sin operación de maquinarias de la producción de energía, agua y gas no calificados",93
+71.3.2.4,"Operadores de maquinaria y/o equipos electromecánicos de la producción de energía, agua y gas no calificados",93
+72.1.1.4,"Cuenta propia sin operación de maquinarias de la construcción edilicia y de obras de infraestructura y de redes de distribución de energía, agua potable, gas, telefonía y petróleo no calificado",93
+72.3.1.4,"Trabajadores sin operación de maquinarias de la construcción edilicia, de obras de infraestructura y de redes de distribución de  energía, agua potable, gas, telefonía y petróleo no calificados",93
+72.3.2.4,"Operadores de maquinaria y/o equipos electromecánicos de la construcción edilicia, de obras de infraestructura y de la distribución de energía, agua potable, gas, telefonía y petróleo no calificados",93
+80.3.1.4,Trabajadores sin operación de maquinarias de la producción industrial y artesanal con calificación profesional,93
+80.3.2.4,Trabajadores sin operación de maquinarias de la producción industrial y artesanal no calificados,93
+82.3.1.4,Jefes de la reparación de bienes de consumo con calificación operativa,93
+82.3.2.4,Trabajadores sin operación de maquinarias de la reparación de bienes de consumo con calificación operativa,93
+90.3.1.4,Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación profesional,93
+90.3.2.4,Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinarias y equipos de la producción de bienes con calificación operativa,93
+92.3.1.4,"Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinaria, equipos y sistemas de la prestación de servicios con calificación profesional",93
+92.3.2.4,"Trabajadores sin operación de maquinarias de la instalación y mantenimiento de maquinaria, equipos y sistemas de la prestación de servicios con calificación operativa",93
+53.3.1.4,Trabajadores sin operación de maquinarias de servicios gastronómicos no calificados,94
+33.1.1.4,Cuenta propia sin operación de maquinarias de la comercialización ambulante y callejera no calificado,95
+10.3.1.4,"Trabajadores sin operación de maquinarias de gestión administrativa, de planificación y control de gestión no calificados",96
+20.3.1.4,"Trabajadores sin operación de maquinarias de la gestión presupuestaria, contable y financiera no calificados",96
+34.3.2.4,Conductores y operadores de maquinaria y/o equipos electromecánicos del transporte sin calificación,96
+44.3.1.4,"Trabajadores sin operación de maquinarias de prevención de siniestros (naturales, humanos, productivos) y atención del medio ambiente y ecología no calificados",96
+46.3.1.4,"Trabajadores sin operación de maquinarias de servicios sociales, comunales, políticos, gremiales y religiosos no calificados",96
+51.3.1.4,Trabajadores sin operación de maquinarias del deporte no calificados,96
+52.3.1.4,Trabajadores sin operación de maquinarias de la recreación no calificados,96
+54.3.1.4,Trabajadores sin operación de maquinarias del alojamiento y turismo no calificados,96
+58.3.1.4,Trabajadores sin operación de maquinarias de otros servicios no calificados,96
