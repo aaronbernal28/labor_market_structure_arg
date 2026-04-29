@@ -87,7 +87,9 @@ def main() -> None:
 			processed_path = eph_to_processed[eph_file]
 			df_wave = pd.read_csv(processed_path)
 			if id_col not in df_wave.columns:
-				raise KeyError(f"Missing group id column '{id_col}' in {processed_path}.")
+				raise KeyError(
+					f"Missing group id column '{id_col}' in {processed_path}."
+				)
 			yearly_frames.append(df_wave)
 
 		df_year = pd.concat(yearly_frames, ignore_index=True)
@@ -103,7 +105,9 @@ def main() -> None:
 			"wave_count": len(waves),
 			"row_count": len(df_year),
 			"group_count": int(df_year[id_col].nunique(dropna=True)),
-			"feature_non_null": int(pd.to_numeric(features_df[feature], errors="coerce").notna().sum()),
+			"feature_non_null": int(
+				pd.to_numeric(features_df[feature], errors="coerce").notna().sum()
+			),
 		}
 
 	alphas = [1.0, 0.1, 0.03, 1e-2, 1e-3]

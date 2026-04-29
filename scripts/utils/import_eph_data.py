@@ -252,7 +252,9 @@ def main() -> None:
 				for name in namelist:
 					base = Path(name).name
 					base_lower = base.lower()
-					is_excel = base_lower.endswith(".xls") or base_lower.endswith(".xlsx")
+					is_excel = base_lower.endswith(".xls") or base_lower.endswith(
+						".xlsx"
+					)
 					if base_lower.startswith("usu_individual_") and is_excel:
 						matched_members.append(name)
 

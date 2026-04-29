@@ -14,3 +14,4 @@ gudhi==3.12.0
 infomap==2.9.2
 bs4==0.0.2
 xlrd==2.0.2
+statsmodels==0.14.6
