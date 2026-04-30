@@ -27,6 +27,9 @@ datasets:
     - name: "nivel_ed"
       type: "float"
       default: NaN
+    - name: "ponderation"
+      type: "float"
+      default: 1
 
   enes_2019:
     source: data/raw/base_enespersonas.csv
@@ -37,6 +40,7 @@ datasets:
     id_caes: "v182caes"
     id_ciuo: "v183ciuo"
     id_cno: "v183cno"
+    ponderation: "f_calib3"
     features:
       sex_id: "v109"
       public_worker: "v188" # en realidad es "v188"==1
@@ -54,6 +58,7 @@ datasets:
     id_caes: "CAES_num"
     id_ciuo: "CIUO_encuestado"
     id_cno: null
+    ponderation: null
     features:
      sex_id: "SEXO"
      public_worker: "M3_7" # en realidad es "M3_7"==1
@@ -70,6 +75,7 @@ datasets:
     id_caes: "PP04B_COD" # o "PP04B COD"
     id_ciuo: null
     id_cno: "PP04D_COD" # o "PP04D COD"
+    ponderation: "PONDERA"
     features:
       sex_id: "PP03G_COD"
       public_worker: "CH04"
@@ -113,7 +119,7 @@ cno:
 figsizes:
   top_n_bar: [6, 4]
   edge_correlation: [6, 6]
-  bipartite: [15, 4]
+  bipartite: [10, 8]
   projection: [8, 8]
   stacked: [12, 3.5]
   heatmap: [16, 10]

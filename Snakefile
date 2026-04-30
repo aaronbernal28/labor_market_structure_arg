@@ -86,12 +86,12 @@ rule all:
 			class_=CLASSES,
 			topo_method=TOPO_METHOD,
 		),
-		expand(
-			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png",
-			class_=["caes", "cno"],
-			weight_function=["hidalgo"],
-			algorithm=["louvain"],
-		),
+		#expand(
+		#	"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png",
+		#	class_=["caes", "cno"],
+		#	weight_function=["hidalgo"],
+		#	algorithm=["louvain"],
+		#),
 
 
 rule _00_aed_report:
