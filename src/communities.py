@@ -52,18 +52,19 @@ def best_louvain_partition_random(
 	Returns:
 		Tuple of (best_partition, best_modularity, best_resolution)
 	"""
-	np.random.seed(seed)
+	rng = np.random.RandomState(seed)
 
 	# Sample resolution values uniformly
-	resolutions = np.random.uniform(min_resolution, max_resolution, n_samples)
+	resolutions = rng.uniform(min_resolution, max_resolution, n_samples)
 
 	best_partition = None
 	best_score = -1.0
 	best_resolution = None
 
-	for resolution in resolutions:
-		seed += 1  # Increment seed for variability
-		partition, score = louvain_partition(graph, resolution=resolution, seed=seed)
+	for i, resolution in enumerate(resolutions):
+		# Use deterministic seed derived from base seed
+		current_seed = seed + i
+		partition, score = louvain_partition(graph, resolution=resolution, seed=current_seed)
 
 		if score > best_score:
 			best_partition = partition
@@ -195,18 +196,19 @@ def best_leiden_partition_random(
 	"""
 	Find the best Leiden partition by random sampling of resolution values.
 	"""
-	np.random.seed(seed)
+	rng = np.random.RandomState(seed)
 
 	# Sample resolution values uniformly
-	resolutions = np.random.uniform(min_resolution, max_resolution, n_samples)
+	resolutions = rng.uniform(min_resolution, max_resolution, n_samples)
 
 	best_partition = None
 	best_score = -1.0
 	best_resolution = None
 
-	for resolution in resolutions:
-		seed += 1  # Increment seed for variability
-		partition, score = leiden_partition(graph, resolution=resolution, seed=seed)
+	for i, resolution in enumerate(resolutions):
+		# Use deterministic seed derived from base seed
+		current_seed = seed + i
+		partition, score = leiden_partition(graph, resolution=resolution, seed=current_seed)
 
 		if score > best_score:
 			best_partition = partition
@@ -284,20 +286,21 @@ def best_infomap_partition_random(
 	"""
 	Find the best Infomap partition by random sampling of markov_time values.
 	"""
-	np.random.seed(seed)
+	rng = np.random.RandomState(seed)
 
 	# Sample markov_time values uniformly
-	markov_times = np.random.uniform(min_markov_time, max_markov_time, n_samples)
+	markov_times = rng.uniform(min_markov_time, max_markov_time, n_samples)
 
 	best_partition = None
 	best_score = -1.0
 	best_markov_time = None
 
-	for markov_time in markov_times:
-		seed += 1  # Increment seed for variability
+	for i, markov_time in enumerate(markov_times):
+		# Use deterministic seed derived from base seed
+		current_seed = seed + i
 		partition, score = infomap_partition(
 			graph,
-			seed=seed,
+			seed=current_seed,
 			markov_time=markov_time,
 			num_trials=num_trials,
 		)
