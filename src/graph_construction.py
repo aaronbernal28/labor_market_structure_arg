@@ -35,10 +35,10 @@ def build_bipartite_graph(
 	Build the bipartite graph from the merged ENES dataframe.
 	"""
 	# Define node sets
-	caes_nodes = set(enes_df[caes_id].unique())
-	ciuo_nodes = set(enes_df[ciuo_id].unique())
+	caes_nodes = sorted(list(set(enes_df[caes_id].unique())))
+	ciuo_nodes = sorted(list(set(enes_df[ciuo_id].unique())))
 
-	assert caes_nodes & ciuo_nodes == set(), "CAES and CIUO IDs must be disjoint."
+	assert set(caes_nodes) & set(ciuo_nodes) == set(), "CAES and CIUO IDs must be disjoint."
 
 	# Build bipartite graph
 	graph = nx.Graph()
@@ -58,7 +58,7 @@ def build_bipartite_graph(
 	)
 
 	assert nx.is_bipartite(graph), "Constructed graph is not bipartite."
-	return graph
+	return graph_sort_nodes_by_id(graph)
 
 
 def build_biadjacency(
@@ -99,7 +99,7 @@ def generic_weighted_projected_graph(
 	)
 	nodes = [
 		node
-		for node in graph.nodes
+		for node in sorted(graph.nodes)
 		if graph.nodes[node].get("bipartite") == target_partition
 	]
 	return nx.bipartite.generic_weighted_projected_graph(graph, nodes, weight_function)
@@ -124,7 +124,7 @@ def projected_graph(graph: nx.Graph, class_name: str) -> nx.Graph:
 	target_partition = _resolve_partition(class_name=class_name)
 	nodes = [
 		node
-		for node in graph.nodes
+		for node in sorted(graph.nodes)
 		if graph.nodes[node].get("bipartite") == target_partition
 	]
 	return nx.bipartite.projected_graph(graph, nodes)
@@ -135,7 +135,7 @@ def weighted_projected_graph(graph: nx.Graph, class_name: str) -> nx.Graph:
 	target_partition = _resolve_partition(class_name=class_name)
 	nodes = [
 		node
-		for node in graph.nodes
+		for node in sorted(graph.nodes)
 		if graph.nodes[node].get("bipartite") == target_partition
 	]
 	return nx.bipartite.weighted_projected_graph(graph, nodes)
@@ -171,7 +171,7 @@ def dot_product_weight(G: nx.Graph, u: int, v: int) -> float:
 	"""Newman, M. E. J. (2001). Scientific collaboration networks. II. Shortest paths, weighted networks, and centrality.
 	Zhou, T., Ren, J., Medo, M., & Zhang, Y. C. (2007). Bipartite network projection and personal recommendation.
 	"""
-	shared_nodes = set(G[u]).intersection(G[v])
+	shared_nodes = sorted(list(set(G[u]).intersection(G[v])))
 	return sum(
 		G[u][node].get("weight", 0.0) * G[v][node].get("weight", 0.0)
 		for node in shared_nodes
@@ -182,7 +182,7 @@ def cosine_similarity_weight(G: nx.Graph, u: int, v: int) -> float:
 	"""Cosine similarity using edge weights on shared neighbors."""
 	norm_weight_u = 0.0
 	norm_weight_v = 0.0
-	shared_nodes = set(G[u]) & set(G[v])
+	shared_nodes = sorted(list(set(G[u]) & set(G[v])))
 
 	for node in shared_nodes:
 		w_u = G[u][node].get("weight", 0.0)
@@ -239,7 +239,7 @@ def weighted_hidalgo_weight(
 	# Note: For very dense graphs, iterating the smaller neighborhood is faster
 	nb_u = set(G[u])
 	nb_v = set(G[v])
-	shared_neighbors = list(nb_u & nb_v)
+	shared_neighbors = sorted(list(nb_u & nb_v))
 
 	# If no overlap, return 0 to save time
 	if len(shared_neighbors) == 0:
@@ -320,10 +320,10 @@ def get_projection_positions(
 		)
 
 	if method == "kamada_kawai":
-		pos = nx.kamada_kawai_layout(graph)
+		pos = nx.kamada_kawai_layout(graph_sort_nodes_by_id(graph))
 	else:
 		pos = nx.spring_layout(
-			graph,
+			graph_sort_nodes_by_id(graph),
 			seed=seed,
 			k=spring_layout_k,
 			iterations=spring_layout_iterations,
