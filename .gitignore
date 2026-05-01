@@ -182,9 +182,9 @@ cython_debug/
 .abstra/
 
 # Visual Studio Code
-#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
+#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore
 #  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
+#  and can be added to the global gitignore or merged into this file. However, if you prefer,
 #  you could uncomment the following to ignore the entire vscode folder
 # .vscode/
 
@@ -231,3 +231,5 @@ data/raw/base_enespersonas.csv
 scripts/deprecated/
 .snakemake/
 logcat_old.txt
+!"data/processed/enes_all/nodelist_caes_hidalgo_0.0043_pos_louvain.csv"
+!"data/processed/enes_all/nodelist_ciuo_hidalgo_0.0093_pos_louvain.csv"
