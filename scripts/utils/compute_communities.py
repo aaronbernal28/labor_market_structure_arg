@@ -36,9 +36,16 @@ def main() -> None:
 			"Unsupported algorithm. Use one of: louvain, leiden, infomap."
 		)
 
+	# Sort graph nodes by ID to ensure consistent ordering across runs
+	graph = gc.graph_sort_nodes_by_id(graph)
+
 	communities, modularity, best_parameter = algorithm_func(
 		graph, seed=seed, n_samples=50
 	)
+
+	communities = utils.relabel_communities_by_size(communities, order="desc")
+	communities = utils.filter_communities_by_size(communities, min_size=3)
+
 	num_communities = len(set(communities.values()))
 	print(f"Modularity score: {modularity:.4f}")
 	print(f"Best {param_label}: {best_parameter:.3f}")

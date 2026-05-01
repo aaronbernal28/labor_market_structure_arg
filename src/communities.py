@@ -37,8 +37,8 @@ def best_louvain_partition_random(
 	graph: nx.Graph,
 	seed: int = 28,
 	n_samples: int = 20,
-	min_resolution: float = 0.5,
-	max_resolution: float = 5.0,
+	min_resolution: float = 0.8,
+	max_resolution: float = 1.5,
 ) -> Tuple[Dict[int, int], float, float]:
 	"""
 	Find the best Louvain partition by random sampling of resolution values.
@@ -189,8 +189,8 @@ def best_leiden_partition_random(
 	graph: nx.Graph,
 	seed: int = 28,
 	n_samples: int = 20,
-	min_resolution: float = 0.5,
-	max_resolution: float = 5.0,
+	min_resolution: float = 0.8,
+	max_resolution: float = 1.5,
 ) -> Tuple[Dict[int, int], float, float]:
 	"""
 	Find the best Leiden partition by random sampling of resolution values.

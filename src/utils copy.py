@@ -84,23 +84,47 @@ def label_fn(c, pad=2):
 
 @lru_cache(maxsize=1000)
 def parse_color_from_string(color_str: str):
-    try:
-        # Handle numpy string representations like "(np.float64(0.5), np.float64(1.0))"
-        if "np.float64" in color_str or "float" in color_str:
-            # Remove the type names to just get the brackets and numbers
-            clean_str = re.sub(r'np\.float\d*\(', '', color_str).replace(')', '')
-            # Extract all floating point numbers
-            numbers = [float(x) for x in re.findall(r"[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?", clean_str)]
-            if numbers:
-                return tuple(numbers)
+	"""
+	Parse color string into a tuple of floats or a color name.
+	Handles: tuples like "(1, 0, 0)", hex like "#FF0000", named colors, rgb/rgba functions.
+	"""
+	color_str = color_str.strip()
 
-        parsed = ast.literal_eval(color_str)
-        if hasattr(parsed, "__iter__") and not isinstance(parsed, str):
-            return tuple(float(x) for x in parsed)
-        return parsed
-    except (ValueError, SyntaxError, TypeError):
-        print(f"Warning: Unable to parse color string '{color_str}'. Defaulting to gray.")
-        return "gray"
+	# Try literal_eval first for simple tuples/numbers
+	try:
+		parsed = ast.literal_eval(color_str)
+		if hasattr(parsed, "__iter__") and not isinstance(parsed, str):
+			return tuple(float(x) for x in parsed)
+		return parsed
+	except (ValueError, SyntaxError):
+		pass
+
+	# Handle rgb/rgba function notation: rgb(255, 0, 0) or rgba(255, 0, 0, 0.5)
+	if color_str.lower().startswith(("rgb(", "rgba(")):
+		try:
+			# Extract numbers from rgb(...) or rgba(...)
+			import re
+			numbers = re.findall(r"[\d.]+", color_str)
+			# Normalize to 0-1 range if values are > 1 (likely 0-255 range)
+			normalized = []
+			for num in numbers:
+				val = float(num)
+				if val > 1:
+					val = val / 255.0
+				normalized.append(val)
+			return tuple(normalized)
+		except Exception:
+			pass
+
+	# Handle hex colors: #FF0000
+	if color_str.startswith("#"):
+		try:
+			return color_str
+		except Exception:
+			pass
+
+	# Return as-is if it's a named color or unknown format
+	return color_str
 
 
 def parse_color(color_value):

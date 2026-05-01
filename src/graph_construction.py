@@ -198,6 +198,37 @@ def cosine_similarity_weight(G: nx.Graph, u: int, v: int) -> float:
 	)
 
 
+def graph_sort_nodes_by_id(graph: nx.Graph) -> nx.Graph:
+	"""
+	Sort graph nodes by ID internally without damaging the graph structure.
+
+	Creates a new graph with sorted nodes while preserving all edges and attributes.
+
+	Args:
+		graph: A NetworkX graph
+
+	Returns:
+		The same graph structure with nodes ordered by ID
+	"""
+	sorted_nodes = sorted(graph.nodes())
+
+	# Create a new graph with the same type as the original
+	sorted_graph = graph.__class__()
+
+	# Add sorted nodes with their attributes
+	for node in sorted_nodes:
+		sorted_graph.add_node(node, **graph.nodes[node])
+
+	# Add all edges with their attributes
+	for u, v, data in graph.edges(data=True):
+		sorted_graph.add_edge(u, v, **data)
+
+	# Copy graph-level attributes
+	sorted_graph.graph.update(graph.graph)
+
+	return sorted_graph
+
+
 def weighted_hidalgo_weight(
 	G: nx.Graph, u: int, v: int, weight: str = "weight"
 ) -> float:
@@ -296,7 +327,8 @@ def get_projection_positions(
 			seed=seed,
 			k=spring_layout_k,
 			iterations=spring_layout_iterations,
-			threshold=1e-3,
+			threshold=1e-4,
+			weight="weight",
 			method=method,
 		)
 
