@@ -32,6 +32,8 @@ rule all:
 	input:
 		"images/enes_all/00_aed_report/aed_top_sectors.png",
 		"images/enes_all/00_aed_report/aed_top_occupations.png",
+		"images/enes_all/00_aed_report/aed_distributions.png",
+		"images/enes_all/00_aed_report/aed_correlation_matrix.png",
 		"images/enes_all/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap.png",
 		"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
 		"images/enes_all/02_bipartite_plot_by_groups/bipartite_degree_dist.png",
@@ -102,7 +104,9 @@ rule _00_aed_report:
 		"data/processed/{dataset}/nodelist_ciuo.csv"
 	output:
 		"images/{dataset}/00_aed_report/aed_top_sectors.png",
-		"images/{dataset}/00_aed_report/aed_top_occupations.png"
+		"images/{dataset}/00_aed_report/aed_top_occupations.png",
+		"images/{dataset}/00_aed_report/aed_distributions.png",
+		"images/{dataset}/00_aed_report/aed_correlation_matrix.png"
 	log:
 		"images/{dataset}/00_aed_report/aed_report.log"
 	script:

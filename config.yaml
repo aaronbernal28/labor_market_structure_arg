@@ -2,7 +2,7 @@ enes: "enes_2019"
 id_1: "nocues"
 id_2: "nhog"
 max_caes_id: 10000
-seed: 45
+seed: 28
 
 paths:
   data_raw: data/raw

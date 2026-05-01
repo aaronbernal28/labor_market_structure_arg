@@ -11,6 +11,7 @@ def main() -> None:
 	meta_ciuo = snakemake.config["ciuo"]
 	df_nodelist_caes = pd.read_csv(snakemake.input[1], dtype={meta_caes["id"]: int})
 	df_nodelist_ciuo = pd.read_csv(snakemake.input[2], dtype={meta_ciuo["id"]: int})
+	df_individual = pd.read_csv(snakemake.input[0])
 
 	pl.plot_top_n_bar(
 		df=df_nodelist_caes,
@@ -34,6 +35,27 @@ def main() -> None:
 		figsize=snakemake.config["figsizes"]["top_n_bar"],
 		output_path=snakemake.output[1],
 		save=True,
+	)
+
+	dataset_name = snakemake.wildcards.dataset
+	features_to_plot = ["total_income", "age", "nivel_ed"]
+	features_for_corr = features_to_plot + ["sex_id", "public_worker"]
+	weight_col = "ponderation"
+
+	pl.plot_weighted_histograms(
+		df=df_individual,
+		features=features_to_plot,
+		weight_col=weight_col,
+		title=f"Feature Distributions ({dataset_name})",
+		output_path=snakemake.output[2],
+	)
+
+	pl.plot_correlation_matrix(
+		df=df_individual,
+		features=features_for_corr,
+		weight_col=weight_col,
+		title=f"Correlation Matrix ({dataset_name})",
+		output_path=snakemake.output[3],
 	)
 
 	log_lines: list[str] = []
