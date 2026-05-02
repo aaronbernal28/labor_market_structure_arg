@@ -5,6 +5,7 @@ import networkx as nx
 import pandas as pd
 import numpy as np
 import seaborn as sns
+import random
 
 nx.config.warnings_to_ignore.add("cache")
 
@@ -38,17 +39,24 @@ def main() -> None:
 		for resolution in RESOLUTIONS:
 			print(f"Running {algorithm} with resolution {resolution:.2f}...")
 			for seed in seeds:
+				nodes = list(graph.nodes())
+				random.seed(seed)
+				np.random.seed(seed)
+				random.shuffle(nodes)
+				mapping = {old: new for old, new in zip(graph.nodes(), nodes)}
+				G_shuffled = nx.relabel_nodes(graph, mapping)
+
 				if algorithm == "louvain":
 					communities, _ = comm.louvain_partition(
-						graph, seed=seed, resolution=resolution
+						G_shuffled, seed=seed, resolution=resolution
 					)
 				elif algorithm == "leiden":
 					communities, _ = comm.leiden_partition(
-						graph, seed=seed, resolution=resolution
+						G_shuffled, seed=seed, resolution=resolution
 					)
 				elif algorithm == "infomap":
 					communities, _ = comm.infomap_partition(
-						graph, seed=seed, resolution=resolution, markov_time=resolution
+						G_shuffled, seed=seed, resolution=resolution, markov_time=resolution
 					)
 				else:
 					raise NotImplementedError(
