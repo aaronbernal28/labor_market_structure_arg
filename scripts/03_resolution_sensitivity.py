@@ -5,12 +5,14 @@ import networkx as nx
 import pandas as pd
 import numpy as np
 import seaborn as sns
+
 nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
 RESOLUTIONS = np.linspace(0.5, 2.0, num=40)
 TRYS = 20
+
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
@@ -27,7 +29,7 @@ def main() -> None:
 			"num_communities": pd.Series(dtype="int64"),
 			"seed": pd.Series(dtype="int64"),
 		},
-		index=pd.RangeIndex(start=0, stop=0, step=1)
+		index=pd.RangeIndex(start=0, stop=0, step=1),
 	)
 
 	# Generate partitions and collect results
@@ -75,14 +77,27 @@ def main() -> None:
 	# Plotting
 	figsize = snakemake.config["figsizes"]["catplot"]
 	sns.catplot(
-	    data=df, x="resolution", y="num_communities", hue="algorithm",
-	    native_scale=True, zorder=1, alpha=0.5, height=figsize[1], aspect=figsize[0]/figsize[1],
+		data=df,
+		x="resolution",
+		y="num_communities",
+		hue="algorithm",
+		native_scale=True,
+		zorder=1,
+		alpha=0.5,
+		height=figsize[1],
+		aspect=figsize[0] / figsize[1],
 	)
 	sns.regplot(
-	    data=df, x="resolution", y="num_communities",
-	    scatter=False, truncate=False, order=2, color=".2", ax=plt.gca()
+		data=df,
+		x="resolution",
+		y="num_communities",
+		scatter=False,
+		truncate=False,
+		order=2,
+		color=".2",
+		ax=plt.gca(),
 	)
-
+	#plt.grid()
 	plt.savefig(snakemake.output[0], bbox_inches="tight")
 
 
