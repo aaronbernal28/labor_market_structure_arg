@@ -175,6 +175,8 @@ rule _03_resolution_sensitivity:
 	#	"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.log"
 	script:
 		"scripts/03_resolution_sensitivity.py"
+	#shell:
+	#	"export CUDA_PATH=/usr"
 
 
 rule _03_projection_plot_by_groups:

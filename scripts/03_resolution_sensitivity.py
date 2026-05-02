@@ -14,7 +14,10 @@ nx.config.warnings_to_ignore.add("cache")
 snakemake: Any
 
 RESOLUTIONS = np.linspace(0.5, 2.0, num=50)
-TRYS = 20
+TRYS = 15
+algorithm_order = ["infomap", "louvain", "leiden"]
+color_map = {"infomap": "#4B8BBE", "louvain": "#4CB391", "leiden": "#F8766D"}
+marker_map = {"infomap": "+", "louvain": "X", "leiden": "s"}
 
 
 def main() -> None:
@@ -53,24 +56,26 @@ def main() -> None:
 			nodes_sorted_communities_labels = []
 
 			for seed in seeds:
-				nodes = list(graph.nodes())
-				random.seed(seed)
-				np.random.seed(seed)
-				random.shuffle(nodes)
-				mapping = {old: new for old, new in zip(graph.nodes(), nodes)}
-				G_shuffled = nx.relabel_nodes(graph, mapping)
+				G_perturbed = graph.copy()
+
+				edge_drop_fraction = 0.05
+				edges = list(G_perturbed.edges())
+				num_to_remove = int(len(edges) * edge_drop_fraction)
+				edges_to_remove = random.sample(edges, num_to_remove)
+
+				G_perturbed.remove_edges_from(edges_to_remove)
 
 				if algorithm == "louvain":
 					communities, _ = comm.louvain_partition(
-						G_shuffled, seed=seed, resolution=resolution
+						G_perturbed, seed=seed, resolution=resolution
 					)
 				elif algorithm == "leiden":
 					communities, _ = comm.leiden_partition(
-						G_shuffled, seed=seed, resolution=resolution
+						G_perturbed, seed=seed, resolution=resolution
 					)
 				elif algorithm == "infomap":
 					communities, _ = comm.infomap_partition(
-						G_shuffled,
+						G_perturbed,
 						seed=seed,
 						resolution=resolution,
 						markov_time=resolution,
@@ -142,20 +147,18 @@ def main() -> None:
 
 	# Plotting general trends in number of communities
 	figsize = snakemake.config["figsizes"]["catplot"]
-	sns.catplot(
-		data=df,
-		x="resolution",
-		y="num_communities",
-		hue="algorithm",
-		hue_order=["infomap", "louvain", "leiden"],
-		palette=["#4B8BBE", "#4CB391", "#F8766D"],
-		kind="strip",
-		native_scale=True,
-		zorder=1,
-		alpha=0.5,
-		height=figsize[1],
-		aspect=figsize[0] / figsize[1],
-	)
+	fig, ax = plt.subplots(figsize=figsize)
+	for algorithm in algorithm_order:
+		algorithm_data = df[df["algorithm"] == algorithm]
+		ax.scatter(
+			algorithm_data["resolution"],
+			algorithm_data["num_communities"],
+			label=algorithm,
+			marker=marker_map[algorithm],
+			color=color_map[algorithm],
+			alpha=0.5,
+			zorder=2,
+		)
 	sns.regplot(
 		data=df,
 		x="resolution",
@@ -164,26 +167,61 @@ def main() -> None:
 		truncate=False,
 		order=2,
 		color=".2",
-		ax=plt.gca(),
+		ax=ax,
 	)
+	ax.legend(title="algorithm")
 	# TODO: Add vertical lines for each algorithm's "best" resolution
-	plt.grid()
-	plt.savefig(snakemake.output[0], bbox_inches="tight")
+	ax.grid(True)
+	fig.savefig(snakemake.output[0], bbox_inches="tight")
 
 	# Plotting scores — create separate plots for AMI and NMI using jointplot
 	for score_type in ["AMI", "NMI"]:
 		# Filter data for just this score type (keep all algorithms!)
 		data_subset = df_scores[df_scores["score_type"] == score_type]
 
-		# Create the jointplot using hue
-		g = sns.jointplot(
+		g = sns.JointGrid(
 			data=data_subset,
 			x="resolution",
 			y="score",
-			hue="algorithm",
-			hue_order=["infomap", "louvain", "leiden"],
-			palette=["#4B8BBE", "#4CB391", "#F8766D"],
-			alpha=0.5,  # Make points transparent so overlapping is visible
+			height=figsize[1],
+			space=0.1,
+		)
+		for algorithm in algorithm_order:
+			algorithm_data = data_subset[data_subset["algorithm"] == algorithm]
+			g.ax_joint.scatter(
+				algorithm_data["resolution"],
+				algorithm_data["score"],
+				label=algorithm,
+				marker=marker_map[algorithm],
+				color=color_map[algorithm],
+				alpha=0.5,
+			)
+			sns.histplot(
+				algorithm_data,
+				x="resolution",
+				ax=g.ax_marg_x,
+				color=color_map[algorithm],
+				alpha=0.25,
+				stat="density",
+				element="step",
+				common_norm=False,
+			)
+			sns.histplot(
+				algorithm_data,
+				y="score",
+				ax=g.ax_marg_y,
+				color=color_map[algorithm],
+				alpha=0.25,
+				stat="density",
+				element="step",
+				common_norm=False,
+			)
+		legend_handles, legend_labels = g.ax_joint.get_legend_handles_labels()
+		label_to_handle = dict(zip(legend_labels, legend_handles))
+		g.ax_joint.legend(
+			[label_to_handle[algorithm] for algorithm in algorithm_order],
+			algorithm_order,
+			title="algorithm",
 		)
 		# TODO: Add vertical lines for each algorithm's "best" resolution
 

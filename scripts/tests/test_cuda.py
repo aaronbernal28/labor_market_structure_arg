@@ -26,8 +26,11 @@ print(f"Modularity score: {nx.algorithms.community.modularity(G, communities_cpu
 
 # 3. Test Leiden Community Detection (using the 'cugraph' backend)
 start = time.time()
-communities_gpu = nx.algorithms.community.leiden_communities(G, backend="cugraph")
+communities_gpu = nx.algorithms.community.leiden_communities(
+	G, backend="cugraph", random_state=42
+)
 print(f"Leiden GPU Time: {time.time() - start:.4f}s")
 print(f"Number of communities detected: {len(communities_gpu)}")
 print(f"Sizes of first 5 communities: {[len(c) for c in communities_gpu[:5]]}")
 print(f"Modularity score: {nx.algorithms.community.modularity(G, communities_gpu):.4f}")
+
