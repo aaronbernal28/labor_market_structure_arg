@@ -16,7 +16,7 @@ from infomap import Infomap
 
 
 def louvain_partition(
-	graph: nx.Graph, resolution: float = 1.0, seed: int = 28
+	graph: nx.Graph, resolution: float = 1.0, seed: int = 28, markov_time=1.0
 ) -> Tuple[Dict[int, int], float]:
 	"""
 	Run Louvain and return the partition map plus modularity.
@@ -171,7 +171,7 @@ def best_louvain_partition_search(
 
 
 def leiden_partition(
-	graph: nx.Graph, resolution: float = 1.0, seed: int = 28
+	graph: nx.Graph, resolution: float = 1.0, seed: int = 28, markov_time=1.0
 ) -> Tuple[Dict[int, int], float]:
 	"""
 	Run Leiden and return the partition map plus modularity.

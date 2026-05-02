@@ -128,3 +128,9 @@ cmaps:
   female_pct: "coolwarm"
   public_sector_pct: "PRGn"
   default: "magma"
+
+community:
+  resolution:
+    caes: ["0.9"]
+    ciuo: ["1.9"]
+    cno: ["1.0"]

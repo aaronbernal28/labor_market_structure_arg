@@ -1,3 +1,4 @@
+import random
 from typing import Any
 from scripts import *
 import matplotlib.pyplot as plt
@@ -14,6 +15,7 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	dataset = snakemake.wildcards["dataset"]
 	seed = int(snakemake.config["seed"])
+	resolution = snakemake.config["community"]["resolution"][class_]
 
 	id_col = snakemake.config[class_]["id"]
 	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
@@ -24,13 +26,13 @@ def main() -> None:
 	algorithm = snakemake.wildcards["algorithm"].lower()
 
 	if algorithm == "louvain":
-		algorithm_func = comm.best_louvain_partition_random
+		algorithm_func = comm.louvain_partition
 		param_label = "resolution"
 	elif algorithm == "leiden":
-		algorithm_func = comm.best_leiden_partition_random
+		algorithm_func = comm.leiden_partition
 		param_label = "resolution"
 	elif algorithm == "infomap":
-		algorithm_func = comm.best_infomap_partition_random
+		algorithm_func = comm.infomap_partition
 		param_label = "markov_time"
 	else:
 		raise NotImplementedError(
@@ -38,10 +40,14 @@ def main() -> None:
 		)
 
 	# Sort graph nodes by ID to ensure consistent ordering across runs
-	graph = gc.graph_sort_nodes_by_id(graph)
+	nodes = list(graph.nodes())
+	random.seed(seed)
+	random.shuffle(nodes)
+	mapping = {old: new for old, new in zip(graph.nodes(), nodes)}
+	G_shuffled = nx.relabel_nodes(graph, mapping)
 
 	communities, modularity, best_parameter = algorithm_func(
-		graph, seed=seed, n_samples=50
+		G_shuffled, seed=seed, resolution=resolution, markov_time=resolution
 	)
 
 	communities = utils.relabel_communities_by_size(communities, order="desc")
