@@ -1,4 +1,3 @@
-
 import json
 from typing import Any
 
@@ -7,6 +6,7 @@ import networkx as nx
 import numpy as np
 
 snakemake: Any
+
 
 def _reference_alpha_from_lcc(
 	alphas: np.ndarray, nodes_largest_cc: np.ndarray
@@ -19,6 +19,7 @@ def _reference_alpha_from_lcc(
 	if ref is None:
 		ref = float(alphas[-1])
 	return ref
+
 
 def main() -> None:
 	projection = nx.read_gexf(snakemake.input[0], node_type=int)
@@ -76,5 +77,7 @@ def main() -> None:
 			f"Modularity max: {modularities.max():.4f}",
 		],
 	)
+
+
 if __name__ == "__main__":
 	main()

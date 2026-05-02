@@ -18,7 +18,7 @@ ALPHA_EPH = (logspace(-10, 0, 60).round(4).astype(str)).tolist()
 ALPHAS_ALL = ALPHA_CAES + ALPHA_CIUO + ALPHA_EPH
 TOPO_METHOD = ["shortest_path", "disparity_filtration"]
 EPH_YEARS = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
-EPH_FILES = glob_wildcards("data/raw/{eph_file}.csv").eph_file
+EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
 DATASETS_ALL = DATASETS + EPH_FILES
 
 wildcard_constraints:
@@ -259,6 +259,8 @@ rule _09_alpha_sensitivity_eph:
 			"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json",
 			dataset=EPH_FILES,
 			class_=wildcards.class_,
+			weight_function=wildcards.weight_function,
+			algorithm=wildcards.algorithm,
 		)
 	output:
 		"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png"
@@ -278,13 +280,13 @@ rule _10_edge_weight_correlation_eph:
 		class_ = "caes|cno"
 	input:
 		projections=lambda wildcards: expand(
-			"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf",
+			"data/graphs/{eph_file}/{class_}/projection_{weight_function}.gexf",
 			eph_file=EPH_FILES,
 			class_=wildcards.class_,
 			weight_function=wildcards.weight_function,
 		),
 		processed=lambda wildcards: expand(
-			"data/processed/eph/{eph_file}.csv",
+			"data/processed/{eph_file}.csv",
 			eph_file=EPH_FILES,
 		),
 	output:
