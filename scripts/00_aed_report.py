@@ -1,8 +1,9 @@
+from typing import Any
 from scripts import *
 import matplotlib.pyplot as plt
 import pandas as pd
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:
@@ -17,8 +18,8 @@ def main() -> None:
 		df=df_nodelist_caes,
 		label_col=meta_caes["label"],
 		val_col="n_obs",
-		color_col=None,
-		title=None,
+		color_col="",
+		title="",
 		xlabel="Workers",
 		figsize=snakemake.config["figsizes"]["top_n_bar"],
 		output_path=snakemake.output[0],
@@ -29,8 +30,8 @@ def main() -> None:
 		df=df_nodelist_ciuo,
 		label_col=meta_ciuo["label"],
 		val_col="n_obs",
-		color_col=None,
-		title=None,
+		color_col="",
+		title="",
 		xlabel="Workers",
 		figsize=snakemake.config["figsizes"]["top_n_bar"],
 		output_path=snakemake.output[1],
@@ -40,12 +41,12 @@ def main() -> None:
 	dataset_name = snakemake.wildcards.dataset
 	features_to_plot = ["total_income", "age", "nivel_ed"]
 	features_for_corr = features_to_plot + ["sex_id", "public_worker"]
-	weight_col = "ponderation"
+	calib_col = "ponderation" if "ponderation" in df_individual.columns else None
 
 	pl.plot_weighted_histograms(
 		df=df_individual,
 		features=features_to_plot,
-		weight_col=weight_col,
+		calib_col=calib_col,
 		title=f"Feature Distributions ({dataset_name})",
 		output_path=snakemake.output[2],
 	)
@@ -53,7 +54,7 @@ def main() -> None:
 	pl.plot_correlation_matrix(
 		df=df_individual,
 		features=features_for_corr,
-		weight_col=weight_col,
+		calib_col=calib_col,
 		title=f"Correlation Matrix ({dataset_name})",
 		output_path=snakemake.output[3],
 	)

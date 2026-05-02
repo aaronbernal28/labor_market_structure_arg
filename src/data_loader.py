@@ -65,9 +65,10 @@ def lcd_load_eph_base(
 	id_3: str | None = None,
 	features: List[Feature] | None = None,
 	max_caes_id: int = 10000,
+	calib_col: str | None = None,
 ) -> pd.DataFrame:
 	# Keep optional args in signature for parity with ENES-style loaders.
-	_ = (id_1, id_2, id_3, features)
+	_ = (id_1, id_2, id_3, features, calib_col)
 
 	df_eph = df_eph.dropna(subset=[id_caes, id_cno]).copy()
 
@@ -105,9 +106,11 @@ def lcd_load_enes_base(
 	id_ciuo: str,
 	features: List[Feature],
 	max_caes_id: int = 10000,
+	calib_col: str | None = None,
 ) -> pd.DataFrame:
 
 	# Copy after filtering to avoid chained-assignment warnings in pandas.
+	_ = (id_1, id_2, features, calib_col)
 	df_enes = df_enes.dropna(subset=[id_ciuo, id_caes]).copy()
 	df_enes.loc[:, id_caes] = df_enes[id_caes].astype(int)
 	df_enes.loc[:, id_ciuo] = df_enes[id_ciuo].astype(int)

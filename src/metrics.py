@@ -35,16 +35,33 @@ def diameter_of_largest_component(graph: nx.Graph) -> Optional[int]:
 
 def summarize_graph(graph: nx.Graph) -> Dict[str, MetricValue]:
 	"""Compute a handful of descriptive metrics for the graph."""
+	# basic counts
+	node_count = graph.number_of_nodes()
+	edge_count = graph.number_of_edges()
+	self_loops = nx.number_of_selfloops(graph)
+
+	# degrees
+	avg_deg = average_degree(graph)
+	avg_wdeg = average_degree(graph, weight="weight")
+
+	# clustering: guard weighted call against division-by-zero in networkx
+	avg_clust = nx.average_clustering(graph) if node_count > 0 else 0.0
+	try:
+		avg_wclust = (
+			nx.average_clustering(graph, weight="weight") if node_count > 0 else 0.0
+		)
+	except ZeroDivisionError:
+		# fallback to unweighted clustering when weights are all zero
+		avg_wclust = avg_clust
+
 	return {
-		"node_count": graph.number_of_nodes(),
-		"edge_count": graph.number_of_edges(),
-		"self_loops": nx.number_of_selfloops(graph),
-		"avg_degree": average_degree(graph),
-		"avg_weighted_degree": average_degree(graph, weight="weight"),
-		"avg_clustering": nx.average_clustering(graph),
-		"avg_weighted_clustering": nx.average_clustering(graph, weight="weight")
-		if graph.number_of_nodes() > 0
-		else 0.0,
+		"node_count": node_count,
+		"edge_count": edge_count,
+		"self_loops": self_loops,
+		"avg_degree": avg_deg,
+		"avg_weighted_degree": avg_wdeg,
+		"avg_clustering": avg_clust,
+		"avg_weighted_clustering": avg_wclust,
 		"connected_components": nx.number_connected_components(graph),
 		"diameter": diameter_of_largest_component(graph),
 	}

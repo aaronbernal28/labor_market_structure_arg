@@ -1,9 +1,10 @@
+from typing import Any
 from pathlib import Path
 from scripts import *
 import networkx as nx
 import pandas as pd
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:

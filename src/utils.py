@@ -84,23 +84,30 @@ def label_fn(c, pad=2):
 
 @lru_cache(maxsize=1000)
 def parse_color_from_string(color_str: str):
-    try:
-        # Handle numpy string representations like "(np.float64(0.5), np.float64(1.0))"
-        if "np.float64" in color_str or "float" in color_str:
-            # Remove the type names to just get the brackets and numbers
-            clean_str = re.sub(r'np\.float\d*\(', '', color_str).replace(')', '')
-            # Extract all floating point numbers
-            numbers = [float(x) for x in re.findall(r"[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?", clean_str)]
-            if numbers:
-                return tuple(numbers)
+	try:
+		# Handle numpy string representations like "(np.float64(0.5), np.float64(1.0))"
+		if "np.float64" in color_str or "float" in color_str:
+			# Remove the type names to just get the brackets and numbers
+			clean_str = re.sub(r"np\.float\d*\(", "", color_str).replace(")", "")
+			# Extract all floating point numbers
+			numbers = [
+				float(x)
+				for x in re.findall(
+					r"[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?", clean_str
+				)
+			]
+			if numbers:
+				return tuple(numbers)
 
-        parsed = ast.literal_eval(color_str)
-        if hasattr(parsed, "__iter__") and not isinstance(parsed, str):
-            return tuple(float(x) for x in parsed)
-        return parsed
-    except (ValueError, SyntaxError, TypeError):
-        print(f"Warning: Unable to parse color string '{color_str}'. Defaulting to gray.")
-        return "gray"
+		parsed = ast.literal_eval(color_str)
+		if hasattr(parsed, "__iter__") and not isinstance(parsed, str):
+			return tuple(float(x) for x in parsed)
+		return parsed
+	except (ValueError, SyntaxError, TypeError):
+		print(
+			f"Warning: Unable to parse color string '{color_str}'. Defaulting to gray."
+		)
+		return "gray"
 
 
 def parse_color(color_value):

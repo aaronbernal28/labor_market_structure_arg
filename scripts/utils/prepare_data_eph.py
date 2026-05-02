@@ -1,7 +1,8 @@
+from typing import Any
 from scripts import *
 import pandas as pd
 
-snakemake: any
+snakemake: Any
 
 
 def _resolve_column(columns: list[str], candidates: list[str]) -> str | None:
@@ -27,6 +28,8 @@ def _resolve_feature_source(
 
 def main() -> None:
 	dataset_cfg = snakemake.config["datasets"]["eph_generic"]
+	ponderation_source = dataset_cfg.get("ponderation")
+	print(f"Configured ponderation source: {ponderation_source}")
 
 	id_1 = dataset_cfg["id_1"]
 	id_2 = dataset_cfg["id_2"]
@@ -61,6 +64,7 @@ def main() -> None:
 		id_cno=id_cno,
 		features=features,
 		max_caes_id=10000,
+		calib_col=ponderation_source,
 	)
 
 	feature_fallbacks: dict[str, list[str]] = {
@@ -81,6 +85,14 @@ def main() -> None:
 		if source_col and source_col in df_eph.columns and source_col != feature_name:
 			rename_cols[source_col] = feature_name
 
+	if ponderation_source and ponderation_source in df_eph.columns:
+		print(f"Using '{ponderation_source}' as ponderation column.")
+		rename_cols[ponderation_source] = "ponderation"
+	else:
+		raise KeyError(
+			f"Could not resolve ponderation {ponderation_source} column in input file."
+		)
+
 	id_caes_out = snakemake.config["caes"]["id"]
 	id_cno_out = snakemake.config["cno"]["id"]
 
@@ -92,7 +104,14 @@ def main() -> None:
 
 	df_eph = dl.clean_enes_base_features(df_eph, features)
 
-	output_cols = [id_1, id_2, id_3, id_caes_out, id_cno_out] + feature_names
+	output_cols = [
+		id_1,
+		id_2,
+		id_3,
+		id_caes_out,
+		id_cno_out,
+		"ponderation",
+	] + feature_names
 	output_cols = [col for col in output_cols if col is not None]
 	for col in output_cols:
 		if col not in df_eph.columns:
@@ -110,6 +129,45 @@ def main() -> None:
 	df_eph["total_income"] = (
 		df_eph["total_income"].replace(-9.0, pd.NA).replace(-9, pd.NA)
 	)
+
+	ponderation_numeric = pd.to_numeric(df_eph["ponderation"], errors="coerce")
+	ponderation_missing = int(ponderation_numeric.isna().sum())
+	ponderation_nonpositive = int((ponderation_numeric <= 0).sum())
+
+	log_lines: list[str] = []
+	log_lines.append("=" * 60)
+	log_lines.append("PREPARE EPH DATA")
+	log_lines.append("=" * 60)
+	log.add_snakemake_overview(log_lines, snakemake)
+	log.add_notes(
+		log_lines,
+		"SOURCE",
+		[
+			f"ID_1: {id_1}",
+			f"ID_2: {id_2}",
+			f"ID_3: {id_3}",
+			f"ID_CAES: {id_caes}",
+			f"ID_CNO: {id_cno}",
+			f"Ponderation source: {ponderation_source}",
+		],
+	)
+	log.add_notes(
+		log_lines,
+		"PONDERATION",
+		[
+			"EPH rows retain a ponderation column for weighted edges.",
+			f"Missing values: {ponderation_missing}",
+			f"Non-positive values: {ponderation_nonpositive}",
+		],
+	)
+	log.add_dataframe_info(
+		log_lines,
+		"OUTPUT DATA",
+		row_count=len(df_eph),
+		column_count=len(df_eph.columns),
+	)
+	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
+	log.write_log(log_lines, log_path)
 
 	df_eph.to_csv(snakemake.output[0], index=False)
 

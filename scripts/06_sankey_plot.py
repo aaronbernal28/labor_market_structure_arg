@@ -1,10 +1,11 @@
+from typing import Any
 from scripts import *
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.graph_objects as go
 import re
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:

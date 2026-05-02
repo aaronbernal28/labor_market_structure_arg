@@ -1,7 +1,8 @@
+from typing import Any
 from scripts import *
 import pandas as pd
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:
@@ -17,6 +18,7 @@ def main() -> None:
 	ID_2 = dataset_input["id_2"]
 	ID_CAES = dataset_input["id_caes"]
 	ID_CIUO = dataset_input["id_ciuo"]
+	CALIB_COL = dataset_input.get("ponderation")
 
 	FEATURES = [
 		dl.Feature(**feature) for feature in snakemake.config["datasets"]["features"]
@@ -35,6 +37,7 @@ def main() -> None:
 		id_caes=ID_CAES,
 		id_ciuo=ID_CIUO,
 		features=FEATURES,
+		calib_col=CALIB_COL,
 	)
 
 	# Normalize IDs and features to the default dataset schema (enes_2019 in this project).
@@ -47,6 +50,12 @@ def main() -> None:
 		rename_cols[ID_1] = default_cfg["id_1"]
 	if ID_2 and default_cfg.get("id_2") and ID_2 != default_cfg["id_2"]:
 		rename_cols[ID_2] = default_cfg["id_2"]
+	if (
+		CALIB_COL
+		and default_cfg.get("ponderation")
+		and CALIB_COL != default_cfg["ponderation"]
+	):
+		rename_cols[CALIB_COL] = default_cfg["ponderation"]
 
 	for feature_name in feature_names:
 		source_col = dataset_features.get(feature_name)
@@ -87,6 +96,7 @@ def main() -> None:
 		output_id_2,
 		output_id_caes,
 		output_id_ciuo,
+		"ponderation",
 	] + feature_names
 	output_cols = [col for col in output_cols if col is not None]
 	for col in output_cols:

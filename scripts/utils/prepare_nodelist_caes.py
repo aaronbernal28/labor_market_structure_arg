@@ -1,7 +1,8 @@
+from typing import Any
 from scripts import *
 import pandas as pd
 
-snakemake: any
+snakemake: Any
 
 
 CHARACTERISTIC_COLUMNS = [

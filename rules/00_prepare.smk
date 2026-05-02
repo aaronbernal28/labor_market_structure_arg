@@ -6,6 +6,8 @@ rule prepare_data_enes:
 	'''
 	wildcard_constraints:
 		dataset = "enes_2019|enes_2021"
+	input:
+		lambda wildcards: "data/raw/base_enespersonas_2021.csv" if wildcards.dataset == "enes_2021" else "data/raw/base_enespersonas.csv"
 	output:
 		"data/processed/{dataset}.csv"
 	log:

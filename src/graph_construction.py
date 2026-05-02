@@ -38,19 +38,30 @@ def build_bipartite_graph(
 	caes_nodes = sorted(list(set(enes_df[caes_id].unique())))
 	ciuo_nodes = sorted(list(set(enes_df[ciuo_id].unique())))
 
-	assert set(caes_nodes) & set(ciuo_nodes) == set(), "CAES and CIUO IDs must be disjoint."
+	assert set(caes_nodes) & set(ciuo_nodes) == set(), (
+		"CAES and CIUO IDs must be disjoint."
+	)
 
 	# Build bipartite graph
 	graph = nx.Graph()
 	graph.add_nodes_from(caes_nodes, bipartite=caes_partition)
 	graph.add_nodes_from(ciuo_nodes, bipartite=ciuo_partition)
 
-	edges = (
-		enes_df.groupby([caes_id, ciuo_id])
-		.size()
-		.apply(lambda x: x if not logscale else float(np.log1p(x)))
-		.reset_index(name="weight")
-	)
+	# Use an explicit calibration/weight column if present
+	calib_col = "ponderation" if "ponderation" in enes_df.columns else None
+	grouped = enes_df.groupby([caes_id, ciuo_id])
+	if calib_col is not None:
+		# Inspect the calibration column to decide whether to treat it as weights
+		col_vals = enes_df[calib_col].dropna().astype(float)
+		if col_vals.empty or col_vals.nunique() <= 1:
+			# No meaningful variation in calibration -> use counts instead
+			edges = grouped.size().reset_index(name="weight")
+		else:
+			edges = grouped[calib_col].sum().reset_index(name="weight")
+	else:
+		edges = grouped.size().reset_index(name="weight")
+	if logscale:
+		edges["weight"] = edges["weight"].apply(lambda x: float(np.log1p(x)))
 
 	# Add edges with weights using vectorization
 	graph.add_weighted_edges_from(
@@ -582,7 +593,13 @@ def compute_sweep_alpha(
 			nodes_largest_cc[i] = 0.0
 
 		if backbone.number_of_edges() > 0:
-			clustering_coeffs[i] = nx.average_clustering(backbone, weight="weight")
+			# networkx.average_clustering with weights can raise ZeroDivisionError
+			# when all edge weights are zero (division by max weight). Catch that
+			# and fall back to the unweighted clustering coefficient.
+			try:
+				clustering_coeffs[i] = nx.average_clustering(backbone, weight="weight")
+			except ZeroDivisionError:
+				clustering_coeffs[i] = nx.average_clustering(backbone)
 			_, mod, _ = algorithm_func(backbone, seed=seed, n_samples=10)
 			modularities[i] = mod
 		else:

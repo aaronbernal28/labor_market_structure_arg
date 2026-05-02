@@ -1,7 +1,8 @@
+from typing import Any
 from scripts import *
 import networkx as nx
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:

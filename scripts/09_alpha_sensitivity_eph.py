@@ -1,25 +1,27 @@
 from pathlib import Path
 from typing import Any
-
+import json
 from scripts import *
 import matplotlib.pyplot as plt
-import networkx as nx
 import numpy as np
 
 snakemake: Any
 
 
-def _reference_alpha_from_lcc(
-	alphas: np.ndarray, nodes_largest_cc: np.ndarray
-) -> float:
-	ref = None
-	for i, a in enumerate(alphas):
-		if nodes_largest_cc[i] > 0.95:
-			ref = float(a)
-			break
-	if ref is None:
-		ref = float(alphas[-1])
-	return ref
+def _extract_eph_file(metrics: dict[str, Any], input_path: Path) -> str:
+	eph_file = metrics.get("eph_file")
+	if isinstance(eph_file, str) and eph_file:
+		return eph_file
+
+	# Expected path pattern:
+	# data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json
+	parts = list(input_path.parts)
+	if "processed" in parts:
+		idx = parts.index("processed")
+		if idx + 1 < len(parts):
+			return parts[idx + 1]
+
+	return input_path.stem
 
 
 def main() -> None:
@@ -29,21 +31,31 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	weight_function = snakemake.wildcards["weight_function"]
 
-	seed = int(snakemake.config["seed"])
-	alphas = np.logspace(-10, 0, 60)
-	alphas.sort()
-
 	input_paths = [Path(p) for p in snakemake.input]
-	eph_files_raw = [utils.extract_eph_file_from_path(p) for p in input_paths]
 
-	# Ensure unique mapping eph_file -> path (keep first occurrence)
-	eph_to_path = {}
-	for eph_file, p in zip(eph_files_raw, input_paths, strict=False):
-		eph_to_path.setdefault(eph_file, p)
+	# Load all JSON results and assign an eph_file key for ordering.
+	results_with_keys: list[tuple[str, dict[str, Any]]] = []
+	for p in input_paths:
+		with open(p, "r") as f:
+			metrics_data = json.load(f)
+		eph_file = _extract_eph_file(metrics_data, p)
+		results_with_keys.append((eph_file, metrics_data))
 
-	eph_files_sorted = utils.sort_eph_files(list(eph_to_path.keys()))
+	# Ensure unique mapping eph_file -> data (keep first occurrence)
+	# and sort chronologically
+	eph_to_data: dict[str, dict[str, Any]] = {}
+	for eph_file, metrics_data in results_with_keys:
+		eph_to_data.setdefault(eph_file, metrics_data)
 
-	n_series = len(eph_files_sorted)
+	eph_files_sorted = utils.sort_eph_files(list(eph_to_data.keys()))
+	results_sorted = [eph_to_data[f] for f in eph_files_sorted]
+
+	n_series = len(results_sorted)
+	if n_series == 0:
+		raise ValueError("No input metrics found.")
+
+	# Assume alphas are consistent across all runs
+	alphas = np.array(results_sorted[0]["alphas"])
 	n_alphas = len(alphas)
 
 	nodes_with_edges_all = np.empty((n_series, n_alphas), dtype=float)
@@ -55,26 +67,30 @@ def main() -> None:
 
 	graph_metrics: dict[str, dict] = {}
 
-	for i, eph_file in enumerate(eph_files_sorted):
-		# NOTE: this block must be ruled to improve efficiency and take advantage of parallelization
-		projection_path = eph_to_path[eph_file]
-		projection = nx.read_gexf(projection_path, node_type=int)
-		graph_metrics[eph_file] = metrics.summarize_graph(projection)
+	for i, (eph_file, metrics_data) in enumerate(zip(eph_files_sorted, results_sorted)):
+		series_alphas = np.array(metrics_data["alphas"])
+		if len(series_alphas) != n_alphas or not np.allclose(series_alphas, alphas):
+			raise ValueError(
+				f"Alpha grid mismatch for {eph_file}: expected {n_alphas} values from first series."
+			)
 
-		(
-			nodes_with_edges,
-			edge_counts,
-			clustering_coeffs,
-			modularities,
-			nodes_largest_cc,
-		) = gc.compute_sweep_alpha(projection, alphas, seed, algorithm=algorithm)
+		nodes_with_edges = np.array(metrics_data["nodes_with_edges"])
+		edge_counts = np.array(metrics_data["edge_counts"])
+		clustering_coeffs = np.array(metrics_data["clustering_coeffs"])
+		modularities = np.array(metrics_data["modularities"])
+		nodes_largest_cc = np.array(metrics_data["nodes_largest_cc"])
+		reference_alpha = float(metrics_data["reference_alpha"])
 
 		nodes_with_edges_all[i, :] = nodes_with_edges
 		edge_counts_all[i, :] = edge_counts
 		clustering_all[i, :] = clustering_coeffs
 		modularities_all[i, :] = modularities
 		nodes_lcc_all[i, :] = nodes_largest_cc
-		reference_alphas[i] = _reference_alpha_from_lcc(alphas, nodes_largest_cc)
+		reference_alphas[i] = reference_alpha
+
+		gm = metrics_data.get("graph_metrics")
+		if isinstance(gm, dict):
+			graph_metrics[eph_file] = gm
 
 	title = f"EPH - {class_} - {weight_function} ({algorithm})"
 	pl.plot_alpha_sensitivity_multi_series(
@@ -96,7 +112,7 @@ def main() -> None:
 
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)
-	log_lines.append("ALPHA SENSITIVITY (EPH - ALL FILES)")
+	log_lines.append("ALPHA SENSITIVITY (EPH - ALL FILES - PARALLEL)")
 	log_lines.append("=" * 60)
 	log.add_snakemake_overview(log_lines, snakemake)
 	log.add_notes(

@@ -10,20 +10,6 @@ rule compute_projection:
 		"../scripts/utils/build_projection.py"
 
 
-rule compute_projection_eph:
-	'''Build projection graph from EPH bipartite graph based on caes or cno.'''
-	wildcard_constraints:
-		class_ = "caes|cno"
-	input:
-		"data/graphs/eph/{eph_file}/bipartite_eph.gexf"
-	output:
-		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
-	log:
-		"images/eph/{eph_file}/{class_}/compute_projection_{weight_function}.log"
-	script:
-		"../scripts/utils/build_projection.py"
-
-
 rule filter_projection:
 	'''Filter projection graph by degree.'''
 	input:
@@ -35,3 +21,15 @@ rule filter_projection:
 		"images/{dataset}/{class_}/backbone_weight_histogram_{weight_function}_{alpha}.log"
 	script:
 		"../scripts/utils/filter_projection.py"
+
+
+rule _compute_alpha_sensitivity:
+	"""Worker for alpha sensitivity: sweep a single projection graph and save metrics to JSON."""
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
+	output:
+		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json"
+	log:
+		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.log"
+	script:
+		"../scripts/utils/compute_alpha_sensitivity.py"

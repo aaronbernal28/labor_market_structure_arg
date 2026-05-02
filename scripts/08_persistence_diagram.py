@@ -1,3 +1,4 @@
+from typing import Any
 from pathlib import Path
 from scripts import *
 import matplotlib.pyplot as plt
@@ -6,7 +7,7 @@ import numpy as np
 
 import src.topology as topo
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:

@@ -1,10 +1,11 @@
+from typing import Any
 from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import matplotlib.colors as mcolors
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:

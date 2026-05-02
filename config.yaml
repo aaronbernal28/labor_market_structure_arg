@@ -27,9 +27,6 @@ datasets:
     - name: "nivel_ed"
       type: "float"
       default: NaN
-    - name: "ponderation"
-      type: "float"
-      default: 1
 
   enes_2019:
     source: data/raw/base_enespersonas.csv
@@ -40,7 +37,7 @@ datasets:
     id_caes: "v182caes"
     id_ciuo: "v183ciuo"
     id_cno: "v183cno"
-    ponderation: "f_calib3"
+    ponderation: null #"f_calib3"
     features:
       sex_id: "v109"
       public_worker: "v188" # en realidad es "v188"==1

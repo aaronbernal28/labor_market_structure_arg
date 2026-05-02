@@ -1,39 +1,26 @@
+from typing import Any
 from pathlib import Path
-
 from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+import json
 
-snakemake: any
+snakemake: Any
 
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
-	projection = nx.read_gexf(snakemake.input[0], node_type=int)
-	graph_metrics = metrics.summarize_graph(projection)
-	algorithm = snakemake.wildcards["algorithm"]
+	with open(snakemake.input[0], "r") as f:
+		metrics = json.load(f)
 
-	seed = int(snakemake.config["seed"])
-	alphas = np.logspace(-10, 0, 60)
-	alphas.sort()
-
-	(
-		nodes_with_edges,
-		edge_counts,
-		clustering_coeffs,
-		modularities,
-		nodes_largest_cc,
-	) = gc.compute_sweep_alpha(projection, alphas, seed, algorithm=algorithm)
-
-	# Find the minimum alpha where nodes in largest CC > 95%
-	reference_alpha = None
-	for i, a in enumerate(alphas):
-		if nodes_largest_cc[i] > 0.95:
-			reference_alpha = a
-			break
-	if reference_alpha is None:
-		reference_alpha = alphas[-1]
+	alphas = np.array(metrics["alphas"])
+	nodes_with_edges = np.array(metrics["nodes_with_edges"])
+	edge_counts = np.array(metrics["edge_counts"])
+	clustering_coeffs = np.array(metrics["clustering_coeffs"])
+	modularities = np.array(metrics["modularities"])
+	nodes_largest_cc = np.array(metrics["nodes_largest_cc"])
+	reference_alpha = metrics["reference_alpha"]
 
 	title = (
 		f"{snakemake.wildcards['dataset']} - "
@@ -74,7 +61,6 @@ def main() -> None:
 			f"Modularity max: {modularities.max():.4f}",
 		],
 	)
-	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 

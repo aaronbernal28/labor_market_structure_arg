@@ -21,15 +21,24 @@ def louvain_partition(
 	"""
 	Run Louvain and return the partition map plus modularity.
 	"""
-	communities_list = louvain_communities(
-		graph, weight="weight", resolution=resolution, seed=seed
-	)
+	# Prefer weighted Louvain but fall back to unweighted if weights cause errors
+	try:
+		communities_list = louvain_communities(
+			graph, weight="weight", resolution=resolution, seed=seed
+		)
+	except ZeroDivisionError:
+		communities_list = louvain_communities(
+			graph, weight=None, resolution=resolution, seed=seed
+		)
 
 	# Convert to dict format: node -> community_id
 	communities = {node: i for i, comm in enumerate(communities_list) for node in comm}
 
-	# Calculate modularity score
-	score = modularity(graph, communities_list, weight="weight")
+	# Calculate modularity score; fall back to unweighted if weighted fails
+	try:
+		score = modularity(graph, communities_list, weight="weight")
+	except ZeroDivisionError:
+		score = modularity(graph, communities_list, weight=None)
 	return communities, score
 
 
@@ -64,7 +73,9 @@ def best_louvain_partition_random(
 	for i, resolution in enumerate(resolutions):
 		# Use deterministic seed derived from base seed
 		current_seed = seed + i
-		partition, score = louvain_partition(graph, resolution=resolution, seed=current_seed)
+		partition, score = louvain_partition(
+			graph, resolution=resolution, seed=current_seed
+		)
 
 		if score > best_score:
 			best_partition = partition
@@ -208,7 +219,9 @@ def best_leiden_partition_random(
 	for i, resolution in enumerate(resolutions):
 		# Use deterministic seed derived from base seed
 		current_seed = seed + i
-		partition, score = leiden_partition(graph, resolution=resolution, seed=current_seed)
+		partition, score = leiden_partition(
+			graph, resolution=resolution, seed=current_seed
+		)
 
 		if score > best_score:
 			best_partition = partition

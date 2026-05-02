@@ -1,9 +1,10 @@
+from typing import Any
 from scripts import *
 import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
 
-snakemake: any
+snakemake: Any
 
 
 def _resolve_community_column(df: pd.DataFrame, preferred: str | None) -> str:
