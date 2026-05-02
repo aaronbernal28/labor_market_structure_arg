@@ -326,7 +326,7 @@ def best_infomap_partition_random(
 
 
 def girvan_newman_partition(
-	graph: nx.Graph, max_levels: int = 20
+	graph: nx.Graph, max_levels: int = 20, resolution: float = 1.0
 ) -> Tuple[Dict[int, int], float]:
 	"""
 	Run Girvan-Newman and return the best partition up to max_levels plus modularity.
@@ -338,7 +338,7 @@ def girvan_newman_partition(
 		if level >= max_levels:
 			break
 		communities_list = [set(c) for c in communities]
-		score = modularity(graph, communities_list, weight="weight")
+		score = modularity(graph, communities_list, weight="weight", resolution=resolution)
 		if score > best_score:
 			best_score = score
 			best_partition = {

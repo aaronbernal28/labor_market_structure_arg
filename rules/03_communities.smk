@@ -11,6 +11,8 @@ rule compute_positions:
 
 
 rule compute_communities:
+	resources:
+		limited_slots = 1
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
 		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv"

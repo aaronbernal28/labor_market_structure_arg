@@ -15,7 +15,7 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	dataset = snakemake.wildcards["dataset"]
 	seed = int(snakemake.config["seed"])
-	resolution = snakemake.config["community"]["resolution"][class_]
+	resolution = float(snakemake.config["community"]["resolution"][class_])
 
 	id_col = snakemake.config[class_]["id"]
 	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
@@ -27,13 +27,10 @@ def main() -> None:
 
 	if algorithm == "louvain":
 		algorithm_func = comm.louvain_partition
-		param_label = "resolution"
 	elif algorithm == "leiden":
 		algorithm_func = comm.leiden_partition
-		param_label = "resolution"
 	elif algorithm == "infomap":
 		algorithm_func = comm.infomap_partition
-		param_label = "markov_time"
 	else:
 		raise NotImplementedError(
 			"Unsupported algorithm. Use one of: louvain, leiden, infomap."
@@ -46,16 +43,20 @@ def main() -> None:
 	mapping = {old: new for old, new in zip(graph.nodes(), nodes)}
 	G_shuffled = nx.relabel_nodes(graph, mapping)
 
-	communities, modularity, best_parameter = algorithm_func(
-		G_shuffled, seed=seed, resolution=resolution, markov_time=resolution
-	)
+	if algorithm == "infomap":
+		communities, modularity = algorithm_func(
+			G_shuffled, seed=seed, resolution=resolution, markov_time=resolution
+		)
+	else:
+		communities, modularity = algorithm_func(
+			G_shuffled, seed=seed, resolution=resolution
+		)
 
 	communities = utils.relabel_communities_by_size(communities, order="desc")
 	communities = utils.filter_communities_by_size(communities, min_size=3)
 
 	num_communities = len(set(communities.values()))
 	print(f"Modularity score: {modularity:.4f}")
-	print(f"Best {param_label}: {best_parameter:.3f}")
 	print(f"Detected communities: {num_communities}")
 
 	graph_metrics = metrics.summarize_graph(graph)
@@ -71,7 +72,6 @@ def main() -> None:
 			f"Class: {class_}",
 			f"Algorithm: {algorithm}",
 			f"Seed: {seed}",
-			f"Best {param_label}: {best_parameter:.3f}",
 			f"Modularity: {modularity:.4f}",
 			f"Detected communities: {num_communities}",
 		],

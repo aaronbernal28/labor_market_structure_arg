@@ -27,7 +27,6 @@ def _extract_eph_file(metrics: dict[str, Any], input_path: Path) -> str:
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 
-	algorithm = snakemake.wildcards["algorithm"]
 	class_ = snakemake.wildcards["class_"]
 	weight_function = snakemake.wildcards["weight_function"]
 
@@ -89,7 +88,7 @@ def main() -> None:
 		if isinstance(gm, dict):
 			graph_metrics[eph_file] = gm
 
-	title = f"EPH - {class_} - {weight_function} ({algorithm})"
+	title = f"EPH - {class_} - {weight_function}"
 	pl.plot_alpha_sensitivity_multi_series(
 		alphas=alphas,
 		series_labels=eph_files_sorted,
@@ -115,7 +114,6 @@ def main() -> None:
 		log_lines,
 		"SWEEP SETTINGS",
 		[
-			f"Algorithm: {algorithm}",
 			f"Alpha min: {alphas.min():.6f}",
 			f"Alpha max: {alphas.max():.6f}",
 			f"Alpha count: {len(alphas)}",

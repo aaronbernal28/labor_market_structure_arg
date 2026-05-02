@@ -5,7 +5,7 @@ from numpy import logspace
 DATASETS = ["enes_all", "enes_2019", "enes_2021"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
-ALGORITHMS = ["louvain", "leiden"]
+ALGORITHMS = ["leiden"]
 ALGORITHMS_ALL = ["louvain", "leiden", "infomap"]
 VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
