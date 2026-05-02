@@ -121,6 +121,7 @@ figsizes:
   stacked: [12, 3.5]
   heatmap: [16, 10]
   histogram: [8, 6]
+  catplot: [10, 5]
 
 # Colormaps for continuous-feature projection plots.
 cmaps:

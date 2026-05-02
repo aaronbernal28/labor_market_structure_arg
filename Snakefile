@@ -153,6 +153,22 @@ rule _02_bipartite_plot_by_groups:
 		"scripts/02_bipartite_plot_by_groups.py"
 
 
+rule _03_resolution_sensitivity:
+	"""Sensitivity of community detection to resolution parameter alpha. This will compare all algorithms also."""
+	resources:
+		limited_slots = 1 # to avoid overloading GPU
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
+	params:
+		algorithms = ALGORITHMS_ALL,
+	output:
+		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.png",
+	#log:
+	#	"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.log"
+	script:
+		"scripts/03_resolution_sensitivity.py"
+
+
 rule _03_projection_plot_by_groups:
 	'''Plot projection graph from graph.
 	Example:
@@ -257,8 +273,9 @@ rule _09_alpha_sensitivity_eph:
 		class_ = "caes|cno"
 	input:
 		lambda wildcards: expand(
-			"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json",
+			"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json",
 			dataset=EPH_FILES,
+			eph_file=EPH_FILES,
 			class_=wildcards.class_,
 			weight_function=wildcards.weight_function,
 			algorithm=wildcards.algorithm,

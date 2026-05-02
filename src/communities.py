@@ -21,24 +21,20 @@ def louvain_partition(
 	"""
 	Run Louvain and return the partition map plus modularity.
 	"""
-	# Prefer weighted Louvain but fall back to unweighted if weights cause errors
 	try:
 		communities_list = louvain_communities(
-			graph, weight="weight", resolution=resolution, seed=seed
+			graph, weight="weight", resolution=resolution, seed=seed, backend="cugraph"
 		)
-	except ZeroDivisionError:
+	except NotImplementedError as exc:
+		print("Falling back to CPU-based Louvain implementation (may be slower)")
 		communities_list = louvain_communities(
-			graph, weight=None, resolution=resolution, seed=seed
+			graph, weight="weight", resolution=resolution, seed=seed
 		)
 
 	# Convert to dict format: node -> community_id
 	communities = {node: i for i, comm in enumerate(communities_list) for node in comm}
 
-	# Calculate modularity score; fall back to unweighted if weighted fails
-	try:
-		score = modularity(graph, communities_list, weight="weight")
-	except ZeroDivisionError:
-		score = modularity(graph, communities_list, weight=None)
+	score = modularity(graph, communities_list, weight="weight", resolution=resolution)
 	return communities, score
 
 
@@ -193,7 +189,7 @@ def leiden_partition(
 	communities = {node: i for i, comm in enumerate(communities_list) for node in comm}
 
 	# Calculate modularity score
-	score = modularity(graph, communities_list, weight="weight")
+	score = modularity(graph, communities_list, weight="weight", resolution=resolution)
 	return communities, score
 
 
@@ -203,6 +199,7 @@ def best_leiden_partition_random(
 	n_samples: int = 20,
 	min_resolution: float = 0.8,
 	max_resolution: float = 1.5,
+	resolution: float = 1.0,
 ) -> Tuple[Dict[int, int], float, float]:
 	"""
 	Find the best Leiden partition by random sampling of resolution values.
@@ -237,6 +234,7 @@ def infomap_partition(
 	seed: int = 28,
 	markov_time: float = 1.0,
 	num_trials: int = 20,
+	resolution: float = 1.0,
 ) -> Tuple[Dict[int, int], float]:
 	"""
 	Run Infomap and return the partition map plus modularity.
@@ -285,7 +283,7 @@ def infomap_partition(
 		communities_list_dict.setdefault(community_id, set()).add(node)
 	communities_list = list(communities_list_dict.values())
 
-	score = modularity(graph, communities_list, weight="weight")
+	score = modularity(graph, communities_list, weight="weight", resolution=resolution)
 	return communities, score
 
 

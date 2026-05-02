@@ -49,3 +49,15 @@ rule _compute_alpha_sensitivity:
 		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.log"
 	script:
 		"../scripts/utils/compute_alpha_sensitivity.py"
+
+
+rule _compute_alpha_sensitivity_eph:
+	"""Worker for alpha sensitivity: sweep a single EPH projection graph and save metrics to JSON."""
+	input:
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
+	output:
+		"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json"
+	log:
+		"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.log"
+	script:
+		"../scripts/utils/compute_alpha_sensitivity.py"
