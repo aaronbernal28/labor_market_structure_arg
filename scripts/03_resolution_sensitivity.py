@@ -13,7 +13,8 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-RESOLUTIONS = np.linspace(0.5, 2.0, num=50)
+RESOLUTIONS = np.geomspace(0.1, 20, num=40)
+
 TRYS = 15
 algorithm_order = ["infomap", "louvain", "leiden"]
 color_map = {"infomap": "#4B8BBE", "louvain": "#4CB391", "leiden": "#F8766D"}
@@ -147,7 +148,7 @@ def main() -> None:
 
 	# Plotting general trends in number of communities
 	figsize = snakemake.config["figsizes"]["catplot"]
-	fig, ax = plt.subplots(figsize=figsize)
+	fig, ax = plt.subplots()
 	for algorithm in algorithm_order:
 		algorithm_data = df[df["algorithm"] == algorithm]
 		ax.scatter(
@@ -172,6 +173,7 @@ def main() -> None:
 	ax.legend(title="algorithm")
 	# TODO: Add vertical lines for each algorithm's "best" resolution
 	ax.grid(True)
+	ax.set_xscale("log")
 	fig.savefig(snakemake.output[0], bbox_inches="tight")
 
 	# Plotting scores — create separate plots for AMI and NMI using jointplot
@@ -223,10 +225,11 @@ def main() -> None:
 			algorithm_order,
 			title="algorithm",
 		)
-		# TODO: Add vertical lines for each algorithm's "best" resolution
 
 		g.fig.suptitle(f"{score_type} by Resolution", y=1.02)
 		g.set_axis_labels("Resolution", "Score")
+		g.ax_joint.set_xscale("log")
+		g.ax_joint.grid(True)
 		output_path = str(snakemake.output[0]).replace(".png", f"_{score_type}.png")
 
 		plt.savefig(output_path, bbox_inches="tight")

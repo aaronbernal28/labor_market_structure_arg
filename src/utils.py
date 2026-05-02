@@ -4,6 +4,7 @@ from functools import lru_cache
 from pathlib import Path
 import re
 from datetime import date
+import numpy as np
 
 
 @dataclass(frozen=True)

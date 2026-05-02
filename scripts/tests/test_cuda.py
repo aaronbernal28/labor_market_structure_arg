@@ -1,5 +1,22 @@
 import networkx as nx
 import time
+import src.graph_construction as gc
+
+Graph = nx.read_gexf("data/graphs/enes_all/caes/projection_hidalgo_0.0043.gexf")
+print("Testing Louvain on real graph...")
+start = time.time()
+num_edges = Graph.number_of_edges()
+degrees = dict(Graph.degree())
+gamma = gc.gamma_max_from_null_model(Graph)
+print(f"Gamma max from null model: {gamma:.4f}")
+
+Graph = nx.read_gexf("data/graphs/enes_all/ciuo/projection_hidalgo_0.0093.gexf")
+print("Testing Louvain on real graph...")
+start = time.time()
+num_edges = Graph.number_of_edges()
+degrees = dict(Graph.degree())
+gamma = gc.gamma_max_from_null_model(Graph)
+print(f"Gamma max from null model: {gamma:.4f}")
 
 # 1. Create a large random graph
 G = nx.fast_gnp_random_graph(n=50000, p=0.0001)
@@ -33,4 +50,3 @@ print(f"Leiden GPU Time: {time.time() - start:.4f}s")
 print(f"Number of communities detected: {len(communities_gpu)}")
 print(f"Sizes of first 5 communities: {[len(c) for c in communities_gpu[:5]]}")
 print(f"Modularity score: {nx.algorithms.community.modularity(G, communities_gpu):.4f}")
-

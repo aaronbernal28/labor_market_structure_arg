@@ -613,3 +613,51 @@ def compute_sweep_alpha(
 		modularities,
 		nodes_largest_cc,
 	)
+
+
+def gamma_max_from_null_model(graph: nx.Graph) -> float:
+	"""
+	Compute an upper bound for the resolution parameter from the standard null model.
+
+	Uses the analytical bound:
+	    gamma_plus = max_{i != j, P_ij != 0} (A_ij / P_ij)
+	where A is the adjacency matrix and P_ij = k_i * k_j / (2m).
+
+	Parameters
+	----------
+	graph : networkx.Graph
+	    The input graph. Edge weights are supported via the 'weight' attribute.
+
+	Returns
+	-------
+	float
+	    The upper bound for the resolution parameter (gamma_plus).
+	"""
+	# Total edge weight (m)
+	m = graph.size(weight="weight")
+	if m == 0:
+		return 0.0
+
+	# Node degrees (or strengths if weighted)
+	degrees = dict(graph.degree(weight="weight"))
+
+	max_ratio = 0.0
+
+	# Since A_ij = 0 for non-edges, the maximum ratio occurs on an existing edge.
+	for u, v, data in graph.edges(data=True):
+		if u == v:
+			continue  # Skip self-loops (i != j)
+
+		A_ij = data.get("weight", 1.0)
+		k_i = degrees[u]
+		k_j = degrees[v]
+
+		if k_i > 0 and k_j > 0:
+			# P_ij = (k_i * k_j) / (2 * m)
+			# ratio = A_ij / P_ij
+			ratio = (A_ij * 2 * m) / (k_i * k_j)
+
+			if ratio > max_ratio:
+				max_ratio = ratio
+
+	return float(max_ratio)
