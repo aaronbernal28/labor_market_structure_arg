@@ -13,8 +13,8 @@ CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "inco
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
 CLASSES_ALL = ["caes", "ciuo", "cno"]
-ALPHA_CAES = ["1.00", "0.0043"]
-ALPHA_CIUO = ["1.00", "0.0093"]
+ALPHA_CAES = ["0.0043"]
+ALPHA_CIUO = ["0.0093"]
 ALPHA_EPH = (logspace(-10, 0, 60).round(4).astype(str)).tolist()
 ALPHAS_ALL = ALPHA_CAES + ALPHA_CIUO + ALPHA_EPH
 TOPO_METHOD = ["shortest_path", "disparity_filtration"]
@@ -48,6 +48,14 @@ rule all:
 			class_=CLASSES,
 			weight_function=["hidalgo"],
 			algorithm=ALGORITHMS,
+		),
+		expand(
+			["images/enes_all/caes/03_resolution_sensitivity/_catplots_{weight_function}_{alpha_caes}.png",
+			"images/enes_all/ciuo/03_resolution_sensitivity/_catplots_{weight_function}_{alpha_ciuo}.png"],
+			class_=CLASSES,
+			weight_function=["hidalgo"],
+			alpha_caes=ALPHA_CAES,
+			alpha_ciuo=ALPHA_CIUO,
 		),
 		expand(
 			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm}_{discrete_feature}.png",

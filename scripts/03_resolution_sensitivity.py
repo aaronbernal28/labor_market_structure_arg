@@ -97,7 +97,7 @@ def main() -> None:
 		color=".2",
 		ax=plt.gca(),
 	)
-	#plt.grid()
+	plt.grid()
 	plt.savefig(snakemake.output[0], bbox_inches="tight")
 
 
