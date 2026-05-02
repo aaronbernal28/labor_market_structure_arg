@@ -93,7 +93,10 @@ def main() -> None:
 			yearly_frames.append(df_wave)
 
 		df_year = pd.concat(yearly_frames, ignore_index=True)
-		features_df = nc.compute_group_characteristics(df_year, col_group=id_col)
+		# Use ponderation weights for computing group characteristics
+		features_df = nc.compute_group_characteristics(
+			df_year, col_group=id_col, calib_col="ponderation"
+		)
 		if feature not in features_df.columns:
 			raise KeyError(
 				f"Feature '{feature}' not found in computed characteristics for year {year_key}. "

@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Tuple
 import networkx as nx
 from networkx.algorithms.community import (
 	girvan_newman,
-	# leiden_communities,
+	leiden_communities,
 	louvain_communities,
 	modularity,
 )
@@ -182,7 +182,7 @@ def leiden_partition(
 	"""
 	try:
 		communities_list = leiden_communities(
-			graph, weight="weight", resolution=resolution, seed=seed
+			graph, weight="weight", resolution=resolution, seed=seed, backend="cugraph"
 		)
 	except NotImplementedError as exc:
 		raise NotImplementedError(
@@ -215,6 +215,7 @@ def best_leiden_partition_random(
 	best_partition = None
 	best_score = -1.0
 	best_resolution = None
+	# FIXME: This approach will be deprecated
 
 	for i, resolution in enumerate(resolutions):
 		# Use deterministic seed derived from base seed

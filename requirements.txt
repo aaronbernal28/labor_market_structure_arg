@@ -16,3 +16,4 @@ bs4==0.0.2
 xlrd==2.0.2
 statsmodels==0.14.6
 nx-cugraph-cu12==26.4.0
+cupy-cuda13x==14.0.1

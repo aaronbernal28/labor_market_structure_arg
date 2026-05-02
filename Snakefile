@@ -5,7 +5,8 @@ from numpy import logspace
 DATASETS = ["enes_all", "enes_2019", "enes_2021"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
-ALGORITHMS = ["louvain", "infomap"]
+ALGORITHMS = ["louvain", "leiden"]
+ALGORITHMS_ALL = ["louvain", "leiden", "infomap"]
 VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
 CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "income_mean", "nivel_ed_mean", "age_mean"] # in nodelist data
@@ -25,7 +26,7 @@ wildcard_constraints:
 	dataset = "|".join(DATASETS_ALL),
 	class_ = "|".join(CLASSES_ALL),
 	weight_function = "|".join(WEIGHT_FUNCTIONS),
-	algorithm = "|".join(ALGORITHMS),
+	algorithm = "|".join(ALGORITHMS_ALL),
 	alpha = "|".join(ALPHAS_ALL),
 	topo_method = "|".join(TOPO_METHOD),
 	eph_file = "|".join(EPH_FILES)
@@ -46,7 +47,7 @@ rule all:
 			"images/enes_all/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.png",
 			class_=CLASSES,
 			weight_function=["hidalgo"],
-			algorithm=["louvain"],
+			algorithm=ALGORITHMS,
 		),
 		expand(
 			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm}_{discrete_feature}.png",
@@ -54,7 +55,7 @@ rule all:
 			weight_function=["hidalgo"],
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
-			algorithm=["louvain"],
+			algorithm=ALGORITHMS,
 			discrete_feature=DISCRETE_FEATURES,
 		),
 		expand(
@@ -71,13 +72,13 @@ rule all:
 			weight_function=["hidalgo"],
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
-			algorithm=["louvain"],
+			algorithm=ALGORITHMS,
 		),
 		expand(
 			["images/enes_all/caes/05_edge_weight_correlation/_{weight_function}_{alpha_caes}_pos_{algorithm}_{continuous_feature}.png",
 			"images/enes_all/ciuo/05_edge_weight_correlation/_{weight_function}_{alpha_ciuo}_pos_{algorithm}_{continuous_feature}.png"],
 			weight_function=["hidalgo"],
-			algorithm=["louvain"],
+			algorithm=ALGORITHMS,
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
 			continuous_feature=CONTINUOUS_FEATURES,
@@ -96,7 +97,7 @@ rule all:
 			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png",
 			class_=["caes", "cno"],
 			weight_function=["hidalgo"],
-			algorithm=["louvain"],
+			algorithm=ALGORITHMS,
 		),
 		expand(
 			"images/eph/{class_}/10_edge_weight_correlation/_{weight_function}_{feature}.png",
@@ -280,13 +281,13 @@ rule _10_edge_weight_correlation_eph:
 		class_ = "caes|cno"
 	input:
 		projections=lambda wildcards: expand(
-			"data/graphs/{eph_file}/{class_}/projection_{weight_function}.gexf",
+			"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf",
 			eph_file=EPH_FILES,
 			class_=wildcards.class_,
 			weight_function=wildcards.weight_function,
 		),
 		processed=lambda wildcards: expand(
-			"data/processed/{eph_file}.csv",
+			"data/processed/eph/{eph_file}.csv",
 			eph_file=EPH_FILES,
 		),
 	output:

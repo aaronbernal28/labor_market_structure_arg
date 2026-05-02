@@ -126,7 +126,7 @@ snakemake --dag | dot -Tpng > images/dag.png
 ## GPU Acceleration with CUDA
 ```bash
 sudo apt install nvidia-cuda-toolkit
-pip install nx-cugraph-cu12
+pip install nx-cugraph-cu13
 export CUDA_PATH=/usr
 ```
 

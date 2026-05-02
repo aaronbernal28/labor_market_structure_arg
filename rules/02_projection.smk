@@ -6,6 +6,22 @@ rule compute_projection:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	log:
 		"images/{dataset}/{class_}/compute_projection_{weight_function}.log"
+	wildcard_constraints:
+		dataset = "|".join(["enes_2019", "enes_2021", "enes_all"])
+	script:
+		"../scripts/utils/build_projection.py"
+
+
+rule compute_projection_eph:
+	'''Build projection graph from EPH bipartite graph based on caes or cno.'''
+	input:
+		"data/graphs/eph/{eph_file}/bipartite_eph.gexf"
+	output:
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
+	log:
+		"images/eph/{eph_file}/{class_}/compute_projection_{weight_function}.log"
+	wildcard_constraints:
+		class_ = "caes|cno"
 	script:
 		"../scripts/utils/build_projection.py"
 
