@@ -44,7 +44,7 @@ rule all:
 		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
 		"images/enes_all/06_sankey_plot/sankey_plot.png",
 		expand(
-			"images/enes_all/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.png",
+			"images/enes_all/{class_}/07_alpha_sensitivity/_{weight_function}.png",
 			class_=CLASSES,
 			weight_function=["hidalgo"],
 			algorithm=ALGORITHMS,
@@ -102,7 +102,7 @@ rule all:
 			eph_file=EPH_FILES
 		),
 		expand(
-			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png",
+			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}.png",
 			class_=["caes", "cno"],
 			weight_function=["hidalgo"],
 			algorithm=ALGORITHMS,
@@ -163,12 +163,9 @@ rule _02_bipartite_plot_by_groups:
 
 rule _03_resolution_sensitivity:
 	"""Sensitivity of community detection to resolution parameter alpha. This will compare all algorithms also."""
-	resources:
-		limited_slots = 1 # to avoid overloading GPU
 	input:
-		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
-	params:
-		algorithms = ALGORITHMS_ALL,
+		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_{weight_function}_{alpha}.csv",
+		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_scores_{weight_function}_{alpha}.csv"
 	output:
 		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.png",
 	#log:
@@ -253,11 +250,11 @@ rule _06_sankey_plot:
 
 rule _07_alpha_sensitivity:
 	input:
-		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json"
+		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}.json"
 	output:
-		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.png"
+		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}.png"
 	log:
-		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}_{algorithm}.log"
+		"images/{dataset}/{class_}/07_alpha_sensitivity/_{weight_function}.log"
 	script:
 		"scripts/07_alpha_sensitivity.py"
 
@@ -275,25 +272,23 @@ rule _08_persistence_diagram:
 
 rule _09_alpha_sensitivity_eph:
 	"""Alpha-sensitivity sweep across all EPH projection graphs.
-
-	Produces a single combined plot per (class_, weight_function, algorithm), overlaying
+	Produces a single combined plot per (class_, weight_function), overlaying
 	all EPH series with colormap gradients.
 	"""
 	wildcard_constraints:
 		class_ = "caes|cno"
 	input:
 		lambda wildcards: expand(
-			"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json",
+			"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}.json",
 			dataset=EPH_FILES,
 			eph_file=EPH_FILES,
 			class_=wildcards.class_,
 			weight_function=wildcards.weight_function,
-			algorithm=wildcards.algorithm,
 		)
 	output:
-		"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.png"
+		"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}.png"
 	log:
-		"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}_{algorithm}.log"
+		"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}.log"
 	script:
 		"scripts/09_alpha_sensitivity_eph.py"
 

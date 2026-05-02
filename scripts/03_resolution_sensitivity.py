@@ -13,9 +13,6 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-RESOLUTIONS = np.geomspace(0.1, 20, num=40)
-
-TRYS = 15
 algorithm_order = ["infomap", "louvain", "leiden"]
 color_map = {"infomap": "#4B8BBE", "louvain": "#4CB391", "leiden": "#F8766D"}
 marker_map = {"infomap": "+", "louvain": "X", "leiden": "s"}
@@ -23,128 +20,11 @@ marker_map = {"infomap": "+", "louvain": "X", "leiden": "s"}
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
-	graph = nx.read_gexf(snakemake.input[0], node_type=int)
-	algorithms = list(snakemake.params["algorithms"])
-	rng = np.random.default_rng(snakemake.config["seed"])
-	seeds = rng.integers(low=0, high=2**16 - 1, size=TRYS).tolist()
 
-	# Create empty DataFrame with explicit dtypes for columns
-	df = pd.DataFrame(
-		{
-			"algorithm": pd.Series(dtype="object"),
-			"resolution": pd.Series(dtype="float64"),
-			"num_communities": pd.Series(dtype="int64"),
-			"seed": pd.Series(dtype="int64"),
-		},
-		index=pd.RangeIndex(start=0, stop=0, step=1),
-	)
-
-	df_scores = pd.DataFrame(
-		{
-			"algorithm": pd.Series(dtype="object"),
-			"resolution": pd.Series(dtype="float64"),
-			"score": pd.Series(dtype="float64"),
-			"score_type": pd.Series(dtype="object"),
-		},
-		index=pd.RangeIndex(start=0, stop=0, step=1),
-	)
-
-	# Generate partitions and collect results
-	for algorithm in algorithms:
-		print(f"Running {algorithm}...")
-		for resolution in RESOLUTIONS:
-			print(f"Running {algorithm} with resolution {resolution:.2f}...")
-			nodes_sorted_communities_labels = []
-
-			for seed in seeds:
-				G_perturbed = graph.copy()
-
-				edge_drop_fraction = 0.05
-				edges = list(G_perturbed.edges())
-				num_to_remove = int(len(edges) * edge_drop_fraction)
-				edges_to_remove = random.sample(edges, num_to_remove)
-
-				G_perturbed.remove_edges_from(edges_to_remove)
-
-				if algorithm == "louvain":
-					communities, _ = comm.louvain_partition(
-						G_perturbed, seed=seed, resolution=resolution
-					)
-				elif algorithm == "leiden":
-					communities, _ = comm.leiden_partition(
-						G_perturbed, seed=seed, resolution=resolution
-					)
-				elif algorithm == "infomap":
-					communities, _ = comm.infomap_partition(
-						G_perturbed,
-						seed=seed,
-						resolution=resolution,
-						markov_time=resolution,
-					)
-				else:
-					raise NotImplementedError(
-						f"Unsupported algorithm: {algorithm}. Use one of: louvain, leiden, infomap."
-					)
-
-				num_communities = len(set(communities.values()))
-				df = pd.concat(
-					[
-						df,
-						pd.DataFrame(
-							{
-								"seed": [seed],
-								"algorithm": [algorithm],
-								"resolution": [resolution],
-								"num_communities": [num_communities],
-							}
-						),
-					],
-					ignore_index=True,
-				)
-				communities = utils.relabel_communities_by_size(
-					communities, order="desc"
-				)
-				nodes_sorted_communities_labels.append(communities.values())
-
-			# Compute pairwise AMI/NMI between all partitions for this algorithm/resolution
-			print(
-				f"Computing pairwise AMI/NMI for {algorithm} at resolution {resolution:.2f}..."
-			)
-			for i in range(len(nodes_sorted_communities_labels)):
-				for j in range(i + 1, len(nodes_sorted_communities_labels)):
-					ami = adjusted_mutual_info_score(
-						list(nodes_sorted_communities_labels[i]),
-						list(nodes_sorted_communities_labels[j]),
-					)
-
-					nmi = normalized_mutual_info_score(
-						list(nodes_sorted_communities_labels[i]),
-						list(nodes_sorted_communities_labels[j]),
-						average_method="geometric",
-					)
-
-					df_scores = pd.concat(
-						[
-							df_scores,
-							pd.DataFrame(
-								{
-									"algorithm": [algorithm, algorithm],
-									"resolution": [resolution, resolution],
-									"score": [ami, nmi],
-									"score_type": ["AMI", "NMI"],
-								}
-							),
-						],
-						ignore_index=True,
-					)
-
-	print("Data collection complete. Sample of results:")
-	print(df.head())
-	print(df.info())
-
-	print("Summary of scores:")
-	print(df_scores)
-	print(df_scores.info())
+	df = pd.read_csv(snakemake.input[0])
+	df_scores = pd.read_csv(snakemake.input[1])
+	class_ = str(snakemake.wildcards["class_"])
+	reference_resolution = float(snakemake.config["community"]["resolution"][class_])
 
 	# Plotting general trends in number of communities
 	figsize = snakemake.config["figsizes"]["catplot"]
@@ -170,8 +50,17 @@ def main() -> None:
 		color=".2",
 		ax=ax,
 	)
-	ax.legend(title="algorithm")
 	# TODO: Add vertical lines for each algorithm's "best" resolution
+	ax.vlines(
+		x=reference_resolution,
+		ymin=df["num_communities"].min(),
+		ymax=df["num_communities"].max(),
+		linestyles="dashed",
+		color="gray",
+		label="reference resolution",
+		zorder=1,
+	)
+	ax.legend(title="algorithm")
 	ax.grid(True)
 	ax.set_xscale("log")
 	fig.savefig(snakemake.output[0], bbox_inches="tight")
@@ -218,11 +107,19 @@ def main() -> None:
 				element="step",
 				common_norm=False,
 			)
+		g.ax_joint.vlines(
+			x=reference_resolution,
+			ymin=data_subset["score"].min(),
+			ymax=data_subset["score"].max(),
+			linestyles="dashed",
+			color="gray",
+			label="reference resolution",
+		)
 		legend_handles, legend_labels = g.ax_joint.get_legend_handles_labels()
 		label_to_handle = dict(zip(legend_labels, legend_handles))
 		g.ax_joint.legend(
-			[label_to_handle[algorithm] for algorithm in algorithm_order],
-			algorithm_order,
+			[label_to_handle[label] for label in algorithm_order + ["reference resolution"]],
+			algorithm_order + ["reference resolution"],
 			title="algorithm",
 		)
 

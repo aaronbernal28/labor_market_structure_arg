@@ -546,24 +546,12 @@ def compute_sweep_alpha(
 	projection: nx.Graph,
 	alphas: np.ndarray,
 	seed: int,
-	algorithm: str = "louvain",
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 	"""Return arrays of (nodes_with_edges, edge_counts, clustering, modularity, nodes_largest_cc) for each alpha."""
-	if algorithm == "louvain":
-		algorithm_func = comm.best_louvain_partition_random
-	elif algorithm == "leiden":
-		algorithm_func = comm.best_leiden_partition_random
-	elif algorithm == "infomap":
-		algorithm_func = comm.best_infomap_partition_random
-	else:
-		raise NotImplementedError(
-			"Unsupported algorithm. Use one of: louvain, leiden, infomap."
-		)
 
 	nodes_with_edges = np.empty(len(alphas), dtype=float)
 	edge_counts = np.empty(len(alphas), dtype=float)
 	clustering_coeffs = np.empty(len(alphas), dtype=float)
-	modularities = np.empty(len(alphas), dtype=float)
 	nodes_largest_cc = np.empty(len(alphas), dtype=float)
 
 	disparity_graph = get_disparity_graph(
@@ -600,17 +588,13 @@ def compute_sweep_alpha(
 				clustering_coeffs[i] = nx.average_clustering(backbone, weight="weight")
 			except ZeroDivisionError:
 				clustering_coeffs[i] = nx.average_clustering(backbone)
-			_, mod, _ = algorithm_func(backbone, seed=seed, n_samples=10)
-			modularities[i] = mod
 		else:
 			clustering_coeffs[i] = 0.0
-			modularities[i] = 0.0
 
 	return (
 		nodes_with_edges,
 		edge_counts,
 		clustering_coeffs,
-		modularities,
 		nodes_largest_cc,
 	)
 

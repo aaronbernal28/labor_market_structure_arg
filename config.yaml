@@ -131,6 +131,6 @@ cmaps:
 
 community:
   resolution:
-    caes: ["3.16"] # sqrt(10)
-    ciuo: ["3.16"] # sqrt(10)
-    cno: ["1.0"]
+    caes: "3.16" # sqrt(10)
+    ciuo: "3.16" # sqrt(10)
+    cno: "1.0"

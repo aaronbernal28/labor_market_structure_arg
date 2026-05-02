@@ -18,7 +18,6 @@ def main() -> None:
 	nodes_with_edges = np.array(metrics["nodes_with_edges"])
 	edge_counts = np.array(metrics["edge_counts"])
 	clustering_coeffs = np.array(metrics["clustering_coeffs"])
-	modularities = np.array(metrics["modularities"])
 	nodes_largest_cc = np.array(metrics["nodes_largest_cc"])
 	reference_alpha = metrics["reference_alpha"]
 
@@ -35,7 +34,6 @@ def main() -> None:
 		clustering_coefficients=clustering_coeffs,
 		title=title,
 		output_path=Path(snakemake.output[0]),
-		modularities=modularities,
 		nodes_largest_cc=nodes_largest_cc,
 		reference_alpha=reference_alpha,
 		save=True,
@@ -57,8 +55,6 @@ def main() -> None:
 			f"Alpha min: {alphas.min():.6f}",
 			f"Alpha max: {alphas.max():.6f}",
 			f"Alpha count: {len(alphas)}",
-			f"Modularity min: {modularities.min():.4f}",
-			f"Modularity max: {modularities.max():.4f}",
 		],
 	)
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None

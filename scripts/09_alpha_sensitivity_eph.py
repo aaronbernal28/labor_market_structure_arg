@@ -61,7 +61,6 @@ def main() -> None:
 	nodes_with_edges_all = np.empty((n_series, n_alphas), dtype=float)
 	edge_counts_all = np.empty((n_series, n_alphas), dtype=float)
 	clustering_all = np.empty((n_series, n_alphas), dtype=float)
-	modularities_all = np.empty((n_series, n_alphas), dtype=float)
 	nodes_lcc_all = np.empty((n_series, n_alphas), dtype=float)
 	reference_alphas = np.empty(n_series, dtype=float)
 
@@ -77,14 +76,12 @@ def main() -> None:
 		nodes_with_edges = np.array(metrics_data["nodes_with_edges"])
 		edge_counts = np.array(metrics_data["edge_counts"])
 		clustering_coeffs = np.array(metrics_data["clustering_coeffs"])
-		modularities = np.array(metrics_data["modularities"])
 		nodes_largest_cc = np.array(metrics_data["nodes_largest_cc"])
-		reference_alpha = float(metrics_data["reference_alpha"])
+		reference_alpha = round(float(metrics_data["reference_alpha"]), 4)
 
 		nodes_with_edges_all[i, :] = nodes_with_edges
 		edge_counts_all[i, :] = edge_counts
 		clustering_all[i, :] = clustering_coeffs
-		modularities_all[i, :] = modularities
 		nodes_lcc_all[i, :] = nodes_largest_cc
 		reference_alphas[i] = reference_alpha
 
@@ -99,7 +96,6 @@ def main() -> None:
 		nodes_with_edges=nodes_with_edges_all,
 		edge_counts=edge_counts_all,
 		clustering_coefficients=clustering_all,
-		modularities=modularities_all,
 		nodes_largest_cc=nodes_lcc_all,
 		title=title,
 		output_path=Path(snakemake.output[0]),
@@ -130,8 +126,7 @@ def main() -> None:
 	log_lines.append("EPH FILES (chronological order):")
 	for j, eph_file in enumerate(eph_files_sorted):
 		log_lines.append(
-			f"  {j:>3d}. {eph_file} | reference_alpha={reference_alphas[j]:.3g} | "
-			f"modularity_range=[{modularities_all[j, :].min():.4f}, {modularities_all[j, :].max():.4f}]"
+			f"  {j:>3d}. {eph_file} | reference_alpha={reference_alphas[j]:.3g}"
 		)
 
 	# Add a small per-file graph summary (first few keys) to keep logs readable

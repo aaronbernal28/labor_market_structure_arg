@@ -1695,7 +1695,6 @@ def plot_alpha_sensitivity_multi_series(
 	nodes_with_edges: np.ndarray,
 	edge_counts: np.ndarray,
 	clustering_coefficients: np.ndarray,
-	modularities: np.ndarray,
 	nodes_largest_cc: np.ndarray,
 	title: str,
 	output_path: Path,
@@ -1720,7 +1719,6 @@ def plot_alpha_sensitivity_multi_series(
 		"nodes_with_edges": nodes_with_edges,
 		"edge_counts": edge_counts,
 		"clustering_coefficients": clustering_coefficients,
-		"modularities": modularities,
 		"nodes_largest_cc": nodes_largest_cc,
 	}.items():
 		if arr.shape != (n_series, len(alphas)):
@@ -1753,12 +1751,6 @@ def plot_alpha_sensitivity_multi_series(
 			"data": clustering_coefficients,
 			"cmap": mpl.cm.Greens,
 			"linestyle": ":",
-		},
-		{
-			"label": "Modularidad",
-			"data": modularities,
-			"cmap": mpl.cm.Purples,
-			"linestyle": "-",
 		},
 		{
 			"label": "Nodos (mayor CC)",

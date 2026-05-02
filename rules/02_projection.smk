@@ -44,9 +44,9 @@ rule _compute_alpha_sensitivity:
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	output:
-		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json"
+		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}.json"
 	log:
-		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.log"
+		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}.log"
 	script:
 		"../scripts/utils/compute_alpha_sensitivity.py"
 
@@ -56,8 +56,25 @@ rule _compute_alpha_sensitivity_eph:
 	input:
 		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
 	output:
-		"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json"
+		"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}.json"
 	log:
-		"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.log"
+		"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}.log"
 	script:
 		"../scripts/utils/compute_alpha_sensitivity.py"
+
+
+rule _compute_resolution_sensitivity:
+	"""Sensitivity of community detection to resolution parameter alpha. This will compare all algorithms also."""
+	resources:
+		limited_slots = 1 # to avoid overloading GPU
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
+	params:
+		algorithms = ALGORITHMS_ALL,
+	output:
+		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_{weight_function}_{alpha}.csv",
+		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_scores_{weight_function}_{alpha}.csv"
+	script:
+		"../scripts/utils/compute_resolution_sensitivity.py"
+	#shell:
+	#	"export CUDA_PATH=/usr"
