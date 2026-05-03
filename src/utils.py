@@ -5,6 +5,8 @@ from pathlib import Path
 import re
 from datetime import date
 from collections import Counter, defaultdict
+from collections.abc import Mapping
+import numpy as np
 
 
 @dataclass(frozen=True)
@@ -302,3 +304,93 @@ def filter_communities_by_observations(
 		for node, comm_id in communities.items()
 		if comm_id in valid_communities
 	}
+
+
+def compute_node_neighbor_mean(G, feature_map: Mapping, *, weight_attr: str = "weight") -> dict:
+	"""Compute weighted (or unweighted) average neighbor feature for each node.
+
+	Returns a dict mapping node -> average(neighbor_feature_values). Only nodes
+	with at least one neighbor with a finite feature value are returned.
+	"""
+	valid_nodes = {n for n, val in feature_map.items() if np.isfinite(val)}
+
+	y_vals_map: dict = {u: [] for u in valid_nodes}
+	edge_weights: dict = {u: [] for u in valid_nodes}
+
+	for u, v, data in G.edges(data=True):
+		if u in valid_nodes and v in valid_nodes:
+			w = data.get(weight_attr, 0.0)
+			if np.isfinite(feature_map[u]) and np.isfinite(feature_map[v]):
+				y_vals_map[u].append(feature_map[v])
+				edge_weights[u].append(w)
+
+				y_vals_map[v].append(feature_map[u])
+				edge_weights[v].append(w)
+
+	node_y = {}
+	for u in y_vals_map:
+		neigh_vals = y_vals_map[u]
+		if not neigh_vals:
+			continue
+		weights = np.asarray(edge_weights[u], dtype=float)
+		if weights.size == 0 or np.isclose(weights.sum(), 0.0):
+			node_y[u] = float(np.mean(neigh_vals))
+		else:
+			node_y[u] = float(np.average(neigh_vals, weights=weights))
+
+	return node_y
+
+
+def get_top_mean_assortativity_communities(
+	G,
+	feature_map: Mapping,
+	community_map: Mapping,
+	*,
+	top_k: int = 4,
+	order: str = "desc",
+	weight_attr: str = "weight",
+) -> list:
+	"""Return the community ids with the most extreme mean neighbor-feature values.
+
+	This computes for each node the (weighted) average of neighbor feature values
+	(the $Y_i$ axis in the assortativity plots), then averages those $Y_i$ per
+	community and returns the top-k communities with largest (order='desc') or
+	smallest (order='asc') mean $Y_i$.
+
+	Args:
+		G: networkx Graph (undirected)
+		feature_map: mapping node -> numeric feature value
+		community_map: mapping node -> community id
+		top_k: number of communities to return
+		order: 'desc' for highest means, 'asc' for lowest means
+		weight_attr: edge attribute to use as weight (falls back to unweighted mean
+					 if weights sum to zero)
+
+	Returns:
+		List of community ids (length <= top_k) ordered by extremity.
+	"""
+	if community_map is None:
+		return []
+
+	# Compute per-node neighbor-average using local helper
+	node_y = compute_node_neighbor_mean(G, feature_map, weight_attr=weight_attr)
+
+	# Aggregate Y_i by community and compute community mean
+	comm_to_vals = defaultdict(list)
+	for node, y in node_y.items():
+		comm = community_map.get(node)
+		if comm is None:
+			continue
+		if not np.isfinite(y):
+			continue
+		comm_to_vals[comm].append(y)
+
+	# Compute mean per community
+	comm_mean = {c: float(np.mean(vals)) for c, vals in comm_to_vals.items() if vals}
+	if not comm_mean:
+		return []
+
+	reverse = order.lower() == "desc"
+	sorted_comms = sorted(comm_mean.items(), key=lambda kv: kv[1], reverse=reverse)
+	top = [comm for comm, _ in sorted_comms[:top_k]]
+	return top

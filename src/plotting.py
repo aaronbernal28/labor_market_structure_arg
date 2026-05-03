@@ -1857,49 +1857,13 @@ def compute_and_plot_edge_correlation(
 	This function also prints and embeds the Pearson correlation (assortativity)
 	computed on the plotted points.
 	"""
-	valid_nodes = {node for node, val in feature_map.items() if np.isfinite(val)}
+	# Reuse shared helper to compute per-node neighbor-average (Y_i)
+	node_y = ut.compute_node_neighbor_mean(G, feature_map, weight_attr="weight")
 
-	x_vals_map = {}
-	y_vals_map = {u: [] for u in valid_nodes}
-	edge_weights = {u: [] for u in valid_nodes}
-
-	for u, v, data in G.edges(data=True):
-		if u in valid_nodes and v in valid_nodes:
-			# Undirected, we add both (u,v) and (v,u) to make it symmetric
-			w = data.get("weight", 0.0)
-
-			if np.isfinite(feature_map[u]) and np.isfinite(feature_map[v]):
-				x_vals_map[u] = feature_map[u]
-				y_vals_map[u].append(feature_map[v])
-				edge_weights[u].append(w)
-
-				x_vals_map[v] = feature_map[v]
-				y_vals_map[v].append(feature_map[u])
-				edge_weights[v].append(w)
-
-	x_vals = []
-	y_vals = []
-	plotted_nodes = []
-	for u in x_vals_map:
-		# For each node, we take its feature value and the average of its neighbors' feature values (weighted if desired)
-		if not y_vals_map[u]:
-			continue
-		x_vals.append(x_vals_map[u])
-		# Safely handle zero-sum weights: fall back to unweighted mean
-		try:
-			weights_arr = np.asarray(edge_weights[u], dtype=float)
-			if weights_arr.size == 0:
-				# No neighbor values (should be caught by earlier check), but guard anyway
-				y_vals.append(np.mean(y_vals_map[u]))
-			elif np.isclose(weights_arr.sum(), 0.0):
-				# All weights sum to zero -> cannot normalize, use unweighted mean
-				y_vals.append(np.mean(y_vals_map[u]))
-			else:
-				y_vals.append(np.average(y_vals_map[u], weights=weights_arr))
-		except Exception:
-			# As a last resort, use unweighted mean to avoid crashing the pipeline
-			y_vals.append(np.mean(y_vals_map[u]))
-		plotted_nodes.append(u)
+	# Nodes for plotting are those with a computed neighbor-average
+	plotted_nodes = list(node_y.keys())
+	x_vals = [float(feature_map[u]) for u in plotted_nodes]
+	y_vals = [float(node_y[u]) for u in plotted_nodes]
 
 	if len(x_vals) < 2:
 		print(
@@ -1907,7 +1871,15 @@ def compute_and_plot_edge_correlation(
 		)
 		return
 
-	highlight_set = set(highlight_communities) if highlight_communities else None
+	if highlight_communities is None:
+		highlight_set = ut.get_top_mean_assortativity_communities(
+			G, feature_map, community_map, top_k=7, order="desc"
+		) + ut.get_top_mean_assortativity_communities(
+			G, feature_map, community_map, top_k=2, order="asc"
+		)
+	else:
+		highlight_set = set(highlight_communities)
+
 	raw_node_sizes = node_size_map or {}
 
 	def _node_color(node_id: int) -> str:
@@ -2049,32 +2021,14 @@ def compute_edge_assortativity_pearson(
 	Returns (pearson_r, p_value, n_points). If fewer than 2 valid points exist,
 	returns (nan, nan, n_points).
 	"""
-	# Only keep nodes that have finite feature values
-	valid_nodes = {node for node, val in feature_map.items() if np.isfinite(val)}
-
-	x_vals_map: dict = {}
-	y_vals_map: dict = {u: [] for u in valid_nodes}
-	edge_weights: dict = {u: [] for u in valid_nodes}
-
-	for u, v, data in G.edges(data=True):
-		if u in valid_nodes and v in valid_nodes:
-			w = data.get(weight_attr, 0.0)
-			if np.isfinite(feature_map[u]) and np.isfinite(feature_map[v]):
-				x_vals_map[u] = feature_map[u]
-				y_vals_map[u].append(feature_map[v])
-				edge_weights[u].append(w)
-
-				x_vals_map[v] = feature_map[v]
-				y_vals_map[v].append(feature_map[u])
-				edge_weights[v].append(w)
+	# Reuse helper to compute per-node neighbor-average and avoid duplicated logic
+	node_y = ut.compute_node_neighbor_mean(G, feature_map, weight_attr=weight_attr)
 
 	x_vals: list[float] = []
 	y_vals: list[float] = []
-	for u in x_vals_map:
-		if not y_vals_map[u]:
-			continue
-		x = float(x_vals_map[u])
-		y = float(np.average(y_vals_map[u], weights=edge_weights[u]))
+	for u in node_y.keys():
+		x = float(feature_map.get(u, float("nan")))
+		y = float(node_y[u])
 		if np.isfinite(x) and np.isfinite(y):
 			x_vals.append(x)
 			y_vals.append(y)

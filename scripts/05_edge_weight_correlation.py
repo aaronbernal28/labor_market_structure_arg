@@ -30,9 +30,9 @@ def main() -> None:
 		raise KeyError("No feature wildcard found (expected 'continuous_feature').")
 
 	id_col = snakemake.config[class_]["id"]
-	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
-	community_col = _resolve_community_column(pos_df, algorithm)
-	pos_df = pos_df.dropna(subset=[id_col, community_col])
+	nodelist = pd.read_csv(snakemake.input[0], dtype={id_col: int})
+	community_col = _resolve_community_column(nodelist, algorithm)
+	pos_df = nodelist.dropna(subset=[id_col, community_col])
 
 	# Cast nodes to int instantly to prevent string mismatch bugs
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
@@ -54,7 +54,6 @@ def main() -> None:
 	feature_map = plot_df.set_index(id_col)[feature_name].to_dict()
 	community_map = plot_df.set_index(id_col)[community_col].to_dict()
 	node_size_map = plot_df.set_index(id_col)["n_obs"].to_dict()
-	highlight_communities = utils.get_top_communities(community_map, top_n=8)
 
 	from seaborn import hls_palette
 
@@ -72,7 +71,7 @@ def main() -> None:
 		color_map=color_map,
 		community_map=community_map,
 		node_size_map=node_size_map,
-		highlight_communities=highlight_communities,
+		highlight_communities=None,
 		title=default_title,
 		output_path=snakemake.output[0],
 		save=True,
