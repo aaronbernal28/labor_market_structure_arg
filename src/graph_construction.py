@@ -2,7 +2,7 @@
 Graph construction helpers for bipartite and projected networks.
 """
 
-from typing import Dict
+from typing import Dict, Optional, Tuple, Any
 import networkx as nx
 import pandas as pd
 import numpy as np
@@ -307,42 +307,56 @@ def get_projection_positions(
 	graph: nx.Graph,
 	seed: int = 42,
 	spring_layout_iterations: int = 1000,
-	spring_layout_k: float = None,
+	spring_layout_k: Optional[float] = None,
 	rotate: bool = False,
-	method: str = "auto",
-) -> dict:
-	"""Calculate node positions for the projection graph using a force-directed layout.
+	method: str = "spring",
+	threshold: float = 1e-8,
+	gravity: float = 1.0,
+) -> Dict[Any, Tuple[float, float]]:
+	"""
+	Calculate node positions for the projection graph using a force-directed layout.
 
 	Handles both undirected and directed graphs (converts directed to undirected as needed).
 	"""
-	# Convert to undirected if needed (e.g., for directed graphs from disparity_filter_backbone)
-	if isinstance(graph, nx.DiGraph):
-		graph = nx.to_undirected(graph)
+	# 1. Convert to undirected if needed
+	if graph.is_directed():
+		graph = graph.to_undirected()
 
+	# 2. Handle disconnected graphs safely
 	if not nx.is_connected(graph):
-		# Get the largest connected component for layout
+		orig_size = graph.number_of_nodes()
 		largest_cc = max(nx.connected_components(graph), key=len)
-		graph = graph.subgraph(largest_cc)
-		print(
-			"Warning: Projection graph is not connected; using largest connected component for layout."
-		)
-		print(
-			f"Original graph had {graph.number_of_nodes()} nodes; largest component has {len(graph.nodes())} nodes."
-		)
 
+		# Create a subgraph of just the largest component
+		graph_to_layout = graph.subgraph(largest_cc).copy()
+		new_size = graph_to_layout.number_of_nodes()
+
+		print(
+			f"Projection graph is disconnected. Using largest connected component for layout. "
+			f"Original nodes: {orig_size} -> LCC nodes: {new_size}."
+		)
+	else:
+		graph_to_layout = graph
+
+	# (Assuming graph_sort_nodes_by_id is a custom helper in your scope.
+	# If not, you can replace the variable below with just `graph_to_layout`)
+	sorted_graph = graph_sort_nodes_by_id(graph_to_layout)
+
+	# 3. Calculate Layout
 	if method == "kamada_kawai":
-		pos = nx.kamada_kawai_layout(graph_sort_nodes_by_id(graph))
+		pos = nx.kamada_kawai_layout(sorted_graph, weight="weight")
 	else:
 		pos = nx.spring_layout(
-			graph_sort_nodes_by_id(graph),
+			sorted_graph,
 			seed=seed,
 			k=spring_layout_k,
 			iterations=spring_layout_iterations,
-			threshold=1e-4,
+			threshold=threshold,
 			weight="weight",
-			method=method,
+			gravity=gravity,
 		)
 
+	# 4. Rotate positions 90 degrees if requested
 	if rotate:
 		pos = {node: (-y, x) for node, (x, y) in pos.items()}
 
@@ -604,18 +618,18 @@ def gamma_max_from_null_model(graph: nx.Graph) -> float:
 	Compute an upper bound for the resolution parameter from the standard null model.
 
 	Uses the analytical bound:
-	    gamma_plus = max_{i != j, P_ij != 0} (A_ij / P_ij)
+		gamma_plus = max_{i != j, P_ij != 0} (A_ij / P_ij)
 	where A is the adjacency matrix and P_ij = k_i * k_j / (2m).
 
 	Parameters
 	----------
 	graph : networkx.Graph
-	    The input graph. Edge weights are supported via the 'weight' attribute.
+		The input graph. Edge weights are supported via the 'weight' attribute.
 
 	Returns
 	-------
 	float
-	    The upper bound for the resolution parameter (gamma_plus).
+		The upper bound for the resolution parameter (gamma_plus).
 	"""
 	# Total edge weight (m)
 	m = graph.size(weight="weight")

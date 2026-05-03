@@ -4,7 +4,7 @@ from functools import lru_cache
 from pathlib import Path
 import re
 from datetime import date
-import numpy as np
+from collections import Counter, defaultdict
 
 
 @dataclass(frozen=True)
@@ -187,51 +187,65 @@ def get_top_communities(community_map: dict[int, str], top_n: int = 5) -> set[st
 	if top_n <= 0 or top_n >= len(set(community_map.values())):
 		return set(community_map.values())
 
-	from collections import Counter
-
 	community_counts = Counter(community_map.values())
 	top_communities = {c for c, _ in community_counts.most_common(top_n)}
 	return top_communities
 
 
-def relabel_communities_by_size(communities: dict, order: str = "desc") -> dict:
+def relabel_communities_by_observations(
+	communities: dict,
+	n_obs: dict,
+	order: str = "desc",
+	num_communities: int | None = None,
+) -> dict:
 	"""
-	Relabel communities by their size (number of nodes).
+	Relabel communities by their total size (weighted by n_obs).
 
 	Args:
-		communities: Dictionary mapping node -> community_id
-		order: "desc" for descending size (largest first), "asc" for ascending
+	    communities: Dictionary mapping node -> community_id
+	    n_obs: Dictionary mapping node -> number of total observations per node (used for size weighting)
+	    order: "desc" for descending size (largest first), "asc" for ascending
+	    num_communities: Optional number of highest-weight communities to keep.
+	                     Nodes belonging to smaller communities are removed from the output.
 
 	Returns:
-		Dictionary with relabeled communities based on size ordering
+	    Dictionary with relabeled communities based on size ordering
 	"""
-	from collections import Counter
+	# Sum the observations (weights) for each community
+	community_weights = defaultdict(int)
+	for node, comm_id in communities.items():
+		community_weights[comm_id] += n_obs.get(node, 0)
 
-	# Count nodes in each community
-	community_counts = Counter(communities.values())
-
-	# Sort communities by size
-	if order.lower() == "desc":
-		sorted_communities = sorted(
-			community_counts.items(), key=lambda x: x[1], reverse=True
-		)
-	else:  # asc
-		sorted_communities = sorted(community_counts.items(), key=lambda x: x[1])
+	# Sort communities by their total aggregated weight
+	is_desc = order.lower() == "desc"
+	sorted_communities = sorted(
+		community_weights.items(), key=lambda item: item[1], reverse=is_desc
+	)
 
 	# Create mapping from old community ID to new ID
 	old_to_new = {
-		old_id: new_id for new_id, (old_id, _) in enumerate(sorted_communities)
+		old_id: new_id for new_id, (old_id, _weight) in enumerate(sorted_communities)
 	}
 
-	# Relabel communities
-	relabeled = {node: old_to_new[comm_id] for node, comm_id in communities.items()}
+	print(
+		f"Relabeling communities by total observations with order='{order}' and num_communities={num_communities}."
+	)
 
-	return relabeled
+	# Relabel communities, dropping any that fall outside the top `num_communities`
+	relabelled_communities = {}
+	for node, comm_id in communities.items():
+		new_id = old_to_new[comm_id]
+
+		# If no limit is set, OR if the new_id falls within our requested top N
+		if num_communities is None or new_id < num_communities:
+			relabelled_communities[node] = new_id
+
+	return relabelled_communities
 
 
 def filter_communities_by_size(communities: dict, min_size: int = 1) -> dict:
 	"""
-	Filter out communities smaller than the minimum size threshold.
+	Filter out communities smaller than the minimum size threshold (raw node count).
 
 	Args:
 		communities: Dictionary mapping node -> community_id
@@ -240,21 +254,51 @@ def filter_communities_by_size(communities: dict, min_size: int = 1) -> dict:
 	Returns:
 		Dictionary with only nodes belonging to communities of size >= min_size
 	"""
-	from collections import Counter
-
 	# Count nodes in each community
 	community_counts = Counter(communities.values())
 
-	# Identify communities that meet the size threshold
+	# Identify communities that meet the raw size threshold
 	valid_communities = {
 		comm_id for comm_id, count in community_counts.items() if count >= min_size
 	}
 
 	# Keep only nodes in valid communities
-	filtered = {
+	return {
 		node: comm_id
 		for node, comm_id in communities.items()
 		if comm_id in valid_communities
 	}
 
-	return filtered
+
+def filter_communities_by_observations(
+	communities: dict, n_obs: dict, min_observations: int
+) -> dict:
+	"""
+	Filter out communities smaller than the minimum observation threshold.
+
+	Args:
+		communities: Dictionary mapping node -> community_id
+		n_obs: Dictionary mapping node -> number of total observations per node (used for size weighting)
+		min_observations: Minimum total observations a community must have to be kept
+
+	Returns:
+		Dictionary with only nodes belonging to communities of total observations >= min_observations
+	"""
+	# Sum the observations (weights) for each community
+	community_weights = defaultdict(int)
+	for node, comm_id in communities.items():
+		community_weights[comm_id] += n_obs.get(node, 0)
+
+	# Identify communities that meet the total observation threshold
+	valid_communities = {
+		comm_id
+		for comm_id, weight in community_weights.items()
+		if weight >= min_observations
+	}
+
+	# Keep only nodes in valid communities
+	return {
+		node: comm_id
+		for node, comm_id in communities.items()
+		if comm_id in valid_communities
+	}

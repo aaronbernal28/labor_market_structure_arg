@@ -46,6 +46,8 @@ def _edge_alpha_from_weight(
 	alpha_min: float = 0.05,
 ) -> float:
 	"""Map an edge weight to an alpha in [alpha_min, min(alpha_max, 0.6)]."""
+	print(f"Calculating edge alpha for weight {weight} with max weight {max_weight}")
+	print(f"Using alpha range [{alpha_min}, {alpha_max}]")
 	alpha_cap = min(float(alpha_max), 0.6)
 	alpha_floor = max(0.0, float(alpha_min))
 	if alpha_floor > alpha_cap:

@@ -19,7 +19,7 @@ gamma = gc.gamma_max_from_null_model(Graph)
 print(f"Gamma max from null model: {gamma:.4f}")
 
 # 1. Create a large random graph
-G = nx.fast_gnp_random_graph(n=50000, p=0.0001)
+G = nx.fast_gnp_random_graph(n=5000, p=0.0001)
 nx.config.warnings_to_ignore.add("cache")
 # 2. Test CPU Performance (Standard NetworkX)
 start = time.time()
@@ -44,9 +44,42 @@ print(f"Modularity score: {nx.algorithms.community.modularity(G, communities_cpu
 # 3. Test Leiden Community Detection (using the 'cugraph' backend)
 start = time.time()
 communities_gpu = nx.algorithms.community.leiden_communities(
-	G, backend="cugraph", random_state=42
+	G, backend="cugraph", seed=42
 )
 print(f"Leiden GPU Time: {time.time() - start:.4f}s")
 print(f"Number of communities detected: {len(communities_gpu)}")
 print(f"Sizes of first 5 communities: {[len(c) for c in communities_gpu[:5]]}")
 print(f"Modularity score: {nx.algorithms.community.modularity(G, communities_gpu):.4f}")
+
+karate = nx.karate_club_graph()
+print("Testing Louvain on Karate Club graph...")
+start = time.time()
+communities_karate = nx.algorithms.community.leiden_communities(
+	karate, backend="cugraph", seed=42
+)
+print(f"Leiden GPU Time: {time.time() - start:.4f}s")
+print(f"Number of communities detected: {len(communities_karate)}")
+print(f"Sizes of communities: {[len(c) for c in communities_karate]}")
+print(
+	f"Modularity score: {nx.algorithms.community.modularity(karate, communities_karate):.4f}"
+)
+communities_cpu = nx.algorithms.community.louvain_communities(karate)
+print(f"Louvain CPU Time: {time.time() - start:.4f}s")
+print(f"Number of communities detected: {len(communities_cpu)}")
+print(f"Sizes of communities: {[len(c) for c in communities_cpu]}")
+print(
+	f"Modularity score: {nx.algorithms.community.modularity(karate, communities_cpu):.4f}"
+)
+
+# Plotting the communities
+import matplotlib.pyplot as plt
+
+color_map = plt.get_cmap("tab10")
+node_colors = [color_map(i) for i in range(len(communities_karate))]
+color_dict = {}
+for i, community in enumerate(communities_karate):
+	for node in community:
+		color_dict[node] = node_colors[i]
+node_color_list = [color_dict[node] for node in karate.nodes()]
+nx.draw(karate, with_labels=True, node_color=node_color_list)
+plt.show()

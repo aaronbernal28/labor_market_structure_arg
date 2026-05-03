@@ -3,11 +3,7 @@ from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
-import numpy as np
 import seaborn as sns
-import random
-from sklearn.metrics.cluster import adjusted_mutual_info_score
-from sklearn.metrics import normalized_mutual_info_score
 
 nx.config.warnings_to_ignore.add("cache")
 
@@ -118,7 +114,10 @@ def main() -> None:
 		legend_handles, legend_labels = g.ax_joint.get_legend_handles_labels()
 		label_to_handle = dict(zip(legend_labels, legend_handles))
 		g.ax_joint.legend(
-			[label_to_handle[label] for label in algorithm_order + ["reference resolution"]],
+			[
+				label_to_handle[label]
+				for label in algorithm_order + ["reference resolution"]
+			],
 			algorithm_order + ["reference resolution"],
 			title="algorithm",
 		)

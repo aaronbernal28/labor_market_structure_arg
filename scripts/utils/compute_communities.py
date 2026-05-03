@@ -41,6 +41,7 @@ def main() -> None:
 	random.seed(seed)
 	random.shuffle(nodes)
 	mapping = {old: new for old, new in zip(graph.nodes(), nodes)}
+	inverse_mapping = {new: old for old, new in mapping.items()}
 	G_shuffled = nx.relabel_nodes(graph, mapping)
 
 	if algorithm == "infomap":
@@ -52,7 +53,15 @@ def main() -> None:
 			G_shuffled, seed=seed, resolution=resolution
 		)
 
-	communities = utils.relabel_communities_by_size(communities, order="desc")
+	print(f"Raw communities detected: {len(set(communities.values()))}")
+	communities = {inverse_mapping[node]: comm for node, comm in communities.items()}
+	n_obs = nodelist_df["n_obs"].to_dict()
+	communities = utils.relabel_communities_by_observations(
+		communities,
+		n_obs,
+		order="desc",
+		num_communities=snakemake.config["community"]["max"][class_],
+	)
 	communities = utils.filter_communities_by_size(communities, min_size=3)
 
 	num_communities = len(set(communities.values()))

@@ -338,7 +338,9 @@ def girvan_newman_partition(
 		if level >= max_levels:
 			break
 		communities_list = [set(c) for c in communities]
-		score = modularity(graph, communities_list, weight="weight", resolution=resolution)
+		score = modularity(
+			graph, communities_list, weight="weight", resolution=resolution
+		)
 		if score > best_score:
 			best_score = score
 			best_partition = {

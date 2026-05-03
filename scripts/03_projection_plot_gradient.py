@@ -34,11 +34,6 @@ def main() -> None:
 	).to_dict()
 	worker_counts = plot_df.set_index(id_col)["n_obs"].to_dict()
 
-	FACTOR_NODE_SIZE = 0.6
-	NODE_SIZE_EXPONENT = 0.8
-	EDGE_ALPHA = 0.1
-	NODE_ALPHA = 0.7
-
 	cmaps = snakemake.config.get("cmaps", {})
 	cmap_name = cmaps.get(feature, cmaps.get("default", "viridis"))
 
@@ -53,10 +48,10 @@ def main() -> None:
 		output_path=snakemake.output[0],
 		save=True,
 		node_size_map=worker_counts,
-		factor_node_size=FACTOR_NODE_SIZE,
-		node_size_exponent=NODE_SIZE_EXPONENT,
-		edge_alpha=EDGE_ALPHA,
-		node_alpha=NODE_ALPHA,
+		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"],
+		node_size_exponent=snakemake.config["NODE_SIZE_EXPONENT"],
+		edge_alpha=snakemake.config["EDGE_ALPHA"][class_],
+		node_alpha=snakemake.config["NODE_ALPHA"],
 	)
 
 	values_series = pd.Series(list(node_values.values()))

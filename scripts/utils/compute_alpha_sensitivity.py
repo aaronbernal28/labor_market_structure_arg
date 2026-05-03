@@ -34,7 +34,7 @@ def main() -> None:
 		clustering_coeffs,
 		nodes_largest_cc,
 	) = gc.compute_sweep_alpha(projection, alphas, seed)
-	#NOTE: Modularity is not computed here because it is not used for determining the reference alpha.
+	# NOTE: Modularity is not computed here because it is not used for determining the reference alpha.
 
 	# Find the minimum alpha where nodes in largest CC > 95%
 	reference_alpha = _reference_alpha_from_lcc(alphas, nodes_largest_cc)

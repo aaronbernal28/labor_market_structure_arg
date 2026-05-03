@@ -131,6 +131,18 @@ cmaps:
 
 community:
   resolution:
-    caes: "3.16" # sqrt(10)
-    ciuo: "3.16" # sqrt(10)
+    caes: 1.7 # 10**(1.25)
+    ciuo: 3.16 # sqrt(10)
     cno: "1.0"
+  max:
+    caes: 15
+    ciuo: 20
+    cno: 10
+
+FACTOR_NODE_SIZE : 4.2
+NODE_SIZE_EXPONENT : 0.7
+EDGE_ALPHA:
+  caes : 0.85
+  ciuo : 0.45
+  cno : 0.5
+NODE_ALPHA : 0.6

@@ -94,10 +94,6 @@ def main() -> None:
 		int(node): count
 		for node, count in plot_df.set_index(id_col)["n_obs"].to_dict().items()
 	}
-	FACTOR_NODE_SIZE = 0.6
-	NODE_SIZE_EXPONENT = 0.8
-	EDGE_ALPHA = 0.1
-	NODE_ALPHA = 0.7
 
 	_ = pl.plot_projection_by_group(
 		graph,
@@ -110,11 +106,11 @@ def main() -> None:
 		save=True,
 		method="energy",
 		node_size_map=worker_counts,
-		factor_node_size=FACTOR_NODE_SIZE,
+		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"],
 		pos=pos,
-		node_size_exponent=NODE_SIZE_EXPONENT,
-		edge_alpha=EDGE_ALPHA,
-		node_alpha=NODE_ALPHA,
+		node_size_exponent=snakemake.config["NODE_SIZE_EXPONENT"],
+		edge_alpha=snakemake.config["EDGE_ALPHA"][class_],
+		node_alpha=snakemake.config["NODE_ALPHA"],
 	)
 
 	log_lines: list[str] = []
