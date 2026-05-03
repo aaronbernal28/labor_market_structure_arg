@@ -275,6 +275,8 @@ rule _09_alpha_sensitivity_eph:
 	Produces a single combined plot per (class_, weight_function), overlaying
 	all EPH series with colormap gradients.
 	"""
+	resources:
+		limited_slots = 7
 	wildcard_constraints:
 		class_ = "caes|cno"
 	input:

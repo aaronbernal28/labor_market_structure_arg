@@ -14,12 +14,21 @@ def _extract_eph_file(metrics: dict[str, Any], input_path: Path) -> str:
 		return eph_file
 
 	# Expected path pattern:
-	# data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}_{algorithm}.json
+	# data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}.json
 	parts = list(input_path.parts)
+
+	# Try to find the eph_file by looking for _alpha_sensitivity directory
+	if "_alpha_sensitivity" in parts:
+		idx = parts.index("_alpha_sensitivity")
+		if idx >= 2:
+			# parts[idx-2] should be the eph_file, parts[idx-1] should be class_
+			return parts[idx - 2]
+
+	# Fallback: look for "processed" and extract the part 2 positions after it
 	if "processed" in parts:
 		idx = parts.index("processed")
-		if idx + 1 < len(parts):
-			return parts[idx + 1]
+		if idx + 2 < len(parts):
+			return parts[idx + 2]
 
 	return input_path.stem
 

@@ -8,6 +8,7 @@ import src.utils as ut
 
 from persim import plot_diagrams as persim_plot_diagrams
 import gudhi
+import matplotlib.dates as mdates
 import matplotlib.patches as patches
 import matplotlib.path as mpath
 import matplotlib.pyplot as plt
@@ -1733,7 +1734,24 @@ def plot_alpha_sensitivity_multi_series(
 			"reference_alphas must be None or have length equal to series_labels"
 		)
 
-	norm = mpl.colors.Normalize(vmin=0, vmax=max(1, n_series - 1))
+	series_dates: list[pd.Timestamp | None] = []
+	for label in series_labels:
+		parsed_key = ut.parse_eph_file_key(label)
+		series_dates.append(
+			pd.Timestamp(parsed_key.time_date) if parsed_key is not None else None
+		)
+	use_date_scale = all(ts is not None for ts in series_dates)
+	if use_date_scale:
+		series_date_nums = np.array(
+			[mdates.date2num(ts.to_pydatetime()) for ts in series_dates if ts is not None],
+			dtype=float,
+		)
+		norm = mpl.colors.Normalize(
+			vmin=float(series_date_nums.min()), vmax=float(series_date_nums.max())
+		)
+	else:
+		series_date_nums = np.arange(n_series, dtype=float)
+		norm = mpl.colors.Normalize(vmin=0, vmax=max(1, n_series - 1))
 
 	metric_specs = [
 		{
@@ -1766,7 +1784,7 @@ def plot_alpha_sensitivity_multi_series(
 	for spec in metric_specs:
 		cmap = spec["cmap"]
 		for i in range(n_series):
-			color = cmap(norm(i))
+			color = cmap(norm(series_date_nums[i]))
 			ax.plot(
 				alphas,
 				spec["data"][i, :],
@@ -1780,7 +1798,7 @@ def plot_alpha_sensitivity_multi_series(
 			mpl.lines.Line2D(
 				[0],
 				[0],
-				color=cmap(norm(n_series - 1)),
+				color=cmap(norm(series_date_nums[-1])),
 				linewidth=2,
 				linestyle=spec["linestyle"],
 				label=spec["label"],
@@ -1795,7 +1813,7 @@ def plot_alpha_sensitivity_multi_series(
 				continue
 			ax.axvline(
 				x=float(ref),
-				color=ref_cmap(norm(i)),
+				color=ref_cmap(norm(series_date_nums[i])),
 				linestyle="--",
 				linewidth=0.8,
 				alpha=0.22,
@@ -1808,18 +1826,24 @@ def plot_alpha_sensitivity_multi_series(
 	sm = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.Greys)
 	sm.set_array([])
 	cbar = fig.colorbar(sm, ax=ax, pad=0.02)
-	cbar.set_label("EPH (orden cronológico)")
-
-	max_ticks = max(2, int(max_cbar_ticks))
-	n_ticks = min(n_series, max_ticks)
-	if n_series == 1:
-		tick_idx = np.array([0], dtype=int)
+	if use_date_scale:
+		locator = mdates.AutoDateLocator(minticks=2, maxticks=max(2, int(max_cbar_ticks)))
+		cbar.ax.yaxis.set_major_locator(locator)
+		cbar.ax.yaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
+		cbar.set_label("EPH (fecha)")
 	else:
-		tick_idx = np.unique(
-			np.round(np.linspace(0, n_series - 1, n_ticks)).astype(int)
-		)
-	cbar.set_ticks(tick_idx)
-	cbar.set_ticklabels([series_labels[i] for i in tick_idx])
+		cbar.set_label("EPH (orden cronológico)")
+
+		max_ticks = max(2, int(max_cbar_ticks))
+		n_ticks = min(n_series, max_ticks)
+		if n_series == 1:
+			tick_idx = np.array([0], dtype=int)
+		else:
+			tick_idx = np.unique(
+				np.round(np.linspace(0, n_series - 1, n_ticks)).astype(int)
+			)
+		cbar.set_ticks(tick_idx)
+		cbar.set_ticklabels([series_labels[i] for i in tick_idx])
 
 	ax.set_title(title)
 	ax.set_xlabel("Alfa")
