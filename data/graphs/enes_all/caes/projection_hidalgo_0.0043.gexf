@@ -1,0 +1,474 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2026-05-02">
+    <creator>NetworkX 3.6.1</creator>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static" name="">
+    <nodes>
+      <node id="100" label="100" />
+      <node id="600" label="600" />
+      <node id="4808" label="4808" />
+      <node id="5602" label="5602" />
+      <node id="8200" label="8200" />
+      <node id="5601" label="5601" />
+      <node id="4904" label="4904" />
+      <node id="200" label="200" />
+      <node id="9302" label="9302" />
+      <node id="4802" label="4802" />
+      <node id="3200" label="3200" />
+      <node id="8600" label="8600" />
+      <node id="8401" label="8401" />
+      <node id="8800" label="8800" />
+      <node id="103" label="103" />
+      <node id="5500" label="5500" />
+      <node id="4803" label="4803" />
+      <node id="2601" label="2601" />
+      <node id="102" label="102" />
+      <node id="5201" label="5201" />
+      <node id="800" label="800" />
+      <node id="8700" label="8700" />
+      <node id="104" label="104" />
+      <node id="4901" label="4901" />
+      <node id="4806" label="4806" />
+      <node id="9700" label="9700" />
+      <node id="7400" label="7400" />
+      <node id="2500" label="2500" />
+      <node id="1009" label="1009" />
+      <node id="1600" label="1600" />
+      <node id="8402" label="8402" />
+      <node id="101" label="101" />
+      <node id="4810" label="4810" />
+      <node id="8501" label="8501" />
+      <node id="1000" label="1000" />
+      <node id="2603" label="2603" />
+      <node id="9601" label="9601" />
+      <node id="9501" label="9501" />
+      <node id="2900" label="2900" />
+      <node id="6400" label="6400" />
+      <node id="9502" label="9502" />
+      <node id="2100" label="2100" />
+      <node id="2301" label="2301" />
+      <node id="5000" label="5000" />
+      <node id="2002" label="2002" />
+      <node id="5202" label="5202" />
+      <node id="4903" label="4903" />
+      <node id="2009" label="2009" />
+      <node id="4000" label="4000" />
+      <node id="2701" label="2701" />
+      <node id="4502" label="4502" />
+      <node id="1200" label="1200" />
+      <node id="9503" label="9503" />
+      <node id="2000" label="2000" />
+      <node id="4804" label="4804" />
+      <node id="2202" label="2202" />
+      <node id="3001" label="3001" />
+      <node id="1502" label="1502" />
+      <node id="7302" label="7302" />
+      <node id="4801" label="4801" />
+      <node id="9602" label="9602" />
+      <node id="5300" label="5300" />
+      <node id="2800" label="2800" />
+      <node id="8102" label="8102" />
+      <node id="4811" label="4811" />
+      <node id="1100" label="1100" />
+      <node id="6200" label="6200" />
+      <node id="3009" label="3009" />
+      <node id="6100" label="6100" />
+      <node id="2700" label="2700" />
+      <node id="1400" label="1400" />
+      <node id="3502" label="3502" />
+      <node id="8509" label="8509" />
+      <node id="9301" label="9301" />
+      <node id="3900" label="3900" />
+      <node id="6900" label="6900" />
+      <node id="8403" label="8403" />
+      <node id="3600" label="3600" />
+      <node id="1001" label="1001" />
+      <node id="8000" label="8000" />
+      <node id="3501" label="3501" />
+      <node id="8101" label="8101" />
+      <node id="2001" label="2001" />
+      <node id="6500" label="6500" />
+      <node id="7800" label="7800" />
+      <node id="3800" label="3800" />
+      <node id="1003" label="1003" />
+      <node id="4902" label="4902" />
+      <node id="1700" label="1700" />
+      <node id="9200" label="9200" />
+      <node id="6300" label="6300" />
+      <node id="9100" label="9100" />
+      <node id="7900" label="7900" />
+      <node id="2309" label="2309" />
+      <node id="4501" label="4501" />
+      <node id="9402" label="9402" />
+      <node id="7100" label="7100" />
+      <node id="9603" label="9603" />
+      <node id="2201" label="2201" />
+      <node id="5100" label="5100" />
+      <node id="500" label="500" />
+      <node id="3000" label="3000" />
+      <node id="900" label="900" />
+      <node id="6800" label="6800" />
+      <node id="4504" label="4504" />
+      <node id="4800" label="4800" />
+      <node id="9409" label="9409" />
+      <node id="1800" label="1800" />
+      <node id="1300" label="1300" />
+      <node id="9609" label="9609" />
+      <node id="6000" label="6000" />
+      <node id="4807" label="4807" />
+      <node id="700" label="700" />
+      <node id="3700" label="3700" />
+      <node id="2709" label="2709" />
+      <node id="1501" label="1501" />
+      <node id="7500" label="7500" />
+      <node id="4900" label="4900" />
+      <node id="7200" label="7200" />
+      <node id="2400" label="2400" />
+      <node id="7301" label="7301" />
+      <node id="9000" label="9000" />
+      <node id="5900" label="5900" />
+      <node id="9401" label="9401" />
+      <node id="3300" label="3300" />
+      <node id="5800" label="5800" />
+      <node id="1902" label="1902" />
+      <node id="4503" label="4503" />
+      <node id="8400" label="8400" />
+      <node id="1002" label="1002" />
+      <node id="4805" label="4805" />
+      <node id="300" label="300" />
+      <node id="4809" label="4809" />
+      <node id="3100" label="3100" />
+      <node id="7702" label="7702" />
+      <node id="4909" label="4909" />
+      <node id="7000" label="7000" />
+      <node id="3003" label="3003" />
+      <node id="7701" label="7701" />
+      <node id="1900" label="1900" />
+      <node id="2604" label="2604" />
+      <node id="2602" label="2602" />
+      <node id="6600" label="6600" />
+    </nodes>
+    <edges>
+      <edge source="100" target="200" id="0" weight="0.11764705882352941" />
+      <edge source="100" target="2601" id="1" weight="0.1111111111111111" />
+      <edge source="100" target="104" id="2" weight="0.08823529411764706" />
+      <edge source="600" target="3800" id="3" weight="0.020155038759689922" />
+      <edge source="600" target="4904" id="4" weight="0.04917387883556255" />
+      <edge source="600" target="5201" id="5" weight="0.1655328798185941" />
+      <edge source="4808" target="1009" id="6" weight="0.07821281466677926" />
+      <edge source="4808" target="4800" id="7" weight="0.5756842213903041" />
+      <edge source="4808" target="4803" id="8" weight="0.6689935354331448" />
+      <edge source="4808" target="4804" id="9" weight="0.698257663185746" />
+      <edge source="4808" target="4807" id="10" weight="0.5261350522138092" />
+      <edge source="4808" target="9602" id="11" weight="0.007196404612454377" />
+      <edge source="4808" target="5601" id="12" weight="0.15330124506244078" />
+      <edge source="5602" target="4811" id="13" weight="0.04830917874396135" />
+      <edge source="8200" target="1001" id="14" weight="0.09026369168356999" />
+      <edge source="8200" target="1100" id="15" weight="0.33530405405405406" />
+      <edge source="8200" target="1502" id="16" weight="0.04983108108108108" />
+      <edge source="8200" target="4801" id="17" weight="0.23057432432432431" />
+      <edge source="8200" target="5300" id="18" weight="0.12439678284182305" />
+      <edge source="8200" target="6100" id="19" weight="0.22550675675675674" />
+      <edge source="8200" target="8000" id="20" weight="0.0893652896543418" />
+      <edge source="5601" target="1009" id="21" weight="0.1497070594286718" />
+      <edge source="5601" target="4800" id="22" weight="0.12993513906836116" />
+      <edge source="5601" target="4803" id="23" weight="0.1708840908805781" />
+      <edge source="5601" target="4804" id="24" weight="0.1768053326749784" />
+      <edge source="5601" target="4807" id="25" weight="0.1277772898919821" />
+      <edge source="5601" target="8501" id="26" weight="0.013900665419690247" />
+      <edge source="4904" target="3800" id="27" weight="0.038119590873328085" />
+      <edge source="4904" target="4502" id="28" weight="0.022931165445176656" />
+      <edge source="4904" target="4801" id="29" weight="0.04996066089693155" />
+      <edge source="4904" target="4805" id="30" weight="0.044846577498033044" />
+      <edge source="4904" target="4903" id="31" weight="0.16981539166902654" />
+      <edge source="4904" target="5201" id="32" weight="0.05043273013375295" />
+      <edge source="200" target="104" id="33" weight="0.17647058823529413" />
+      <edge source="200" target="5000" id="34" weight="0.17777777777777778" />
+      <edge source="200" target="3001" id="35" weight="0.18181818181818182" />
+      <edge source="9302" target="5500" id="36" weight="0.18854568854568854" />
+      <edge source="9302" target="5900" id="37" weight="0.17096774193548386" />
+      <edge source="9302" target="8000" id="38" weight="0.055642538841382636" />
+      <edge source="9302" target="9000" id="39" weight="0.1650602409638554" />
+      <edge source="9302" target="9700" id="40" weight="0.0016369116276722059" />
+      <edge source="9302" target="9609" id="41" weight="0.1032258064516129" />
+      <edge source="4802" target="1001" id="42" weight="0.25963488843813387" />
+      <edge source="4802" target="2309" id="43" weight="0.1043613707165109" />
+      <edge source="4802" target="4501" id="44" weight="0.48598130841121495" />
+      <edge source="4802" target="4503" id="45" weight="0.7118380062305296" />
+      <edge source="4802" target="4801" id="46" weight="0.5240847784200385" />
+      <edge source="4802" target="9200" id="47" weight="0.13213598460551634" />
+      <edge source="4802" target="4810" id="48" weight="0.09177145378336643" />
+      <edge source="4802" target="4811" id="49" weight="0.2601246105919003" />
+      <edge source="4802" target="4805" id="50" weight="0.42013232514177695" />
+      <edge source="4802" target="4809" id="51" weight="0.5119705340699816" />
+      <edge source="3200" target="1000" id="52" weight="0.44" />
+      <edge source="3200" target="1300" id="53" weight="0.1703056768558952" />
+      <edge source="3200" target="2202" id="54" weight="0.14521452145214522" />
+      <edge source="3200" target="2400" id="55" weight="0.24778761061946902" />
+      <edge source="8600" target="4903" id="56" weight="0.061720404007713364" />
+      <edge source="8600" target="6900" id="57" weight="0.052101396727307125" />
+      <edge source="8600" target="8101" id="58" weight="0.10527477378062237" />
+      <edge source="8600" target="8401" id="59" weight="0.2722282040005459" />
+      <edge source="8600" target="8402" id="60" weight="0.025033893495601728" />
+      <edge source="8600" target="8501" id="61" weight="0.022475948457183065" />
+      <edge source="8600" target="9602" id="62" weight="0.006778699120345556" />
+      <edge source="8600" target="9700" id="63" weight="0.00427426767823152" />
+      <edge source="8600" target="8700" id="64" weight="0.06526468455402465" />
+      <edge source="8401" target="4000" id="65" weight="0.017995612471045273" />
+      <edge source="8401" target="4502" id="66" weight="0.022868928284375426" />
+      <edge source="8401" target="4903" id="67" weight="0.051283088582332076" />
+      <edge source="8401" target="6400" id="68" weight="0.1402010888521557" />
+      <edge source="8401" target="6900" id="69" weight="0.18803172533021945" />
+      <edge source="8401" target="8000" id="70" weight="0.04344793072595199" />
+      <edge source="8401" target="8101" id="71" weight="0.11742315099861998" />
+      <edge source="8401" target="8501" id="72" weight="0.04237020013212213" />
+      <edge source="8401" target="8402" id="73" weight="0.11522421558666081" />
+      <edge source="8800" target="5500" id="74" weight="0.13063063063063063" />
+      <edge source="8800" target="8509" id="75" weight="0.06495828367103695" />
+      <edge source="8800" target="8700" id="76" weight="0.27155963302752295" />
+      <edge source="8800" target="9700" id="77" weight="0.003642138230108527" />
+      <edge source="8800" target="9301" id="78" weight="0.07452907452907453" />
+      <edge source="103" target="1002" id="79" weight="0.07971014492753623" />
+      <edge source="103" target="101" id="80" weight="0.03198720511795282" />
+      <edge source="103" target="102" id="81" weight="0.22693096377306904" />
+      <edge source="5500" target="8101" id="82" weight="0.19394204396390666" />
+      <edge source="5500" target="9700" id="83" weight="0.002062406122073148" />
+      <edge source="5500" target="8700" id="84" weight="0.12522935779816513" />
+      <edge source="5500" target="9301" id="85" weight="0.2438867438867439" />
+      <edge source="4803" target="1009" id="86" weight="0.1257683057188669" />
+      <edge source="4803" target="4800" id="87" weight="0.7955304649919829" />
+      <edge source="4803" target="4903" id="88" weight="0.03775773022101757" />
+      <edge source="4803" target="4804" id="89" weight="0.8169238365633872" />
+      <edge source="4803" target="4807" id="90" weight="0.7700928647781935" />
+      <edge source="4803" target="9602" id="91" weight="0.006330171031533939" />
+      <edge source="2601" target="2603" id="92" weight="0.22727272727272727" />
+      <edge source="2601" target="3001" id="93" weight="0.18181818181818182" />
+      <edge source="102" target="1001" id="94" weight="0.07910750507099391" />
+      <edge source="102" target="101" id="95" weight="0.035500085680013706" />
+      <edge source="102" target="104" id="96" weight="0.04989747095010253" />
+      <edge source="5201" target="1000" id="97" weight="0.28193832599118945" />
+      <edge source="5201" target="1002" id="98" weight="0.24669603524229075" />
+      <edge source="5201" target="101" id="99" weight="0.029159764665562346" />
+      <edge source="5201" target="104" id="100" weight="0.13656387665198239" />
+      <edge source="5201" target="1100" id="101" weight="0.2669404517453799" />
+      <edge source="5201" target="4901" id="102" weight="0.1394736842105263" />
+      <edge source="5201" target="5202" id="103" weight="0.2555066079295154" />
+      <edge source="800" target="3502" id="104" weight="0.21052631578947367" />
+      <edge source="800" target="3600" id="105" weight="0.18095238095238095" />
+      <edge source="800" target="700" id="106" weight="0.09210526315789473" />
+      <edge source="8700" target="9700" id="107" weight="0.001615617185876422" />
+      <edge source="104" target="1002" id="108" weight="0.21428571428571427" />
+      <edge source="104" target="101" id="109" weight="0.020963043354086938" />
+      <edge source="104" target="7800" id="110" weight="0.10294117647058823" />
+      <edge source="4901" target="3300" id="111" weight="0.22105263157894736" />
+      <edge source="4806" target="4503" id="112" weight="0.0801781737193764" />
+      <edge source="4806" target="4801" id="113" weight="0.10579064587973273" />
+      <edge source="4806" target="4805" id="114" weight="0.1824196597353497" />
+      <edge source="4806" target="4809" id="115" weight="0.17093541202672605" />
+      <edge source="9700" target="8101" id="116" weight="0.004620105186655641" />
+      <edge source="7400" target="1800" id="117" weight="0.1330166270783848" />
+      <edge source="7400" target="5800" id="118" weight="0.08788598574821853" />
+      <edge source="7400" target="6300" id="119" weight="0.07838479809976247" />
+      <edge source="7400" target="7100" id="120" weight="0.0714879467996675" />
+      <edge source="7400" target="7301" id="121" weight="0.20308788598574823" />
+      <edge source="2500" target="2400" id="122" weight="0.1477933629832364" />
+      <edge source="2500" target="2900" id="123" weight="0.05473828258638385" />
+      <edge source="2500" target="4000" id="124" weight="0.004618451531292564" />
+      <edge source="1009" target="101" id="125" weight="0.026617924258867883" />
+      <edge source="1009" target="4804" id="126" weight="0.10402419454388347" />
+      <edge source="1009" target="4800" id="127" weight="0.14193883353524364" />
+      <edge source="1009" target="4807" id="128" weight="0.15518015045532532" />
+      <edge source="1600" target="3100" id="129" weight="0.17300380228136883" />
+      <edge source="8402" target="6900" id="130" weight="0.017317041689971176" />
+      <edge source="8402" target="8000" id="131" weight="0.029406703093404468" />
+      <edge source="101" target="1002" id="132" weight="0.029388244702119152" />
+      <edge source="101" target="8102" id="133" weight="0.0469812075169932" />
+      <edge source="101" target="1100" id="134" weight="0.023876163820186213" />
+      <edge source="4810" target="4801" id="135" weight="0.10324288550628723" />
+      <edge source="4810" target="4805" id="136" weight="0.1460401500110302" />
+      <edge source="4810" target="4807" id="137" weight="0.08726408868945493" />
+      <edge source="4810" target="4809" id="138" weight="0.1526582836973307" />
+      <edge source="4810" target="4811" id="139" weight="0.13456871828810943" />
+      <edge source="8501" target="8101" id="140" weight="0.046948915307690166" />
+      <edge source="8501" target="8509" id="141" weight="0.013629840365082298" />
+      <edge source="1000" target="2900" id="142" weight="0.27932960893854747" />
+      <edge source="1000" target="2701" id="143" weight="0.14084507042253522" />
+      <edge source="1000" target="2202" id="144" weight="0.1419141914191419" />
+      <edge source="1000" target="2309" id="145" weight="0.09028960817717206" />
+      <edge source="1000" target="9409" id="146" weight="0.38125" />
+      <edge source="1000" target="2400" id="147" weight="0.2920353982300885" />
+      <edge source="1000" target="1002" id="148" weight="0.31851851851851853" />
+      <edge source="2603" target="2701" id="149" weight="0.34507042253521125" />
+      <edge source="9601" target="1300" id="150" weight="0.07860262008733625" />
+      <edge source="9601" target="4503" id="151" weight="0.06458333333333334" />
+      <edge source="9501" target="3300" id="152" weight="0.12639405204460966" />
+      <edge source="9501" target="6100" id="153" weight="0.3344262295081967" />
+      <edge source="9501" target="6200" id="154" weight="0.1801470588235294" />
+      <edge source="9501" target="6300" id="155" weight="0.15613382899628253" />
+      <edge source="9501" target="9502" id="156" weight="0.11524163568773234" />
+      <edge source="2900" target="2400" id="157" weight="0.27876106194690264" />
+      <edge source="2900" target="4504" id="158" weight="0.08224442736356649" />
+      <edge source="2900" target="9409" id="159" weight="0.26256983240223464" />
+      <edge source="6400" target="6500" id="160" weight="0.16204217536071033" />
+      <edge source="6400" target="7100" id="161" weight="0.06363300036995931" />
+      <edge source="6400" target="6900" id="162" weight="0.1362367802585194" />
+      <edge source="9502" target="2700" id="163" weight="0.18181818181818182" />
+      <edge source="9502" target="2709" id="164" weight="0.3333333333333333" />
+      <edge source="9502" target="3000" id="165" weight="0.2727272727272727" />
+      <edge source="9502" target="3700" id="166" weight="0.09090909090909091" />
+      <edge source="9502" target="8403" id="167" weight="0.21739130434782608" />
+      <edge source="2100" target="2002" id="168" weight="0.14492753623188406" />
+      <edge source="2301" target="1003" id="169" weight="0.22727272727272727" />
+      <edge source="2301" target="1200" id="170" weight="0.1111111111111111" />
+      <edge source="2301" target="2000" id="171" weight="0.2222222222222222" />
+      <edge source="2301" target="8403" id="172" weight="0.30434782608695654" />
+      <edge source="2301" target="2604" id="173" weight="0.1111111111111111" />
+      <edge source="2301" target="4900" id="174" weight="0.2222222222222222" />
+      <edge source="5000" target="300" id="175" weight="0.15555555555555556" />
+      <edge source="5000" target="5202" id="176" weight="0.2196969696969697" />
+      <edge source="2002" target="1902" id="177" weight="0.22580645161290322" />
+      <edge source="2002" target="2000" id="178" weight="0.27586206896551724" />
+      <edge source="2002" target="2001" id="179" weight="0.41379310344827586" />
+      <edge source="2009" target="1003" id="180" weight="0.3333333333333333" />
+      <edge source="2009" target="1700" id="181" weight="0.18604651162790697" />
+      <edge source="2009" target="1902" id="182" weight="0.3548387096774194" />
+      <edge source="2009" target="5100" id="183" weight="0.2" />
+      <edge source="2009" target="900" id="184" weight="0.26666666666666666" />
+      <edge source="2009" target="3502" id="185" weight="0.20930232558139536" />
+      <edge source="2701" target="2400" id="186" weight="0.168141592920354" />
+      <edge source="4502" target="4504" id="187" weight="0.1437047073556281" />
+      <edge source="1200" target="7702" id="188" weight="0.1111111111111111" />
+      <edge source="9503" target="1300" id="189" weight="0.14393105977264392" />
+      <edge source="9503" target="1400" id="190" weight="0.462108072048032" />
+      <edge source="9503" target="1502" id="191" weight="0.09204253758709205" />
+      <edge source="9503" target="3100" id="192" weight="0.18151815181518152" />
+      <edge source="2000" target="8403" id="193" weight="0.21739130434782608" />
+      <edge source="2000" target="2001" id="194" weight="0.35294117647058826" />
+      <edge source="4804" target="4800" id="195" weight="0.6708184174793236" />
+      <edge source="4804" target="4807" id="196" weight="0.6703740278977904" />
+      <edge source="2202" target="1800" id="197" weight="0.0675" />
+      <edge source="3001" target="2201" id="198" weight="0.13333333333333333" />
+      <edge source="3001" target="2400" id="199" weight="0.21238938053097345" />
+      <edge source="3001" target="3009" id="200" weight="0.18181818181818182" />
+      <edge source="1502" target="1100" id="201" weight="0.05180840664711633" />
+      <edge source="1502" target="1300" id="202" weight="0.08113391984359726" />
+      <edge source="7302" target="3502" id="203" weight="0.13953488372093023" />
+      <edge source="7302" target="8403" id="204" weight="0.0975609756097561" />
+      <edge source="7302" target="9402" id="205" weight="0.1346153846153846" />
+      <edge source="4801" target="1001" id="206" weight="0.08620689655172414" />
+      <edge source="4801" target="4501" id="207" weight="0.41811175337186895" />
+      <edge source="4801" target="4503" id="208" weight="0.5144508670520231" />
+      <edge source="4801" target="5300" id="209" weight="0.1780160857908847" />
+      <edge source="4801" target="4811" id="210" weight="0.16859344894026976" />
+      <edge source="4801" target="9200" id="211" weight="0.18088518280949326" />
+      <edge source="4801" target="4805" id="212" weight="0.5614366729678639" />
+      <edge source="4801" target="4809" id="213" weight="0.5972989564149785" />
+      <edge source="9602" target="4800" id="214" weight="0.009271392192251588" />
+      <edge source="9602" target="4807" id="215" weight="0.00947604592846773" />
+      <edge source="9602" target="8101" id="216" weight="0.010494097070397902" />
+      <edge source="9602" target="9609" id="217" weight="0.009784831077791841" />
+      <edge source="2800" target="1003" id="218" weight="0.22727272727272727" />
+      <edge source="2800" target="3003" id="219" weight="0.06666666666666667" />
+      <edge source="2800" target="4900" id="220" weight="0.26666666666666666" />
+      <edge source="8102" target="8101" id="221" weight="0.032992805183447944" />
+      <edge source="4811" target="4501" id="222" weight="0.1723027375201288" />
+      <edge source="4811" target="4503" id="223" weight="0.28125" />
+      <edge source="4811" target="4809" id="224" weight="0.2105586249232658" />
+      <edge source="1100" target="1001" id="225" weight="0.12474645030425964" />
+      <edge source="1100" target="1002" id="226" weight="0.23408624229979466" />
+      <edge source="1100" target="2309" id="227" weight="0.11584327086882454" />
+      <edge source="6200" target="6100" id="228" weight="0.10655737704918032" />
+      <edge source="6200" target="6300" id="229" weight="0.5661764705882353" />
+      <edge source="2700" target="2709" id="230" weight="0.16666666666666666" />
+      <edge source="1400" target="1300" id="231" weight="0.08805870580386925" />
+      <edge source="1400" target="3100" id="232" weight="0.07211474316210807" />
+      <edge source="3502" target="1902" id="233" weight="0.27906976744186046" />
+      <edge source="3502" target="3600" id="234" weight="0.3142857142857143" />
+      <edge source="3502" target="900" id="235" weight="0.32558139534883723" />
+      <edge source="3502" target="3900" id="236" weight="0.16279069767441862" />
+      <edge source="8509" target="9301" id="237" weight="0.3301549463647199" />
+      <edge source="9301" target="8101" id="238" weight="0.06232857653933299" />
+      <edge source="9301" target="9000" id="239" weight="0.06841046277665996" />
+      <edge source="3900" target="3600" id="240" weight="0.10476190476190476" />
+      <edge source="3900" target="3800" id="241" weight="0.037209302325581395" />
+      <edge source="8403" target="1003" id="242" weight="0.34782608695652173" />
+      <edge source="8403" target="300" id="243" weight="0.13793103448275862" />
+      <edge source="8403" target="3000" id="244" weight="0.5217391304347826" />
+      <edge source="8403" target="7800" id="245" weight="0.11764705882352941" />
+      <edge source="8403" target="8400" id="246" weight="0.391304347826087" />
+      <edge source="8403" target="9402" id="247" weight="0.4807692307692308" />
+      <edge source="8403" target="9603" id="248" weight="0.18518518518518517" />
+      <edge source="8403" target="9401" id="249" weight="0.5652173913043478" />
+      <edge source="3600" target="9402" id="250" weight="0.3333333333333333" />
+      <edge source="3600" target="9409" id="251" weight="0.39375" />
+      <edge source="8000" target="9200" id="252" weight="0.0443213296398892" />
+      <edge source="6500" target="9409" id="253" weight="0.1588310038119441" />
+      <edge source="7800" target="9402" id="254" weight="0.10294117647058823" />
+      <edge source="1003" target="5100" id="255" weight="0.15384615384615385" />
+      <edge source="4902" target="5100" id="256" weight="0.11538461538461539" />
+      <edge source="4902" target="500" id="257" weight="0.3333333333333333" />
+      <edge source="1700" target="1501" id="258" weight="0.08" />
+      <edge source="9200" target="4503" id="259" weight="0.1372674791533034" />
+      <edge source="9200" target="4805" id="260" weight="0.2443289224952741" />
+      <edge source="9200" target="4809" id="261" weight="0.27255985267034993" />
+      <edge source="9100" target="7900" id="262" weight="0.16666666666666666" />
+      <edge source="9100" target="9409" id="263" weight="0.1875" />
+      <edge source="2309" target="4503" id="264" weight="0.11073253833049404" />
+      <edge source="4501" target="4504" id="265" weight="0.12144504227517294" />
+      <edge source="4501" target="4503" id="266" weight="0.5748792270531401" />
+      <edge source="4501" target="4805" id="267" weight="0.34735349716446123" />
+      <edge source="4501" target="4809" id="268" weight="0.37630448127685695" />
+      <edge source="9402" target="300" id="269" weight="0.11538461538461539" />
+      <edge source="9402" target="3000" id="270" weight="0.34615384615384615" />
+      <edge source="9402" target="8400" id="271" weight="0.28846153846153844" />
+      <edge source="9402" target="9401" id="272" weight="0.4230769230769231" />
+      <edge source="9402" target="9409" id="273" weight="0.41875" />
+      <edge source="9603" target="4900" id="274" weight="0.18518518518518517" />
+      <edge source="9603" target="9401" id="275" weight="0.25925925925925924" />
+      <edge source="5100" target="1902" id="276" weight="0.1935483870967742" />
+      <edge source="3000" target="9401" id="277" weight="0.45" />
+      <edge source="3000" target="8400" id="278" weight="0.42857142857142855" />
+      <edge source="900" target="1902" id="279" weight="0.25806451612903225" />
+      <edge source="900" target="2709" id="280" weight="0.2222222222222222" />
+      <edge source="900" target="4909" id="281" weight="0.1111111111111111" />
+      <edge source="900" target="700" id="282" weight="0.05555555555555555" />
+      <edge source="900" target="7702" id="283" weight="0.16666666666666666" />
+      <edge source="4504" target="4503" id="284" weight="0.10684089162182936" />
+      <edge source="4504" target="4805" id="285" weight="0.08553875236294896" />
+      <edge source="4504" target="4809" id="286" weight="0.09208103130755065" />
+      <edge source="4800" target="4807" id="287" weight="0.9530002225134127" />
+      <edge source="4800" target="4805" id="288" weight="0.217865354661656" />
+      <edge source="9409" target="1501" id="289" weight="0.0875" />
+      <edge source="9409" target="5800" id="290" weight="0.13930348258706468" />
+      <edge source="9409" target="7500" id="291" weight="0.1871345029239766" />
+      <edge source="1800" target="1300" id="292" weight="0.10043668122270742" />
+      <edge source="1800" target="7301" id="293" weight="0.08" />
+      <edge source="1800" target="5800" id="294" weight="0.0725" />
+      <edge source="1300" target="1501" id="295" weight="0.2052401746724891" />
+      <edge source="9609" target="7301" id="296" weight="0.0860655737704918" />
+      <edge source="9609" target="7500" id="297" weight="0.10245901639344263" />
+      <edge source="9609" target="9000" id="298" weight="0.04216867469879518" />
+      <edge source="6000" target="5800" id="299" weight="0.5422885572139303" />
+      <edge source="6000" target="5900" id="300" weight="0.3902439024390244" />
+      <edge source="4807" target="4805" id="301" weight="0.22848092912762308" />
+      <edge source="4807" target="4809" id="302" weight="0.20248119308433418" />
+      <edge source="2709" target="7000" id="303" weight="0.125" />
+      <edge source="7500" target="7200" id="304" weight="0.10526315789473684" />
+      <edge source="4900" target="3003" id="305" weight="0.06666666666666667" />
+      <edge source="2400" target="3300" id="306" weight="0.2610619469026549" />
+      <edge source="7301" target="5800" id="307" weight="0.21890547263681592" />
+      <edge source="7301" target="5900" id="308" weight="0.13008130081300814" />
+      <edge source="9000" target="5900" id="309" weight="0.04939759036144578" />
+      <edge source="5900" target="5800" id="310" weight="0.16666666666666666" />
+      <edge source="9401" target="8400" id="311" weight="0.4" />
+      <edge source="4503" target="4805" id="312" weight="0.43147448015122875" />
+      <edge source="4503" target="4809" id="313" weight="0.5131982811540823" />
+      <edge source="4805" target="4809" id="314" weight="0.8189981096408318" />
+      <edge source="7702" target="4909" id="315" weight="0.1111111111111111" />
+      <edge source="7702" target="7000" id="316" weight="0.08333333333333333" />
+      <edge source="7702" target="7701" id="317" weight="0.6" />
+      <edge source="7000" target="7701" id="318" weight="0.125" />
+    </edges>
+  </graph>
+</gexf>
