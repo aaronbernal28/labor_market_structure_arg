@@ -1,12 +1,11 @@
 from pathlib import Path
 from typing import Any
-
 from scripts import *
-import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
+import seaborn as sns
 
 snakemake: Any
 
@@ -50,6 +49,16 @@ def main() -> None:
 		)
 
 	eph_files_sorted = utils.sort_eph_files(eph_files)
+
+	# Keep only third-quarter (Q3) waves (period == 3)
+	_filtered = []
+	for _f in eph_files_sorted:
+		_k = utils.parse_eph_file_key(_f)
+		if _k is not None and getattr(_k, "period", None) == 3:
+			_filtered.append(_f)
+	eph_files_sorted = _filtered
+	if not eph_files_sorted:
+		raise ValueError("No Q3 waves found after filtering. Check EPH filenames or adjust filter.")
 	wave_year_key: dict[str, str] = {}
 	wave_time_meta: dict[str, tuple[float, pd.Timestamp, str]] = {}
 
@@ -177,47 +186,15 @@ def main() -> None:
 	results["time_date"] = pd.to_datetime(results["time_date"], errors="coerce")
 	results = results.sort_values(["time_date", "alpha"], kind="mergesort")
 
-	# Plot
-	figsize = snakemake.config.get("figsizes", {}).get("edge_correlation", (7, 4))
-	plt.figure(figsize=figsize)
+	# Prepare a tidy summary dataframe with date, assortativity and alpha for downstream work
+	_summary_cols = ["time_date", "pearson_r", "alpha", "eph_file", "time_label", "time_numeric"]
+	_summary_df = results.loc[:, [c for c in _summary_cols if c in results.columns]].copy()
+	_summary_df = _summary_df.sort_values(["time_date", "alpha"], kind="mergesort")
 
-	def _alpha_label(a_val) -> str:
-		if isinstance(a_val, str):
-			return a_val
-		return f"alpha={a_val:g}"
+	print("Example of results dataframe:")
+	print(_summary_df.head())
 
-	for a_val in alphas:
-		df_a = results[results["alpha"].astype(str) == str(a_val)].copy()
-		if df_a.empty:
-			continue
-		x = pd.to_datetime(df_a["time_date"]).to_numpy()
-		y = df_a["pearson_r"].to_numpy(dtype=float)
-		plt.plot(
-			x, y, marker="o", linewidth=1.3, markersize=3.5, label=_alpha_label(a_val)
-		)
-
-	ax = plt.gca()
-	plt.axhline(0.0, color="black", linewidth=0.8, alpha=0.25)
-	plt.ylim(bottom=min(0, plt.ylim()[0]), top=1.0)
-
-	# Continuous calendar axis with regular date ticks (not only observed EPH points).
-	t_min = pd.to_datetime(min(x_dates)) - pd.Timedelta(days=45)
-	t_max = pd.to_datetime(max(x_dates)) + pd.Timedelta(days=45)
-	xmin = float(mdates.date2num(t_min.to_pydatetime()))
-	xmax = float(mdates.date2num(t_max.to_pydatetime()))
-	ax.set_xlim(xmin, xmax)
-	major_locator = mdates.AutoDateLocator(minticks=6, maxticks=12)
-	ax.xaxis.set_major_locator(major_locator)
-	ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(major_locator))
-	ax.xaxis.set_minor_locator(mdates.MonthLocator(bymonth=[1, 4, 7, 10]))
-	plt.setp(ax.get_xticklabels(), rotation=0, ha="center")
-
-	title = f"EPH - {class_.upper()} - Asortatividad (Pearson r)\n{weight_function} | feature={feature}"
-	plt.title(title)
-	plt.xlabel("Fecha (EPH)")
-	plt.ylabel("Asortatividad (Pearson r)")
-	plt.legend(loc="best", frameon=True)
-	plt.tight_layout()
+	sns.lineplot(data=_summary_df, x="time_date", y="pearson_r", hue="alpha", palette="viridis")
 
 	out_path = Path(snakemake.output[0])
 	plt.savefig(out_path, bbox_inches="tight")
@@ -287,21 +264,6 @@ def main() -> None:
 				items.append(f"{k}={gm[k]}")
 		log_lines.append(
 			f"  - {eph_file}: " + (", ".join(items) if items else "(no metrics)")
-		)
-
-	log_lines.append("")
-	log_lines.append("PER-ALPHA SUMMARY (across time):")
-	for a_val in alphas:
-		df_a = results[results["alpha"].astype(str) == str(a_val)].copy()
-		if df_a.empty:
-			continue
-		r_vals = pd.to_numeric(df_a["pearson_r"], errors="coerce")
-		r_vals = r_vals[np.isfinite(r_vals)]
-		if len(r_vals) == 0:
-			log_lines.append(f"  - {_alpha_label(a_val)}: no finite r values")
-			continue
-		log_lines.append(
-			f"  - {_alpha_label(a_val)}: mean={r_vals.mean():.4f}, std={r_vals.std():.4f}, min={r_vals.min():.4f}, max={r_vals.max():.4f}"
 		)
 
 	log_path = None
