@@ -33,6 +33,8 @@ def main() -> None:
 	nodelist = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 	community_col = _resolve_community_column(nodelist, algorithm)
 	pos_df = nodelist.dropna(subset=[id_col, community_col])
+	max_group_code = snakemake.config["community"]["max"][class_]
+	nodelist = nodelist[nodelist["community"] < utils.label_fn(max_group_code, len(str(max_group_code)))].copy()
 
 	# Cast nodes to int instantly to prevent string mismatch bugs
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)

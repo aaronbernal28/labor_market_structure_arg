@@ -64,7 +64,16 @@ rule all:
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
 			algorithm=ALGORITHMS,
-			discrete_feature=DISCRETE_FEATURES,
+			discrete_feature=["community"],
+		),
+		expand(
+			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm}_{discrete_feature}.png",
+			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm}_{discrete_feature}.png"],
+			weight_function=["hidalgo"],
+			alpha_caes=ALPHA_CAES,
+			alpha_ciuo=ALPHA_CIUO,
+			algorithm=["leiden"], # Any algorithm will do since we're only plotting discrete feature groups
+			discrete_feature=["grupo"],
 		),
 		expand(
 			["images/enes_all/caes/03_projection_plot_gradient/_{weight_function}_{alpha_caes}_pos_{discrete_feature}.png",
@@ -168,6 +177,8 @@ rule _03_resolution_sensitivity:
 		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_scores_{weight_function}_{alpha}.csv"
 	output:
 		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.png",
+		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}_AMI.png",
+		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}_NMI.png"
 	#log:
 	#	"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.log"
 	script:

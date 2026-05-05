@@ -39,6 +39,7 @@ def summarize_graph(graph: nx.Graph) -> Dict[str, MetricValue]:
 	node_count = graph.number_of_nodes()
 	edge_count = graph.number_of_edges()
 	self_loops = nx.number_of_selfloops(graph)
+	density = nx.density(graph)
 
 	# degrees
 	avg_deg = average_degree(graph)
@@ -58,6 +59,7 @@ def summarize_graph(graph: nx.Graph) -> Dict[str, MetricValue]:
 		"node_count": node_count,
 		"edge_count": edge_count,
 		"self_loops": self_loops,
+		"density": density,
 		"avg_degree": avg_deg,
 		"avg_weighted_degree": avg_wdeg,
 		"avg_clustering": avg_clust,
@@ -73,6 +75,7 @@ def log_graph_metrics(label: str, metrics: Dict[str, MetricValue]) -> None:
 	print(f"Node count: {metrics['node_count']}")
 	print(f"Edge count: {metrics['edge_count']}")
 	print(f"Loop count: {metrics['self_loops']}")
+	print(f"Density: {metrics['density']:.4f}")
 	print(f"Average degree: {metrics['avg_degree']:.2f}")
 	print(f"Average weighted degree: {metrics['avg_weighted_degree']:.2f}")
 	print(f"Average clustering coefficient ponderado: {metrics['avg_clustering']:.4f}")

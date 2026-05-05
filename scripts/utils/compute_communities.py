@@ -60,11 +60,11 @@ def main() -> None:
 		communities,
 		n_obs,
 		order="desc",
-		num_communities=snakemake.config["community"]["max"][class_],
+		num_communities=None # snakemake.config["community"]["max"][class_],
 	)
 	communities = utils.filter_communities_by_size(communities, min_size=3)
-
 	num_communities = len(set(communities.values()))
+
 	print(f"Modularity score: {modularity:.4f}")
 	print(f"Detected communities: {num_communities}")
 
@@ -92,7 +92,6 @@ def main() -> None:
 		for node, comm in communities.items()
 	}
 	nodelist_df["community"] = nodelist_df[id_col].astype(int).map(communities_int)
-	nodelist_df = nodelist_df.dropna(subset=["community"])
 	nodelist_df.to_csv(snakemake.output[0], index=False)
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
 	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
@@ -152,6 +151,11 @@ def main() -> None:
 		"nivel_ed_mean": "Education",
 		"age_mean": "Age",
 	}
+
+	nodelist_df = nodelist_df.dropna(subset=["community"])
+	# Filtering greater that Cxx groups:
+	max_group_code = snakemake.config["community"]["max"][class_]
+	nodelist_df = nodelist_df[nodelist_df["community"] < utils.label_fn(max_group_code, len(str(max_group_code)))].copy()
 
 	pl.plot_community_boxplots(
 		df_nodes=nodelist_df,

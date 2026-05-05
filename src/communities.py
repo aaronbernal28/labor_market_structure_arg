@@ -23,7 +23,7 @@ def louvain_partition(
 	"""
 	try:
 		communities_list = louvain_communities(
-			graph, weight="weight", resolution=resolution, seed=seed, backend="cugraph"
+			graph, weight="weight", resolution=resolution, seed=seed,# backend="cugraph"
 		)
 	except NotImplementedError as exc:
 		print("Falling back to CPU-based Louvain implementation (may be slower)")
