@@ -11,8 +11,8 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-RESOLUTIONS = np.geomspace(0.1, 20, num=40)
-TRYS = 15
+RESOLUTIONS = np.geomspace(0.1, 25, num=40)
+TRYS = 25
 
 
 def main() -> None:
@@ -95,10 +95,11 @@ def main() -> None:
 					],
 					ignore_index=True,
 				)
-				communities = utils.relabel_communities_by_size(
-					communities, order="desc"
+				communities = utils.filter_communities_by_size(
+					communities, min_size=3
 				)
-				nodes_sorted_communities_labels.append(communities.values())
+				# Store the full community dict, not just values, so we can align nodes later
+				nodes_sorted_communities_labels.append(communities)
 
 			# Compute pairwise AMI/NMI between all partitions for this algorithm/resolution
 			print(
@@ -106,14 +107,28 @@ def main() -> None:
 			)
 			for i in range(len(nodes_sorted_communities_labels)):
 				for j in range(i + 1, len(nodes_sorted_communities_labels)):
+					# Get community dicts
+					communities_i = nodes_sorted_communities_labels[i]
+					communities_j = nodes_sorted_communities_labels[j]
+
+					# Find common nodes between the two partitions
+					common_nodes = sorted(set(communities_i.keys()) & set(communities_j.keys()))
+
+					if len(common_nodes) == 0:
+						continue  # Skip if no common nodes
+
+					# Extract labels only for common nodes
+					labels_i = np.array([communities_i[node] for node in common_nodes])
+					labels_j = np.array([communities_j[node] for node in common_nodes])
+
 					ami = adjusted_mutual_info_score(
-						list(nodes_sorted_communities_labels[i]),
-						list(nodes_sorted_communities_labels[j]),
+						labels_i,
+						labels_j,
 					)
 
 					nmi = normalized_mutual_info_score(
-						list(nodes_sorted_communities_labels[i]),
-						list(nodes_sorted_communities_labels[j]),
+						labels_i,
+						labels_j,
 						average_method="geometric",
 					)
 

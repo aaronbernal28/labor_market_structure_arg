@@ -62,7 +62,7 @@ def main() -> None:
 	fig.savefig(snakemake.output[0], bbox_inches="tight")
 
 	# Plotting scores — create separate plots for AMI and NMI using jointplot
-	for score_type in ["AMI", "NMI"]:
+	for i, score_type in enumerate(["AMI", "NMI"]):
 		# Filter data for just this score type (keep all algorithms!)
 		data_subset = df_scores[df_scores["score_type"] == score_type]
 
@@ -126,8 +126,7 @@ def main() -> None:
 		g.set_axis_labels("Resolution", "Score")
 		g.ax_joint.set_xscale("log")
 		g.ax_joint.grid(True)
-		output_path = str(snakemake.output[0]).replace(".png", f"_{score_type}.png")
-
+		output_path = str(snakemake.output[i + 1])
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
 
