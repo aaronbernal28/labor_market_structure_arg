@@ -74,3 +74,16 @@ rule prepare_data_eph:
 rule prepare_eph_all:
 	input:
 		expand("data/processed/eph/{eph_file}.csv", eph_file=EPH_FILES)
+
+
+rule _11_ponderations_test:
+	'''Test the ponderations for the ENES 2021 dataset.'''
+	input:
+		"data/raw/base_enespersonas_2021.csv",
+		"data/raw/base_enespersonas.csv"
+	output:
+		"images/enes_all/ponderations_test_histogram.png"
+	log:
+		"images/enes_all/ponderations_test.log"
+	script:
+		"../scripts/11_ponderations_test.py"
