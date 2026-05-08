@@ -95,9 +95,9 @@ def main() -> None:
 					],
 					ignore_index=True,
 				)
-				communities = utils.relabel_communities_by_size(
-					communities, order="desc"
-				)
+				#communities = utils.relabel_communities_by_observations(
+				#	communities, order="desc"
+				#)
 				nodes_sorted_communities_labels.append(communities.values())
 
 			# Compute pairwise AMI/NMI between all partitions for this algorithm/resolution
