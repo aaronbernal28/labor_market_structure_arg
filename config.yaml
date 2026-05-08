@@ -55,7 +55,7 @@ datasets:
     id_caes: "CAES_num"
     id_ciuo: "CIUO_encuestado"
     id_cno: null
-    ponderation: null
+    ponderation: null #"POND1_FIN"
     features:
      sex_id: "SEXO"
      public_worker: "M3_7" # en realidad es "M3_7"==1

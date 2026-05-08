@@ -420,7 +420,7 @@ def disparity_filter_backbone(
 	"""
 	if mode not in {"or", "and"}:
 		raise ValueError("mode must be 'or' or 'and'.")
-	if alpha <= 0 or alpha > 1:
+	if alpha is not None and (alpha <= 0 or alpha > 1):
 		raise ValueError("alpha must be in (0, 1].")
 
 	if original_graph is None and disparity_graph is None:
@@ -432,34 +432,28 @@ def disparity_filter_backbone(
 	if disparity_graph.number_of_nodes() == 0:
 		return nx.Graph()
 
+	if original_graph is not None:
+		n = original_graph.number_of_nodes()
+	else:
+		raise ValueError("original_graph is required to determine node count for coverage stopping criterion.")
+
 	# Start with all nodes, but no edges
 	backbone = nx.Graph()
 	backbone.add_nodes_from(disparity_graph.nodes(data=True))
-
-	for u, v in disparity_graph.to_undirected().edges():
-		# Determine which directions pass the threshold
-		u_to_v_passes = (
-			disparity_graph.get_edge_data(u, v, default={}).get("alpha", 1) < alpha
-		)
-		v_to_u_passes = (
-			disparity_graph.get_edge_data(v, u, default={}).get("alpha", 1) < alpha
-		)
-
-		if mode == "or":
-			# Keep edge if at least one direction passes
-			if u_to_v_passes or v_to_u_passes:
-				w_uv = disparity_graph.get_edge_data(u, v, default={}).get(
-					"weight", 0.0
-				)
-				# print(f"Keeping edge ({u}, {v}) with data w_uv={w_uv}, a_uv={disparity_graph.get_edge_data(u, v, default={}).get('alpha', 'N/A')}, a_vu={disparity_graph.get_edge_data(v, u, default={}).get('alpha', 'N/A')}")
-				backbone.add_edge(u, v, weight=w_uv)
-		else:  # mode == "and"
-			# Keep edge only if both directions pass
-			if u_to_v_passes and v_to_u_passes:
-				w_uv = disparity_graph.get_edge_data(u, v, default={}).get(
-					"weight", 0.0
-				)
-				backbone.add_edge(u, v, weight=w_uv)
+	edges = disparity_graph.edges(data=True)
+	edges = sorted(edges, key=lambda x: x[2].get("alpha", 1), reverse=False)
+	if alpha is not None:
+		edges = [e for e in edges if e[2].get("alpha", 1) < alpha]
+		backbone.add_edges_from((u, v, {"weight": d.get("weight", 1)}) for u, v, d in edges)
+	else:
+		nodes = set()
+		for u, v, data in edges:
+			nodes = nodes | {u, v}
+			if len(nodes) / n > 0.9650:
+				print("Reached 95% node coverage in backbone; stopping edge addition.")
+				print(f"Current alpha: {data.get('alpha', 1)}, nodes covered: {len(nodes)}/{n} ({len(nodes)/n:.2%})")
+				break # Stop when we have included edges that cover 95% of the nodes
+			backbone.add_edge(u, v, weight=data.get("weight", 0.0))
 
 	if not keep_isolates:
 		isolates = [n for n in backbone.nodes() if backbone.degree(n) == 0]
@@ -575,6 +569,7 @@ def compute_sweep_alpha(
 	for i, alpha in enumerate(alphas):
 		# FIXME: This is inefficient since it recomputes the disparity graph each time. Refactor to compute once and pass in.
 		backbone = disparity_filter_backbone(
+			original_graph=projection,
 			disparity_graph=disparity_graph,
 			alpha=float(alpha),
 			mode="or",

@@ -37,7 +37,7 @@ def main() -> None:
 		)
 
 	# Sort graph nodes by ID to ensure consistent ordering across runs
-	nodes = list(graph.nodes())
+	nodes = sorted(list(graph.nodes()))
 	random.seed(seed)
 	random.shuffle(nodes)
 	mapping = {old: new for old, new in zip(graph.nodes(), nodes)}
@@ -55,7 +55,7 @@ def main() -> None:
 
 	print(f"Raw communities detected: {len(set(communities.values()))}")
 	communities = {inverse_mapping[node]: comm for node, comm in communities.items()}
-	n_obs = nodelist_df["n_obs"].to_dict()
+	n_obs = nodelist_df.set_index(id_col)["n_obs"].to_dict()
 	communities = utils.relabel_communities_by_observations(
 		communities,
 		n_obs,

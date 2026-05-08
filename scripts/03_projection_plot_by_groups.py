@@ -13,8 +13,6 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
-	max_group_code = snakemake.config["community"]["max"][class_]
-	pos_df = pos_df[pos_df["community"] < utils.label_fn(max_group_code, len(str(max_group_code)))].copy()
 
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
 	graph_metrics = metrics.summarize_graph(graph)
@@ -33,11 +31,22 @@ def main() -> None:
 		raise ValueError(
 			f"Discrete feature '{discrete_feature}' not found in positions dataframe."
 		)
+	if discrete_feature == "community":
+		max_group_code = snakemake.config["community"]["max"][class_]
+		threshold_label = utils.label_fn(max_group_code, 2)
+
+		plot_df[discrete_feature] = plot_df[discrete_feature].fillna("Other")
+		mask = plot_df[discrete_feature] > threshold_label
+		plot_df.loc[mask, discrete_feature] = "Other"
+		for col in plot_df.columns:
+			if "color" in col:
+				plot_df.loc[mask, col] = "gray"
+
+		plot_df[discrete_feature] = plot_df[discrete_feature].fillna("Other")
+
 	group_map = {
 		int(node): group
-		for node, group in plot_df.set_index(id_col)[discrete_feature].dropna()
-		.to_dict()
-		.items()
+		for node, group in plot_df.set_index(id_col)[discrete_feature].to_dict().items()
 	}
 	group_color_map = None
 	preferred_color_col = f"{discrete_feature}_color"
