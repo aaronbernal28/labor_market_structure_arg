@@ -10,7 +10,7 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-RESOLUTIONS = np.geomspace(0.1, 30, num=30)
+RESOLUTIONS = np.geomspace(0.1, 30, num=40)
 TRYS = 15
 
 
@@ -52,7 +52,7 @@ def main() -> None:
 			for seed in seeds:
 				G_perturbed = graph.copy()
 
-				edge_drop_fraction = 0.1
+				edge_drop_fraction = 0.05
 				edges = sorted([tuple(sorted(e)) for e in G_perturbed.edges()])
 				num_to_remove = int(len(edges) * edge_drop_fraction)
 

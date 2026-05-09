@@ -2,7 +2,6 @@ from typing import Any
 from pathlib import Path
 from scripts import *
 import matplotlib.pyplot as plt
-import networkx as nx
 import numpy as np
 import json
 

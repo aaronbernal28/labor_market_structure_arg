@@ -131,9 +131,9 @@ cmaps:
 
 community:
   resolution:
-    caes: 1.7 # 10**(1.25)
+    caes: 5.62 # 10**(0.75)
     ciuo: 3.16 # sqrt(10)
-    cno: "1.0"
+    cno: 1.0
   max:
     caes: 15
     ciuo: 20
