@@ -323,7 +323,8 @@ def draw_bipartite_by_color(
 	figsize: tuple | None = None,
 	edge_alpha: float = 0.9,
 	legend_marker_size: float = 11.0,
-	factor_node_size: float = 3.0,
+	factor_node_size_caes: float = 3.0,
+	factor_node_size_ciuo: float = 3.0,
 	node_size_map: Mapping[int, float] = None,
 	node_size_exponent: float = 1.0,
 ) -> Dict[str, tuple]:
@@ -346,7 +347,7 @@ def draw_bipartite_by_color(
 		print("Graph contains nodes not present in label map.")
 
 	# Compute initial layout
-	pos = nx.spring_layout(graph, seed=seed, k=0.5, iterations=1000, method="force")
+	pos = nx.spring_layout(graph, seed=seed, k=0.5, iterations=100, method="force")
 	pos_caes_y = [
 		pos[node][1]
 		for node in graph.nodes()
@@ -377,22 +378,23 @@ def draw_bipartite_by_color(
 			pos[node][1] = normalize_ciuo_y(pos[node][1])
 
 	# Defining color and size maps
-	# node_colors = [color_map.get(int(node), LIGTHGRAY) for node in graph.nodes()]
 	if node_size_map is not None:
 		raw_sizes = {
 			node: float(node_size_map.get(node, node_size_map.get(int(node), 1.0)))
 			for node in graph.nodes()
 		}
+		print("Using custom node size map for sizing.")
 	else:
 		raw_sizes = {node: float(degree) for node, degree in graph.degree()}
+		print("No node size map provided; using degree for sizing.")
 
 	size_map = {
 		node: float(
-			np.power(max(raw_sizes.get(node, 1.0), 0.0), node_size_exponent)
-			* factor_node_size
+			np.sqrt(raw_sizes.get(node, 1.0)) * min(factor_node_size_caes, factor_node_size_ciuo)
 		)
 		for node in graph.nodes()
 	}
+
 	caes_nodes = [
 		node
 		for node in graph.nodes()
@@ -859,7 +861,7 @@ def plot_projection_by_group(
 	else:
 		raw_sizes = [graph.degree(node) + 1 for node in graph.nodes()]
 
-	node_sizes = [np.power(s, node_size_exponent) * factor_node_size for s in raw_sizes]
+	node_sizes = [np.sqrt(s) * factor_node_size for s in raw_sizes]
 
 	# Prepare edge widths and alphas
 	edges = list(graph.edges())
@@ -983,7 +985,7 @@ def plot_projection_gradient(
 	else:
 		raw_sizes = [graph.degree(n) + 1 for n in nodes]
 
-	node_sizes = [np.power(s, node_size_exponent) * factor_node_size for s in raw_sizes]
+	node_sizes = [np.sqrt(s) * factor_node_size for s in raw_sizes]
 
 	subgraph = graph.subgraph(nodes)
 	subpos = {n: pos[n] for n in nodes}
@@ -1063,6 +1065,7 @@ def plot_stacked_by_group(
 	community_map: Dict[int, int],
 	title: str,
 	output_path: Path,
+	weights: str | None = None,
 	group_color_map: Dict[str, tuple] = None,
 	legend_title: str = None,
 	figsize: tuple | None = None,
@@ -1075,15 +1078,28 @@ def plot_stacked_by_group(
 	df_index_copy = df_index_copy.dropna(subset=["community"])
 
 	# Create crosstab and normalize if needed
-	if percentage:
-		ct = (
-			pd.crosstab(
-				df_index_copy["community"], df_index_copy[group_col], normalize="index"
-			)
-			* 100
+	if weights is not None and weights in df_index_copy.columns:
+		ct = pd.crosstab(
+			df_index_copy["community"],
+			df_index_copy[group_col],
+			values=df_index_copy[weights],
+			aggfunc="sum",
+			normalize="index" if percentage else False,
 		)
+		if percentage:
+			ct = ct * 100
 	else:
-		ct = pd.crosstab(df_index_copy["community"], df_index_copy[group_col])
+		if percentage:
+			ct = (
+				pd.crosstab(
+					df_index_copy["community"],
+					df_index_copy[group_col],
+					normalize="index",
+				)
+				* 100
+			)
+		else:
+			ct = pd.crosstab(df_index_copy["community"], df_index_copy[group_col])
 
 	# Build color list matching the column order
 	if group_color_map:
@@ -1221,7 +1237,7 @@ def plot_distance_heatmap(
 def plot_backbone_weight_histogram(
 	original_weights: list,
 	backbone_weights: list,
-	alpha: float,
+	coverage_threshold: float,
 	title_prefix: str,
 	output_path: Path,
 	save: bool = True,
@@ -1251,7 +1267,7 @@ def plot_backbone_weight_histogram(
 
 	if title_prefix:
 		ax.set_title(
-			f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (alpha={alpha})"
+			f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (coverage={coverage_threshold})"
 		)
 
 	ax.set_xlabel("Peso de arista")
@@ -1918,8 +1934,7 @@ def compute_and_plot_edge_correlation(
 	plt.figure(figsize=figsize)
 	raw_node_sizes_plot = [
 		float(
-			np.power(max(raw_node_sizes.get(u, 1.0), 0.0), node_size_exponent)
-			* factor_node_size
+			np.sqrt(raw_node_sizes.get(u, 1.0)) * factor_node_size
 		)
 		for u in plotted_nodes
 	]

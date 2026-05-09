@@ -52,7 +52,6 @@ rule all:
 		expand(
 			["images/enes_all/caes/03_resolution_sensitivity/_catplots_{weight_function}_{alpha_caes}.png",
 			"images/enes_all/ciuo/03_resolution_sensitivity/_catplots_{weight_function}_{alpha_ciuo}.png"],
-			class_=CLASSES,
 			weight_function=["hidalgo"],
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
@@ -106,6 +105,7 @@ rule all:
 			class_=CLASSES,
 			topo_method=TOPO_METHOD,
 		),
+"""
 		expand(
 			"data/processed/eph/{eph_file}.csv",
 			eph_file=EPH_FILES
@@ -122,6 +122,7 @@ rule all:
 			weight_function=["hidalgo"],
 			feature=["female_pct"],
 		),
+"""
 
 
 rule _00_aed_report:

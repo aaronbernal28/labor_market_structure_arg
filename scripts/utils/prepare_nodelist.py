@@ -7,6 +7,7 @@ snakemake: Any
 
 CHARACTERISTIC_COLUMNS = [
 	"n_obs",
+	"total_workers_weighted",
 	"income_mean",
 	"income_q1",
 	"income_median",

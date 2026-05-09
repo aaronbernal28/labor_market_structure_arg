@@ -38,7 +38,7 @@ rule prepare_nodelist:
 	log:
 		"data/processed/{dataset}/nodelist_{class_}.log"
 	script:
-		"../scripts/utils/prepare_nodelist_caes.py"
+		"../scripts/utils/prepare_nodelist.py"
 
 
 rule import_eph_data:

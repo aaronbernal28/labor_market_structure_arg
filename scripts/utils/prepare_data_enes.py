@@ -50,12 +50,8 @@ def main() -> None:
 		rename_cols[ID_1] = default_cfg["id_1"]
 	if ID_2 and default_cfg.get("id_2") and ID_2 != default_cfg["id_2"]:
 		rename_cols[ID_2] = default_cfg["id_2"]
-	if (
-		CALIB_COL
-		and default_cfg.get("ponderation")
-		and CALIB_COL != default_cfg["ponderation"]
-	):
-		rename_cols[CALIB_COL] = default_cfg["ponderation"]
+	if CALIB_COL and CALIB_COL != "ponderation":
+		rename_cols[CALIB_COL] = "ponderation"
 
 	for feature_name in feature_names:
 		source_col = dataset_features.get(feature_name)

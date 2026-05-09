@@ -63,8 +63,8 @@ def main() -> None:
 		save=True,
 		figsize=snakemake.config["figsizes"]["bipartite"],
 		node_size_map=node_size_map_workers,
-		factor_node_size=0.6,
-		node_size_exponent=0.8,
+		factor_node_size_caes=snakemake.config["FACTOR_NODE_SIZE"]["caes"],
+		factor_node_size_ciuo=snakemake.config["FACTOR_NODE_SIZE"]["ciuo"],
 	)
 
 	degrees = gc.degree_sequences(

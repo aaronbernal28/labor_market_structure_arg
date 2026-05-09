@@ -8,19 +8,6 @@ import numpy as np
 snakemake: Any
 
 
-def _reference_alpha_from_lcc(
-	alphas: np.ndarray, nodes_largest_cc: np.ndarray
-) -> float:
-	ref = None
-	for i, a in enumerate(alphas):
-		if nodes_largest_cc[i] > 0.95:
-			ref = float(a)
-			break
-	if ref is None:
-		ref = float(alphas[-1])
-	return round(float(ref), 4)
-
-
 def main() -> None:
 	projection = nx.read_gexf(snakemake.input[0], node_type=int)
 
@@ -36,8 +23,11 @@ def main() -> None:
 	) = gc.compute_sweep_alpha(projection, alphas, seed)
 	# NOTE: Modularity is not computed here because it is not used for determining the reference alpha.
 
-	# Find the minimum alpha where nodes in largest CC > 95%
-	reference_alpha = _reference_alpha_from_lcc(alphas, nodes_largest_cc)
+	# Find the minimum alpha where nodes in largest CC > 99%
+	reference_alpha = gc.get_reference_backbone_alpha(
+		disparity_graph=gc.get_disparity_graph(projection),
+		coverage=snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"],
+	)
 
 	output_data = {
 		"projection_file": str(snakemake.input[0]),

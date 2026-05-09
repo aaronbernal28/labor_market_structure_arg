@@ -37,7 +37,7 @@ datasets:
     id_caes: "v182caes"
     id_ciuo: "v183ciuo"
     id_cno: "v183cno"
-    ponderation: null #"f_calib3"
+    ponderation: "f_calib3"
     features:
       sex_id: "v109"
       public_worker: "v188" # en realidad es "v188"==1
@@ -55,7 +55,7 @@ datasets:
     id_caes: "CAES_num"
     id_ciuo: "CIUO_encuestado"
     id_cno: null
-    ponderation: null #"POND1_FIN"
+    ponderation: "POND1_FIN"
     features:
      sex_id: "SEXO"
      public_worker: "M3_7" # en realidad es "M3_7"==1
@@ -114,7 +114,7 @@ cno:
   partition: 0
 
 figsizes:
-  top_n_bar: [6, 4]
+  top_n_bar: [8, 4]
   edge_correlation: [6, 6]
   bipartite: [10, 8]
   projection: [8, 8]
@@ -139,10 +139,17 @@ community:
     ciuo: 20
     cno: 10
 
-FACTOR_NODE_SIZE : 4.2
+FACTOR_NODE_SIZE:
+  caes : 0.6
+  ciuo : 0.75
+  cno : 0.8
+
 NODE_SIZE_EXPONENT : 0.7
 EDGE_ALPHA:
   caes : 0.85
   ciuo : 0.45
   cno : 0.5
 NODE_ALPHA : 0.6
+
+alpha_sensitivity:
+  reference_coverage_threshold: 0.99

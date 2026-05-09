@@ -44,6 +44,7 @@ def main() -> None:
 		enes_df,
 		caes_col=letra_caes,
 		ciuo_col=letra_ciuo,
+		values="ponderation",
 		logscale=False,
 	)
 	if biadj.empty:

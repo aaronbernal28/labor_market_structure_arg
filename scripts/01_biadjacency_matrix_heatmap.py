@@ -41,6 +41,7 @@ def main() -> None:
 		enes_df,
 		letra_caes,
 		letra_ciuo,
+		values="ponderation",
 		logscale=False,
 	)
 

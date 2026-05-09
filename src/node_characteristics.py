@@ -123,7 +123,7 @@ def compute_group_characteristics(
 
 	grouped = data.groupby(col_group, dropna=True)
 	features = pd.DataFrame(index=grouped.size().index)
-	features["n_obs"] = grouped.size()
+	features["n_obs"] = grouped[calib_col].sum()
 
 	if region_col in data.columns:
 		valid_region = data[data[region_col].notna()]
@@ -257,5 +257,5 @@ def attach_group_characteristics(
 
 	result = nodelist_df.join(features_df, how="left")
 	if "n_obs" in result.columns:
-		result["n_obs"] = result["n_obs"].fillna(0).astype("Int64")
+		result["n_obs"] = pd.to_numeric(result["n_obs"], errors="coerce").fillna(0).astype(float)
 	return result

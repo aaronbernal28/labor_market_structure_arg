@@ -9,12 +9,12 @@ snakemake: Any
 
 def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
-	alpha = float(snakemake.wildcards["alpha"])
+	alpha = None #float(snakemake.wildcards["alpha"])
 	print(f"Filtering projection graph with alpha={alpha}...")
 	input_metrics = metrics.summarize_graph(graph)
 
-	if alpha < 1.0:
-		backbone = gc.disparity_filter_backbone(original_graph=graph, alpha=alpha)
+	if alpha is None or alpha < 1.0:
+		backbone = gc.disparity_filter_backbone(original_graph=graph, alpha=alpha, coverage=snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"])
 		# Convert to undirected for metrics computation and downstream analysis
 		backbone_for_metrics = nx.to_undirected(backbone)
 	else:
@@ -33,7 +33,7 @@ def main() -> None:
 		"PARAMETERS",
 		[
 			f"Alpha: {alpha}",
-			f"Filtering applied: {alpha < 1.0}",
+			f"Filtering applied: {alpha is None or alpha < 1.0}",
 		],
 	)
 	log.add_graph_metrics(log_lines, "Input projection metrics", input_metrics)
@@ -46,7 +46,7 @@ def main() -> None:
 	nx.write_gexf(backbone, output_path)
 
 	# For weight histogram, use undirected version to count unique edges consistently
-	if alpha < 1.0:
+	if alpha is None or alpha < 1.0:
 		backbone_undirected = nx.to_undirected(backbone)
 	else:
 		backbone_undirected = backbone
@@ -56,7 +56,7 @@ def main() -> None:
 		backbone_weights=[
 			d["weight"] for _, _, d in backbone_undirected.edges(data=True)
 		],
-		alpha=alpha,
+		coverage_threshold=snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"],
 		title_prefix=None,
 		output_path=Path(snakemake.output[1]),
 		save=True,

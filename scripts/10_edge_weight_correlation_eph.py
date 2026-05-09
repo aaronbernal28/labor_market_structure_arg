@@ -164,7 +164,7 @@ def main() -> None:
 		disp = gc.get_disparity_graph(projection)
 		for a in alphas:
 			bb = gc.disparity_filter_backbone(
-				disparity_graph=disp, alpha=float(a), keep_isolates=True
+				disparity_graph=disp, alpha=float(a), keep_isolates=True, coverage=snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"]
 			)
 			r, p, n = pl.compute_edge_assortativity_pearson(bb, feature_map)
 			rows.append(

@@ -112,7 +112,7 @@ def main() -> None:
 		save=True,
 		method="energy",
 		node_size_map=worker_counts,
-		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"],
+		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_],
 		pos=pos,
 		node_size_exponent=snakemake.config["NODE_SIZE_EXPONENT"],
 		edge_alpha=snakemake.config["EDGE_ALPHA"][class_],

@@ -3,7 +3,6 @@ from scripts import *
 import networkx as nx
 import pandas as pd
 import numpy as np
-import random
 from sklearn.metrics.cluster import adjusted_mutual_info_score
 from sklearn.metrics import normalized_mutual_info_score
 
@@ -11,13 +10,13 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-RESOLUTIONS = np.geomspace(0.1, 20, num=40)
+RESOLUTIONS = np.geomspace(0.1, 30, num=30)
 TRYS = 15
 
 
 def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
-	algorithms = list(snakemake.params["algorithms"])
+	algorithms = sorted(list(snakemake.params["algorithms"]))
 
 	rng = np.random.default_rng(snakemake.config["seed"])
 	seeds = rng.integers(low=0, high=2**16 - 1, size=TRYS).tolist()
@@ -53,23 +52,37 @@ def main() -> None:
 			for seed in seeds:
 				G_perturbed = graph.copy()
 
-				edge_drop_fraction = 0.05
-				edges = list(G_perturbed.edges())
+				edge_drop_fraction = 0.1
+				edges = sorted([tuple(sorted(e)) for e in G_perturbed.edges()])
 				num_to_remove = int(len(edges) * edge_drop_fraction)
-				edges_to_remove = random.sample(edges, num_to_remove)
+
+				# Use seeded numpy RNG to guarantee deterministic sub-sampling
+				rng_seed = np.random.default_rng(seed)
+				edges_arr = np.array(edges, dtype=object)
+				sampled_indices = rng_seed.choice(len(edges_arr), size=num_to_remove, replace=False)
+				edges_to_remove = [tuple(edges_arr[i]) for i in sampled_indices]
 
 				G_perturbed.remove_edges_from(edges_to_remove)
 
+				# Apply node shuffling to avoid graph dict internal order bias
+				original_nodes = sorted(list(G_perturbed.nodes()))
+				shuffled_nodes = original_nodes.copy()
+				rng_shuffle = np.random.default_rng(seed + 1)
+				rng_shuffle.shuffle(shuffled_nodes)
+				mapping = {old: new for old, new in zip(original_nodes, shuffled_nodes)}
+				inverse_mapping = {new: old for old, new in mapping.items()}
+				G_perturbed = nx.relabel_nodes(G_perturbed, mapping)
+
 				if algorithm == "louvain":
-					communities, _ = comm.louvain_partition(
+					communities_raw, _ = comm.louvain_partition(
 						G_perturbed, seed=seed, resolution=resolution
 					)
 				elif algorithm == "leiden":
-					communities, _ = comm.leiden_partition(
+					communities_raw, _ = comm.leiden_partition(
 						G_perturbed, seed=seed, resolution=resolution
 					)
 				elif algorithm == "infomap":
-					communities, _ = comm.infomap_partition(
+					communities_raw, _ = comm.infomap_partition(
 						G_perturbed,
 						seed=seed,
 						resolution=resolution,
@@ -79,6 +92,8 @@ def main() -> None:
 					raise NotImplementedError(
 						f"Unsupported algorithm: {algorithm}. Use one of: louvain, leiden, infomap."
 					)
+
+				communities = {inverse_mapping[node]: c for node, c in communities_raw.items()}
 
 				num_communities = len(set(communities.values()))
 				df = pd.concat(
@@ -98,7 +113,8 @@ def main() -> None:
 				#communities = utils.relabel_communities_by_observations(
 				#	communities, order="desc"
 				#)
-				nodes_sorted_communities_labels.append(communities.values())
+				nodes_sorted = sorted(list(graph.nodes()))
+				nodes_sorted_communities_labels.append([communities[n] for n in nodes_sorted])
 
 			# Compute pairwise AMI/NMI between all partitions for this algorithm/resolution
 			print(

@@ -14,10 +14,15 @@ def main() -> None:
 	df_nodelist_ciuo = pd.read_csv(snakemake.input[2], dtype={meta_ciuo["id"]: int})
 	df_individual = pd.read_csv(snakemake.input[0])
 
+	val_col_caes = (
+		"total_workers_weighted"
+		if "total_workers_weighted" in df_nodelist_caes.columns
+		else "n_obs"
+	)
 	pl.plot_top_n_bar(
 		df=df_nodelist_caes,
 		label_col=meta_caes["label"],
-		val_col="n_obs",
+		val_col=val_col_caes,
 		color_col="",
 		title="",
 		xlabel="Workers",
@@ -26,10 +31,15 @@ def main() -> None:
 		save=True,
 	)
 
+	val_col_ciuo = (
+		"total_workers_weighted"
+		if "total_workers_weighted" in df_nodelist_ciuo.columns
+		else "n_obs"
+	)
 	pl.plot_top_n_bar(
 		df=df_nodelist_ciuo,
 		label_col=meta_ciuo["label"],
-		val_col="n_obs",
+		val_col=val_col_ciuo,
 		color_col="",
 		title="",
 		xlabel="Workers",

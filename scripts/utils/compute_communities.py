@@ -190,6 +190,7 @@ def main() -> None:
 		community_map=communities_int,
 		title=f"{class_.upper()} - Distribucion por comunidad ({algorithm})",
 		output_path=snakemake.output[1],
+		weights="n_obs",
 		group_color_map=group_color_map,
 		legend_title=group_col,
 		figsize=tuple(snakemake.config["figsizes"]["stacked"]),

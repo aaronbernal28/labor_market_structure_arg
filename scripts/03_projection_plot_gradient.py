@@ -48,7 +48,7 @@ def main() -> None:
 		output_path=snakemake.output[0],
 		save=True,
 		node_size_map=worker_counts,
-		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"],
+		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_],
 		node_size_exponent=snakemake.config["NODE_SIZE_EXPONENT"],
 		edge_alpha=snakemake.config["EDGE_ALPHA"][class_],
 		node_alpha=snakemake.config["NODE_ALPHA"],

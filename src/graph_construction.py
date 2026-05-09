@@ -76,12 +76,18 @@ def build_biadjacency(
 	enes_df: pd.DataFrame,
 	caes_col: str,
 	ciuo_col: str,
+	values: str | None = None,
 	logscale: bool = False,
 	rownames=None,
 	colnames=None,
 ) -> pd.DataFrame:
-	"""Return the CAES-by-CIUO biadjacency matrix (counts)."""
-	matrix = pd.crosstab(enes_df[caes_col], enes_df[ciuo_col])
+	"""Return the CAES-by-CIUO biadjacency matrix (counts or weighted)."""
+	if values is not None and values in enes_df.columns:
+		matrix = pd.crosstab(
+			enes_df[caes_col], enes_df[ciuo_col], values=enes_df[values], aggfunc="sum"
+		).fillna(0)
+	else:
+		matrix = pd.crosstab(enes_df[caes_col], enes_df[ciuo_col])
 
 	# Reindex to include all specified row/column names if provided
 	if rownames is not None:
@@ -407,6 +413,7 @@ def disparity_filter_backbone(
 	alpha: float = 0.05,
 	mode: str = "or",
 	keep_isolates: bool = True,
+	coverage: Optional[float] = None,
 ) -> nx.Graph:
 	"""Return a disparity-filtered backbone as an undirected graph.
 
@@ -449,10 +456,10 @@ def disparity_filter_backbone(
 		nodes = set()
 		for u, v, data in edges:
 			nodes = nodes | {u, v}
-			if len(nodes) / n > 0.9650:
-				print("Reached 95% node coverage in backbone; stopping edge addition.")
+			if len(nodes) / n > coverage:
+				print(f"Reached {coverage:.2%} node coverage in backbone; stopping edge addition.")
 				print(f"Current alpha: {data.get('alpha', 1)}, nodes covered: {len(nodes)}/{n} ({len(nodes)/n:.2%})")
-				break # Stop when we have included edges that cover 95% of the nodes
+				break # Stop when we have included edges that cover the specified coverage threshold
 			backbone.add_edge(u, v, weight=data.get("weight", 0.0))
 
 	if not keep_isolates:
@@ -460,6 +467,33 @@ def disparity_filter_backbone(
 		backbone.remove_nodes_from(isolates)
 
 	return backbone
+
+
+def get_reference_backbone_alpha(
+	disparity_graph: nx.DiGraph,
+	coverage: float = 0.99,
+) -> float:
+	if coverage is not None and (coverage <= 0 or coverage > 1):
+		raise ValueError("coverage must be in (0, 1].")
+
+	if disparity_graph.number_of_nodes() == 0:
+		return 1.0
+
+	# Start with all nodes, but no edges
+	backbone = nx.Graph()
+	backbone.add_nodes_from(disparity_graph.nodes(data=True))
+	edges = disparity_graph.edges(data=True)
+	edges = sorted(edges, key=lambda x: x[2].get("alpha", 1), reverse=False)
+	n = disparity_graph.number_of_nodes()
+
+	nodes = set()
+	for u, v, data in edges:
+		nodes = nodes | {u, v}
+		if len(nodes) / n > coverage:
+			print(f"Reached {coverage:.2%} node coverage in backbone; stopping edge addition.")
+			print(f"Current alpha: {data.get('alpha', 1)}, nodes covered: {len(nodes)}/{n} ({len(nodes)/n:.2%})")
+			return data.get("alpha", 1)
+	return 1.0
 
 
 def compute_distance_matrix(graph: nx.Graph, method: str) -> np.ndarray:
