@@ -1,0 +1,58 @@
+============================================================
+COMMUNITY DETECTION
+============================================================
+
+SNAKEMAKE
+---------
+Inputs: data/graphs/enes_all/ciuo/projection_hidalgo_0.0093.gexf, data/processed/enes_all/nodelist_ciuo_hidalgo_0.0093_pos.csv
+Outputs: data/processed/enes_all/nodelist_ciuo_hidalgo_0.0093_pos_leiden.csv, images/enes_all/ciuo/03_communities/_distribution_hidalgo_0.0093_leiden.png, images/enes_all/ciuo/03_communities/_boxplots_hidalgo_0.0093_leiden.png
+Params: 
+Wildcards: enes_all, ciuo, hidalgo, 0.0093, leiden
+
+PARAMETERS
+----------
+Class: ciuo
+Algorithm: leiden
+Seed: 28
+Modularity: 0.7825
+Detected communities: 24
+
+Projection metrics
+------------------
+Node count: 470
+Edge count: 1685
+Loop count: 0
+Average degree: 7.17
+Average weighted degree: 2.64
+Average clustering coefficient: 0.4432
+Average clustering coefficient ponderado: 0.1745
+Diameter (largest component): 14
+Connected components: 10
+
+NODELIST WITH COMMUNITIES
+-------------------------
+Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median \\
+C00 & 5. Trabajadores de servicios y ventas (9), 9. Operarios no calificados (5), 3. Técnicos (2) & 44.73 & 5.49 & 37.00 & 4578.00 \\
+C01 & 2. Profesionales (14), 3. Técnicos (3), 5. Trabajadores de servicios y ventas (2) & 65.94 & 51.35 & 42.00 & 6250.00 \\
+C02 & 7. Trabajadores de oficios (19), 3. Técnicos (4), 8. Operarios calificados (2) & 5.77 & 9.85 & 42.50 & 5888.00 \\
+C03 & 5. Trabajadores de servicios y ventas (2), 9. Operarios no calificados (1) & 95.76 & 1.42 & 45.00 & 2700.00 \\
+C04 & 8. Operarios calificados (10), 5. Trabajadores de servicios y ventas (6), 9. Operarios no calificados (6) & 30.75 & 18.37 & 41.00 & 5803.00 \\
+C05 & 2. Profesionales (8), 3. Técnicos (4), 4. Trabajadores administrativos (4) & 70.42 & 29.07 & 44.00 & 7433.00 \\
+C06 & 7. Trabajadores de oficios (18), 8. Operarios calificados (5), 3. Técnicos (2) & 13.56 & 5.06 & 47.00 & 5944.00 \\
+C07 & 2. Profesionales (10), 3. Técnicos (10), 4. Trabajadores administrativos (6) & 48.54 & 61.76 & 44.00 & 8000.00 \\
+C08 & 8. Operarios calificados (7), 7. Trabajadores de oficios (6), 3. Técnicos (5) & 41.30 & 9.64 & 47.00 & 6116.50 \\
+C09 & 6. Trabajadores agropecuarios (8), 9. Operarios no calificados (6), 1. Gerentes y directivos (1) & 18.56 & 9.28 & 50.25 & 4350.00 \\
+C10 & 3. Técnicos (6), 8. Operarios calificados (6), 2. Profesionales (4) & 29.79 & 34.43 & 42.00 & 8000.00 \\
+C11 & 2. Profesionales (6), 5. Trabajadores de servicios y ventas (5), 9. Operarios no calificados (3) & 41.15 & 21.80 & 41.00 & 5571.75 \\
+C12 & 2. Profesionales (12), 3. Técnicos (5), 6. Trabajadores agropecuarios (2) & 35.84 & 38.23 & 47.00 & 10551.00 \\
+C13 & 3. Técnicos (8), 4. Trabajadores administrativos (6), 1. Gerentes y directivos (3) & 33.68 & 24.52 & 48.50 & 9370.50 \\
+C14 & 9. Operarios no calificados (4), 5. Trabajadores de servicios y ventas (3), 3. Técnicos (3) & 33.41 & 27.64 & 50.00 & 5221.00 \\
+C15 & 2. Profesionales (6), 3. Técnicos (4), 1. Gerentes y directivos (2) & 29.42 & 27.24 & 41.25 & 7887.75 \\
+C16 & 3. Técnicos (6), 2. Profesionales (2), 1. Gerentes y directivos (1) & 80.21 & 37.31 & 47.00 & 5371.50 \\
+C17 & 7. Trabajadores de oficios (6), 3. Técnicos (2), 8. Operarios calificados (2) & 42.21 & 1.36 & 36.25 & 4975.00 \\
+C18 & 7. Trabajadores de oficios (8), 3. Técnicos (4), 8. Operarios calificados (3) & 24.26 & 19.97 & 40.50 & 5092.50 \\
+C19 & 3. Técnicos (7), 8. Operarios calificados (4), 1. Gerentes y directivos (1) & 14.41 & 22.84 & 40.25 & 13137.75 \\
+C20 & 3. Técnicos (5), 1. Gerentes y directivos (3), 5. Trabajadores de servicios y ventas (3) & 48.07 & 15.97 & 39.50 & 7000.00 \\
+C22 & 2. Profesionales (7), 3. Técnicos (5), 4. Trabajadores administrativos (2) & 54.08 & 69.32 & 50.75 & 9350.00 \\
+C23 & 2. Profesionales (5), 1. Gerentes y directivos (3), 3. Técnicos (3) & 57.15 & 47.67 & 47.00 & 9843.00 \\
+C24 & 6. Trabajadores agropecuarios (6), 7. Trabajadores de oficios (2), 9. Operarios no calificados (2) & 26.41 & 5.56 & 61.00 & 3934.50 \\

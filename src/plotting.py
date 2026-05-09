@@ -1114,7 +1114,7 @@ def plot_stacked_by_group(
 			plot_kwargs["figsize"] = figsize
 		ax = ct.plot(**plot_kwargs)
 
-	ax.set_xlabel("Porcentaje (%)" if percentage else "Conteo")
+	ax.set_xlabel("Porcentaje (%)" if percentage else "Cantidad")
 	ax.set_title(title)
 	ax.set_xlim(0, 100 if percentage else None)
 	legend_title = legend_title or group_col
@@ -2092,9 +2092,14 @@ def plot_community_boxplots(
 	output_path: str,
 ):
 	"""Create a stacked horizontal boxplot for community metrics."""
-	plot_cols = {
-		col: title for col, title in metrics_dict.items() if col in df_nodes.columns
-	}
+	plot_cols = {}
+	for col, title in metrics_dict.items():
+		if col not in df_nodes.columns:
+			continue
+		# Skip metrics with no usable data to avoid seaborn errors
+		if df_nodes[col].dropna().empty:
+			continue
+		plot_cols[col] = title
 	if not plot_cols:
 		return
 

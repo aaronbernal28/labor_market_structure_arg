@@ -204,14 +204,14 @@ def relabel_communities_by_observations(
 	Relabel communities by their total size (weighted by n_obs).
 
 	Args:
-	    communities: Dictionary mapping node -> community_id
-	    n_obs: Dictionary mapping node -> number of total observations per node (used for size weighting)
-	    order: "desc" for descending size (largest first), "asc" for ascending
-	    num_communities: Optional number of highest-weight communities to keep.
-	                     Nodes belonging to smaller communities are removed from the output.
+		communities: Dictionary mapping node -> community_id
+		n_obs: Dictionary mapping node -> number of total observations per node (used for size weighting)
+		order: "desc" for descending size (largest first), "asc" for ascending
+		num_communities: Optional number of highest-weight communities to keep.
+						 Nodes belonging to smaller communities are removed from the output.
 
 	Returns:
-	    Dictionary with relabeled communities based on size ordering
+		Dictionary with relabeled communities based on size ordering
 	"""
 	# Sum the observations (weights) for each community
 	community_weights = defaultdict(int)
@@ -394,3 +394,23 @@ def get_top_mean_assortativity_communities(
 	sorted_comms = sorted(comm_mean.items(), key=lambda kv: kv[1], reverse=reverse)
 	top = [comm for comm, _ in sorted_comms[:top_k]]
 	return top
+
+def get_markov_time(resolution: float) -> float:
+	"""
+	Converts a standard resolution parameter to Infomap's Markov time.
+
+	In modularity-based algorithms (Louvain/Leiden), higher resolution yields
+	smaller communities. In Infomap, shorter Markov time yields smaller communities.
+	Using the reciprocal aligns their behavior for parameter sweeps.
+
+	Args:
+		resolution (float): The resolution parameter (expected range: 0.1 to 40).
+
+	Returns:
+		float: The corresponding Markov time.
+	"""
+	if resolution <= 0:
+		raise ValueError("Resolution must be strictly greater than 0.")
+
+	# Inverse relationship to match Leiden/Louvain behavior
+	return 1.0 / resolution

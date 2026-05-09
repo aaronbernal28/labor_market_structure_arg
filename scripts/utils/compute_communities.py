@@ -46,7 +46,7 @@ def main() -> None:
 
 	if algorithm == "infomap":
 		communities, modularity = algorithm_func(
-			G_shuffled, seed=seed, resolution=resolution, markov_time=resolution
+			G_shuffled, seed=seed, resolution=resolution
 		)
 	else:
 		communities, modularity = algorithm_func(
@@ -154,8 +154,9 @@ def main() -> None:
 
 	nodelist_df = nodelist_df.dropna(subset=["community"])
 	# Filtering greater that Cxx groups:
-	max_group_code = snakemake.config["community"]["max"][class_]
-	nodelist_df = nodelist_df[nodelist_df["community"] < utils.label_fn(max_group_code, len(str(max_group_code)))].copy()
+	max_group_code = int(snakemake.config["community"]["max"][class_])
+	community_codes = nodelist_df["community"].astype(str).str.extract(r"C(\d+)", expand=False).astype(int)
+	nodelist_df = nodelist_df[community_codes < max_group_code].copy()
 
 	pl.plot_community_boxplots(
 		df_nodes=nodelist_df,

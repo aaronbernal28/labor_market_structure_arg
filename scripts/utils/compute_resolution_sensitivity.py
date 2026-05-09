@@ -28,6 +28,7 @@ def main() -> None:
 			"resolution": pd.Series(dtype="float64"),
 			"num_communities": pd.Series(dtype="int64"),
 			"seed": pd.Series(dtype="int64"),
+			"modularity": pd.Series(dtype="float64"),
 		},
 		index=pd.RangeIndex(start=0, stop=0, step=1),
 	)
@@ -74,19 +75,18 @@ def main() -> None:
 				G_perturbed = nx.relabel_nodes(G_perturbed, mapping)
 
 				if algorithm == "louvain":
-					communities_raw, _ = comm.louvain_partition(
+					communities_raw, modularity = comm.louvain_partition(
 						G_perturbed, seed=seed, resolution=resolution
 					)
 				elif algorithm == "leiden":
-					communities_raw, _ = comm.leiden_partition(
+					communities_raw, modularity = comm.leiden_partition(
 						G_perturbed, seed=seed, resolution=resolution
 					)
 				elif algorithm == "infomap":
-					communities_raw, _ = comm.infomap_partition(
+					communities_raw, modularity = comm.infomap_partition(
 						G_perturbed,
 						seed=seed,
 						resolution=resolution,
-						markov_time=resolution,
 					)
 				else:
 					raise NotImplementedError(
@@ -105,6 +105,7 @@ def main() -> None:
 								"algorithm": [algorithm],
 								"resolution": [resolution],
 								"num_communities": [num_communities],
+								"modularity": [modularity],
 							}
 						),
 					],

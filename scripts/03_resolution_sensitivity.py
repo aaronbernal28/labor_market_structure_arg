@@ -62,7 +62,7 @@ def main() -> None:
 	fig.savefig(snakemake.output[0], bbox_inches="tight")
 
 	# Plotting scores — create separate plots for AMI and NMI using jointplot
-	for score_type in ["AMI", "NMI"]:
+	for i, score_type in enumerate((["AMI", "NMI"])):
 		# Filter data for just this score type (keep all algorithms!)
 		data_subset = df_scores[df_scores["score_type"] == score_type]
 
@@ -126,10 +126,46 @@ def main() -> None:
 		g.set_axis_labels("Resolution", "Score")
 		g.ax_joint.set_xscale("log")
 		g.ax_joint.grid(True)
-		output_path = str(snakemake.output[0]).replace(".png", f"_{score_type}.png")
+		output_path = str(snakemake.output[i+1])
 
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()
+
+	# Modularity violin plot by algorithm
+	fig, ax = plt.subplots()
+	for algorithm in algorithm_order:
+		algorithm_data = df[df["algorithm"] == algorithm]
+		ax.scatter(
+			algorithm_data["resolution"],
+			algorithm_data["modularity"],
+			label=algorithm,
+			marker=marker_map[algorithm],
+			color=color_map[algorithm],
+			alpha=0.5,
+			zorder=2,
+		)
+	# Add label with all negatives values ommitted
+	group_neg = df.groupby("algorithm")["modularity"].apply(lambda x: x[x < 0].count())
+	for algorithm in algorithm_order:
+		count_neg = group_neg.get(algorithm, 0)
+		if count_neg > 0:
+			ax.text(
+				x=reference_resolution,
+				y=0.05,
+				s=f"{count_neg} negative values",
+				color=color_map[algorithm],
+				horizontalalignment="center",
+				verticalalignment="bottom",
+				fontsize="small",
+			)
+	ax.grid(True)
+	ax.set_xscale("log")
+	ax.set_xlabel("Resolution")
+	ax.set_ylabel("Modularity")
+	ax.set_title("Modularity by Resolution")
+	ax.set_ylim(-0.1, 1.1)
+	plt.savefig(snakemake.output[3], bbox_inches="tight")
+	plt.close()
 
 
 if __name__ == "__main__":

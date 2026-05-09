@@ -5,7 +5,8 @@ from numpy import logspace
 DATASETS = ["enes_all", "enes_2019", "enes_2021"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
-ALGORITHMS = ["leiden"]
+ALGORITHMS_CAES = ["infomap"]
+ALGORITHMS_CIUO = ["leiden"]
 ALGORITHMS_ALL = ["louvain", "leiden", "infomap"]
 VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
@@ -13,7 +14,7 @@ CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "inco
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
 CLASSES_ALL = ["caes", "ciuo", "cno"]
-ALPHA_CAES = ["0.0043"]
+ALPHA_CAES = ["0.0043"] # NOTE: these alpha are not used, final alphas are automatically selected based on alpha sensitivity analysis.
 ALPHA_CIUO = ["0.0093"]
 ALPHA_EPH = (logspace(-10, 0, 60).round(4).astype(str)).tolist()
 ALPHAS_ALL = ALPHA_CAES + ALPHA_CIUO + ALPHA_EPH
@@ -47,7 +48,6 @@ rule all:
 			"images/enes_all/{class_}/07_alpha_sensitivity/_{weight_function}.png",
 			class_=CLASSES,
 			weight_function=["hidalgo"],
-			algorithm=ALGORITHMS,
 		),
 		expand(
 			["images/enes_all/caes/03_resolution_sensitivity/_catplots_{weight_function}_{alpha_caes}.png",
@@ -57,21 +57,23 @@ rule all:
 			alpha_ciuo=ALPHA_CIUO,
 		),
 		expand(
-			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm}_{discrete_feature}.png",
-			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm}_{discrete_feature}.png"],
+			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm_caes}_{discrete_feature}.png",
+			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm_ciuo}_{discrete_feature}.png"],
 			weight_function=["hidalgo"],
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
-			algorithm=ALGORITHMS,
+			algorithm_caes=ALGORITHMS_CAES,
+			algorithm_ciuo=ALGORITHMS_CIUO,
 			discrete_feature=["community"],
 		),
 		expand(
-			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm}_{discrete_feature}.png",
-			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm}_{discrete_feature}.png"],
+			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm_caes}_{discrete_feature}.png",
+			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm_ciuo}_{discrete_feature}.png"],
 			weight_function=["hidalgo"],
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
-			algorithm=["leiden"], # Any algorithm will do since we're only plotting discrete feature groups
+			algorithm_caes=ALGORITHMS_CAES, # Any caes algorithm, since discrete feature is grupo which is independent of communities
+			algorithm_ciuo=ALGORITHMS_CIUO,
 			discrete_feature=["grupo"],
 		),
 		expand(
@@ -83,18 +85,20 @@ rule all:
 			discrete_feature=CONTINUOUS_FEATURES,
 		),
 		expand(
-			["images/enes_all/caes/03_communities/_distribution_{weight_function}_{alpha_caes}_{algorithm}.png",
-			"images/enes_all/ciuo/03_communities/_distribution_{weight_function}_{alpha_ciuo}_{algorithm}.png"],
+			["images/enes_all/caes/03_communities/_distribution_{weight_function}_{alpha_caes}_{algorithm_caes}.png",
+			"images/enes_all/ciuo/03_communities/_distribution_{weight_function}_{alpha_ciuo}_{algorithm_ciuo}.png"],
 			weight_function=["hidalgo"],
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
-			algorithm=ALGORITHMS,
+			algorithm_caes=ALGORITHMS_CAES,
+			algorithm_ciuo=ALGORITHMS_CIUO,
 		),
 		expand(
-			["images/enes_all/caes/05_edge_weight_correlation/_{weight_function}_{alpha_caes}_pos_{algorithm}_{continuous_feature}.png",
-			"images/enes_all/ciuo/05_edge_weight_correlation/_{weight_function}_{alpha_ciuo}_pos_{algorithm}_{continuous_feature}.png"],
+			["images/enes_all/caes/05_edge_weight_correlation/_{weight_function}_{alpha_caes}_pos_{algorithm_caes}_{continuous_feature}.png",
+			"images/enes_all/ciuo/05_edge_weight_correlation/_{weight_function}_{alpha_ciuo}_pos_{algorithm_ciuo}_{continuous_feature}.png"],
 			weight_function=["hidalgo"],
-			algorithm=ALGORITHMS,
+			algorithm_caes=ALGORITHMS_CAES,
+			algorithm_ciuo=ALGORITHMS_CIUO,
 			alpha_caes=ALPHA_CAES,
 			alpha_ciuo=ALPHA_CIUO,
 			continuous_feature=CONTINUOUS_FEATURES,
@@ -114,7 +118,6 @@ rule all:
 			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}.png",
 			class_=["caes", "cno"],
 			weight_function=["hidalgo"],
-			algorithm=ALGORITHMS,
 		),
 		expand(
 			"images/eph/{class_}/10_edge_weight_correlation/_{weight_function}_{feature}.png",
@@ -179,7 +182,8 @@ rule _03_resolution_sensitivity:
 	output:
 		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.png",
 		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}_AMI.png",
-		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}_NMI.png"
+		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}_NMI.png",
+		"images/{dataset}/{class_}/03_resolution_sensitivity/_{weight_function}_{alpha}_modularity.png"
 	#log:
 	#	"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.log"
 	script:
