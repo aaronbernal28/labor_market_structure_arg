@@ -39,6 +39,19 @@ rule filter_projection:
 		"../scripts/utils/filter_projection.py"
 
 
+rule filter_projection_eph:
+	'''Filter projection graph by degree.'''
+	input:
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
+	output:
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}_backbone.gexf",
+		"images/eph/{eph_file}/{class_}/backbone_weight_histogram_{weight_function}.png"
+	log:
+		"images/eph/{eph_file}/{class_}/backbone_weight_histogram_{weight_function}.log"
+	script:
+		"../scripts/utils/filter_projection.py"
+
+
 rule _compute_alpha_sensitivity:
 	"""Worker for alpha sensitivity: sweep a single projection graph and save metrics to JSON."""
 	input:
@@ -54,7 +67,7 @@ rule _compute_alpha_sensitivity:
 rule _compute_alpha_sensitivity_eph:
 	"""Worker for alpha sensitivity: sweep a single EPH projection graph and save metrics to JSON."""
 	input:
-		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf" # NOTE: unfiltered projection graph
 	output:
 		"data/processed/eph/{eph_file}/{class_}/_alpha_sensitivity/_{weight_function}.json"
 	log:

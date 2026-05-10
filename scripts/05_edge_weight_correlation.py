@@ -78,8 +78,7 @@ def main() -> None:
 		output_path=snakemake.output[0],
 		save=True,
 		perfect_line=False,
-		factor_node_size=1.2,
-		node_size_exponent=0.8,
+		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_],
 		figsize=snakemake.config["figsizes"]["edge_correlation"],
 	)
 

@@ -16,6 +16,7 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	weight_function = snakemake.wildcards["weight_function"]
 	feature = snakemake.wildcards.get("feature", "female_pct")
+	utils.setup_networkx_backend(algorithm=None)
 
 	if class_ not in {"caes", "cno"}:
 		raise ValueError("This EPH-only script supports class_ in {'caes', 'cno'}.")
@@ -58,69 +59,28 @@ def main() -> None:
 			_filtered.append(_f)
 	eph_files_sorted = _filtered
 	if not eph_files_sorted:
-		raise ValueError("No Q3 waves found after filtering. Check EPH filenames or adjust filter.")
-	wave_year_key: dict[str, str] = {}
-	wave_time_meta: dict[str, tuple[float, pd.Timestamp, str]] = {}
+		raise ValueError(
+			"No Q3 waves found after filtering. Check EPH filenames or adjust filter."
+		)
 
+	wave_time_meta: dict[str, tuple[float, pd.Timestamp, str]] = {}
 	fallback_idx = 0
 	for eph_file in eph_files_sorted:
 		key = utils.parse_eph_file_key(eph_file)
 		if key is None:
-			# Fallback: keep wave-level ordering and isolate unparsed files in their own pseudo-year buckets.
+			# Fallback: keep wave-level ordering for unparsed files.
 			year = 2000 + fallback_idx // 4
 			period = 1 + (fallback_idx % 4)
 			time_date = pd.Timestamp(utils.eph_quarter_start_date(year, period))
 			time_num = float(year) + float(period - 1) / 4.0
 			lbl = eph_file
-			year_key = f"UNPARSED::{eph_file}"
 			fallback_idx += 1
 		else:
 			time_num = key.time_numeric
 			lbl = key.label
 			time_date = pd.Timestamp(key.time_date)
-			year_key = str(key.year)
 
-		wave_year_key[eph_file] = year_key
 		wave_time_meta[eph_file] = (time_num, time_date, lbl)
-
-	year_to_waves: dict[str, list[str]] = {}
-	for eph_file in eph_files_sorted:
-		yk = wave_year_key[eph_file]
-		year_to_waves.setdefault(yk, []).append(eph_file)
-
-	yearly_feature_map: dict[str, dict[Any, float]] = {}
-	yearly_feature_summary: dict[str, dict[str, Any]] = {}
-	for year_key, waves in year_to_waves.items():
-		yearly_frames = []
-		for eph_file in waves:
-			processed_path = eph_to_processed[eph_file]
-			df_wave = pd.read_csv(processed_path)
-			if id_col not in df_wave.columns:
-				raise KeyError(
-					f"Missing group id column '{id_col}' in {processed_path}."
-				)
-			yearly_frames.append(df_wave)
-
-		df_year = pd.concat(yearly_frames, ignore_index=True)
-		# Use ponderation weights for computing group characteristics
-		features_df = nc.compute_group_characteristics(
-			df_year, col_group=id_col, calib_col="ponderation"
-		)
-		if feature not in features_df.columns:
-			raise KeyError(
-				f"Feature '{feature}' not found in computed characteristics for year {year_key}. "
-				f"Available columns include: {', '.join(features_df.columns[:10])}..."
-			)
-
-		yearly_feature_map[year_key] = features_df[feature].to_dict()
-		yearly_feature_summary[year_key] = {
-			"wave_count": len(waves),
-			"row_count": len(df_year),
-			"group_count": int(df_year[id_col].nunique(dropna=True)),
-			"feature_non_null": int(
-				pd.to_numeric(features_df[feature], errors="coerce").notna().sum()
-			),
-		}
 
 	alphas = [1.0, 0.1, 0.03, 1e-2, 1e-3]
 	x_dates = []
@@ -130,16 +90,32 @@ def main() -> None:
 
 	for eph_file in eph_files_sorted:
 		time_num, time_date, lbl = wave_time_meta[eph_file]
-		year_key = wave_year_key[eph_file]
 
 		x_dates.append(time_date)
 
 		projection_path = eph_to_projection[eph_file]
+		processed_path = eph_to_processed[eph_file]
 
 		projection = nx.read_gexf(projection_path, node_type=int)
 		projection_metrics[eph_file] = metrics.summarize_graph(projection)
 
-		feature_map = yearly_feature_map[year_key]
+		df_wave = pd.read_csv(processed_path)
+		if id_col not in df_wave.columns:
+			raise KeyError(
+				f"Missing group id column '{id_col}' in {processed_path}."
+			)
+
+		# Use ponderation weights for computing group characteristics per wave
+		features_df = nc.compute_group_characteristics(
+			df_wave, col_group=id_col, calib_col="ponderation"
+		)
+		if feature not in features_df.columns:
+			raise KeyError(
+				f"Feature '{feature}' not found in computed characteristics for wave {eph_file}. "
+				f"Available columns include: {', '.join(features_df.columns[:10])}..."
+			)
+
+		feature_map = features_df[feature].to_dict()
 
 		# Compute assortativity (unfiltered)
 		r_unf, p_unf, n_unf = pl.compute_edge_assortativity_pearson(
@@ -164,7 +140,7 @@ def main() -> None:
 		disp = gc.get_disparity_graph(projection)
 		for a in alphas:
 			bb = gc.disparity_filter_backbone(
-				disparity_graph=disp, alpha=float(a), keep_isolates=True, coverage=snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"]
+				disparity_graph=disp, alpha=float(a), keep_isolates=True
 			)
 			r, p, n = pl.compute_edge_assortativity_pearson(bb, feature_map)
 			rows.append(
@@ -235,24 +211,6 @@ def main() -> None:
 		k = utils.parse_eph_file_key(eph_file)
 		lbl = k.label if k else eph_file
 		log_lines.append(f"  {j:>3d}. {eph_file} -> {lbl}")
-
-	log_lines.append("")
-	log_lines.append("WAVE TO YEARLY FEATURE MAP:")
-	for eph_file in eph_files_sorted:
-		year_key = wave_year_key[eph_file]
-		log_lines.append(f"  - {eph_file}: feature_year={year_key}")
-
-	log_lines.append("")
-	log_lines.append("YEARLY FEATURE MAP SUMMARY:")
-	for year_key in sorted(year_to_waves.keys()):
-		s = yearly_feature_summary.get(year_key, {})
-		log_lines.append(
-			"  - "
-			+ f"{year_key}: waves={s.get('wave_count', 'NA')}, "
-			+ f"rows={s.get('row_count', 'NA')}, "
-			+ f"unique_groups={s.get('group_count', 'NA')}, "
-			+ f"feature_non_null={s.get('feature_non_null', 'NA')}"
-		)
 
 	log_lines.append("")
 	log_lines.append("PER-FILE PROJECTION METRICS (unfiltered):")

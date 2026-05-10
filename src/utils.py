@@ -18,6 +18,16 @@ class EphKey:
 	label: str
 	raw: str
 
+def setup_networkx_backend(algorithm: str | None = None) -> None:
+	try:
+		from networkx import config
+		if algorithm == "leiden":
+			config.backend_priority = ["cugraph", "networkx"]
+		else:
+			config.backend_priority = ["networkx"]
+	except Exception as e:
+		print(f"Error setting up networkx backend: {e}")
+
 
 def eph_quarter_start_date(year: int, period: int) -> date:
 	"""Map EPH quarter to a calendar date at quarter start."""

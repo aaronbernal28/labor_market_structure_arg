@@ -10,6 +10,7 @@ snakemake: Any
 
 def main() -> None:
 	projection = nx.read_gexf(snakemake.input[0], node_type=int)
+	utils.setup_networkx_backend(algorithm=None)
 
 	seed = int(snakemake.config["seed"])
 	alphas = np.logspace(-10, 0, 60)

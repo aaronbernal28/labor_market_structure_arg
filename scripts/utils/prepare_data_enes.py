@@ -1,6 +1,7 @@
 from typing import Any
 from scripts import *
 import pandas as pd
+import numpy as np
 
 snakemake: Any
 
@@ -99,9 +100,10 @@ def main() -> None:
 		if col not in df_enes.columns:
 			df_enes[col] = pd.NA
 	df_enes = df_enes[output_cols]
-
+	df_enes["total_income"] = np.log1p(df_enes["total_income"])
 	df_enes[output_id_caes] = df_enes[output_id_caes].astype(int)
 	df_enes[output_id_ciuo] = df_enes[output_id_ciuo].astype(int)
+	df_enes["nivel_ed"] = pd.to_numeric(df_enes["nivel_ed"], errors="coerce").clip(lower=0, upper=10)
 
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)

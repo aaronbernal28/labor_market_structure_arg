@@ -14,45 +14,37 @@ PARAMETERS
 Class: ciuo
 Algorithm: leiden
 Seed: 28
-Modularity: 0.7825
-Detected communities: 24
+Modularity: 0.6491
+Detected communities: 16
 
 Projection metrics
 ------------------
 Node count: 470
-Edge count: 1685
+Edge count: 3955
 Loop count: 0
-Average degree: 7.17
-Average weighted degree: 2.64
-Average clustering coefficient: 0.4432
-Average clustering coefficient ponderado: 0.1745
-Diameter (largest component): 14
-Connected components: 10
+Average degree: 16.83
+Average weighted degree: 4.44
+Average clustering coefficient: 0.5063
+Average clustering coefficient ponderado: 0.1369
+Diameter (largest component): 7
+Connected components: 2
 
 NODELIST WITH COMMUNITIES
 -------------------------
 Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median \\
-C00 & 5. Trabajadores de servicios y ventas (9), 9. Operarios no calificados (5), 3. Técnicos (2) & 44.73 & 5.49 & 37.00 & 4578.00 \\
-C01 & 2. Profesionales (14), 3. Técnicos (3), 5. Trabajadores de servicios y ventas (2) & 65.94 & 51.35 & 42.00 & 6250.00 \\
-C02 & 7. Trabajadores de oficios (19), 3. Técnicos (4), 8. Operarios calificados (2) & 5.77 & 9.85 & 42.50 & 5888.00 \\
-C03 & 5. Trabajadores de servicios y ventas (2), 9. Operarios no calificados (1) & 95.76 & 1.42 & 45.00 & 2700.00 \\
-C04 & 8. Operarios calificados (10), 5. Trabajadores de servicios y ventas (6), 9. Operarios no calificados (6) & 30.75 & 18.37 & 41.00 & 5803.00 \\
-C05 & 2. Profesionales (8), 3. Técnicos (4), 4. Trabajadores administrativos (4) & 70.42 & 29.07 & 44.00 & 7433.00 \\
-C06 & 7. Trabajadores de oficios (18), 8. Operarios calificados (5), 3. Técnicos (2) & 13.56 & 5.06 & 47.00 & 5944.00 \\
-C07 & 2. Profesionales (10), 3. Técnicos (10), 4. Trabajadores administrativos (6) & 48.54 & 61.76 & 44.00 & 8000.00 \\
-C08 & 8. Operarios calificados (7), 7. Trabajadores de oficios (6), 3. Técnicos (5) & 41.30 & 9.64 & 47.00 & 6116.50 \\
-C09 & 6. Trabajadores agropecuarios (8), 9. Operarios no calificados (6), 1. Gerentes y directivos (1) & 18.56 & 9.28 & 50.25 & 4350.00 \\
-C10 & 3. Técnicos (6), 8. Operarios calificados (6), 2. Profesionales (4) & 29.79 & 34.43 & 42.00 & 8000.00 \\
-C11 & 2. Profesionales (6), 5. Trabajadores de servicios y ventas (5), 9. Operarios no calificados (3) & 41.15 & 21.80 & 41.00 & 5571.75 \\
-C12 & 2. Profesionales (12), 3. Técnicos (5), 6. Trabajadores agropecuarios (2) & 35.84 & 38.23 & 47.00 & 10551.00 \\
-C13 & 3. Técnicos (8), 4. Trabajadores administrativos (6), 1. Gerentes y directivos (3) & 33.68 & 24.52 & 48.50 & 9370.50 \\
-C14 & 9. Operarios no calificados (4), 5. Trabajadores de servicios y ventas (3), 3. Técnicos (3) & 33.41 & 27.64 & 50.00 & 5221.00 \\
-C15 & 2. Profesionales (6), 3. Técnicos (4), 1. Gerentes y directivos (2) & 29.42 & 27.24 & 41.25 & 7887.75 \\
-C16 & 3. Técnicos (6), 2. Profesionales (2), 1. Gerentes y directivos (1) & 80.21 & 37.31 & 47.00 & 5371.50 \\
-C17 & 7. Trabajadores de oficios (6), 3. Técnicos (2), 8. Operarios calificados (2) & 42.21 & 1.36 & 36.25 & 4975.00 \\
-C18 & 7. Trabajadores de oficios (8), 3. Técnicos (4), 8. Operarios calificados (3) & 24.26 & 19.97 & 40.50 & 5092.50 \\
-C19 & 3. Técnicos (7), 8. Operarios calificados (4), 1. Gerentes y directivos (1) & 14.41 & 22.84 & 40.25 & 13137.75 \\
-C20 & 3. Técnicos (5), 1. Gerentes y directivos (3), 5. Trabajadores de servicios y ventas (3) & 48.07 & 15.97 & 39.50 & 7000.00 \\
-C22 & 2. Profesionales (7), 3. Técnicos (5), 4. Trabajadores administrativos (2) & 54.08 & 69.32 & 50.75 & 9350.00 \\
-C23 & 2. Profesionales (5), 1. Gerentes y directivos (3), 3. Técnicos (3) & 57.15 & 47.67 & 47.00 & 9843.00 \\
-C24 & 6. Trabajadores agropecuarios (6), 7. Trabajadores de oficios (2), 9. Operarios no calificados (2) & 26.41 & 5.56 & 61.00 & 3934.50 \\
+C00 & 2. Profesionales (12), 3. Técnicos (11), 4. Trabajadores administrativos (7) & 67.29 & 29.40 & 44.00 & 6358.25 \\
+C01 & 5. Trabajadores de servicios y ventas (13), 9. Operarios no calificados (6), 1. Gerentes y directivos (2) & 47.44 & 4.27 & 40.00 & 4000.00 \\
+C02 & 7. Trabajadores de oficios (30), 8. Operarios calificados (7), 3. Técnicos (5) & 8.64 & 8.56 & 42.00 & 5888.00 \\
+C03 & 2. Profesionales (17), 3. Técnicos (3), 5. Trabajadores de servicios y ventas (3) & 67.51 & 51.66 & 42.00 & 6600.00 \\
+C04 & 8. Operarios calificados (8), 4. Trabajadores administrativos (4), 3. Técnicos (4) & 30.39 & 16.56 & 41.50 & 5901.50 \\
+C05 & 7. Trabajadores de oficios (17), 8. Operarios calificados (14), 3. Técnicos (7) & 41.13 & 6.86 & 47.00 & 5800.00 \\
+C06 & 3. Técnicos (15), 2. Profesionales (10), 4. Trabajadores administrativos (5) & 45.29 & 60.86 & 45.50 & 8000.00 \\
+C07 & 6. Trabajadores agropecuarios (14), 9. Operarios no calificados (8), 7. Trabajadores de oficios (2) & 21.58 & 7.85 & 51.50 & 4000.00 \\
+C08 & 7. Trabajadores de oficios (14), 3. Técnicos (8), 8. Operarios calificados (7) & 16.77 & 7.00 & 47.50 & 7000.00 \\
+C09 & 3. Técnicos (7), 5. Trabajadores de servicios y ventas (7), 9. Operarios no calificados (5) & 40.46 & 26.26 & 47.00 & 5118.50 \\
+C10 & 0. Oc. militares (3), 5. Trabajadores de servicios y ventas (3), 3. Técnicos (1) & 28.33 & 90.35 & 35.00 & 8086.00 \\
+C11 & 2. Profesionales (12), 3. Técnicos (12), 8. Operarios calificados (5) & 23.29 & 31.74 & 43.75 & 10993.00 \\
+C12 & 2. Profesionales (7), 9. Operarios no calificados (4), 5. Trabajadores de servicios y ventas (3) & 30.59 & 8.72 & 39.25 & 5000.00 \\
+C13 & 3. Técnicos (11), 4. Trabajadores administrativos (6), 2. Profesionales (5) & 34.23 & 26.17 & 45.50 & 6857.00 \\
+C14 & 2. Profesionales (7), 3. Técnicos (6), 4. Trabajadores administrativos (3) & 43.93 & 67.13 & 49.50 & 9675.00 \\
+C15 & 2. Profesionales (4), 1. Gerentes y directivos (3), 3. Técnicos (3) & 61.23 & 43.93 & 48.75 & 9241.00 \\

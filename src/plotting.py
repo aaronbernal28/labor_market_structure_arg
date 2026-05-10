@@ -1934,7 +1934,7 @@ def compute_and_plot_edge_correlation(
 	plt.figure(figsize=figsize)
 	raw_node_sizes_plot = [
 		float(
-			np.sqrt(raw_node_sizes.get(u, 1.0)) * factor_node_size
+			np.sqrt(raw_node_sizes.get(u, 1.0)) * factor_node_size / 3
 		)
 		for u in plotted_nodes
 	]

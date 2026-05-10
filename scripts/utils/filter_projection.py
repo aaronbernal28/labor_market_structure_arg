@@ -9,18 +9,15 @@ snakemake: Any
 
 def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
-	alpha = None #float(snakemake.wildcards["alpha"])
-	print(f"Filtering projection graph with alpha={alpha}...")
+	utils.setup_networkx_backend(algorithm=None)
+
+	coverage_threshold = snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"]
+	print("Filtering projection graph")
 	input_metrics = metrics.summarize_graph(graph)
 
-	if alpha is None or alpha < 1.0:
-		backbone = gc.disparity_filter_backbone(original_graph=graph, alpha=alpha, coverage=snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"])
-		# Convert to undirected for metrics computation and downstream analysis
-		backbone_for_metrics = nx.to_undirected(backbone)
-	else:
-		print("Alpha >= 1.0, skipping filtering and using original projection.")
-		backbone = graph
-		backbone_for_metrics = graph
+	backbone = gc.disparity_filter_backbone(original_graph=graph, coverage=coverage_threshold)
+	# Convert to undirected for metrics computation and downstream analysis
+	backbone_for_metrics = nx.to_undirected(backbone)
 
 	backbone_metrics = metrics.summarize_graph(backbone_for_metrics)
 	log_lines: list[str] = []
@@ -32,8 +29,8 @@ def main() -> None:
 		log_lines,
 		"PARAMETERS",
 		[
-			f"Alpha: {alpha}",
-			f"Filtering applied: {alpha is None or alpha < 1.0}",
+			f"Coverage threshold: {snakemake.config['alpha_sensitivity']['reference_coverage_threshold']}",
+			f"Filtering applied: {coverage_threshold is not None and coverage_threshold < 1.0}",
 		],
 	)
 	log.add_graph_metrics(log_lines, "Input projection metrics", input_metrics)
@@ -46,17 +43,14 @@ def main() -> None:
 	nx.write_gexf(backbone, output_path)
 
 	# For weight histogram, use undirected version to count unique edges consistently
-	if alpha is None or alpha < 1.0:
-		backbone_undirected = nx.to_undirected(backbone)
-	else:
-		backbone_undirected = backbone
+	backbone_undirected = nx.to_undirected(backbone)
 
 	pl.plot_backbone_weight_histogram(
 		original_weights=[d["weight"] for _, _, d in graph.edges(data=True)],
 		backbone_weights=[
 			d["weight"] for _, _, d in backbone_undirected.edges(data=True)
 		],
-		coverage_threshold=snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"],
+		coverage_threshold=coverage_threshold,
 		title_prefix=None,
 		output_path=Path(snakemake.output[1]),
 		save=True,

@@ -1,6 +1,7 @@
 from typing import Any
 from scripts import *
 import pandas as pd
+import numpy as np
 
 snakemake: Any
 
@@ -35,7 +36,7 @@ def main() -> None:
 	id_2 = dataset_cfg["id_2"]
 	id_3 = dataset_cfg["id_3"]
 
-	df_eph = pd.read_csv(snakemake.input[0], sep=",")
+	df_eph = pd.read_csv(snakemake.input[0], sep=",", low_memory=False)
 	columns = df_eph.columns.tolist()
 
 	id_caes = _resolve_column(
@@ -127,8 +128,12 @@ def main() -> None:
 
 	# Special case for total income which has -9 for "no income" and -9.0 for "missing"
 	df_eph["total_income"] = (
-		df_eph["total_income"].replace(-9.0, pd.NA).replace(-9, pd.NA)
+	    df_eph["total_income"].replace(-9.0, pd.NA).replace(-9, pd.NA)
 	)
+	# Convert to numeric, coercing invalid values (e.g., strings) to NaN
+	df_eph["total_income"] = pd.to_numeric(df_eph["total_income"], errors="coerce")
+	df_eph["total_income"] = np.log1p(df_eph["total_income"])
+	df_eph["nivel_ed"] = pd.to_numeric(df_eph["nivel_ed"], errors="coerce").clip(lower=0, upper=10)
 
 	ponderation_numeric = pd.to_numeric(df_eph["ponderation"], errors="coerce")
 	ponderation_missing = int(ponderation_numeric.isna().sum())

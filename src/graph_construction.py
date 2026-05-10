@@ -439,11 +439,6 @@ def disparity_filter_backbone(
 	if disparity_graph.number_of_nodes() == 0:
 		return nx.Graph()
 
-	if original_graph is not None:
-		n = original_graph.number_of_nodes()
-	else:
-		raise ValueError("original_graph is required to determine node count for coverage stopping criterion.")
-
 	# Start with all nodes, but no edges
 	backbone = nx.Graph()
 	backbone.add_nodes_from(disparity_graph.nodes(data=True))
@@ -452,7 +447,12 @@ def disparity_filter_backbone(
 	if alpha is not None:
 		edges = [e for e in edges if e[2].get("alpha", 1) < alpha]
 		backbone.add_edges_from((u, v, {"weight": d.get("weight", 1)}) for u, v, d in edges)
+		print(f"Added {len(edges)} edges to backbone with alpha < {alpha}.")
 	else:
+		if original_graph is not None:
+			n = original_graph.number_of_nodes()
+		else:
+			raise ValueError("original_graph is required to determine node count for coverage stopping criterion.")
 		nodes = set()
 		for u, v, data in edges:
 			nodes = nodes | {u, v}

@@ -17,6 +17,7 @@ TRYS = 15
 def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	algorithms = sorted(list(snakemake.params["algorithms"]))
+	utils.setup_networkx_backend(algorithm=algorithms[1])
 
 	rng = np.random.default_rng(snakemake.config["seed"])
 	seeds = rng.integers(low=0, high=2**16 - 1, size=TRYS).tolist()

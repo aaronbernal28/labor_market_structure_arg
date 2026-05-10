@@ -9,6 +9,7 @@ def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0])
 	class_name = snakemake.wildcards["class_"]
 	weight_function_name = snakemake.wildcards["weight_function"]
+	utils.setup_networkx_backend(algorithm=None)
 
 	print(
 		f"Building projection for class '{class_name}' using weight function '{weight_function_name}'..."
