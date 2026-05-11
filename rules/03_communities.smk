@@ -11,8 +11,6 @@ rule compute_positions:
 
 
 rule compute_communities:
-	resources:
-		limited_slots=lambda wildcards: 1 if wildcards.algorithm == "leiden" else 7
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
 		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv"

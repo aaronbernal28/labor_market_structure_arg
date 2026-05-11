@@ -14,8 +14,8 @@ PARAMETERS
 Class: caes
 Algorithm: infomap
 Seed: 28
-Modularity: 0.5063
-Detected communities: 10
+Modularity: 0.4974
+Detected communities: 11
 
 Projection metrics
 ------------------
@@ -32,13 +32,14 @@ Connected components: 3
 NODELIST WITH COMMUNITIES
 -------------------------
 Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median \\
-C00 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (5), H. Transporte y Almacenamiento (2), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (1) & 36.35 & 42.01 & 46.50 & 6594.50 \\
-C01 & GI. Comercio, alojamiento y comidas (6), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (2), JKLMNOPQRS. Servicios, adm. pública, educación y salud (1) & 54.89 & 0.62 & 39.00 & 4250.00 \\
-C02 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (11), GI. Comercio, alojamiento y comidas (1), T. Empleo doméstico (1) & 51.11 & 15.24 & 39.00 & 4986.00 \\
-C03 & GI. Comercio, alojamiento y comidas (12), JKLMNOPQRS. Servicios, adm. pública, educación y salud (4), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (2) & 43.47 & 6.77 & 39.00 & 5000.00 \\
-C04 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (7), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (5), H. Transporte y Almacenamiento (1) & 30.77 & 12.47 & 44.00 & 6000.00 \\
-C05 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (11), H. Transporte y Almacenamiento (1), JKLMNOPQRS. Servicios, adm. pública, educación y salud (1) & 36.86 & 2.54 & 44.00 & 5275.00 \\
-C06 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (22), JKLMNOPQRS. Servicios, adm. pública, educación y salud (5), H. Transporte y Almacenamiento (4) & 21.96 & 14.83 & 42.75 & 8000.00 \\
-C07 & A. Agricultura, Ganadería, Caza, Silvicultura y Pesca (5) & 22.34 & 4.33 & 51.00 & 6000.00 \\
-C08 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (7), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (1) & 37.01 & 13.30 & 36.50 & 6656.00 \\
-C09 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (8), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (7), H. Transporte y Almacenamiento (2) & 34.32 & 34.18 & 43.00 & 7000.00 \\
+C00 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (5), H. Transporte y Almacenamiento (2), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (1) & 36.35 & 42.01 & 46.50 & 8.79 \\
+C01 & GI. Comercio, alojamiento y comidas (6), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (2), JKLMNOPQRS. Servicios, adm. pública, educación y salud (1) & 54.89 & 0.62 & 39.00 & 8.35 \\
+C02 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (11), GI. Comercio, alojamiento y comidas (1), T. Empleo doméstico (1) & 51.11 & 15.24 & 39.00 & 8.51 \\
+C03 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (17), JKLMNOPQRS. Servicios, adm. pública, educación y salud (7), H. Transporte y Almacenamiento (2) & 34.33 & 6.78 & 44.75 & 8.59 \\
+C04 & GI. Comercio, alojamiento y comidas (12), JKLMNOPQRS. Servicios, adm. pública, educación y salud (4), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (2) & 43.47 & 6.77 & 39.00 & 8.52 \\
+C05 & A. Agricultura, Ganadería, Caza, Silvicultura y Pesca (5) & 22.34 & 4.33 & 51.00 & 8.70 \\
+C06 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (7), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (1) & 37.01 & 13.30 & 36.50 & 8.80 \\
+C07 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (9), JKLMNOPQRS. Servicios, adm. pública, educación y salud (8), H. Transporte y Almacenamiento (2) & 31.74 & 31.62 & 44.50 & 8.80 \\
+C08 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (4), JKLMNOPQRS. Servicios, adm. pública, educación y salud (3), H. Transporte y Almacenamiento (2) & 21.32 & 26.91 & 49.00 & 8.74 \\
+C09 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (7), JKLMNOPQRS. Servicios, adm. pública, educación y salud (1) & 17.37 & 16.31 & 41.00 & 9.12 \\
+C10 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (8), H. Transporte y Almacenamiento (2), JKLMNOPQRS. Servicios, adm. pública, educación y salud (2) & 26.28 & 7.96 & 36.00 & 9.03 \\

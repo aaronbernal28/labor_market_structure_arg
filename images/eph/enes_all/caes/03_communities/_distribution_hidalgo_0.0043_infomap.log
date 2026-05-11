@@ -1,0 +1,43 @@
+============================================================
+COMMUNITY DETECTION 5/10/2026 9:00:00 PM - DEPRECATED - IGNORE
+============================================================
+
+SNAKEMAKE
+---------
+Inputs: data/graphs/enes_all/caes/projection_hidalgo_0.0043.gexf, data/processed/enes_all/nodelist_caes_hidalgo_0.0043_pos.csv
+Outputs: data/processed/enes_all/nodelist_caes_hidalgo_0.0043_pos_infomap.csv, images/enes_all/caes/03_communities/_distribution_hidalgo_0.0043_infomap.png, images/enes_all/caes/03_communities/_boxplots_hidalgo_0.0043_infomap.png
+Params:
+Wildcards: enes_all, caes, hidalgo, 0.0043, infomap
+
+PARAMETERS
+----------
+Class: caes
+Algorithm: infomap
+Seed: 28
+Modularity: 0.5111
+Detected communities: 9
+
+Projection metrics
+------------------
+Node count: 142
+Edge count: 872
+Loop count: 0
+Average degree: 12.28
+Average weighted degree: 1.30
+Average clustering coefficient: 0.3890
+Average clustering coefficient ponderado: 0.0464
+Diameter (largest component): 6
+Connected components: 3
+
+NODELIST WITH COMMUNITIES
+-------------------------
+Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median \\
+C0 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (5), H. Transporte y Almacenamiento (2), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (1) & 36.35 & 42.01 & 46.50 & 8.79 \\
+C1 & GI. Comercio, alojamiento y comidas (6), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (2), JKLMNOPQRS. Servicios, adm. pública, educación y salud (1) & 54.89 & 0.62 & 39.00 & 8.35 \\
+C2 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (11), GI. Comercio, alojamiento y comidas (1), T. Empleo doméstico (1) & 51.11 & 15.24 & 39.00 & 8.51 \\
+C3 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (17), JKLMNOPQRS. Servicios, adm. pública, educación y salud (6), H. Transporte y Almacenamiento (4) & 34.57 & 10.10 & 47.00 & 8.59 \\
+C4 & GI. Comercio, alojamiento y comidas (12), JKLMNOPQRS. Servicios, adm. pública, educación y salud (6), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (2) & 41.80 & 7.52 & 39.00 & 8.54 \\
+C5 & BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (22), JKLMNOPQRS. Servicios, adm. pública, educación y salud (5), H. Transporte y Almacenamiento (2) & 20.68 & 12.35 & 42.25 & 8.99 \\
+C6 & A. Agricultura, Ganadería, Caza, Silvicultura y Pesca (5) & 22.34 & 4.33 & 51.00 & 8.70 \\
+C7 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (7), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (1) & 37.01 & 13.30 & 36.50 & 8.80 \\
+C8 & JKLMNOPQRS. Servicios, adm. pública, educación y salud (8), BCDEF. Minería, Industria, Electricidad, Saneamiento y Construcción (6), H. Transporte y Almacenamiento (2) & 34.95 & 36.03 & 42.00 & 8.85 \\

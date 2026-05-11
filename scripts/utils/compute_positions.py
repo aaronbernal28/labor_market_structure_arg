@@ -18,7 +18,7 @@ def main() -> None:
 	pos = gc.get_projection_positions(
 		graph,
 		seed=seed,
-		spring_layout_iterations=50,
+		spring_layout_iterations=1000,
 		spring_layout_k=None,
 		rotate=False,
 		method="auto",

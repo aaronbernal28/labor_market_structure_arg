@@ -37,6 +37,12 @@ def main() -> None:
 			"Unsupported algorithm. Use one of: louvain, leiden, infomap."
 		)
 
+	# Re-create graph from sorted edges to ensure deterministic internal representation
+	G_sorted = nx.Graph()
+	G_sorted.add_nodes_from(sorted(graph.nodes(data=True)))
+	G_sorted.add_edges_from(sorted(graph.edges(data=True), key=lambda x: (x[0], x[1])))
+	graph = G_sorted
+
 	# Sort graph nodes by ID to ensure consistent ordering across runs
 	nodes = sorted(list(graph.nodes()))
 	random.seed(seed)

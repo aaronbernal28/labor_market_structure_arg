@@ -228,10 +228,12 @@ def relabel_communities_by_observations(
 	for node, comm_id in communities.items():
 		community_weights[comm_id] += n_obs.get(node, 0)
 
-	# Sort communities by their total aggregated weight
+	# Sort communities by their total aggregated weight, using old_id as tie-break for reproducibility
 	is_desc = order.lower() == "desc"
 	sorted_communities = sorted(
-		community_weights.items(), key=lambda item: item[1], reverse=is_desc
+		community_weights.items(),
+		key=lambda item: (item[1], item[0]),
+		reverse=is_desc
 	)
 
 	# Create mapping from old community ID to new ID

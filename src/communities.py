@@ -6,12 +6,13 @@ from typing import Any, Dict, List, Tuple
 
 import networkx as nx
 from networkx.algorithms.community import (
-	girvan_newman,
-	leiden_communities,
-	louvain_communities,
-	modularity,
+    girvan_newman,
+    louvain_communities,
+    modularity,
 )
 import numpy as np
+import igraph as ig
+import leidenalg as la
 from infomap import Infomap
 import src.utils as ut
 
@@ -172,26 +173,46 @@ def best_louvain_partition_search(
 
 
 def leiden_partition(
-	graph: nx.Graph, resolution: float = 1.0, seed: int = 28, markov_time: float | None = None
+    graph: nx.Graph, resolution: float = 1.0, seed: int = 28, markov_time: float | None = None
 ) -> Tuple[Dict[int, int], float]:
-	"""
-	Run Leiden and return the partition map plus modularity.
-	"""
-	try:
-		communities_list = leiden_communities(
-			graph, weight="weight", resolution=resolution, seed=seed, backend="cugraph"
-		)
-	except NotImplementedError as exc:
-		raise NotImplementedError(
-			"Leiden requires an external backend in NetworkX 3.6 (Nvidia cuGraph)"
-		) from exc
+    """
+    Run Leiden using leidenalg and return the partition map plus modularity.
+    """
+    # Convert NetworkX graph to iGraph
+    nodes = sorted(list(graph.nodes()))
+    node_to_idx = {node: i for i, node in enumerate(nodes)}
 
-	# Convert to dict format: node -> community_id
-	communities = {node: i for i, comm in enumerate(communities_list) for node in comm}
+    ig_graph = ig.Graph(len(nodes), directed=False)
+    edges = []
+    weights = []
+    for u, v, data in graph.edges(data=True):
+        edges.append((node_to_idx[u], node_to_idx[v]))
+        weights.append(data.get("weight", 1.0))
 
-	# Calculate modularity score
-	score = modularity(graph, communities_list, weight="weight", resolution=1.0)
-	return communities, score
+    ig_graph.add_edges(edges)
+    ig_graph.es["weight"] = weights
+
+    # Run Leiden
+    partition = la.find_partition(
+        ig_graph,
+        la.RBConfigurationVertexPartition,
+        resolution_parameter=resolution,
+        weights="weight",
+        seed=seed
+    )
+
+    # Convert back to dict format: node -> community_id
+    communities = {}
+    communities_list = []
+    for i, comm in enumerate(partition):
+        community_nodes = [nodes[idx] for idx in comm]
+        communities_list.append(set(community_nodes))
+        for node in community_nodes:
+            communities[node] = i
+
+    # Calculate modularity score using NetworkX utility for consistency
+    score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+    return communities, score
 
 
 def best_leiden_partition_random(
