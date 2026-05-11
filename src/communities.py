@@ -44,9 +44,8 @@ def best_louvain_partition_random(
 	graph: nx.Graph,
 	seed: int = 28,
 	n_samples: int = 20,
-	min_resolution: float = 0.8,
-	max_resolution: float = 1.5,
-) -> Tuple[Dict[int, int], float, float]:
+	resolution: float = 1.0,
+) -> Tuple[Dict[int, int], float]:
 	"""
 	Find the best Louvain partition by random sampling of resolution values.
 	Args:
@@ -62,25 +61,22 @@ def best_louvain_partition_random(
 	rng = np.random.RandomState(seed)
 
 	# Sample resolution values uniformly
-	resolutions = rng.uniform(min_resolution, max_resolution, n_samples)
+	seeds = rng.randint(0, 10000, n_samples)
 
 	best_partition = None
 	best_score = -1.0
-	best_resolution = None
 
-	for i, resolution in enumerate(resolutions):
+	for seed in seeds:
 		# Use deterministic seed derived from base seed
-		current_seed = seed + i
 		partition, score = louvain_partition(
-			graph, resolution=resolution, seed=current_seed
+			graph, resolution=resolution, seed=seed
 		)
 
 		if score > best_score:
 			best_partition = partition
 			best_score = score
-			best_resolution = resolution
 
-	return best_partition, best_score, best_resolution
+	return best_partition, best_score
 
 
 def best_louvain_partition_search(
@@ -219,36 +215,30 @@ def best_leiden_partition_random(
 	graph: nx.Graph,
 	seed: int = 28,
 	n_samples: int = 20,
-	min_resolution: float = 0.8,
-	max_resolution: float = 1.5,
 	resolution: float = 1.0,
-) -> Tuple[Dict[int, int], float, float]:
+) -> Tuple[Dict[int, int], float]:
 	"""
 	Find the best Leiden partition by random sampling of resolution values.
 	"""
 	rng = np.random.RandomState(seed)
 
 	# Sample resolution values uniformly
-	resolutions = rng.uniform(min_resolution, max_resolution, n_samples)
+	seeds = rng.randint(0, 10000, n_samples)
 
 	best_partition = None
 	best_score = -1.0
-	best_resolution = None
-	# FIXME: This approach will be deprecated
 
-	for i, resolution in enumerate(resolutions):
+	for seed in seeds:
 		# Use deterministic seed derived from base seed
-		current_seed = seed + i
 		partition, score = leiden_partition(
-			graph, resolution=resolution, seed=current_seed
+			graph, resolution=resolution, seed=seed
 		)
 
 		if score > best_score:
 			best_partition = partition
 			best_score = score
-			best_resolution = resolution
 
-	return best_partition, best_score, best_resolution
+	return best_partition, best_score
 
 
 def infomap_partition(
@@ -316,38 +306,30 @@ def best_infomap_partition_random(
 	graph: nx.Graph,
 	seed: int = 28,
 	n_samples: int = 20,
-	min_markov_time: float = 0.5,
-	max_markov_time: float = 5.0,
-	num_trials: int = 20,
-) -> Tuple[Dict[int, int], float, float]:
+	resolution: float = 1.0,
+) -> Tuple[Dict[int, int], float]:
 	"""
 	Find the best Infomap partition by random sampling of markov_time values.
 	"""
 	rng = np.random.RandomState(seed)
 
-	# Sample markov_time values uniformly
-	markov_times = rng.uniform(min_markov_time, max_markov_time, n_samples)
+	# Sample resolution values uniformly
+	seeds = rng.randint(0, 10000, n_samples)
 
 	best_partition = None
 	best_score = -1.0
-	best_markov_time = None
 
-	for i, markov_time in enumerate(markov_times):
+	for seed in seeds:
 		# Use deterministic seed derived from base seed
-		current_seed = seed + i
 		partition, score = infomap_partition(
-			graph,
-			seed=current_seed,
-			markov_time=markov_time,
-			num_trials=num_trials,
+			graph, resolution=resolution, seed=seed
 		)
 
 		if score > best_score:
 			best_partition = partition
 			best_score = score
-			best_markov_time = markov_time
 
-	return best_partition, best_score, best_markov_time
+	return best_partition, best_score
 
 
 def girvan_newman_partition(

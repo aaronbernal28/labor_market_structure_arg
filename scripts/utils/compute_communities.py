@@ -27,41 +27,24 @@ def main() -> None:
 	#utils.setup_networkx_backend(algorithm=algorithm)
 
 	if algorithm == "louvain":
-		algorithm_func = comm.louvain_partition
+		algorithm_func = comm.best_louvain_partition_random
 	elif algorithm == "leiden":
-		algorithm_func = comm.leiden_partition
+		algorithm_func = comm.best_leiden_partition_random
 	elif algorithm == "infomap":
-		algorithm_func = comm.infomap_partition
+		algorithm_func = comm.best_infomap_partition_random
 	else:
 		raise NotImplementedError(
 			"Unsupported algorithm. Use one of: louvain, leiden, infomap."
 		)
 
-	# Re-create graph from sorted edges to ensure deterministic internal representation
-	G_sorted = nx.Graph()
-	G_sorted.add_nodes_from(sorted(graph.nodes(data=True)))
-	G_sorted.add_edges_from(sorted(graph.edges(data=True), key=lambda x: (x[0], x[1])))
-	graph = G_sorted
-
 	# Sort graph nodes by ID to ensure consistent ordering across runs
-	nodes = sorted(list(graph.nodes()))
-	random.seed(seed)
-	random.shuffle(nodes)
-	mapping = {old: new for old, new in zip(graph.nodes(), nodes)}
-	inverse_mapping = {new: old for old, new in mapping.items()}
-	G_shuffled = nx.relabel_nodes(graph, mapping)
+	graph = gc.graph_sort_nodes_by_id(graph)
 
-	if algorithm == "infomap":
-		communities, modularity = algorithm_func(
-			G_shuffled, seed=seed, resolution=resolution
-		)
-	else:
-		communities, modularity = algorithm_func(
-			G_shuffled, seed=seed, resolution=resolution
-		)
+	communities, modularity = algorithm_func(
+		graph, seed=seed, n_samples=20, resolution=resolution
+	)
 
 	print(f"Raw communities detected: {len(set(communities.values()))}")
-	communities = {inverse_mapping[node]: comm for node, comm in communities.items()}
 	n_obs = nodelist_df.set_index(id_col)["n_obs"].to_dict()
 	communities = utils.relabel_communities_by_observations(
 		communities,
