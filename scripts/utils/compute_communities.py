@@ -24,7 +24,7 @@ def main() -> None:
 	graph = graph.subgraph(nodelist_df[id_col].unique()).copy()
 
 	algorithm = snakemake.wildcards["algorithm"].lower()
-	utils.setup_networkx_backend(algorithm=algorithm)
+	#utils.setup_networkx_backend(algorithm=algorithm)
 
 	if algorithm == "louvain":
 		algorithm_func = comm.louvain_partition

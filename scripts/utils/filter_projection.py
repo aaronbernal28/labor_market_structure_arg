@@ -9,7 +9,7 @@ snakemake: Any
 
 def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
-	utils.setup_networkx_backend(algorithm=None)
+	#utils.setup_networkx_backend(algorithm=None)
 
 	coverage_threshold = snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"]
 	print("Filtering projection graph")

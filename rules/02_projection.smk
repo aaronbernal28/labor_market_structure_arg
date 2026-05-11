@@ -78,8 +78,6 @@ rule _compute_alpha_sensitivity_eph:
 
 rule _compute_resolution_sensitivity:
 	"""Sensitivity of community detection to resolution parameter alpha. This will compare all algorithms also."""
-	resources:
-		limited_slots = 1 # to avoid overloading GPU
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
 	params:

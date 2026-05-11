@@ -16,7 +16,7 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	weight_function = snakemake.wildcards["weight_function"]
 	feature = snakemake.wildcards.get("feature", "female_pct")
-	utils.setup_networkx_backend(algorithm=None)
+	#utils.setup_networkx_backend(algorithm=None)
 
 	if class_ not in {"caes", "cno"}:
 		raise ValueError("This EPH-only script supports class_ in {'caes', 'cno'}.")
