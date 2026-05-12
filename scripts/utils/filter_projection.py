@@ -12,7 +12,7 @@ def main() -> None:
 	#utils.setup_networkx_backend(algorithm=None)
 
 	coverage_threshold = snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"]
-	alpha = 10**-2 if "eph/usu" in snakemake.input[0] else None
+	alpha = snakemake.config["alpha_sensitivity"]["default_alpha_eph"] if "eph/usu" in snakemake.input[0] else None
 	print("Filtering projection graph")
 	input_metrics = metrics.summarize_graph(graph)
 

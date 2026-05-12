@@ -153,3 +153,4 @@ NODE_ALPHA : 0.6
 
 alpha_sensitivity:
   reference_coverage_threshold: 0.99
+  default_alpha_eph: 0.001

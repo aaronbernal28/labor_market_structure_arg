@@ -128,7 +128,11 @@ rule all:
 			"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_{weight_function}_backbone.png",
 			weight_function=["hidalgo"],
 		),
-
+		expand(
+			"images/eph/{class_}/13_preferential_attachment/_{weight_function}.png",
+			weight_function=["hidalgo"],
+			class_=["cno"],
+		),
 
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''
@@ -356,6 +360,22 @@ rule _12_betweenness_centrality_ai:
 	script:
 		"scripts/12_betweenness_centrality_ai.py"
 
+
+rule _13_preferential_attachment:
+	"""Estimate the preferential attachment exponent alpha for EPH projections."""
+	input:
+		projections=lambda wildcards: sorted(expand(
+			"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}_backbone.gexf",
+			eph_file=EPH_FILES,
+			class_=wildcards.class_,
+			weight_function=wildcards.weight_function,
+		))
+	output:
+		plot="images/eph/{class_}/13_preferential_attachment/_{weight_function}.png"
+	log:
+		"images/eph/{class_}/13_preferential_attachment/_{weight_function}.log"
+	script:
+		"scripts/13_preferential_attachment.py"
 
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
