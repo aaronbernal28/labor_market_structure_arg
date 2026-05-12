@@ -124,6 +124,10 @@ rule all:
 			weight_function=["hidalgo"],
 			feature=["female_pct"],
 		),
+		expand(
+			"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_{weight_function}_backbone.png",
+			weight_function=["hidalgo"],
+		),
 
 
 rule _00_aed_report:
@@ -334,6 +338,23 @@ rule _10_edge_weight_correlation_eph:
 		"images/eph/{class_}/10_edge_weight_correlation/_{weight_function}_{feature}.log"
 	script:
 		"scripts/10_edge_weight_correlation_eph.py"
+
+
+rule _12_betweenness_centrality_ai:
+	"""Time-series of betweenness centrality for AI-related occupations in CNO projections."""
+	input:
+		projections=lambda wildcards: expand(
+			"data/graphs/eph/{eph_file}/cno/projection_{weight_function}_backbone.gexf",
+			eph_file=EPH_FILES,
+			weight_function=wildcards.weight_function,
+		),
+		nodelist="data/raw/nodelist_cno.csv",
+	output:
+		"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_{weight_function}_backbone.png"
+	log:
+		"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_{weight_function}_backbone.log"
+	script:
+		"scripts/12_betweenness_centrality_ai.py"
 
 
 include: "rules/00_prepare.smk"

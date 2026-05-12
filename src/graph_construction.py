@@ -410,7 +410,7 @@ def get_disparity_graph(graph_in: nx.Graph) -> nx.DiGraph:
 def disparity_filter_backbone(
 	original_graph: nx.Graph = None,
 	disparity_graph: nx.DiGraph = None,
-	alpha: float = 0.05,
+	alpha: float = None,
 	mode: str = "or",
 	keep_isolates: bool = True,
 	coverage: Optional[float] = None,
