@@ -231,3 +231,4 @@ scripts/deprecated/
 .snakemake/
 logcat_old.txt
 data/processed/eph
+data/diagrams

@@ -89,3 +89,12 @@ rule _compute_resolution_sensitivity:
 		"../scripts/utils/compute_resolution_sensitivity.py"
 	#shell:
 	#	"export CUDA_PATH=/usr"
+
+
+rule compute_persistence_diagram:
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
+	output:
+		"data/diagrams/{dataset}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv"
+	script:
+		"../scripts/utils/compute_persistence_diagram.py"

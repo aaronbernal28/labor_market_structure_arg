@@ -495,17 +495,14 @@ def compute_distance_matrix(graph: nx.Graph, method: str) -> np.ndarray:
 
 def _build_betas(size: int = 100) -> np.ndarray:
 	"""Return a strictly increasing beta grid including 0 and 1."""
-	betas = np.concatenate(([0.0], np.logspace(-6, 0, size - 2)))
+	betas = np.concatenate(([0.0], np.logspace(-14, 0, size - 2, endpoint=True, base=2)))
 	betas = np.unique(betas)
 	betas.sort()
 	if betas[0] != 0.0:
-		betas = np.concatenate(([0.0], betas))
+		raise ValueError("Beta grid must start with 0.0.")
 	# Ensure 1.0 is present and is the last endpoint
 	if betas[-1] != 1.0:
-		betas = np.concatenate((betas, [1.0]))
-		betas = np.unique(betas)
-		betas.sort()
-	betas[-1] = 1.0
+		raise ValueError("Beta grid must end with 1.0.")
 	return betas
 
 
