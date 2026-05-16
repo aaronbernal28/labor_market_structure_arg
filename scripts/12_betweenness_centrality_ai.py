@@ -46,8 +46,11 @@ def main() -> None:
         # Load graph
         graph = nx.read_gexf(projection_path, node_type=int)
 
+        # Calculate costs
+        graph = gc.convert_weights_to_costs(graph)
+
         # Calculate betweenness centrality
-        bc = nx.betweenness_centrality(graph, weight="weight")
+        bc = nx.betweenness_centrality(graph, weight="cost")
 
         for code in HIGHLIGHT_CODES:
             if code in bc:
