@@ -69,6 +69,7 @@ def main() -> None:
 	nodes_with_edges_all = np.empty((n_series, n_alphas), dtype=float)
 	edge_counts_all = np.empty((n_series, n_alphas), dtype=float)
 	clustering_all = np.empty((n_series, n_alphas), dtype=float)
+	clustering_weighted_all = np.empty((n_series, n_alphas), dtype=float)
 	nodes_lcc_all = np.empty((n_series, n_alphas), dtype=float)
 	reference_alphas = np.empty(n_series, dtype=float)
 
@@ -84,12 +85,14 @@ def main() -> None:
 		nodes_with_edges = np.array(metrics_data["nodes_with_edges"])
 		edge_counts = np.array(metrics_data["edge_counts"])
 		clustering_coeffs = np.array(metrics_data["clustering_coeffs"])
+		clustering_coeffs_weighted = np.array(metrics_data["clustering_coeffs_weighted"])
 		nodes_largest_cc = np.array(metrics_data["nodes_largest_cc"])
 		reference_alpha = round(float(metrics_data["reference_alpha"]), 4)
 
 		nodes_with_edges_all[i, :] = nodes_with_edges
 		edge_counts_all[i, :] = edge_counts
 		clustering_all[i, :] = clustering_coeffs
+		clustering_weighted_all[i, :] = clustering_coeffs_weighted
 		nodes_lcc_all[i, :] = nodes_largest_cc
 		reference_alphas[i] = reference_alpha
 
@@ -104,6 +107,7 @@ def main() -> None:
 		nodes_with_edges=nodes_with_edges_all,
 		edge_counts=edge_counts_all,
 		clustering_coefficients=clustering_all,
+		clustering_coefficients_weighted=clustering_weighted_all,
 		nodes_largest_cc=nodes_lcc_all,
 		title=title,
 		output_path=Path(snakemake.output[0]),

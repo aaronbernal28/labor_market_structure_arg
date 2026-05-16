@@ -11,12 +11,10 @@ def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	#utils.setup_networkx_backend(algorithm=None)
 
-	coverage_threshold = snakemake.config["alpha_sensitivity"]["reference_coverage_threshold"]
-	alpha = snakemake.config["alpha_sensitivity"]["default_alpha_eph"] if "eph/usu" in snakemake.input[0] else None
-	print("Filtering projection graph")
+	alpha = float(snakemake.wildcards.get("alpha", "0.05"))
 	input_metrics = metrics.summarize_graph(graph)
 
-	backbone = gc.disparity_filter_backbone(original_graph=graph, alpha=alpha, coverage=coverage_threshold)
+	backbone = gc.disparity_filter_backbone(original_graph=graph, alpha=alpha)
 	# Convert to undirected for metrics computation and downstream analysis
 	backbone_for_metrics = nx.to_undirected(backbone)
 
@@ -30,8 +28,8 @@ def main() -> None:
 		log_lines,
 		"PARAMETERS",
 		[
-			f"Coverage threshold: {coverage_threshold}",
-			f"Filtering applied: {coverage_threshold is not None and coverage_threshold < 1.0}",
+			f"Alpha: {alpha}",
+			f"Filtering applied: {alpha is not None and alpha < 1.0}",
 		],
 	)
 	log.add_graph_metrics(log_lines, "Input projection metrics", input_metrics)
@@ -51,7 +49,7 @@ def main() -> None:
 		backbone_weights=[
 			d["weight"] for _, _, d in backbone_undirected.edges(data=True)
 		],
-		coverage_threshold=coverage_threshold,
+		reference_alpha=alpha,
 		title_prefix=None,
 		output_path=Path(snakemake.output[1]),
 		save=True,

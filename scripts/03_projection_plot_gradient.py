@@ -29,9 +29,23 @@ def main() -> None:
 		raise ValueError("No overlap between nodelist ids and projection graph nodes.")
 
 	pos = dl.load_positions(pos_df, id_col)
-	node_values = pd.to_numeric(
-		plot_df.set_index(id_col)[feature], errors="coerce"
-	).to_dict()
+	feature_series = plot_df.set_index(id_col)[feature]
+	if feature == "community":
+		# Ensure non-community labels are rendered in gray.
+		feature_series = feature_series.replace(
+			{
+				"Other": pd.NA,
+				"other": pd.NA,
+				"None": pd.NA,
+				"none": pd.NA,
+			}
+		)
+
+	numeric_values = pd.to_numeric(feature_series, errors="coerce")
+	if feature == "community":
+		numeric_values = numeric_values.where(numeric_values >= 0)
+
+	node_values = numeric_values.to_dict()
 	worker_counts = plot_df.set_index(id_col)["n_obs"].to_dict()
 
 	cmaps = snakemake.config.get("cmaps", {})

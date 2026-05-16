@@ -217,9 +217,8 @@ reference/
 main.bbl
 main.synctex(busy)
 
-data/processed/
 data/raw/
-data/graphs/
+data/graphs/eph
 # images/
 data/raw/base_enespersonas_2021.csv
 data/raw/metadata_base_enespersonas.csv
@@ -231,18 +230,4 @@ data/raw/base_enespersonas.csv
 scripts/deprecated/
 .snakemake/
 logcat_old.txt
-
-!data/processed/enes_all/caes/_compute_resolution_sensitivity/_df_scores_hidalgo_0.0043.csv
-!data/processed/enes_all/ciuo/_compute_resolution_sensitivity/_df_scores_hidalgo_0.0093.csv
-!data/processed/enes_all/nodelist_caes_hidalgo_0.0043_pos_infomap.csv
-!data/processed/enes_all/nodelist_ciuo_hidalgo_0.0093_pos_louvain.csv
-!data/processed/enes_all/nodelist_caes_hidalgo_0.0043_pos_leiden.csv
-!data/graphs/enes_all/caes/projection_hidalgo_0.0043.gexf
-!data/processed/enes_all/caes/_compute_resolution_sensitivity/_df_scores_hidalgo_0.0043.csv
-!data/processed/enes_all/ciuo/_compute_resolution_sensitivity/_df_scores_hidalgo_0.0093.csv
-!data/raw/caes_to_ciuo_first_2digits_relation.csv
-!data/raw/nodelist_caes.csv
-!data/raw/nodelist_ciuo.csv
-!data/raw/nodelist_cno.csv
-!data/graphs/enes_all/caes/projection_hidalgo_0.0043.gexf
-!data/graphs/enes_all/ciuo/projection_hidalgo_0.0093.gexf
+data/processed/eph

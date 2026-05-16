@@ -122,7 +122,6 @@ def main() -> None:
 			title="algorithm",
 		)
 
-		g.fig.suptitle(f"{score_type} by Resolution", y=1.02)
 		g.set_axis_labels("Resolution", "Score")
 		g.ax_joint.set_xscale("log")
 		g.ax_joint.grid(True)
@@ -144,14 +143,16 @@ def main() -> None:
 			alpha=0.5,
 			zorder=2,
 		)
-	# Add label with all negatives values ommitted
+	# Add label with all negatives values omitted, vertically separated
 	group_neg = df.groupby("algorithm")["modularity"].apply(lambda x: x[x < 0].count())
-	for algorithm in algorithm_order:
+	label_y_base = 0.05
+	label_y_step = 0.06
+	for idx, algorithm in enumerate(algorithm_order):
 		count_neg = group_neg.get(algorithm, 0)
 		if count_neg > 0:
 			ax.text(
 				x=reference_resolution,
-				y=0.05,
+				y=label_y_base + label_y_step * idx,
 				s=f"{count_neg} negative values",
 				color=color_map[algorithm],
 				horizontalalignment="center",
@@ -162,7 +163,6 @@ def main() -> None:
 	ax.set_xscale("log")
 	ax.set_xlabel("Resolution")
 	ax.set_ylabel("Modularity")
-	ax.set_title("Modularity by Resolution")
 	ax.set_ylim(-0.1, 1.1)
 	plt.savefig(snakemake.output[3], bbox_inches="tight")
 	plt.close()

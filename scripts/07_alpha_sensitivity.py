@@ -17,8 +17,9 @@ def main() -> None:
 	nodes_with_edges = np.array(metrics["nodes_with_edges"])
 	edge_counts = np.array(metrics["edge_counts"])
 	clustering_coeffs = np.array(metrics["clustering_coeffs"])
+	clustering_coeffs_weighted = np.array(metrics["clustering_coeffs_weighted"])
 	nodes_largest_cc = np.array(metrics["nodes_largest_cc"])
-	reference_alpha = metrics["reference_alpha"]
+	reference_alpha = round(metrics["reference_alpha"], 4)
 
 	title = (
 		f"{snakemake.wildcards['dataset']} - "
@@ -31,6 +32,7 @@ def main() -> None:
 		nodes_with_edges=nodes_with_edges,
 		edge_counts=edge_counts,
 		clustering_coefficients=clustering_coeffs,
+		clustering_coefficients_weighted=clustering_coeffs_weighted,
 		title=title,
 		output_path=Path(snakemake.output[0]),
 		nodes_largest_cc=nodes_largest_cc,
@@ -50,7 +52,7 @@ def main() -> None:
 		log_lines,
 		"SWEEP SETTINGS",
 		[
-			f"Reference alpha: {reference_alpha}",
+			f"Reference alpha (99% coverage): {reference_alpha}",
 			f"Alpha min: {alphas.min():.6f}",
 			f"Alpha max: {alphas.max():.6f}",
 			f"Alpha count: {len(alphas)}",

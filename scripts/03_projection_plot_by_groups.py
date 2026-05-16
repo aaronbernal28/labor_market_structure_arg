@@ -73,6 +73,10 @@ def main() -> None:
 			except (ValueError, SyntaxError, TypeError):
 				group_color_map[group_name] = "gray"
 
+	if discrete_feature == "community" and group_color_map is not None:
+		# Always render non-community nodes in gray.
+		group_color_map.setdefault("Other", "gray")
+
 	print(f"Using discrete feature '{discrete_feature}' for grouping.")
 	print(f"Group mapping: {set(group_map.values())}")
 	print(
@@ -86,10 +90,18 @@ def main() -> None:
 		from seaborn import hls_palette
 
 		unique_groups = sorted(set(group_map.values()))
-		palette = hls_palette(len(unique_groups), l=0.6).as_hex()
-		group_color_map = {
-			group: palette[i % len(palette)] for i, group in enumerate(unique_groups)
-		}
+		if discrete_feature == "community" and "Other" in unique_groups:
+			unique_groups = [group for group in unique_groups if group != "Other"]
+			palette = hls_palette(len(unique_groups), l=0.6).as_hex()
+			group_color_map = {
+				group: palette[i % len(palette)] for i, group in enumerate(unique_groups)
+			}
+			group_color_map["Other"] = "gray"
+		else:
+			palette = hls_palette(len(unique_groups), l=0.6).as_hex()
+			group_color_map = {
+				group: palette[i % len(palette)] for i, group in enumerate(unique_groups)
+			}
 
 	if pos:
 		graph = nx.subgraph(graph, set(pos.keys()))

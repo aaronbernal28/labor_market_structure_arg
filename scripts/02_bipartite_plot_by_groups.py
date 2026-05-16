@@ -79,7 +79,7 @@ def main() -> None:
 		degrees=degrees,
 		colors=colors,
 		output_path=snakemake.output[1],
-		logscale=False,
+		logscale=True,
 	)
 
 	graph_metrics = metrics.summarize_graph(bigraph)

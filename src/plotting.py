@@ -100,11 +100,10 @@ def plot_heatmap(
 	biadjacency.columns = wrapped_columns
 	biadjacency.index = wrapped_index
 
-	values = biadjacency.to_numpy()
-	is_integer = np.issubdtype(values.dtype, np.integer)
-	fmt = "d" if is_integer else ".2f"
+	rounded = biadjacency.round(0)
+	fmt = ".0f"
 	ax = sns.heatmap(
-		biadjacency,
+		rounded,
 		annot=True,
 		fmt=fmt,
 		cmap="Greens",
@@ -710,37 +709,50 @@ def plot_degree_histogram(
 	logscale: bool = False,
 	is_discrete: bool = True,
 ) -> None:
-	"""Plot degree distribution as scatter plot for discrete data or histogram for continuous data."""
+	"""Plot degree distribution using seaborn with optional log-log scaling."""
 	created_fig = ax is None
 	if created_fig:
 		fig, ax = plt.subplots()
 
 	degrees_array = np.array(list(degrees))
-
-	# Use scatter plot for discrete data (few unique values), histogram for continuous
 	if logscale:
-		ax.set_xscale("log")
-		ax.set_yscale("log")
+		degrees_array = degrees_array[degrees_array > 0]
+		if degrees_array.size == 0:
+			ax.set_title(f"{title}\n(no positive degrees)")
+			if created_fig:
+				if save and output_path is not None:
+					plt.savefig(output_path, bbox_inches="tight")
+					plt.close()
+				else:
+					plt.show()
+			return
 
 	if is_discrete:
-		# Count frequency of each degree value and plot as scatter
 		degree_counts = pd.Series(degrees_array).value_counts().sort_index()
 		sns.scatterplot(
 			x=degree_counts.index,
 			y=degree_counts.values,
 			color=color,
-			s=50,
+			s=36,
 			alpha=0.7,
 			ax=ax,
 		)
-		if not logscale:
-			ax.set_ylim(-0.05 * degree_counts.max(), degree_counts.max() * 1.05)
+		if logscale:
+			ax.set_xscale("log")
+			ax.set_yscale("log")
 	else:
-		# Use seaborn histogram for continuous data
-		sns.histplot(degrees_array, color=color, alpha=0.5, ax=ax)
-		if not logscale:
-			ylim_max = max(ax.get_ylim()[1], 1) * 1.05
-			ax.set_ylim(-0.05 * ylim_max, ylim_max)
+		log_scale = (True, True) if logscale else False
+		sns.histplot(
+			degrees_array,
+			color=color,
+			alpha=0.5,
+			ax=ax,
+			log_scale=log_scale,
+		)
+
+	if not logscale:
+		ylim_max = max(ax.get_ylim()[1], 1) * 1.05
+		ax.set_ylim(-0.05 * ylim_max, ylim_max)
 
 	ax.set_xlabel("k")
 	ax.set_ylabel("Frecuencia")
@@ -1237,7 +1249,7 @@ def plot_distance_heatmap(
 def plot_backbone_weight_histogram(
 	original_weights: list,
 	backbone_weights: list,
-	coverage_threshold: float,
+	reference_alpha: float,
 	title_prefix: str,
 	output_path: Path,
 	save: bool = True,
@@ -1249,7 +1261,6 @@ def plot_backbone_weight_histogram(
 	sns.histplot(
 		original_weights,
 		bins=50,
-		kde=True,
 		ax=ax,
 		color="steelblue",
 		alpha=0.3,
@@ -1258,7 +1269,6 @@ def plot_backbone_weight_histogram(
 	sns.histplot(
 		backbone_weights,
 		bins=50,
-		kde=True,
 		ax=ax,
 		color="coral",
 		alpha=0.3,
@@ -1267,7 +1277,7 @@ def plot_backbone_weight_histogram(
 
 	if title_prefix:
 		ax.set_title(
-			f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (coverage={coverage_threshold})"
+			f"{title_prefix} Distribucion de pesos de aristas: Original vs Esqueleto (alpha={reference_alpha:.2f})"
 		)
 
 	ax.set_xlabel("Peso de arista")
@@ -1397,8 +1407,10 @@ def color_map_ciuo(ciuo_nodes: Iterable[str], max_caes_id: int) -> Dict[int, str
 
 def mean_color(colors):
 	colors_array = np.array([list(c) for c in colors])
-	return tuple(colors_array.mean(axis=0))
-
+	res = colors_array.mean(axis=0).round(4).tolist()
+	res = tuple([float(c) for c in res])
+	print(res)
+	return res
 
 def color_letra_map_caes(
 	caes_df: pd.DataFrame, letra_col: str, base_color_col: str
@@ -1604,6 +1616,7 @@ def plot_alpha_sensitivity(
 	nodes_with_edges: np.ndarray,
 	edge_counts: np.ndarray,
 	clustering_coefficients: np.ndarray,
+	clustering_coefficients_weighted: np.ndarray,
 	title: str,
 	output_path: Path,
 	modularities: np.ndarray = None,
@@ -1633,8 +1646,10 @@ def plot_alpha_sensitivity(
 	color_nodes = "steelblue"
 	color_edges = "coral"
 	color_clust = "seagreen"
+	color_clust_weighted = "mediumseagreen"
 	color_mod = "darkorchid"
 	color_lcc = "firebrick"
+	reference_alpha=round(reference_alpha, 4)
 
 	(l1,) = ax.plot(
 		alphas, nodes_with_edges, color=color_nodes, linewidth=2, label="Nodos"
@@ -1653,22 +1668,29 @@ def plot_alpha_sensitivity(
 		color=color_clust,
 		linewidth=2,
 		linestyle=":",
-		label="Coef. de clustering prom. ponderado",
+		label="Coef. de clustering prom.",
 	)
-
-	lines = [l1, l2, l3]
+	(l4,) = ax.plot(
+		alphas,
+		clustering_coefficients_weighted,
+		color=color_clust_weighted,
+		linewidth=2,
+		linestyle="-.",
+		label="Coef. de clustering prom. (ponderado)",
+	)
+	lines = [l1, l2, l3, l4]
 	if modularities is not None:
-		(l4,) = ax.plot(
+		(l5,) = ax.plot(
 			alphas,
 			modularities,
 			color=color_mod,
 			linewidth=2,
 			label="Modularidad",
 		)
-		lines.append(l4)
+		lines.append(l5)
 
 	if nodes_largest_cc is not None:
-		(l5,) = ax.plot(
+		(l6,) = ax.plot(
 			alphas,
 			nodes_largest_cc,
 			color=color_lcc,
@@ -1676,7 +1698,7 @@ def plot_alpha_sensitivity(
 			linestyle="-.",
 			label="Nodos (mayor CC)",
 		)
-		lines.append(l5)
+		lines.append(l6)
 
 	# Reference vertical line
 	vline = ax.axvline(
@@ -1685,7 +1707,7 @@ def plot_alpha_sensitivity(
 		linestyle="--",
 		linewidth=1.2,
 		alpha=0.7,
-		label=f"alpha = {reference_alpha}",
+		label=f"alpha (99% coverage) = {reference_alpha}",
 	)
 	lines.append(vline)
 
@@ -1714,6 +1736,7 @@ def plot_alpha_sensitivity_multi_series(
 	nodes_with_edges: np.ndarray,
 	edge_counts: np.ndarray,
 	clustering_coefficients: np.ndarray,
+	clustering_coefficients_weighted: np.ndarray,
 	nodes_largest_cc: np.ndarray,
 	title: str,
 	output_path: Path,
@@ -1738,6 +1761,7 @@ def plot_alpha_sensitivity_multi_series(
 		"nodes_with_edges": nodes_with_edges,
 		"edge_counts": edge_counts,
 		"clustering_coefficients": clustering_coefficients,
+		"clustering_coefficients_weighted": clustering_coefficients_weighted,
 		"nodes_largest_cc": nodes_largest_cc,
 	}.items():
 		if arr.shape != (n_series, len(alphas)):
@@ -1783,9 +1807,15 @@ def plot_alpha_sensitivity_multi_series(
 			"linestyle": "--",
 		},
 		{
-			"label": "Coef. de clustering prom. ponderado",
+			"label": "Coef. de clustering prom.",
 			"data": clustering_coefficients,
 			"cmap": mpl.cm.Greens,
+			"linestyle": ":",
+		},
+		{
+			"label": "Coef. de clustering prom. ponderado",
+			"data": clustering_coefficients_weighted,
+			"cmap": mpl.cm.YlGnBu,
 			"linestyle": ":",
 		},
 		{

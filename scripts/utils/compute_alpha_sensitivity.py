@@ -13,13 +13,14 @@ def main() -> None:
 	#utils.setup_networkx_backend(algorithm=None)
 
 	seed = int(snakemake.config["seed"])
-	alphas = np.logspace(-10, 0, 60)
+	alphas = np.logspace(-8, 0, 60)
 	alphas.sort()
 
 	(
 		nodes_with_edges,
 		edge_counts,
 		clustering_coeffs,
+		clustering_coeffs_weighted,
 		nodes_largest_cc,
 	) = gc.compute_sweep_alpha(projection, alphas, seed)
 	# NOTE: Modularity is not computed here because it is not used for determining the reference alpha.
@@ -38,6 +39,7 @@ def main() -> None:
 		"nodes_with_edges": nodes_with_edges.tolist(),
 		"edge_counts": edge_counts.tolist(),
 		"clustering_coeffs": clustering_coeffs.tolist(),
+		"clustering_coeffs_weighted": clustering_coeffs_weighted.tolist(),
 		"nodes_largest_cc": nodes_largest_cc.tolist(),
 		"reference_alpha": reference_alpha,
 	}
