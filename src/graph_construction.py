@@ -561,14 +561,17 @@ def get_disparity_distance_matrix(graph: nx.Graph) -> np.ndarray:
 	return distance_matrix
 
 
-def convert_weights_to_costs(graph: nx.Graph) -> nx.Graph:
+def convert_weights_to_costs(graph: nx.Graph, prob_weight: bool = True) -> nx.Graph:
 	"""Convert edge weights to costs for distance calculations."""
 	cost_graph = graph.copy()
 	for u, v, data in graph.edges(data=True):
 		weight = float(data.get("weight", 0.0))
-		cost = float(-np.log(weight)) if weight > 0 else float("inf")
-		# NOTE: if weight is zero, cost becomes infinite
-		# If weight is one, cost becomes zero (as expected for a perfect match)
+		if prob_weight and weight > 0 and weight <= 1.0:
+			cost = float(-np.log(weight)) if weight > 0 else float("inf")
+			# NOTE: if weight is zero, cost becomes infinite
+			# If weight is one, cost becomes zero (as expected for a perfect match)
+		elif weight >= 1.0:
+			cost = 1/float(np.log1p(weight)) if weight >= 1.0 else float("inf")
 		cost_graph.add_edge(u, v, cost=cost)
 	return cost_graph
 

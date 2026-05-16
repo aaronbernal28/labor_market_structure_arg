@@ -28,7 +28,13 @@ def main() -> None:
 		ciuo_partition=snakemake.config["ciuo"]["partition"],
 	)
 
-	metric_results = metrics.summarize_graph(graph)
+	partition_labels = {
+		snakemake.config["caes"]["partition"]: "Sector",
+		snakemake.config["ciuo"]["partition"]: "Ocupacion",
+	}
+	metric_results = metrics.summarize_bipartite_graph(
+		graph, partition_labels=partition_labels
+	)
 	metrics.log_graph_metrics("Bipartite graph", metric_results)
 
 	log_lines: list[str] = []
@@ -43,6 +49,11 @@ def main() -> None:
 		column_count=len(enes_df.columns),
 	)
 	log.add_graph_metrics(log_lines, "Bipartite graph metrics", metric_results)
+	log.add_bipartite_degree_strength_latex(
+		log_lines,
+		"LATEX RESUMEN GRADOS Y FUERZAS",
+		metric_results,
+	)
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 
