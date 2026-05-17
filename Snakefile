@@ -134,6 +134,7 @@ rule all:
 			weight_function=["hidalgo"],
 			class_=["cno"],
 		),
+		"images/enes_all/ciuo/_14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log"
 
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''
@@ -377,6 +378,21 @@ rule _13_preferential_attachment:
 		"images/eph/{class_}/13_preferential_attachment/_{weight_function}.log"
 	script:
 		"scripts/13_preferential_attachment.py"
+
+
+rule _14_persistence_diagram_distance_hypothesis_test:
+	input:
+		"data/diagrams/{dataset}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
+	output:
+		"images/{dataset}/{class_}/_14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log"
+	params:
+		alpha=0.05,
+		n_perm=10000,
+		two_sided=True,
+		seed=42,
+		null_families=NULL_GRAPH_MODELS,
+	script:
+		"scripts/14_persistence_diagram_distance_hypothesis_test.py"
 
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"

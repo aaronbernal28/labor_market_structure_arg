@@ -1,0 +1,82 @@
+============================================================
+PERSISTENCE DIAGRAM DISTANCE HYPOTHESIS TEST
+============================================================
+
+SNAKEMAKE
+---------
+Inputs: data/diagrams/enes_all/ciuo/_persistence_diagram_distance/_hidalgo_disparity_filtration.csv
+Outputs: images/enes_all/ciuo/_14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log
+Params: 0.05, 10000, True, 42, ['configuration_model', 'watts_strogatz', 'barabasi_albert', 'stochastic_block_model', 'erdos_renyi']
+Wildcards: enes_all, ciuo, hidalgo, disparity_filtration
+
+DATA OVERVIEW
+-------------
+Input: data/diagrams/enes_all/ciuo/_persistence_diagram_distance/_hidalgo_disparity_filtration.csv
+Empirical label: _hidalgo_disparity_filtration.csv
+Null families: configuration_model, watts_strogatz, barabasi_albert, stochastic_block_model, erdos_renyi
+Dimensions: 0, 1, 2
+Metrics: bottleneck, wasserstein
+
+PARAMETERS
+----------
+Alpha: 0.05
+Permutation count: 10000
+Two-sided: True
+Seed: 42
+Significance stars (Bonferroni-style): *** p < 0.001/d, ** p < 0.01/d, * p < 0.05/d
+
+METRIC: bottleneck
+------------------
+
+SUMMARY BY NULL FAMILY
+ index            null_family  sum  count  rejected_pct
+     0        barabasi_albert    2      3     66.666667
+     1    configuration_model    2      2    100.000000
+     2            erdos_renyi    3      3    100.000000
+     3 stochastic_block_model    3      3    100.000000
+     4         watts_strogatz    3      3    100.000000
+
+PER-DIMENSION RESULTS
+           null_family  dimension  n_emp_null  mean_emp_null  n_null_null  mean_null_null  mean_diff  p_value sig  bonf_threshold
+       barabasi_albert          0          30      50.000000          435       29.389655  20.610345 0.000100 ***        0.016667
+       barabasi_albert          1          30      36.716667          435       37.675862  -0.959195 0.000100 ***        0.016667
+       barabasi_albert          2          29       2.931034          435        4.883908  -1.952874 0.027397            0.016667
+   configuration_model          0          30      50.000000          435       49.740230   0.259770 0.001700  **        0.025000
+   configuration_model          1          30      26.000000          435        3.908046  22.091954 0.000100 ***        0.025000
+           erdos_renyi          0          30      50.000000          435       17.601149  32.398851 0.000100 ***        0.016667
+           erdos_renyi          1          30      35.583333          435       36.977011  -1.393678 0.000200 ***        0.016667
+           erdos_renyi          2          30      14.250000          435       15.609195  -1.359195 0.000300 ***        0.016667
+stochastic_block_model          0          30      50.000000          435       24.295402  25.704598 0.000100 ***        0.016667
+stochastic_block_model          1          30      37.550000          435       38.420690  -0.870690 0.000100 ***        0.016667
+stochastic_block_model          2          30      11.483333          435       13.957471  -2.474138 0.000300 ***        0.016667
+        watts_strogatz          0          30      50.000000          435       16.510345  33.489655 0.000100 ***        0.016667
+        watts_strogatz          1          30      38.916667          435       40.083908  -1.167241 0.000400  **        0.016667
+        watts_strogatz          2          30      17.100000          435       18.289655  -1.189655 0.003800   *        0.016667
+
+METRIC: wasserstein
+-------------------
+
+SUMMARY BY NULL FAMILY
+ index            null_family  sum  count  rejected_pct
+     0        barabasi_albert    2      3     66.666667
+     1    configuration_model    2      2    100.000000
+     2            erdos_renyi    3      3    100.000000
+     3 stochastic_block_model    2      3     66.666667
+     4         watts_strogatz    3      3    100.000000
+
+PER-DIMENSION RESULTS
+           null_family  dimension  n_emp_null  mean_emp_null  n_null_null  mean_null_null   mean_diff  p_value sig  bonf_threshold
+       barabasi_albert          0          30     743.984504          435      168.520385  575.464119 0.000100 ***        0.016667
+       barabasi_albert          1          30    3435.185637          435     1114.179691 2321.005946 0.000100 ***        0.016667
+       barabasi_albert          2          29      11.289326          435       18.646613   -7.357288 0.088391            0.016667
+   configuration_model          0          30    2316.514064          435      499.499430 1817.014635 0.000100 ***        0.025000
+   configuration_model          1          30     575.501327          435        8.464085  567.037241 0.000100 ***        0.025000
+           erdos_renyi          0          30    1374.331630          435       96.039782 1278.291848 0.000100 ***        0.016667
+           erdos_renyi          1          30    5816.070882          435     1152.601796 4663.469086 0.000100 ***        0.016667
+           erdos_renyi          2          30     453.514719          435      283.146505  170.368214 0.000100 ***        0.016667
+stochastic_block_model          0          30    1016.927768          435      126.131034  890.796733 0.000100 ***        0.016667
+stochastic_block_model          1          30    4793.387075          435     1171.395715 3621.991360 0.000100 ***        0.016667
+stochastic_block_model          2          30     132.111117          435      154.403319  -22.292202 0.299570            0.016667
+        watts_strogatz          0          30    1417.568621          435       93.760920 1323.807702 0.000100 ***        0.016667
+        watts_strogatz          1          30    2685.626461          435      730.564039 1955.062422 0.000100 ***        0.016667
+        watts_strogatz          2          30    1159.325138          435      468.701715  690.623423 0.000100 ***        0.016667

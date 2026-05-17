@@ -1,9 +1,7 @@
 from typing import Any
-from pathlib import Path
 from scripts import *
 import networkx as nx
 import numpy as np
-import pandas as pd
 
 import src.topology as topo
 
@@ -34,7 +32,7 @@ def main() -> None:
 	# Compute persistence diagrams (thresh matches discrete scale)
 	diagrams = topo.compute_persistence(
 		distance_matrix,
-		maxdim=1,
+		maxdim=2,
 		thresh=100,
 		coeff=2,
 	)

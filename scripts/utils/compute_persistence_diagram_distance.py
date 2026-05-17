@@ -2,7 +2,6 @@ from typing import Any
 from pathlib import Path
 
 from scripts import *
-import numpy as np
 import pandas as pd
 import src.topology as topo
 

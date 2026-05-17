@@ -1,0 +1,41 @@
+============================================================
+WALD TEST SUMMARY
+============================================================
+
+SNAKEMAKE
+---------
+Inputs: data/processed/enes_2019.csv, data/processed/enes_2021.csv, data/processed/enes_all/nodelist_caes.csv, data/processed/enes_all/nodelist_ciuo.csv
+Outputs: images/enes_all/04_walt_test/walt_test_bootstrap_se.png, images/enes_all/04_walt_test/walt_test_delta.png, images/enes_all/04_walt_test/walt_test_pvalue_detailed.png
+Params: 
+Wildcards: 
+
+DATA OVERVIEW
+-------------
+Input 2019: data/processed/enes_2019.csv
+Input 2021: data/processed/enes_2021.csv
+Rows 2019: 15556
+Rows 2021: 4780
+CAES categories: 20
+CIUO categories: 10
+Total tests: 200
+
+PARAMETERS
+----------
+Alpha: 0.05
+Bonferroni threshold: 2.50e-04
+Rejected pairs: 8 (4.00%)
+Significance stars (Bonferroni-style): *** p < 0.001/d, ** p < 0.01/d, * p < 0.05/d
+Bootstrap B: 1000
+
+REJECTED PAIRS (NULL HYPOTHESIS REJECTED):
+                                            caesletra                         ciuo1diglabel  delta_hat  se_boot      p_value sig
+A. Agricultura, Ganadería, Caza, Silvicultura y Pesca            7. Trabajadores de oficios   0.001029 0.000253 6.279372e-05   *
+A. Agricultura, Ganadería, Caza, Silvicultura y Pesca           9. Operarios no calificados   0.011309 0.001253 0.000000e+00 ***
+                           C. Industria Manufacturera                           3. Técnicos   0.004350 0.001115 9.702162e-05   *
+                           C. Industria Manufacturera           9. Operarios no calificados   0.004864 0.001213 7.340055e-05   *
+                                      F. Construcción            7. Trabajadores de oficios   0.022470 0.003960 1.886901e-08 ***
+                I. Alojamiento y Servicios de Comidas 5. Trabajadores de servicios y ventas  -0.011154 0.003017 1.963786e-04   *
+                  O. Administración Pública y Defensa       4. Trabajadores administrativos  -0.011710 0.002593 2.156855e-05  **
+                                         P. Enseñanza                      2. Profesionales  -0.029247 0.004669 3.255658e-10 ***
+
+Note: Significance stars indicate levels of significance after Bonferroni correction.
