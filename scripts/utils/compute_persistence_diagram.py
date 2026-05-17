@@ -34,13 +34,15 @@ def main() -> None:
 	# Compute persistence diagrams (thresh matches discrete scale)
 	diagrams = topo.compute_persistence(
 		distance_matrix,
-		maxdim=2,
-		thresh=np.inf,
+		maxdim=1,
+		thresh=100,
 		coeff=2,
 	)
-	print(
-		f"Computed persistence diagram with {len(diagrams[0])} 0-dimensional features, {len(diagrams[1])} 1-dimensional features, and {len(diagrams[2])} 2-dimensional features."
-	)
+	feature_counts = [len(dgm) for dgm in diagrams]
+	message_parts = [
+		f"{count} {dim}-dimensional features" for dim, count in enumerate(feature_counts)
+	]
+	print(f"Computed persistence diagram with {', '.join(message_parts)}.")
 
 	loader = topo.DGMS_loader(snakemake.output[0])
 	loader.export(diagrams)

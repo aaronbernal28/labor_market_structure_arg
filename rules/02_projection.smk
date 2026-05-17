@@ -91,10 +91,39 @@ rule _compute_resolution_sensitivity:
 	#	"export CUDA_PATH=/usr"
 
 
-rule compute_persistence_diagram:
+rule _compute_persistence_diagram:
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	output:
 		"data/diagrams/{dataset}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv"
+	script:
+		"../scripts/utils/compute_persistence_diagram.py"
+
+
+rule _compute_random_graphs:
+	'''Compute random graphs for a given projection graph.'''
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
+	output:
+		er ="data/graphs/{dataset}/{class_}/_random_graphs/erdos_renyi/_{weight_function}_{i}.gexf",
+		cm ="data/graphs/{dataset}/{class_}/_random_graphs/configuration_model/_{weight_function}_{i}.gexf",
+		ws ="data/graphs/{dataset}/{class_}/_random_graphs/watts_strogatz/_{weight_function}_{i}.gexf",
+		ba ="data/graphs/{dataset}/{class_}/_random_graphs/barabasi_albert/_{weight_function}_{i}.gexf",
+		sbm="data/graphs/{dataset}/{class_}/_random_graphs/stochastic_block_model/_{weight_function}_{i}.gexf"
+	log:
+		"data/null_graphs/{dataset}/{class_}/_{weight_function}_random_graphs_{i}.log"
+	wildcard_constraints:
+		i = "\\d+"
+	script:
+		"../scripts/utils/compute_random_graphs.py"
+
+
+rule compute_persistence_diagram_null_graphs:
+	input:
+		"data/graphs/{dataset}/{class_}/_random_graphs/{null_model}/_{weight_function}_{i}.gexf",
+	output:
+		"data/diagrams/{dataset}/{class_}/_persistence_diagram/{null_model}/_{weight_function}_{i}_{topo_method}.csv"
+	wildcard_constraints:
+		i = "\\d+"
 	script:
 		"../scripts/utils/compute_persistence_diagram.py"

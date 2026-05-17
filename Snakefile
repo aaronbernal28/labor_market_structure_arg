@@ -21,6 +21,8 @@ TOPO_METHOD = ["shortest_path", "disparity_filtration"]
 EPH_YEARS = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
 EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
 DATASETS_ALL = DATASETS + EPH_FILES
+NULL_GRAPH_MODELS = ["configuration_model", "watts_strogatz", "barabasi_albert", "stochastic_block_model", "erdos_renyi"]
+
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS_ALL),
@@ -380,3 +382,4 @@ include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
 include: "rules/02_projection.smk"
 include: "rules/03_communities.smk"
+include: "rules/04_diagrams.smk"

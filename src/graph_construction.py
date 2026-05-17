@@ -9,6 +9,71 @@ import numpy as np
 import src.communities as comm
 
 
+def clean_graph(graph: nx.Graph) -> nx.Graph:
+	"""Convert to a simple undirected graph and remove self-loops."""
+	cleaned = nx.Graph(graph)
+	cleaned.remove_edges_from(nx.selfloop_edges(cleaned))
+	return cleaned
+
+
+def compute_sbm_parameters(
+	graph: nx.Graph, resolution: float, seed: int
+) -> tuple[list[int], list[list[float]], int, float | None]:
+	"""Compute block sizes and edge probabilities using Leiden communities."""
+	if graph.number_of_nodes() == 0:
+		return [], [], 0, None
+
+	try:
+		partition, modularity = comm.leiden_partition(
+			graph, resolution=resolution, seed=seed
+		)
+	except Exception as exc:
+		print(f"SBM partition failed ({exc}). Using single block.")
+		partition = {node: 0 for node in graph.nodes()}
+		modularity = None
+
+	community_ids = sorted(set(partition.values()))
+	community_index = {cid: idx for idx, cid in enumerate(community_ids)}
+	block_count = len(community_ids)
+	sizes = [0] * block_count
+	for node, cid in partition.items():
+		sizes[community_index[cid]] += 1
+
+	edge_counts = [[0] * block_count for _ in range(block_count)]
+	for u, v in graph.edges():
+		cu = community_index[partition[u]]
+		cv = community_index[partition[v]]
+		edge_counts[cu][cv] += 1
+		if cu != cv:
+			edge_counts[cv][cu] += 1
+
+	probs = [[0.0] * block_count for _ in range(block_count)]
+	for i in range(block_count):
+		for j in range(block_count):
+			if i == j:
+				possible = sizes[i] * (sizes[i] - 1) / 2
+			else:
+				possible = sizes[i] * sizes[j]
+			probs[i][j] = (edge_counts[i][j] / possible) if possible else 0.0
+
+	return sizes, probs, block_count, modularity
+
+
+def assign_resampled_weights(
+	graph: nx.Graph, empirical_weights: list[float]
+) -> nx.Graph:
+	"""Assign weights by sampling from the empirical distribution."""
+	num_edges = graph.number_of_edges()
+	if num_edges == 0 or not empirical_weights:
+		return graph
+
+	sampled_weights = np.random.choice(empirical_weights, size=num_edges, replace=True)
+	for (u, v), weight in zip(graph.edges(), sampled_weights):
+		graph[u][v]["weight"] = float(weight)
+
+	return graph
+
+
 def get_weight_function(weight_function_name: str):
 	"""Map weight function name to actual function."""
 	weight_function_name = weight_function_name.lower()
@@ -493,9 +558,13 @@ def compute_distance_matrix(graph: nx.Graph, method: str) -> np.ndarray:
 		raise ValueError(f"Unknown distance matrix method '{method}'.")
 
 
-def _build_betas(size: int = 100) -> np.ndarray:
+def _build_betas(alphas: np.ndarray, size: int = 100) -> np.ndarray:
 	"""Return a strictly increasing beta grid including 0 and 1."""
-	betas = np.concatenate(([0.0], np.logspace(-14, 0, size - 2, endpoint=True, base=2)))
+	step = max(1, len(alphas) // max(1, size))
+	indexes = np.arange(start=0, stop=len(alphas), step=step, dtype=np.int_)
+	alphas_sorted = np.sort(alphas)
+	alphas_filtered = alphas_sorted[indexes]
+	betas = np.concatenate(([np.array([0.0]), alphas_filtered, np.array([1.0])]))
 	betas = np.unique(betas)
 	betas.sort()
 	if betas[0] != 0.0:
@@ -515,20 +584,29 @@ def _edge_distance_from_alpha(alpha_min: float, betas: np.ndarray) -> int:
 	return min(k, k_max)
 
 
+def disparity_graph_get_alphas(disparity_graph: nx.Graph) -> np.ndarray:
+	"""Extract alpha values from the disparity graph edges."""
+	alphas = []
+	for u, v in disparity_graph.edges():
+		a_uv = float(disparity_graph.edges[u, v].get("alpha", 1.0))
+		a_vu = float(disparity_graph.edges[v, u].get("alpha", 1.0))
+		alpha_min = min(a_uv, a_vu)
+		alphas.append(alpha_min)
+	return np.array(alphas)
+
+
 def get_disparity_distance_matrix(graph: nx.Graph) -> np.ndarray:
 	"""Compute a distance matrix for the given graph and method."""
-	betas = _build_betas(size=100)
-	k_max = len(betas) - 1
-	default_distance = float(k_max + 1)
+	disparity_graph = get_disparity_graph(graph)
 
+	alphas = disparity_graph_get_alphas(disparity_graph)
+	betas = _build_betas(alphas, size=100)
 	nodes = sorted(graph.nodes())
 	node_index = {node: i for i, node in enumerate(nodes)}
 	n_nodes = len(nodes)
 
-	distance_matrix = np.full((n_nodes, n_nodes), default_distance, dtype=float)
+	distance_matrix = np.full((n_nodes, n_nodes), np.inf, dtype=float)
 	np.fill_diagonal(distance_matrix, 0.0)
-
-	disparity_graph = get_disparity_graph(graph)
 
 	for u, v in graph.edges():
 		a_uv = float(disparity_graph.edges[u, v].get("alpha", 1.0))

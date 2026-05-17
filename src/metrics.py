@@ -24,6 +24,28 @@ def average_degree(graph: nx.Graph, weight: Optional[str] = None) -> float:
 	return res
 
 
+def get_empirical_stats(graph: nx.Graph) -> tuple[int, int, list[int], int, int, float]:
+	"""Extract graph stats and model parameters from the empirical backbone."""
+	node_count = graph.number_of_nodes()
+	edge_count = graph.number_of_edges()
+	degree_sequence = [deg for _, deg in graph.degree()]
+	avg_degree = (sum(degree_sequence) / node_count) if node_count > 0 else 0.0
+
+	k_ws = int(round(avg_degree))
+	if k_ws % 2 != 0:
+		k_ws += 1
+	if node_count > 0:
+		k_ws = min(k_ws, node_count - 1)
+		if k_ws % 2 != 0:
+			k_ws = max(0, k_ws - 1)
+
+	m_ba = max(1, int(round(avg_degree / 2)))
+	if node_count > 0:
+		m_ba = min(m_ba, max(1, node_count - 1))
+
+	return node_count, edge_count, degree_sequence, k_ws, m_ba, avg_degree
+
+
 def diameter_of_largest_component(graph: nx.Graph) -> Optional[int]:
 	"""Return the diameter of the largest connected component, or None if the graph is empty."""
 	if graph.number_of_nodes() == 0:

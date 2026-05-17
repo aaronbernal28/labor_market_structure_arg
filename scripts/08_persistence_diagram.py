@@ -33,15 +33,11 @@ def main() -> None:
 		else:
 			labels[idx] = str(node_id)
 
-	default_distance = (
-		np.max(distance_matrix) + 1
-	)  # Use max distance as default threshold for persistence computation
-
 	# Compute persistence diagrams (thresh matches discrete scale)
 	diagrams = topo.compute_persistence(
 		distance_matrix,
 		maxdim=2,
-		thresh=np.inf,
+		thresh=100,
 		coeff=2,
 	)
 
@@ -50,7 +46,7 @@ def main() -> None:
 
 	pl.plot_distance_histogram(
 		distance_matrix,
-		title=f"Distance histogram d(u,v)\n(non-edge={default_distance:g})",
+		title="Distance histogram d(u,v)",
 		include_infinite=False,
 		ax=axs[0, 0],
 		save=False,

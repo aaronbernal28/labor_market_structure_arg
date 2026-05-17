@@ -231,4 +231,9 @@ scripts/deprecated/
 .snakemake/
 logcat_old.txt
 data/processed/eph
-data/diagrams
+data/graphs/enes_all/caes/_random_graphs
+data/diagrams/enes_all/caes/_persistence_diagram
+!data/diagrams/enes_all/caes/_persistence_diagram/_hidalgo_disparity_filtration.csv
+data/diagrams/enes_all/ciuo/_persistence_diagram
+!data/diagrams/enes_all/ciuo/_persistence_diagram/_hidalgo_disparity_filtration.csv
+data/graphs/enes_all/ciuo/_random_graphs
