@@ -28,41 +28,39 @@ Significance stars (Bonferroni-style): *** p < 0.001/d, ** p < 0.01/d, * p < 0.0
 METRIC: bottleneck
 ------------------
 
-SUMMARY BY NULL FAMILY
 SUMMARY BY NULL FAMILY (LATEX)
 \begin{tabular}{rlrrr}
 \toprule
-index & null_family & sum & count & rejected_pct \\
+index & Null Family & Rejected & Total & Rejected % \\
 \midrule
-0 & barabasi_albert & 2 & 3 & 66.6667 \\
-1 & configuration_model & 2 & 2 & 100.0000 \\
-2 & erdos_renyi & 3 & 3 & 100.0000 \\
-3 & stochastic_block_model & 3 & 3 & 100.0000 \\
-4 & watts_strogatz & 3 & 3 & 100.0000 \\
+0 & Barabasi-Albert & 2 & 3 & 66.67 \\
+1 & Configuration Model & 2 & 2 & 100.00 \\
+2 & Erdos-Renyi & 3 & 3 & 100.00 \\
+3 & Stochastic Block Model & 3 & 3 & 100.00 \\
+4 & Watts-Strogatz & 3 & 3 & 100.00 \\
 \bottomrule
 \end{tabular}
 
 
-PER-DIMENSION RESULTS
 PER-DIMENSION RESULTS (LATEX)
 \begin{tabular}{lrrrrrrrlr}
 \toprule
-null_family & dimension & n_emp_null & mean_emp_null & n_null_null & mean_null_null & mean_diff & p_value & sig & bonf_threshold \\
+Null Family & Dim. & n(E, N) & Mean(E, N) & n(N, N) & Mean(N, N) & Mean Diff. & p-value & Sig. & Bonf. \\
 \midrule
-barabasi_albert & 0 & 30 & 50.000000 & 435 & 29.389655 & 20.610345 & 0.000200 & *** & 0.016667 \\
-barabasi_albert & 1 & 30 & 36.716667 & 435 & 37.675862 & -0.959195 & 0.000200 & *** & 0.016667 \\
-barabasi_albert & 2 & 29 & 2.931034 & 435 & 4.883908 & -1.952874 & 0.020798 &  & 0.016667 \\
-configuration_model & 0 & 30 & 50.000000 & 435 & 49.740230 & 0.259770 & 0.000200 & *** & 0.025000 \\
-configuration_model & 1 & 30 & 26.000000 & 435 & 3.908046 & 22.091954 & 0.000200 & *** & 0.025000 \\
-erdos_renyi & 0 & 30 & 50.000000 & 435 & 17.601149 & 32.398851 & 0.000200 & *** & 0.016667 \\
-erdos_renyi & 1 & 30 & 35.583333 & 435 & 36.977011 & -1.393678 & 0.000400 & ** & 0.016667 \\
-erdos_renyi & 2 & 30 & 14.250000 & 435 & 15.609195 & -1.359195 & 0.000400 & ** & 0.016667 \\
-stochastic_block_model & 0 & 30 & 50.000000 & 435 & 24.295402 & 25.704598 & 0.000200 & *** & 0.016667 \\
-stochastic_block_model & 1 & 30 & 37.550000 & 435 & 38.420690 & -0.870690 & 0.000400 & ** & 0.016667 \\
-stochastic_block_model & 2 & 30 & 11.483333 & 435 & 13.957471 & -2.474138 & 0.000600 & ** & 0.016667 \\
-watts_strogatz & 0 & 30 & 50.000000 & 435 & 16.510345 & 33.489655 & 0.000200 & *** & 0.016667 \\
-watts_strogatz & 1 & 30 & 38.916667 & 435 & 40.083908 & -1.167241 & 0.000200 & *** & 0.016667 \\
-watts_strogatz & 2 & 30 & 17.100000 & 435 & 18.289655 & -1.189655 & 0.001800 & ** & 0.016667 \\
+Barabasi-Albert & 0 & 30 & 50.00 & 435 & 29.39 & 20.61 & 0.0002 & *** & 0.02 \\
+Barabasi-Albert & 1 & 30 & 36.72 & 435 & 37.68 & -0.96 & 0.0002 & *** & 0.02 \\
+Barabasi-Albert & 2 & 29 & 2.93 & 435 & 4.88 & -1.95 & 0.0208 &  & 0.02 \\
+Configuration Model & 0 & 30 & 50.00 & 435 & 49.74 & 0.26 & 0.0002 & *** & 0.03 \\
+Configuration Model & 1 & 30 & 26.00 & 435 & 3.91 & 22.09 & 0.0002 & *** & 0.03 \\
+Erdos-Renyi & 0 & 30 & 50.00 & 435 & 17.60 & 32.40 & 0.0002 & *** & 0.02 \\
+Erdos-Renyi & 1 & 30 & 35.58 & 435 & 36.98 & -1.39 & 0.0004 & ** & 0.02 \\
+Erdos-Renyi & 2 & 30 & 14.25 & 435 & 15.61 & -1.36 & 0.0004 & ** & 0.02 \\
+Stochastic Block Model & 0 & 30 & 50.00 & 435 & 24.30 & 25.70 & 0.0002 & *** & 0.02 \\
+Stochastic Block Model & 1 & 30 & 37.55 & 435 & 38.42 & -0.87 & 0.0004 & ** & 0.02 \\
+Stochastic Block Model & 2 & 30 & 11.48 & 435 & 13.96 & -2.47 & 0.0006 & ** & 0.02 \\
+Watts-Strogatz & 0 & 30 & 50.00 & 435 & 16.51 & 33.49 & 0.0002 & *** & 0.02 \\
+Watts-Strogatz & 1 & 30 & 38.92 & 435 & 40.08 & -1.17 & 0.0002 & *** & 0.02 \\
+Watts-Strogatz & 2 & 30 & 17.10 & 435 & 18.29 & -1.19 & 0.0018 & ** & 0.02 \\
 \bottomrule
 \end{tabular}
 
@@ -70,40 +68,38 @@ watts_strogatz & 2 & 30 & 17.100000 & 435 & 18.289655 & -1.189655 & 0.001800 & *
 METRIC: wasserstein
 -------------------
 
-SUMMARY BY NULL FAMILY
 SUMMARY BY NULL FAMILY (LATEX)
 \begin{tabular}{rlrrr}
 \toprule
-index & null_family & sum & count & rejected_pct \\
+index & Null Family & Rejected & Total & Rejected % \\
 \midrule
-0 & barabasi_albert & 2 & 3 & 66.6667 \\
-1 & configuration_model & 2 & 2 & 100.0000 \\
-2 & erdos_renyi & 3 & 3 & 100.0000 \\
-3 & stochastic_block_model & 2 & 3 & 66.6667 \\
-4 & watts_strogatz & 3 & 3 & 100.0000 \\
+0 & Barabasi-Albert & 2 & 3 & 66.67 \\
+1 & Configuration Model & 2 & 2 & 100.00 \\
+2 & Erdos-Renyi & 3 & 3 & 100.00 \\
+3 & Stochastic Block Model & 2 & 3 & 66.67 \\
+4 & Watts-Strogatz & 3 & 3 & 100.00 \\
 \bottomrule
 \end{tabular}
 
 
-PER-DIMENSION RESULTS
 PER-DIMENSION RESULTS (LATEX)
 \begin{tabular}{lrrrrrrrlr}
 \toprule
-null_family & dimension & n_emp_null & mean_emp_null & n_null_null & mean_null_null & mean_diff & p_value & sig & bonf_threshold \\
+Null Family & Dim. & n(E, N) & Mean(E, N) & n(N, N) & Mean(N, N) & Mean Diff. & p-value & Sig. & Bonf. \\
 \midrule
-barabasi_albert & 0 & 30 & 743.984504 & 435 & 168.520385 & 575.464119 & 0.000200 & *** & 0.016667 \\
-barabasi_albert & 1 & 30 & 3435.185637 & 435 & 1114.179691 & 2321.005946 & 0.000200 & *** & 0.016667 \\
-barabasi_albert & 2 & 29 & 11.289326 & 435 & 18.646613 & -7.357288 & 0.072593 &  & 0.016667 \\
-configuration_model & 0 & 30 & 2316.514064 & 435 & 499.499430 & 1817.014635 & 0.000200 & *** & 0.025000 \\
-configuration_model & 1 & 30 & 575.501327 & 435 & 8.464085 & 567.037241 & 0.000200 & *** & 0.025000 \\
-erdos_renyi & 0 & 30 & 1374.331630 & 435 & 96.039782 & 1278.291848 & 0.000200 & *** & 0.016667 \\
-erdos_renyi & 1 & 30 & 5816.070882 & 435 & 1152.601796 & 4663.469086 & 0.000200 & *** & 0.016667 \\
-erdos_renyi & 2 & 30 & 453.514719 & 435 & 283.146505 & 170.368214 & 0.000200 & *** & 0.016667 \\
-stochastic_block_model & 0 & 30 & 1016.927768 & 435 & 126.131034 & 890.796733 & 0.000200 & *** & 0.016667 \\
-stochastic_block_model & 1 & 30 & 4793.387075 & 435 & 1171.395715 & 3621.991360 & 0.000200 & *** & 0.016667 \\
-stochastic_block_model & 2 & 30 & 132.111117 & 435 & 154.403319 & -22.292202 & 0.287971 &  & 0.016667 \\
-watts_strogatz & 0 & 30 & 1417.568621 & 435 & 93.760920 & 1323.807702 & 0.000200 & *** & 0.016667 \\
-watts_strogatz & 1 & 30 & 2685.626461 & 435 & 730.564039 & 1955.062422 & 0.000200 & *** & 0.016667 \\
-watts_strogatz & 2 & 30 & 1159.325138 & 435 & 468.701715 & 690.623423 & 0.000200 & *** & 0.016667 \\
+Barabasi-Albert & 0 & 30 & 743.98 & 435 & 168.52 & 575.46 & 0.0002 & *** & 0.02 \\
+Barabasi-Albert & 1 & 30 & 3435.19 & 435 & 1114.18 & 2321.01 & 0.0002 & *** & 0.02 \\
+Barabasi-Albert & 2 & 29 & 11.29 & 435 & 18.65 & -7.36 & 0.0726 &  & 0.02 \\
+Configuration Model & 0 & 30 & 2316.51 & 435 & 499.50 & 1817.01 & 0.0002 & *** & 0.03 \\
+Configuration Model & 1 & 30 & 575.50 & 435 & 8.46 & 567.04 & 0.0002 & *** & 0.03 \\
+Erdos-Renyi & 0 & 30 & 1374.33 & 435 & 96.04 & 1278.29 & 0.0002 & *** & 0.02 \\
+Erdos-Renyi & 1 & 30 & 5816.07 & 435 & 1152.60 & 4663.47 & 0.0002 & *** & 0.02 \\
+Erdos-Renyi & 2 & 30 & 453.51 & 435 & 283.15 & 170.37 & 0.0002 & *** & 0.02 \\
+Stochastic Block Model & 0 & 30 & 1016.93 & 435 & 126.13 & 890.80 & 0.0002 & *** & 0.02 \\
+Stochastic Block Model & 1 & 30 & 4793.39 & 435 & 1171.40 & 3621.99 & 0.0002 & *** & 0.02 \\
+Stochastic Block Model & 2 & 30 & 132.11 & 435 & 154.40 & -22.29 & 0.2880 &  & 0.02 \\
+Watts-Strogatz & 0 & 30 & 1417.57 & 435 & 93.76 & 1323.81 & 0.0002 & *** & 0.02 \\
+Watts-Strogatz & 1 & 30 & 2685.63 & 435 & 730.56 & 1955.06 & 0.0002 & *** & 0.02 \\
+Watts-Strogatz & 2 & 30 & 1159.33 & 435 & 468.70 & 690.62 & 0.0002 & *** & 0.02 \\
 \bottomrule
 \end{tabular}

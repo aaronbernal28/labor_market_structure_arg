@@ -77,7 +77,6 @@ def _sig_stars(p_value: float, n_tests: int) -> str:
 		return "*"
 	return ""
 
-
 def main() -> None:
 	df = pd.read_csv(snakemake.input[0])
 
@@ -194,6 +193,14 @@ def main() -> None:
 	if warnings:
 		log.add_notes(log_lines, "WARNINGS", warnings)
 
+	null_family_display_map = {
+		"barabasi_albert": "Barabasi-Albert",
+		"configuration_model": "Configuration Model",
+		"erdos_renyi": "Erdos-Renyi",
+		"stochastic_block_model": "Stochastic Block Model",
+		"watts_strogatz": "Watts-Strogatz",
+	}
+
 	for metric in metrics:
 		log_lines.append("")
 		log_lines.append(f"METRIC: {metric}")
@@ -238,20 +245,20 @@ def main() -> None:
 
 				rows.append(
 					{
-						"null_family": family,
-						"dimension": dim,
-						"n_emp_null": int(emp_vals.size),
-						"mean_emp_null": float(emp_vals.mean())
+						"Null Family": null_family_display_map.get(family, family),
+						"Dim.": dim,
+						"n(E, N)": int(emp_vals.size),
+						"Mean(E, N)": float(emp_vals.mean())
 						if emp_vals.size
 						else float("nan"),
-						"n_null_null": int(null_vals.size),
-						"mean_null_null": float(null_vals.mean())
+						"n(N, N)": int(null_vals.size),
+						"Mean(N, N)": float(null_vals.mean())
 						if null_vals.size
 						else float("nan"),
-						"mean_diff": mean_diff,
-						"p_value": p_value,
-						"sig": _sig_stars(p_value, n_tests),
-						"bonf_threshold": threshold,
+						"Mean Diff.": mean_diff,
+						"p-value": p_value,
+						"Sig.": _sig_stars(p_value, n_tests),
+						"Bonf.": threshold,
 					}
 				)
 
@@ -261,30 +268,36 @@ def main() -> None:
 			continue
 
 		summary_rows = (
-			results.dropna(subset=["p_value"])
-			.assign(rejected=lambda df_: df_["p_value"] < df_["bonf_threshold"])
-			.groupby("null_family", as_index=False)["rejected"]
-			.agg(["sum", "count"])
+			results.dropna(subset=["p-value"])
+			.assign(rejected=lambda df_: df_["p-value"] < df_["Bonf."])
+			.groupby("Null Family", as_index=False)["rejected"]
+			.agg(Rejected="sum", Total="count")
 			.reset_index()
 		)
 
 		if not summary_rows.empty:
-			summary_rows["rejected_pct"] = (
-				100 * summary_rows["sum"] / summary_rows["count"]
+			summary_rows["Rejected %"] = (
+				100 * summary_rows["Rejected"] / summary_rows["Total"]
 			)
 			log_lines.append("")
-			log_lines.append("SUMMARY BY NULL FAMILY")
-			#log_lines.append(summary_rows.to_string(index=False))
-			#log_lines.append("")
 			log_lines.append("SUMMARY BY NULL FAMILY (LATEX)")
-			log_lines.append(summary_rows.to_latex(index=False, float_format="%.4f"))
+			log_lines.append(
+				summary_rows.to_latex(
+					index=False,
+					float_format="%.2f",
+					formatters={"p-value": "{:,.4f}".format} if "p-value" in summary_rows.columns else None
+				)
+			)
 
 		log_lines.append("")
-		log_lines.append("PER-DIMENSION RESULTS")
-		#log_lines.append(results.to_string(index=False))
-		#log_lines.append("")
 		log_lines.append("PER-DIMENSION RESULTS (LATEX)")
-		log_lines.append(results.to_latex(index=False, float_format="%.6f"))
+		log_lines.append(
+			results.to_latex(
+				index=False,
+				float_format="%.2f",
+				formatters={"p-value": "{:,.4f}".format} if "p-value" in results.columns else None
+			)
+		)
 
 	if hasattr(snakemake, "log") and snakemake.log:
 		log_path = snakemake.log[0]
