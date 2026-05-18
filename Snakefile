@@ -384,7 +384,7 @@ rule _14_persistence_diagram_distance_hypothesis_test:
 	input:
 		"data/diagrams/{dataset}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
 	output:
-		"images/{dataset}/{class_}/_14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log"
+		"images/{dataset}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log"
 	params:
 		alpha=0.05,
 		n_perm=10000,

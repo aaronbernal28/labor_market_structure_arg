@@ -274,11 +274,17 @@ def main() -> None:
 			)
 			log_lines.append("")
 			log_lines.append("SUMMARY BY NULL FAMILY")
-			log_lines.append(summary_rows.to_string(index=False))
+			#log_lines.append(summary_rows.to_string(index=False))
+			#log_lines.append("")
+			log_lines.append("SUMMARY BY NULL FAMILY (LATEX)")
+			log_lines.append(summary_rows.to_latex(index=False, float_format="%.4f"))
 
 		log_lines.append("")
 		log_lines.append("PER-DIMENSION RESULTS")
-		log_lines.append(results.to_string(index=False))
+		#log_lines.append(results.to_string(index=False))
+		#log_lines.append("")
+		log_lines.append("PER-DIMENSION RESULTS (LATEX)")
+		log_lines.append(results.to_latex(index=False, float_format="%.6f"))
 
 	if hasattr(snakemake, "log") and snakemake.log:
 		log_path = snakemake.log[0]
