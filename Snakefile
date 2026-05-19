@@ -134,8 +134,13 @@ rule all:
 			weight_function=["hidalgo"],
 			class_=["cno"],
 		),
-		"images/enes_all/ciuo/_14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log",
-		"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration_gender.png"
+		#"images/enes_all/ciuo/14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log",
+		expand(
+			"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}_gender.png",
+			weight_function=["hidalgo"],
+			class_=CLASSES,
+			topo_method=["disparity_filtration"],
+		),
 
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''

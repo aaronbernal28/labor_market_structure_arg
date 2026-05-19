@@ -87,21 +87,11 @@ def main() -> None:
 		print(
 			f"Warning: No color mapping found for discrete feature '{discrete_feature}'. Using default colors."
 		)
-		from seaborn import hls_palette
-
 		unique_groups = sorted(set(group_map.values()))
-		if discrete_feature == "community" and "Other" in unique_groups:
-			unique_groups = [group for group in unique_groups if group != "Other"]
-			palette = hls_palette(len(unique_groups), l=0.6).as_hex()
-			group_color_map = {
-				group: palette[i % len(palette)] for i, group in enumerate(unique_groups)
-			}
-			group_color_map["Other"] = "gray"
-		else:
-			palette = hls_palette(len(unique_groups), l=0.6).as_hex()
-			group_color_map = {
-				group: palette[i % len(palette)] for i, group in enumerate(unique_groups)
-			}
+		group_color_map = utils.build_community_color_map(
+			unique_groups,
+			other_label="Other",
+		)
 
 	if pos:
 		graph = nx.subgraph(graph, set(pos.keys()))

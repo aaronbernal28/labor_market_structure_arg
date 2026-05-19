@@ -57,13 +57,10 @@ def main() -> None:
 	community_map = plot_df.set_index(id_col)[community_col].to_dict()
 	node_size_map = plot_df.set_index(id_col)["n_obs"].to_dict()
 
-	from seaborn import hls_palette
-
-	palette = hls_palette(len(set(community_map.values())), l=0.6).as_hex()
-	color_map = {
-		node_id: palette[int(community.split("C")[-1]) % len(palette)]
-		for node_id, community in community_map.items()
-	}
+	color_map = utils.build_node_color_map_from_communities(
+		community_map,
+		other_label="Other",
+	)
 
 	default_title = f"{class_.upper()} - {feature_name}"
 

@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from datetime import date
 from collections import Counter, defaultdict
-from collections.abc import Mapping
+from collections.abc import Mapping, Iterable
 import numpy as np
 
 
@@ -131,6 +131,71 @@ def parse_color(color_value):
 	if hasattr(color_value, "__iter__") and not isinstance(color_value, str):
 		return tuple(float(x) for x in color_value)
 	return color_value
+
+
+def _is_missing_label(label: object) -> bool:
+	if label is None:
+		return True
+	if isinstance(label, float) and np.isnan(label):
+		return True
+	return False
+
+
+def _community_sort_key(label: object) -> tuple[int, int | str]:
+	label_str = str(label)
+	match = re.search(r"(\d+)", label_str)
+	if match:
+		return (0, int(match.group(1)))
+	return (1, label_str)
+
+
+def build_community_color_map(
+	labels: Iterable[object],
+	*,
+	other_label: str = "Other",
+	palette: str = "default",
+) -> dict[str, str]:
+	"""Return a label->color map using the Gephi palette for communities."""
+	from ggsci import pal_gephi
+
+	clean_labels = [
+		str(label)
+		for label in labels
+		if not _is_missing_label(label) and str(label) != other_label
+	]
+	np.random.seed(len(set(clean_labels)))  # Seed based on number of unique labels for consistency
+	unique_labels = sorted(set(clean_labels), key=_community_sort_key)
+	if unique_labels:
+		gephi_colors_func = pal_gephi(palette=palette)
+		palette_colors = gephi_colors_func(len(unique_labels))
+		color_map = {
+			label: palette_colors[i % len(palette_colors)]
+			for i, label in enumerate(unique_labels)
+		}
+	else:
+		color_map = {}
+
+	if any(str(label) == other_label for label in labels if not _is_missing_label(label)):
+		color_map[other_label] = "gray"
+	return color_map
+
+
+def build_node_color_map_from_communities(
+	community_map: Mapping[int, object],
+	*,
+	other_label: str = "Other",
+	palette: str = "default",
+) -> dict[int, str]:
+	"""Return a node->color map based on community labels."""
+	label_color_map = build_community_color_map(
+		community_map.values(),
+		other_label=other_label,
+		palette=palette,
+	)
+	return {
+		node_id: label_color_map.get(str(community), "gray")
+		for node_id, community in community_map.items()
+	}
 
 
 def get_class_index(col_name: str) -> int:

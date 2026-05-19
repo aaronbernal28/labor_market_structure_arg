@@ -247,3 +247,7 @@ data/graphs/enes_all_female/bipartite.gexf
 data/graphs/enes_all_female/ciuo/projection_hidalgo.gexf
 data/graphs/enes_all_male/ciuo/projection_hidalgo.gexf
 data/graphs/enes_all_male/bipartite.gexf
+data/diagrams/enes_all_female
+data/diagrams/enes_all_male
+data/graphs/enes_all_female/caes/projection_hidalgo.gexf
+data/graphs/enes_all_male/caes/projection_hidalgo.gexf
