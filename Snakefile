@@ -2,7 +2,7 @@ configfile: "config.yaml"
 from numpy import logspace
 
 
-DATASETS = ["enes_all", "enes_2019", "enes_2021"]
+DATASETS = ["enes_all", "enes_2019", "enes_2021", "enes_all_male", "enes_all_female"]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
 ALGORITHMS_CAES = ["infomap"]
@@ -134,7 +134,8 @@ rule all:
 			weight_function=["hidalgo"],
 			class_=["cno"],
 		),
-		"images/enes_all/ciuo/_14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log"
+		"images/enes_all/ciuo/_14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log",
+		"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration_gender.png"
 
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''
@@ -292,6 +293,17 @@ rule _08_persistence_diagram:
 	#	"images/{dataset}/{class_}/08_persistence_diagram/_{weight_function}.log"
 	script:
 		"scripts/08_persistence_diagram.py"
+
+
+rule _15_persistence_diagram_gender:
+	"""Compare male vs female persistence diagrams side-by-side."""
+	input:
+		male="data/diagrams/enes_all_male/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
+		female="data/diagrams/enes_all_female/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv"
+	output:
+		"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}_gender.png"
+	script:
+		"scripts/15_persistence_diagram_gender.py"
 
 
 rule _09_alpha_sensitivity_eph:

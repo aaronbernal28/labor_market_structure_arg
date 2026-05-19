@@ -29,6 +29,19 @@ rule prepare_enes_all:
 		"../scripts/utils/prepare_data_enes_all.py"
 
 
+rule prepare_enes_all_by_gender:
+	"""Partition ENES all data into male/female subsets."""
+	input:
+		"data/processed/enes_all.csv"
+	output:
+		"data/processed/enes_all_male.csv",
+		"data/processed/enes_all_female.csv"
+	log:
+		"data/processed/enes_all/prepare_enes_all_by_gender.log"
+	script:
+		"../scripts/utils/prepare_data_enes_all_gender.py"
+
+
 rule prepare_nodelist:
 	'''Add coloring and features information to the nodelist infered from the one ENES dataset.'''
 	input:

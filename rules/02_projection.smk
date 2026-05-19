@@ -7,7 +7,7 @@ rule compute_projection:
 	log:
 		"images/{dataset}/{class_}/compute_projection_{weight_function}.log"
 	wildcard_constraints:
-		dataset = "|".join(["enes_2019", "enes_2021", "enes_all"])
+		dataset = "|".join(["enes_2019", "enes_2021", "enes_all", "enes_all_male", "enes_all_female"])
 	script:
 		"../scripts/utils/build_projection.py"
 

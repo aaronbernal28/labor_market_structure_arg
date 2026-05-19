@@ -239,3 +239,11 @@ data/diagrams/enes_all/ciuo/_persistence_diagram
 data/graphs/enes_all/ciuo/_random_graphs
 !images/enes_all/04_walt_test/walt_test_pvalue_summary.log
 !images/enes_all/ciuo/_14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log
+data/processed/enes_all_female.csv
+data/processed/enes_all_male.csv
+data/diagrams/enes_all_female/ciuo/_persistence_diagram/_hidalgo_disparity_filtration.csv
+data/diagrams/enes_all_male/ciuo/_persistence_diagram/_hidalgo_disparity_filtration.csv
+data/graphs/enes_all_female/bipartite.gexf
+data/graphs/enes_all_female/ciuo/projection_hidalgo.gexf
+data/graphs/enes_all_male/ciuo/projection_hidalgo.gexf
+data/graphs/enes_all_male/bipartite.gexf
