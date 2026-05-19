@@ -6,6 +6,7 @@ import re
 from datetime import date
 from collections import Counter, defaultdict
 from collections.abc import Mapping, Iterable
+import networkx as nx
 import numpy as np
 
 
@@ -416,6 +417,35 @@ def compute_node_neighbor_mean(G, feature_map: Mapping, *, weight_attr: str = "w
 			node_y[u] = float(np.average(neigh_vals, weights=weights))
 
 	return node_y
+
+
+def compute_node_sizes(
+	graph: nx.Graph,
+	*,
+	nodes: Iterable | None = None,
+	factor: float = 1.0,
+	min_size: float = 5.0,
+	weight_attr: str = "weight",
+) -> dict:
+	"""Compute node sizes based on weighted degree with a minimum size floor."""
+	if nodes is None:
+		nodes_list = list(graph.nodes())
+	else:
+		nodes_list = list(nodes)
+
+	weighted_degree = {node: 0.0 for node in nodes_list}
+	for u, v, data in graph.edges(data=True):
+		w = float(data.get(weight_attr, 0.0))
+		if u in weighted_degree:
+			weighted_degree[u] += w
+		if v in weighted_degree:
+			weighted_degree[v] += w
+
+	size_map = {
+		node: max(min_size, weighted_degree.get(node, 0.0) * float(factor)*5.0)
+		for node in nodes_list
+	}
+	return size_map
 
 
 def get_top_mean_assortativity_communities(

@@ -325,7 +325,6 @@ def draw_bipartite_by_color(
 	factor_node_size_caes: float = 3.0,
 	factor_node_size_ciuo: float = 3.0,
 	node_size_map: Mapping[int, float] = None,
-	node_size_exponent: float = 1.0,
 ) -> Dict[str, tuple]:
 	"""Draw the bipartite network with custom layout and return the positions.
 
@@ -378,21 +377,16 @@ def draw_bipartite_by_color(
 
 	# Defining color and size maps
 	if node_size_map is not None:
-		raw_sizes = {
+		size_map = {
 			node: float(node_size_map.get(node, node_size_map.get(int(node), 1.0)))
 			for node in graph.nodes()
 		}
 		print("Using custom node size map for sizing.")
 	else:
-		raw_sizes = {node: float(degree) for node, degree in graph.degree()}
+		size_map = {
+			node: float(degree) for node, degree in graph.degree()
+		}
 		print("No node size map provided; using degree for sizing.")
-
-	size_map = {
-		node: float(
-			np.sqrt(raw_sizes.get(node, 1.0)) * min(factor_node_size_caes, factor_node_size_ciuo)
-		)
-		for node in graph.nodes()
-	}
 
 	caes_nodes = [
 		node
@@ -416,7 +410,8 @@ def draw_bipartite_by_color(
 		node_size=[size_map[node] for node in caes_nodes],
 		node_shape="^",
 		alpha=0.7,
-		# edgecolors="white",
+		edgecolors="#000000",
+		linewidths=0.2,
 	)
 	nx.draw_networkx_nodes(
 		graph,
@@ -426,7 +421,8 @@ def draw_bipartite_by_color(
 		node_size=[size_map[node] for node in ciuo_nodes],
 		node_shape="o",
 		alpha=0.7,
-		# edgecolors="white",
+		edgecolors="#000000",
+		linewidths=0.2,
 	)
 
 	# Draw spline edges
@@ -805,7 +801,6 @@ def plot_projection_by_group(
 	spring_layout_k: float = None,
 	factor_node_size: int = 0.5,
 	node_size_map: Mapping[int, float] = None,
-	node_size_exponent: float = 1.0,
 	pos: dict = None,
 	rotate: bool = False,
 	method: str = "auto",
@@ -869,11 +864,19 @@ def plot_projection_by_group(
 		for node in graph.nodes()
 	}
 	if node_size_map is not None:
-		raw_sizes = [node_size_map.get(node, 1) for node in graph.nodes()]
+		size_map = {
+			node: float(node_size_map.get(node, 1.0))
+			for node in graph.nodes()
+		}
 	else:
-		raw_sizes = [graph.degree(node) + 1 for node in graph.nodes()]
+		size_map = ut.compute_node_sizes(
+			graph,
+			factor=factor_node_size,
+			min_size=10.0,
+			weight_attr="weight",
+		)
 
-	node_sizes = [np.sqrt(s) * factor_node_size for s in raw_sizes]
+	node_sizes = [size_map.get(node, 10.0) for node in graph.nodes()]
 
 	# Prepare edge widths and alphas
 	edges = list(graph.edges())
@@ -895,7 +898,13 @@ def plot_projection_by_group(
 	# Plotting
 	plt.figure(figsize=figsize)
 	nx.draw_networkx_nodes(
-		graph, pos, node_color=node_colors, node_size=node_sizes, alpha=node_alpha
+		graph,
+		pos,
+		node_color=node_colors,
+		node_size=node_sizes,
+		alpha=node_alpha,
+		edgecolors="#000000",
+		linewidths=0.2,
 	)
 	if len(edges) > 0:
 		if isinstance(edge_alphas, list):
@@ -957,7 +966,6 @@ def plot_projection_gradient(
 	node_size_map: Mapping[int, float] = None,
 	vmin: float = None,
 	vmax: float = None,
-	node_size_exponent: float = 1.0,
 	edge_alpha: float = 0.1,
 	node_alpha: float = 0.5,
 ):
@@ -993,11 +1001,17 @@ def plot_projection_gradient(
 	node_colors = [colormap(norm(v)) if np.isfinite(v) else "lightgray" for v in values]
 	node_color_by_node = {n: c for n, c in zip(nodes, node_colors)}
 	if node_size_map is not None:
-		raw_sizes = [node_size_map.get(n, 1) for n in nodes]
+		size_map = {n: float(node_size_map.get(n, 1.0)) for n in nodes}
 	else:
-		raw_sizes = [graph.degree(n) + 1 for n in nodes]
+		size_map = ut.compute_node_sizes(
+			graph,
+			nodes=nodes,
+			factor=factor_node_size,
+			min_size=10.0,
+			weight_attr="weight",
+		)
 
-	node_sizes = [np.sqrt(s) * factor_node_size for s in raw_sizes]
+	node_sizes = [size_map.get(n, 10.0) for n in nodes]
 
 	subgraph = graph.subgraph(nodes)
 	subpos = {n: pos[n] for n in nodes}
@@ -1027,6 +1041,8 @@ def plot_projection_gradient(
 		node_color=node_colors,
 		node_size=node_sizes,
 		alpha=node_alpha,
+		edgecolors="#000000",
+		linewidths=0.2,
 	)
 	if len(edges) > 0:
 		if isinstance(edge_alphas, list):
@@ -1917,7 +1933,6 @@ def compute_and_plot_edge_correlation(
 	highlight_communities: Iterable[int] = None,
 	node_size_map: dict = None,
 	factor_node_size: float = 1.0,
-	node_size_exponent: float = 1.0,
 	save: bool = True,
 	perfect_line: bool = True,
 	figsize: tuple | None = None,
@@ -1964,7 +1979,7 @@ def compute_and_plot_edge_correlation(
 	plt.figure(figsize=figsize)
 	raw_node_sizes_plot = [
 		float(
-			np.sqrt(raw_node_sizes.get(u, 1.0)) * factor_node_size / 3
+			np.sqrt(raw_node_sizes.get(u, 1.0)) * factor_node_size
 		)
 		for u in plotted_nodes
 	]
@@ -1991,8 +2006,8 @@ def compute_and_plot_edge_correlation(
 		s=node_sizes,
 		alpha=0.7,
 		c=node_colors,
-		edgecolor="white",
-		linewidth=0.5,
+		edgecolor="#000000",
+		linewidth=0.2,
 	)
 	axis_min = float(min(min(x_vals), min(y_vals)))
 	axis_max = float(max(max(x_vals), max(y_vals)))

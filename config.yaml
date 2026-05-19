@@ -126,7 +126,8 @@ figsizes:
 # Colormaps for continuous-feature projection plots.
 cmaps:
   female_pct: "coolwarm"
-  public_sector_pct: "PRGn"
+  income_mean: "cubehelix"
+  nivel_ed_mean: "gist_stern"
   default: "magma"
 
 community:
@@ -140,8 +141,8 @@ community:
     cno: 10
 
 FACTOR_NODE_SIZE:
-  caes : 0.6
-  ciuo : 0.75
+  caes : 11.6
+  ciuo : 4.75
   cno : 0.8
 
 NODE_SIZE_EXPONENT : 0.7
