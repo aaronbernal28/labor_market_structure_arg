@@ -23,19 +23,27 @@ PARAMETERS
 ----------
 Alpha: 0.05
 Bonferroni threshold: 2.50e-04
-Rejected pairs: 8 (4.00%)
+Rejected pairs: 3 (1.50%)
 Significance stars (Bonferroni-style): *** p < 0.001/d, ** p < 0.01/d, * p < 0.05/d
 Bootstrap B: 1000
 
-REJECTED PAIRS (NULL HYPOTHESIS REJECTED):
-                                            caesletra                         ciuo1diglabel  delta_hat  se_boot      p_value sig
-A. Agricultura, Ganadería, Caza, Silvicultura y Pesca            7. Trabajadores de oficios   0.001029 0.000253 6.279372e-05   *
-A. Agricultura, Ganadería, Caza, Silvicultura y Pesca           9. Operarios no calificados   0.011309 0.001253 0.000000e+00 ***
-                           C. Industria Manufacturera                           3. Técnicos   0.004350 0.001115 9.702162e-05   *
-                           C. Industria Manufacturera           9. Operarios no calificados   0.004864 0.001213 7.340055e-05   *
-                                      F. Construcción            7. Trabajadores de oficios   0.022470 0.003960 1.886901e-08 ***
-                I. Alojamiento y Servicios de Comidas 5. Trabajadores de servicios y ventas  -0.011154 0.003017 1.963786e-04   *
-                  O. Administración Pública y Defensa       4. Trabajadores administrativos  -0.011710 0.002593 2.156855e-05  **
-                                         P. Enseñanza                      2. Profesionales  -0.029247 0.004669 3.255658e-10 ***
+TOP 5 LOWEST P-VALUES (LATEX):
+\begin{tabular}{llrrrl}
+\toprule
+\textbf{\gls{caes}} & \textbf{\gls{ciuo}} & \textbf{$\hat{\delta}$} &
+\textbf{SE boot} & \textbf{p-valor} & \textbf{sig.} \\
+\midrule
+A. Agricultura, Ganadería, Caza, Silvicultura y Pesca &
+9. Operarios no calificados & 0.011145 & 0.001077 & 4.440892e-16 & *** \\
+A. Agricultura, Ganadería, Caza, Silvicultura y Pesca &
+6. Trabajadores agropecuarios & 0.008747 & 0.001318 & 1.124531e-06 & *** \\
+N. Actividades Administrativas y Servicios de Apoyo &
+6. Trabajadores agropecuarios & 0.002810 & 0.000512 & 2.032442e-05 & ** \\
+R. Artes, Entretenimiento y Recreación  &
+5. Trabajadores de servicios y ventas & 0.003963 & 0.000839 & 5.175843e-04 &  \\
+R. Artes, Entretenimiento y Recreación  &
+4. Trabajadores administrativos & 0.003589 & 0.000790 & 1.640310e-03 &  \\
+\bottomrule
+\end{tabular}%
 
 Note: Significance stars indicate levels of significance after Bonferroni correction.

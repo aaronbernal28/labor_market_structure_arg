@@ -2,8 +2,126 @@ from typing import Any
 from scripts import *
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+from scipy import stats
 
 snakemake: Any
+
+
+def weighted_wald_test_comparison_proportions(
+	df1: pd.DataFrame,
+	df2: pd.DataFrame,
+	caes_col: str,
+	ciuo_col: str,
+	weight_col: str,
+	rownames: list[str],
+	colnames: list[str],
+	alpha: float = 0.05,
+) -> dict:
+	n1 = df1[weight_col].sum()
+	n2 = df2[weight_col].sum()
+
+	print(f"Weighted sample sizes: n1={n1:.2f}, n2={n2:.2f}")
+
+	crosstab1 = pd.crosstab(
+		df1[caes_col], df1[ciuo_col], values=df1[weight_col], aggfunc="sum"
+	).fillna(0)
+	crosstab2 = pd.crosstab(
+		df2[caes_col], df2[ciuo_col], values=df2[weight_col], aggfunc="sum"
+	).fillna(0)
+
+	crosstab1 = crosstab1.reindex(index=rownames, columns=colnames, fill_value=0)
+	crosstab2 = crosstab2.reindex(index=rownames, columns=colnames, fill_value=0)
+
+	counts1 = crosstab1.to_numpy().astype(float)
+	counts2 = crosstab2.to_numpy().astype(float)
+
+	p1 = counts1 / n1
+	p2 = counts2 / n2
+
+	delta_hat = p1 - p2
+
+	w2_1 = df1[weight_col] ** 2
+	df1_w2 = df1.assign(**{weight_col: w2_1})
+	crosstab1_w2 = pd.crosstab(
+		df1_w2[caes_col], df1_w2[ciuo_col], values=df1_w2[weight_col], aggfunc="sum"
+	).fillna(0)
+	crosstab1_w2 = crosstab1_w2.reindex(index=rownames, columns=colnames, fill_value=0)
+	w2_cell_1 = crosstab1_w2.to_numpy().astype(float)
+	w2_tot_1 = w2_1.sum()
+
+	var1 = ((1 - p1) ** 2 * w2_cell_1 + p1**2 * (w2_tot_1 - w2_cell_1)) / (n1**2)
+
+	w2_2 = df2[weight_col] ** 2
+	df2_w2 = df2.assign(**{weight_col: w2_2})
+	crosstab2_w2 = pd.crosstab(
+		df2_w2[caes_col], df2_w2[ciuo_col], values=df2_w2[weight_col], aggfunc="sum"
+	).fillna(0)
+	crosstab2_w2 = crosstab2_w2.reindex(index=rownames, columns=colnames, fill_value=0)
+	w2_cell_2 = crosstab2_w2.to_numpy().astype(float)
+	w2_tot_2 = w2_2.sum()
+
+	var2 = ((1 - p2) ** 2 * w2_cell_2 + p2**2 * (w2_tot_2 - w2_cell_2)) / (n2**2)
+
+	se = np.sqrt(var1 + var2)
+	se = np.where(se > 0, se, 1e-10)
+
+	W = delta_hat / se
+	p_values = 2 * (1 - stats.norm.cdf(np.abs(W)))
+
+	d = delta_hat.size
+	bonferroni_threshold = alpha / d
+	rejected = p_values < bonferroni_threshold
+
+	print("\n=== Wald Test Results (Weighted Proportions) ===")
+	print(f"Total number of tests (d): {d}")
+	print(f"Bonferroni threshold: {bonferroni_threshold:.2e}")
+	print(
+		f"Number of rejections: {np.sum(rejected)} ({100 * np.sum(rejected) / d:.2f}%)"
+	)
+	print(f"Mean |delta_hat|: {np.mean(np.abs(delta_hat)):.6f}")
+	print(f"Max |delta_hat|: {np.max(np.abs(delta_hat)):.6f}")
+	print(f"Mean p-value: {np.mean(p_values):.4f}")
+	print(f"Min p-value: {np.min(p_values):.2e}")
+
+	return {
+		"delta_hat": delta_hat, "se": se, "W": W, "p_values": p_values,
+		"bonferroni_threshold": bonferroni_threshold, "rejected": rejected,
+		"n1": n1, "n2": n2, "p1": p1, "p2": p2, "counts1": counts1, "counts2": counts2,
+	}
+
+
+def weighted_bootstrap_se(
+	df1: pd.DataFrame, df2: pd.DataFrame, caes_col: str, ciuo_col: str,
+	weight_col: str, rownames: list[str], colnames: list[str],
+	B: int = 1000, seed: int = 28,
+) -> np.ndarray:
+	deltas = np.zeros((B, len(rownames), len(colnames)))
+
+	prob1 = df1[weight_col] / df1[weight_col].sum()
+	prob2 = df2[weight_col] / df2[weight_col].sum()
+
+	n1 = len(df1)
+	n2 = len(df2)
+
+	for b in range(B):
+		s1 = df1.sample(n=n1, replace=True, weights=prob1, random_state=seed + 2 * b)
+		s2 = df2.sample(n=n2, replace=True, weights=prob2, random_state=seed + 2 * b + 1)
+
+		ct1 = (
+			pd.crosstab(s1[caes_col], s1[ciuo_col])
+			.reindex(index=rownames, columns=colnames, fill_value=0)
+			.to_numpy(dtype=float)
+		)
+		ct2 = (
+			pd.crosstab(s2[caes_col], s2[ciuo_col])
+			.reindex(index=rownames, columns=colnames, fill_value=0)
+			.to_numpy(dtype=float)
+		)
+
+		deltas[b] = ct1 / n1 - ct2 / n2
+
+	return deltas.std(axis=0, ddof=1)
 
 
 def main() -> None:
@@ -75,26 +193,38 @@ def main() -> None:
 	)
 
 	alpha = 0.05
-	test_results = dl.wald_test_comparison_proportions(
-		df_2019,
-		df_2021,
-		caes_col,
-		ciuo_col,
-		rownames,
-		colnames,
-		alpha=alpha,
-	)
-
 	bootstrap_B = 1000
-	se_boot = dl.bootstrap_se(
-		df_2019,
-		df_2021,
-		caes_col,
-		ciuo_col,
-		rownames,
-		colnames,
-		B=bootstrap_B,
-	)
+
+	if "ponderation" in df_2019.columns and "ponderation" in df_2021.columns:
+		print("Using weighted proportions and weighted bootstrap (ponderation found).")
+		test_results = weighted_wald_test_comparison_proportions(
+			df_2019,
+			df_2021,
+			caes_col,
+			ciuo_col,
+			"ponderation",
+			rownames,
+			colnames,
+			alpha=alpha,
+		)
+		se_boot = weighted_bootstrap_se(
+			df_2019,
+			df_2021,
+			caes_col,
+			ciuo_col,
+			"ponderation",
+			rownames,
+			colnames,
+			B=bootstrap_B,
+		)
+	else:
+		print("Using unweighted proportions and unweighted bootstrap (ponderation missing).")
+		test_results = dl.wald_test_comparison_proportions(
+			df_2019, df_2021, caes_col, ciuo_col, rownames, colnames, alpha=alpha,
+		)
+		se_boot = dl.bootstrap_se(
+			df_2019, df_2021, caes_col, ciuo_col, rownames, colnames, B=bootstrap_B,
+		)
 
 	# Extract first digit labels for better readability in plots
 	rownames_plot = [label.split(".")[0] for label in rownames]
@@ -193,23 +323,30 @@ def main() -> None:
 		],
 	)
 
-	rejected_count = int(test_results["rejected"].sum())
-	if rejected_count > 0:
-		rejected_df = pvalue_detailed.loc[
-			pvalue_detailed["rejected"],
-			[caes_col, ciuo_col, "delta_hat", "se_boot", "p_value", "sig"],
-		].sort_values([caes_col, ciuo_col], ascending=True, kind="mergesort")
+	top5_df = pvalue_detailed.head(5).sort_values("p_value", ascending=True)
 
-		log_lines.append("")
-		log_lines.append("REJECTED PAIRS (NULL HYPOTHESIS REJECTED):")
-		log_lines.append(rejected_df.to_string(index=False))
-		log_lines.append("")
-		log_lines.append(
-			"Note: Significance stars indicate levels of significance after Bonferroni correction."
-		)
-	else:
-		log_lines.append("")
-		log_lines.append("No pairs rejected (all p-values above Bonferroni threshold).")
+	latex_lines = [
+		r"\begin{tabular}{llrrrl}",
+		r"\toprule",
+		r"\textbf{\gls{caes}} & \textbf{\gls{ciuo}} & \textbf{$\hat{\delta}$} &",
+		r"\textbf{SE boot} & \textbf{p-valor} & \textbf{sig.} \\",
+		r"\midrule"
+	]
+
+	for _, row in top5_df.iterrows():
+		latex_lines.append(f"{row[caes_col]} &")
+		latex_lines.append(f"{row[ciuo_col]} & {row['delta_hat']:.6f} & {row['se_boot']:.6f} & {row['p_value']:e} & {row['sig']} \\\\")
+
+	latex_lines.append(r"\bottomrule")
+	latex_lines.append(r"\end{tabular}%")
+
+	log_lines.append("")
+	log_lines.append("TOP 5 LOWEST P-VALUES (LATEX):")
+	log_lines.extend(latex_lines)
+	log_lines.append("")
+	log_lines.append(
+		"Note: Significance stars indicate levels of significance after Bonferroni correction."
+	)
 
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
