@@ -127,3 +127,14 @@ rule compute_persistence_diagram_null_graphs:
 		i = "\\d+"
 	script:
 		"../scripts/utils/compute_persistence_diagram.py"
+
+
+rule _compute_persistence_diagram_eph:
+	'''Compute persistence diagram for EPH projection graph.
+	E.g. data/diagrams/eph/usu_individual_T318./caes/_persistence_diagram/_hidalgo_disparity_filtration.csv'''
+	input:
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
+	output:
+		"data/diagrams/eph/{eph_file}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv"
+	script:
+		"../scripts/utils/compute_persistence_diagram.py"

@@ -22,7 +22,7 @@ EPH_YEARS = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "20
 EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
 DATASETS_ALL = DATASETS + EPH_FILES
 NULL_GRAPH_MODELS = ["configuration_model", "watts_strogatz", "barabasi_albert", "stochastic_block_model", "erdos_renyi"]
-
+DISTANCE_DIAGRAMS = ["bottleneck", "wasserstein"]
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS_ALL),
@@ -31,7 +31,8 @@ wildcard_constraints:
 	algorithm = "|".join(ALGORITHMS_ALL),
 	alpha = "|".join(ALPHAS_ALL),
 	topo_method = "|".join(TOPO_METHOD),
-	eph_file = "|".join(EPH_FILES)
+	eph_file = "|".join(EPH_FILES),
+	distance_diagrams = "|".join(DISTANCE_DIAGRAMS)
 
 
 rule all:
@@ -140,6 +141,13 @@ rule all:
 			weight_function=["hidalgo"],
 			class_=CLASSES,
 			topo_method=["disparity_filtration"],
+		),
+		expand(
+			"images/eph/{class_}/16_persistence_diagram_distance/_{weight_function}_{topo_method}_heatmap_{distance_diagrams}.png",
+			class_=["caes", "cno"],
+			weight_function=["hidalgo"],
+			topo_method=TOPO_METHOD,
+			distance_diagrams=DISTANCE_DIAGRAMS,
 		),
 
 rule _00_aed_report:
@@ -410,6 +418,23 @@ rule _14_persistence_diagram_distance_hypothesis_test:
 		null_families=NULL_GRAPH_MODELS,
 	script:
 		"scripts/14_persistence_diagram_distance_hypothesis_test.py"
+
+
+rule _16_persistence_diagram_distance_eph:
+	"""Compute distance between persistence diagrams between EPH waves.
+	"""
+	input:
+		lambda wildcards: expand(
+			"data/diagrams/eph/{eph_file}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
+			eph_file=EPH_FILES,
+			class_=wildcards.class_,
+			weight_function=wildcards.weight_function,
+			topo_method=wildcards.topo_method,
+		)
+	output:
+		"images/eph/{class_}/16_persistence_diagram_distance/_{weight_function}_{topo_method}_heatmap_{distance_diagrams}.png",
+	script:
+		"scripts/16_persistence_diagram_distance_eph.py"
 
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
