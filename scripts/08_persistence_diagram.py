@@ -41,14 +41,21 @@ def main() -> None:
 		coeff=2,
 	)
 
-	fig, axs = plt.subplots(2, 2, figsize=(16, 12))
+	fig, axs = plt.subplots(1, 2, figsize=(16, 6))
 	fig.suptitle("Persistence Diagram", y=0.98)
 
-	pl.plot_distance_histogram(
-		distance_matrix,
-		title="Distance histogram d(u,v)",
-		include_infinite=False,
-		ax=axs[0, 0],
+	# pl.plot_distance_histogram(
+	# 	distance_matrix,
+	# 	title="Distance histogram d(u,v)",
+	# 	include_infinite=False,
+	# 	ax=axs[0],
+	# 	save=False,
+	# )
+
+	pl.plot_persistence_diagrams(
+		diagrams,
+		title="Persistence diagrams",
+		ax=axs[0],
 		save=False,
 	)
 
@@ -56,23 +63,16 @@ def main() -> None:
 		distance_matrix,
 		title="Distance matrix d(u,v) (beta-index)",
 		labels=labels,
-		ax=axs[0, 1],
+		ax=axs[1],
 		save=False,
 	)
 
-	pl.plot_persistence_diagrams(
-		diagrams,
-		title="Persistence diagrams",
-		ax=axs[1, 0],
-		save=False,
-	)
-
-	pl.plot_persistence_barcodes(
-		diagrams,
-		title="Persistence barcodes",
-		ax=axs[1, 1],
-		save=False,
-	)
+	# pl.plot_persistence_barcodes(
+	# 	diagrams,
+	# 	title="Persistence barcodes",
+	# 	ax=axs[1],
+	# 	save=False,
+	# )
 
 	plt.tight_layout()
 	fig.savefig(Path(snakemake.output[0]), bbox_inches="tight")
