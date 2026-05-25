@@ -377,3 +377,26 @@ def best_partition(
 			best_score = score
 			best_partition = partition
 	return best_partition, best_score
+
+def local_modularity_weighted(
+		graph: nx.Graph,
+		nodes: set[int],
+		gamma: float = 1.0,
+	) -> float:
+		strength_total = sum(dict(graph.degree(weight="weight")).values())
+		if strength_total == 0:
+			return 0.0
+
+		strength_community = 0.0
+		for node in nodes:
+			strength_community += graph.degree(node, weight="weight")
+
+		internal_weight = 0.0
+		for node in nodes:
+			for neighbor in graph.neighbors(node):
+				if neighbor in nodes:
+					internal_weight += graph[node][neighbor].get("weight", 1.0)
+
+		fraction_real = internal_weight / strength_total
+		fraction_expected = (strength_community / strength_total) ** 2
+		return fraction_real - (gamma * fraction_expected)

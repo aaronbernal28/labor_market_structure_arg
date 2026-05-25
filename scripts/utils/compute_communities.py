@@ -109,26 +109,37 @@ def main() -> None:
 
 	rows: list[str] = []
 	rows.append(
-		"Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median \\\\"  # noqa: E501
+		"Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median & Modularity & Workers (millions) \\\\"  # noqa: E501
 	)
 	for comm_id, group in nodelist_df.groupby("community"):
 		if len(group) <= 1:
 			continue
 
+		community_nodes = set(group[id_col].astype(int).tolist())
+		local_modularity = comm.local_modularity_weighted(graph, community_nodes, gamma=1.0)
+
 		dominant_groups_str = "NA"
 		if group_col and group_col in group.columns:
 			dominant_groups = group[group_col].value_counts().head(3)
-			dominant_groups_str = ", ".join(
-				[f"{idx} ({count})" for idx, count in dominant_groups.items()]
-			)
+			dominant_groups_items = [
+				f"{idx} ({count})" for idx, count in dominant_groups.items()
+			]
+			dominant_groups_str = "\\makecell[l]{" + " \\\\ ".join(
+				dominant_groups_items
+			) + "}"
 
 		female_mean = _mean_or_none(group, "female_pct")
 		public_mean = _mean_or_none(group, "public_sector_pct")
 		age_median = _median_or_none(group, "age_median")
 		income_median = _median_or_none(group, "income_median")
+		workers_millions = None
+		if "total_workers_weighted" in group.columns:
+			workers_series = group["total_workers_weighted"].dropna()
+			if not workers_series.empty:
+				workers_millions = float(workers_series.sum()) / 1_000_000
 
 		rows.append(  # Formato para latex table
-			f"{comm_id} & {dominant_groups_str} & {_fmt_number(female_mean)} & {_fmt_number(public_mean)} & {_fmt_number(age_median)} & {_fmt_number(income_median)} \\\\"
+			f"{comm_id} & {dominant_groups_str} & {_fmt_number(female_mean)} & {_fmt_number(public_mean)} & {_fmt_number(age_median)} & {_fmt_number(income_median)} & {local_modularity:.4f} & {workers_millions:.4f} \\\\ \\hline"
 		)
 
 	log.add_notes(log_lines, "NODELIST WITH COMMUNITIES", rows)
@@ -181,12 +192,11 @@ def main() -> None:
 		community_map=communities_int,
 		title=f"{class_.upper()} - Distribucion por comunidad ({algorithm})",
 		output_path=snakemake.output[1],
-		weights="n_obs",
 		group_color_map=group_color_map,
 		legend_title=group_col,
 		figsize=tuple(snakemake.config["figsizes"]["stacked"]),
 		save=True,
-		percentage=False,
+		percentage=True,
 	)
 
 
