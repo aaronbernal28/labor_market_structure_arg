@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import matplotlib.colors as mcolors
+from networkx.algorithms.community import modularity
 
 snakemake: Any
 
@@ -98,6 +99,54 @@ def main() -> None:
 	else:
 		print("Warning: No positions found; plotting without position filter.")
 
+	# Compute group-based modularity metrics on the same graph used for plotting.
+	group_to_nodes: dict[str, set[int]] = {}
+	for node, group in group_map.items():
+		if node in graph:
+			group_to_nodes.setdefault(str(group), set()).add(int(node))
+	communities_list = [nodes for nodes in group_to_nodes.values() if nodes]
+	classic_modularity = None
+	if communities_list:
+		classic_modularity = modularity(graph, communities_list, weight="weight")
+
+	exclude_group_label = "2. Trabajadores de servicios y ventas"
+	classic_modularity_filtered = None
+	if discrete_feature == "ciuo3cat":
+		# Compute classic modularity excluding a specific CIUO3CAT group.
+		normalized_exclude_label = " ".join(exclude_group_label.split())
+		filtered_group_to_nodes: dict[str, set[int]] = {}
+		for group_label, nodes in group_to_nodes.items():
+			normalized_label = " ".join(str(group_label).split())
+			if normalized_label != normalized_exclude_label:
+				filtered_group_to_nodes[group_label] = nodes
+		filtered_nodes = (
+			set().union(*filtered_group_to_nodes.values())
+			if filtered_group_to_nodes
+			else set()
+		)
+		filtered_graph = (
+			graph.subgraph(filtered_nodes).copy() if filtered_nodes else nx.Graph()
+		)
+		filtered_communities_list = [
+			nodes for nodes in filtered_group_to_nodes.values() if nodes
+		]
+		if filtered_communities_list and filtered_graph.number_of_nodes() > 0:
+			classic_modularity_filtered = modularity(
+				filtered_graph,
+				filtered_communities_list,
+				weight="weight",
+			)
+
+	local_modularity_rows: list[str] = []
+	for group_label in sorted(group_to_nodes.keys()):
+		nodes = group_to_nodes[group_label]
+		local_modularity = comm.local_modularity_weighted(
+			graph, nodes, gamma=1.0
+		)
+		local_modularity_rows.append(
+			f"{group_label}: n={len(nodes)}, local_modularity={local_modularity:.6f}"
+		)
+
 	_ = pl.plot_projection_by_group(
 		graph,
 		group_map=group_map,
@@ -135,6 +184,25 @@ def main() -> None:
 		column_count=len(pos_df.columns),
 	)
 	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	log.add_notes(
+		log_lines,
+		"GROUP MODULARITY (WEIGHTED)",
+		[
+			f"Discrete feature: {discrete_feature}",
+			f"Modularity (partition): {classic_modularity:.6f}"
+			if classic_modularity is not None
+			else "Classic modularity (partition): N/A",
+			f"Modularity (partition, exclude '{exclude_group_label}'): {classic_modularity_filtered:.6f}"
+			if discrete_feature == "ciuo3cat" and classic_modularity_filtered is not None
+			else f"Classic modularity (partition, exclude '{exclude_group_label}'): N/A",
+		],
+	)
+	if local_modularity_rows:
+		log.add_notes(
+			log_lines,
+			"LOCAL MODULARITY BY GROUP",
+			local_modularity_rows,
+		)
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 
