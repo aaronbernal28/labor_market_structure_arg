@@ -436,6 +436,20 @@ rule _16_persistence_diagram_distance_eph:
 	script:
 		"scripts/16_persistence_diagram_distance_eph.py"
 
+
+rule _17_phi_proximity:
+	"""Phi proximity plots from bipartite graphs."""
+	input:
+		"data/graphs/{dataset}/bipartite.gexf"
+	output:
+		"images/{dataset}/{class_}/17_phi_proximity/_phi_weighted_vs_unweighted.png",
+		"images/{dataset}/{class_}/17_phi_proximity/_puv_vs_maxp_weighted_unweighted.png"
+	log:
+		"images/{dataset}/{class_}/17_phi_proximity/_phi_proximity.log"
+	script:
+		"scripts/17_phi_proximity.py"
+
+
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
 include: "rules/02_projection.smk"
