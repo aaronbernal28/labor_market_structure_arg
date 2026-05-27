@@ -26,6 +26,7 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	feature_name = snakemake.wildcards.get("continuous_feature", None)
 	algorithm = snakemake.wildcards.get("algorithm", None)
+	translation = snakemake.config.get("translation", {})
 	if not feature_name:
 		raise KeyError("No feature wildcard found (expected 'continuous_feature').")
 
@@ -62,7 +63,8 @@ def main() -> None:
 		other_label="Other",
 	)
 
-	default_title = f"{class_.upper()} - {feature_name}"
+	feature_label = utils.translate_label(feature_name, translation)
+	default_title = f"{class_.upper()} - {feature_label}"
 
 	pl.compute_and_plot_edge_correlation(
 		G=graph,

@@ -16,6 +16,9 @@ def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	class_ = snakemake.wildcards["class_"]
 	topo_method = snakemake.wildcards.get("topo_method", "disparity_filtration")
+	translation = snakemake.config.get("translation", {})
+	def _t(label: str) -> str:
+		return utils.translate_label(label, translation)
 
 	distance_matrix = gc.compute_distance_matrix(graph, method=topo_method)
 	nodes = sorted(graph.nodes())
@@ -41,8 +44,8 @@ def main() -> None:
 		coeff=2,
 	)
 
-	fig, axs = plt.subplots(1, 2, figsize=(16, 6))
-	fig.suptitle("Persistence Diagram", y=0.98)
+	fig, axs = plt.subplots(1, 2, figsize=(12, 6))
+	fig.suptitle(_t("Persistence Diagram"), y=0.98)
 
 	# pl.plot_distance_histogram(
 	# 	distance_matrix,
@@ -54,17 +57,21 @@ def main() -> None:
 
 	pl.plot_persistence_diagrams(
 		diagrams,
-		title="Persistence diagrams",
+		title=_t("Persistence diagrams"),
 		ax=axs[0],
 		save=False,
+		translation=translation,
 	)
 
 	pl.plot_distance_heatmap(
 		distance_matrix,
 		title="Distance matrix d(u,v) (beta-index)",
 		labels=labels,
+		x_label=_t("Year"),
+		y_label=_t("Year"),
 		ax=axs[1],
 		save=False,
+		translation=translation,
 	)
 
 	# pl.plot_persistence_barcodes(

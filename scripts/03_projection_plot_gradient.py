@@ -10,6 +10,7 @@ snakemake: Any
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 	class_ = snakemake.wildcards["class_"]
+	translation = snakemake.config.get("translation", {})
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
@@ -62,6 +63,7 @@ def main() -> None:
 		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_],
 		edge_alpha=snakemake.config["EDGE_ALPHA"][class_],
 		node_alpha=snakemake.config["NODE_ALPHA"],
+		translation=translation,
 	)
 
 	values_series = pd.Series(list(node_values.values()))

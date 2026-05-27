@@ -18,6 +18,7 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import re
 import textwrap
 from scipy import stats
 
@@ -806,6 +807,7 @@ def plot_projection_by_group(
 	method: str = "auto",
 	edge_alpha: float = 0.1,
 	node_alpha: float = 0.5,
+	translation: Mapping[str, str] | None = None,
 ) -> dict:
 	"""
 	Plot the graph with nodes colored by their group.
@@ -934,15 +936,20 @@ def plot_projection_by_group(
 	ordered_groups = sorted(groups, key=lambda value: str(value).lower())
 
 	for group in ordered_groups:
-		plt.scatter([], [], color=group_color_map[group], label=group)
+		group_label = ut.translate_label(group, translation) if translation else group
+		plt.scatter([], [], color=group_color_map[group], label=group_label)
 
+	legend_title_display = (
+		ut.translate_label(legend_title, translation) if legend_title else legend_title
+	)
 	plt.legend(
-		title=legend_title,
+		title=legend_title_display,
 		loc="best",
 		borderaxespad=2.0,
 		framealpha=0.7,
 	)
-	plt.title(title)
+	if title is not None:
+		plt.title(ut.translate_label(title, translation))
 	plt.axis("off")
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
@@ -968,6 +975,7 @@ def plot_projection_gradient(
 	vmax: float = None,
 	edge_alpha: float = 0.1,
 	node_alpha: float = 0.5,
+	translation: Mapping[str, str] | None = None,
 ):
 	"""Plot the projection network with nodes colored by a continuous scalar gradient.
 
@@ -1076,9 +1084,10 @@ def plot_projection_gradient(
 	sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
 	sm.set_array([])
 	cbar = fig.colorbar(sm, ax=ax, shrink=0.4, pad=-0.15)
-	cbar.set_label(colorbar_label)
+	cbar.set_label(ut.translate_label(colorbar_label, translation) if translation else colorbar_label)
 
-	ax.set_title(title)
+	if title is not None:
+		ax.set_title(ut.translate_label(title, translation) if translation else title)
 	ax.axis("off")
 	if save:
 		plt.savefig(output_path, bbox_inches="tight")
@@ -1099,6 +1108,7 @@ def plot_stacked_by_group(
 	figsize: tuple | None = None,
 	save: bool = True,
 	percentage: bool = True,
+	translation: Mapping[str, str] | None = None,
 ) -> None:
 	"""Plot stacked bar chart showing distribution of groups within communities."""
 	df_index_copy = df_index.copy()
@@ -1142,10 +1152,17 @@ def plot_stacked_by_group(
 			plot_kwargs["figsize"] = figsize
 		ax = ct.plot(**plot_kwargs)
 
-	ax.set_xlabel("Porcentaje (%)" if percentage else "Cantidad")
+	x_label = "Porcentaje (%)" if percentage else "Cantidad"
+	if translation:
+		x_label = ut.translate_label(x_label, translation)
+		if title is not None:
+			title = ut.translate_label(title, translation)
+	ax.set_xlabel(x_label)
 	ax.set_title(title)
 	ax.set_xlim(0, 100 if percentage else None)
 	legend_title = legend_title or group_col
+	if translation:
+		legend_title = ut.translate_label(legend_title, translation)
 	ax.legend(
 		title=legend_title,
 		bbox_to_anchor=(1.05, 1),
@@ -1222,8 +1239,11 @@ def plot_distance_heatmap(
 	output_path: Path = None,
 	title: str = "Matriz de distancias",
 	labels: Iterable[str] = None,
+	x_label: str | None = None,
+	y_label: str | None = None,
 	ax=None,
 	save: bool = True,
+	translation: Mapping[str, str] | None = None,
 ) -> None:
 	"""Plot heatmap for a distance matrix (infinite distances are masked).
 
@@ -1253,7 +1273,17 @@ def plot_distance_heatmap(
 	else:
 		ax.set_xticks([])
 		ax.set_yticks([])
+	if translation:
+		title = ut.translate_label(title, translation)
+	if x_label:
+		x_label = ut.translate_label(x_label, translation) if translation else x_label
+	if y_label:
+		y_label = ut.translate_label(y_label, translation) if translation else y_label
 	ax.set_title(title)
+	if x_label:
+		ax.set_xlabel(x_label)
+	if y_label:
+		ax.set_ylabel(y_label)
 	if created_fig:
 		if save:
 			fig.savefig(output_path, bbox_inches="tight")
@@ -1315,6 +1345,7 @@ def plot_persistence_diagrams(
 	output_path: Path = None,
 	ax=None,
 	save: bool = True,
+	translation: Mapping[str, str] | None = None,
 ):
 	"""Plot persistence diagrams.
 
@@ -1330,7 +1361,9 @@ def plot_persistence_diagrams(
 		created_fig = True
 	plt.sca(ax)
 	persim_plot_diagrams(diagrams, show=False)
-	ax.set_title(title)
+	ax.set_title(ut.translate_label(title, translation) if translation else title)
+	ax.set_xlabel(ut.translate_label("Birth", translation) if translation else "Birth")
+	ax.set_ylabel(ut.translate_label("Death", translation) if translation else "Death")
 	if created_fig:
 		if save:
 			fig.savefig(output_path)
@@ -1435,10 +1468,28 @@ def color_letra_map_caes(
 	return caes_df.groupby(letra_col)[base_color_col].apply(mean_color).to_dict()
 
 
+def _ciuo_digit_from_label(label: object) -> int | None:
+	match = re.match(r"^\s*(\d)", str(label))
+	return int(match.group(1)) if match else None
+
+
 def color_1digit_map_ciuo(
-	ciuo_df: pd.DataFrame, letra_col: str, base_color_col: str
+	ciuo_df: pd.DataFrame,
+	letra_col: str,
+	base_color_col: str,
+	palette: list[str] | None = None,
 ) -> Dict[str, str]:
 	"""Create a color map for CIUO letra based on their group."""
+	if palette:
+		labels = ciuo_df[letra_col].dropna().astype(str).unique().tolist()
+		mapped: dict[str, str] = {}
+		for label in labels:
+			digit = _ciuo_digit_from_label(label)
+			if digit is not None:
+				mapped[label] = palette[(digit - 1) % len(palette)]
+			else:
+				mapped[label] = "gray"
+		return mapped
 	return ciuo_df.groupby(letra_col)[base_color_col].apply(mean_color).to_dict()
 
 
@@ -1450,9 +1501,27 @@ def color_agrupation_map_caes(
 
 
 def color_ciuo3cat_map_ciuo(
-	ciuo_df: pd.DataFrame, cat_col: str, base_color_col: str
+	ciuo_df: pd.DataFrame,
+	cat_col: str,
+	base_color_col: str,
+	palette: list[str] | None = None,
 ) -> Dict[str, str]:
 	"""Create a color map for CIUO 3-category based on their group."""
+	if palette is None:
+		try:
+			import yaml
+			with open("config.yaml", "r") as f:
+				palette = yaml.safe_load(f).get("palette", {}).get(cat_col)
+		except Exception:
+			pass
+	if palette:
+		labels = (
+			ciuo_df[cat_col].dropna().astype(str).unique().tolist()
+		)
+		labels = sorted(labels)
+		return {
+			label: palette[idx % len(palette)] for idx, label in enumerate(labels)
+		}
 	return ciuo_df.groupby(cat_col)[base_color_col].apply(mean_color).to_dict()
 
 
@@ -2135,6 +2204,7 @@ def plot_community_boxplots(
 	class_: str,
 	algorithm: str,
 	output_path: str,
+	translation: Mapping[str, str] | None = None,
 ):
 	"""Create a stacked horizontal boxplot for community metrics."""
 	plot_cols = {}
@@ -2153,7 +2223,18 @@ def plot_community_boxplots(
 	if n_cols == 1:
 		axes = [axes]
 
+	community_label = "Community"
+	if translation:
+		community_label = ut.translate_label(community_label, translation)
+		dist_suffix = ut.translate_label("Distribution by Community", translation)
+	else:
+		dist_suffix = "Distribution by Community"
+
 	for ax, (col, title) in zip(axes, plot_cols.items()):
+		if translation:
+			metric_title = translation.get(col, title)
+		else:
+			metric_title = title
 		sns.boxplot(
 			data=df_nodes,
 			x=col,
@@ -2166,10 +2247,10 @@ def plot_community_boxplots(
 			order=sorted(df_nodes["community"].unique(), reverse=True),
 		)
 		ax.set_title(
-			f"{class_.upper()} - {title} Distribution by Community ({algorithm})"
+			f"{class_.upper()} - {metric_title} {dist_suffix} ({algorithm})"
 		)
-		ax.set_xlabel(title)
-		ax.set_ylabel("Community")
+		ax.set_xlabel(metric_title)
+		ax.set_ylabel(community_label)
 
 	plt.tight_layout()
 	plt.savefig(output_path, bbox_inches="tight")
@@ -2177,7 +2258,12 @@ def plot_community_boxplots(
 
 
 def plot_correlation_matrix(
-	df, features, calib_col=None, title="Correlation Matrix", output_path=None
+	df,
+	features,
+	calib_col=None,
+	title="Correlation Matrix",
+	output_path=None,
+	translation: Mapping[str, str] | None = None,
 ):
 	cols = features.copy()
 	if calib_col and calib_col in df.columns:
@@ -2186,6 +2272,9 @@ def plot_correlation_matrix(
 	# Keep only columns that exist
 	cols = [c for c in cols if c in df.columns]
 	corr = df[cols].corr()
+	if translation:
+		display_map = {col: ut.translate_label(col, translation) for col in corr.columns}
+		corr = corr.rename(index=display_map, columns=display_map)
 
 	fig, ax = plt.subplots(figsize=(8, 6))
 	sns.heatmap(corr, annot=True, cmap="coolwarm", vmin=-1, vmax=1, ax=ax, fmt=".2f")
@@ -2198,7 +2287,12 @@ def plot_correlation_matrix(
 
 
 def plot_weighted_histograms(
-	df, features, calib_col=None, title="Feature Distributions", output_path=None
+	df,
+	features,
+	calib_col=None,
+	title="Feature Distributions",
+	output_path=None,
+	translation: Mapping[str, str] | None = None,
 ):
 	cols = [c for c in features if c in df.columns]
 	n_cols = len(cols)
@@ -2210,6 +2304,7 @@ def plot_weighted_histograms(
 		axes = [axes]
 
 	for ax, col in zip(axes, cols):
+		display_col = ut.translate_label(col, translation) if translation else col
 		if calib_col and calib_col in df.columns and df[calib_col].notna().any():
 			weights = df[calib_col]
 		else:
@@ -2230,8 +2325,8 @@ def plot_weighted_histograms(
 			color="steelblue",
 			edgecolor="black",
 		)
-		ax.set_title(f"Distribution of {col}")
-		ax.set_xlabel(col)
+		ax.set_title(f"Distribution of {display_col}")
+		ax.set_xlabel(display_col)
 		if weights is not None:
 			ax.set_ylabel("Weighted Count")
 		else:

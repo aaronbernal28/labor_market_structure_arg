@@ -80,7 +80,12 @@ def main() -> None:
 	from plotly.colors import hex_to_rgb
 	from plotly.colors import qualitative
 
-	palette = list(getattr(qualitative, "Plotly", [])) or [
+	palette_map = utils.get_config_section(
+		snakemake.config, "palette"
+	)
+	palette = palette_map.get(letra_ciuo)
+	if not palette:
+		palette = list(getattr(qualitative, "Plotly", [])) or [
 		"#636EFA",
 		"#EF553B",
 		"#00CC96",
@@ -91,7 +96,7 @@ def main() -> None:
 		"#B6E880",
 		"#FF97FF",
 		"#FECB52",
-	]
+		]
 
 	def _rgba(hex_color: str, a: float) -> str:
 		if hex_to_rgb is None:

@@ -16,6 +16,9 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	weight_function = snakemake.wildcards["weight_function"]
 	feature = snakemake.wildcards.get("feature", "female_pct")
+	translation = snakemake.config.get("translation", {})
+	def _t(label: str) -> str:
+		return utils.translate_label(label, translation)
 	#utils.setup_networkx_backend(algorithm=None)
 
 	if class_ not in {"caes", "cno"}:
@@ -127,7 +130,7 @@ def main() -> None:
 				"time_numeric": time_num,
 				"time_date": time_date,
 				"time_label": lbl,
-				"alpha": "unfiltered",
+				"alpha": _t("unfiltered"),
 				"pearson_r": r_unf,
 				"p_value": p_unf,
 				"n_points": n_unf,
@@ -170,7 +173,19 @@ def main() -> None:
 	print("Example of results dataframe:")
 	print(_summary_df.head())
 
-	sns.lineplot(data=_summary_df, x="time_date", y="pearson_r", hue="alpha", palette="viridis")
+	sns.lineplot(
+		data=_summary_df,
+		x="time_date",
+		y="pearson_r",
+		hue="alpha",
+		palette="viridis",
+	)
+	ax = plt.gca()
+	ax.set_xlabel(_t("time_date"))
+	ax.set_ylabel(_t("pearson_r"))
+	legend = ax.get_legend()
+	if legend is not None:
+		legend.set_title(_t("alpha"))
 
 	out_path = Path(snakemake.output[0])
 	plt.savefig(out_path, bbox_inches="tight")

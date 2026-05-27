@@ -120,6 +120,7 @@ def _plot_faceted_heatmaps(
 	class_: str,
 	weight_function: str,
 	topo_method: str,
+	translation: dict[str, str] | None = None,
 ) -> None:
 	dimensions = sorted(matrices)
 	if not dimensions:
@@ -146,6 +147,9 @@ def _plot_faceted_heatmaps(
 
 	cmap = sns.color_palette("mako", as_cmap=True)
 
+	def _t(label: str) -> str:
+		return utils.translate_label(label, translation) if translation else label
+
 	for ax, dim in zip(plot_axes, dimensions):
 		df = pd.DataFrame(matrices[dim], index=wave_labels, columns=wave_labels)
 		mask = df.isna()
@@ -166,9 +170,9 @@ def _plot_faceted_heatmaps(
 			linewidths=0.2,
 			linecolor="#f2f2f2",
 		)
-		ax.set_title(f"Dimension {dim}")
-		ax.set_xlabel("Year")
-		ax.set_ylabel("Year")
+		ax.set_title(f"{_t('Dimension')} {dim}")
+		ax.set_xlabel(_t("Year"))
+		ax.set_ylabel(_t("Year"))
 		ax.tick_params(axis="x", rotation=45)
 		ax.tick_params(axis="y", rotation=0)
 
@@ -180,10 +184,12 @@ def _plot_faceted_heatmaps(
 			pad=0.04,
 		)
 		if ax == plot_axes[-1]:  # Only label the last colorbar for cleanliness
-			colorbar.set_label(f"{metric.title()} distance (3er Trim)")
+			colorbar.set_label(
+				f"{_t(metric.title())} {_t('distance')} (3er Trim)"
+			)
 
 	fig.suptitle(
-		f"EPH Persistence Diagram Distance - {metric.title()} ({class_}, {weight_function}, {topo_method})",
+		f"{_t('EPH Persistence Diagram Distance')} - {metric.title()} ({class_}, {weight_function}, {topo_method})",
 		y=0.99,
 	)
 
@@ -198,6 +204,7 @@ def main() -> None:
 	weight_function = snakemake.wildcards["weight_function"]
 	topo_method = snakemake.wildcards["topo_method"]
 	metric = snakemake.wildcards["distance_diagrams"]
+	translation = snakemake.config.get("translation", {})
 
 	wave_labels, wave_diagrams = _load_waves()
 	print(f"Loaded EPH waves in order: {', '.join(wave_labels)}")
@@ -227,6 +234,7 @@ def main() -> None:
 		class_,
 		weight_function,
 		topo_method,
+		translation,
 	)
 	print(f"Saved {metric} heatmap to {snakemake.output[0]}")
 

@@ -183,7 +183,7 @@ def main() -> None:
 
 	if plot_df.empty or not f_col_actual:
 		# Create a blank plot with error text to satisfy Snakemake's output requirement
-		fig, ax = plt.subplots(figsize=(8, 4))
+		fig, ax = plt.subplots(figsize=(4, 4))
 		msg = (
 			f"'{f_col}' missing in base file."
 			if not f_col_actual
@@ -199,7 +199,7 @@ def main() -> None:
 		n_plots = len(plot_df)
 		cols = 2
 		rows = math.ceil(n_plots / cols)
-		fig, axes = plt.subplots(rows, cols, figsize=(12, 5 * rows))
+		fig, axes = plt.subplots(rows, cols, figsize=(5, 5 * rows))
 		axes = np.array(axes).flatten()  # Ensure iterable for 1 row
 
 		for i, (idx, row) in enumerate(plot_df.iterrows()):

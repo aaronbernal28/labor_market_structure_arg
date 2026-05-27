@@ -33,6 +33,9 @@ def main() -> None:
 	nodelist = snakemake.config[class_name]
 	id = nodelist["id"]
 	max_caes_id = snakemake.config["max_caes_id"]
+	palette_map = utils.get_config_section(
+		snakemake.config, "palette"
+	)
 
 	if class_name == "caes":
 		df_nodelist = dl.load_nodelist_caes(
@@ -54,6 +57,7 @@ def main() -> None:
 			ciuo_label_color_col=nodelist["label_color"],
 			ciuo_letra_color_col=nodelist["letra_color"],
 			ciuo_3cat_color_col=nodelist["grupo_color"],
+			palette=palette_map,
 		)
 	else:
 		raise ValueError(f"Unsupported nodelist type: {class_name}")

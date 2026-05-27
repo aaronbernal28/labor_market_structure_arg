@@ -3,7 +3,7 @@ Data loading and cleaning utilities for the ENES occupational network analysis.
 """
 
 from pathlib import Path
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple, List, Mapping
 import src.utils as ut
 import pandas as pd
 import numpy as np
@@ -191,6 +191,7 @@ def load_nodelist_ciuo(
 	ciuo_label_color_col: str,
 	ciuo_letra_color_col: str,
 	ciuo_3cat_color_col: str,
+	palette: Mapping[str, list[str]] | None = None,
 ) -> pd.DataFrame:
 	"""Load CIUO node metadata and normalize labels."""
 	ciuo_df = pd.read_csv(ciuo_path)
@@ -203,13 +204,23 @@ def load_nodelist_ciuo(
 	color_map = color_map_ciuo(ciuo_df.index.to_list(), max_caes_id=max_caes_id)
 	ciuo_df[ciuo_label_color_col] = ciuo_df.index.map(color_map)
 
+	palette = dict(palette or {})
+	palette_1digit = palette.get(ciuo_letra_col)
+	palette_3cat = palette.get(ciuo_3cat_col)
+
 	color_map = color_1digit_map_ciuo(
-		ciuo_df, letra_col=ciuo_letra_col, base_color_col=ciuo_label_color_col
+		ciuo_df,
+		letra_col=ciuo_letra_col,
+		base_color_col=ciuo_label_color_col,
+		palette=palette_1digit,
 	)
 	ciuo_df[ciuo_letra_color_col] = ciuo_df[ciuo_letra_col].map(color_map)
 
 	color_map = color_ciuo3cat_map_ciuo(
-		ciuo_df, cat_col=ciuo_3cat_col, base_color_col=ciuo_letra_color_col
+		ciuo_df,
+		cat_col=ciuo_3cat_col,
+		base_color_col=ciuo_letra_color_col,
+		palette=palette_3cat,
 	)
 	ciuo_df[ciuo_3cat_color_col] = ciuo_df[ciuo_3cat_col].map(color_map)
 	return ciuo_df

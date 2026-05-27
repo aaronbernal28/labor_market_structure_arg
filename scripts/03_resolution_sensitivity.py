@@ -21,6 +21,9 @@ def main() -> None:
 	df_scores = pd.read_csv(snakemake.input[1])
 	class_ = str(snakemake.wildcards["class_"])
 	reference_resolution = float(snakemake.config["community"]["resolution"][class_])
+	translation = snakemake.config.get("translation", {})
+	def _t(label: str) -> str:
+		return utils.translate_label(label, translation)
 
 	# Plotting general trends in number of communities
 	figsize = snakemake.config["figsizes"]["catplot"]
@@ -53,12 +56,14 @@ def main() -> None:
 		ymax=df["num_communities"].max(),
 		linestyles="dashed",
 		color="gray",
-		label="reference resolution",
+		label=_t("reference resolution"),
 		zorder=1,
 	)
-	ax.legend(title="algorithm")
+	ax.legend(title=_t("algorithm"))
 	ax.grid(True)
 	ax.set_xscale("log")
+	ax.set_xlabel(_t("Resolution"))
+	ax.set_ylabel(_t("Communities"))
 	fig.savefig(snakemake.output[0], bbox_inches="tight")
 
 	# Plotting scores — create separate plots for AMI and NMI using jointplot
@@ -109,7 +114,7 @@ def main() -> None:
 			ymax=data_subset["score"].max(),
 			linestyles="dashed",
 			color="gray",
-			label="reference resolution",
+			label=_t("reference resolution"),
 		)
 		legend_handles, legend_labels = g.ax_joint.get_legend_handles_labels()
 		label_to_handle = dict(zip(legend_labels, legend_handles))
@@ -118,11 +123,11 @@ def main() -> None:
 				label_to_handle[label]
 				for label in algorithm_order + ["reference resolution"]
 			],
-			algorithm_order + ["reference resolution"],
-			title="algorithm",
+			algorithm_order + [_t("reference resolution")],
+			title=_t("algorithm"),
 		)
 
-		g.set_axis_labels("Resolution", "Score")
+		g.set_axis_labels(_t("Resolution"), _t("Score"))
 		g.ax_joint.set_xscale("log")
 		g.ax_joint.grid(True)
 		output_path = str(snakemake.output[i+1])
@@ -153,7 +158,7 @@ def main() -> None:
 			ax.text(
 				x=reference_resolution,
 				y=label_y_base + label_y_step * idx,
-				s=f"{count_neg} negative values",
+				s=f"{count_neg} {_t('negative values')}",
 				color=color_map[algorithm],
 				horizontalalignment="center",
 				verticalalignment="bottom",
@@ -161,8 +166,8 @@ def main() -> None:
 			)
 	ax.grid(True)
 	ax.set_xscale("log")
-	ax.set_xlabel("Resolution")
-	ax.set_ylabel("Modularity")
+	ax.set_xlabel(_t("Resolution"))
+	ax.set_ylabel(_t("Modularity"))
 	ax.set_ylim(-0.1, 1.1)
 	plt.savefig(snakemake.output[3], bbox_inches="tight")
 	plt.close()

@@ -59,6 +59,7 @@ def main() -> None:
 	print(f"Detected communities: {num_communities}")
 
 	graph_metrics = metrics.summarize_graph(graph)
+	translation = snakemake.config.get("translation", {})
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)
 	log_lines.append("COMMUNITY DETECTION")
@@ -165,6 +166,7 @@ def main() -> None:
 		class_=class_,
 		algorithm=algorithm,
 		output_path=snakemake.output[2],
+		translation=translation,
 	)
 
 	group_color_col = snakemake.config[class_].get(
@@ -196,7 +198,8 @@ def main() -> None:
 		legend_title=group_col,
 		figsize=tuple(snakemake.config["figsizes"]["stacked"]),
 		save=True,
-		percentage=True,
+		percentage=False,
+		translation=translation,
 	)
 
 

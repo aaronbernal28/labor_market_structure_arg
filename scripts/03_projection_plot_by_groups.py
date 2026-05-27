@@ -13,6 +13,7 @@ def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 	class_ = snakemake.wildcards["class_"]
 	id_col = snakemake.config[class_]["id"]
+	translation = snakemake.config.get("translation", {})
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
@@ -152,7 +153,7 @@ def main() -> None:
 		group_map=group_map,
 		group_color_map=group_color_map,
 		title=None,
-		legend_title=discrete_feature,
+		legend_title=utils.translate_label(discrete_feature, translation),
 		figsize=snakemake.config["figsizes"]["projection"],
 		output_path=snakemake.output[0],
 		save=True,
@@ -161,6 +162,7 @@ def main() -> None:
 		pos=pos,
 		edge_alpha=snakemake.config["EDGE_ALPHA"][class_],
 		node_alpha=snakemake.config["NODE_ALPHA"],
+		translation=translation,
 	)
 
 	log_lines: list[str] = []

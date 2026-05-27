@@ -98,6 +98,11 @@ def label_fn(c, pad=2):
 
 @lru_cache(maxsize=1000)
 def parse_color_from_string(color_str: str):
+	color_str_clean = color_str.strip()
+	if color_str_clean.startswith("#"):
+		return color_str_clean
+	if not any(c in color_str_clean for c in "()[],"):
+		return color_str_clean
 	try:
 		# Handle numpy string representations like "(np.float64(0.5), np.float64(1.0))"
 		if "np.float64" in color_str or "float" in color_str:
@@ -258,6 +263,31 @@ def _as_bool(value: object) -> bool:
 	if isinstance(value, str):
 		return value != "non_logscale"
 	raise ValueError(f"Invalid boolean value for logscale: {value!r}")
+
+
+def get_config_section(
+	config: Mapping[str, object] | None,
+	preferred_key: str,
+	legacy_key: str | None = None,
+) -> dict:
+	"""Return a config section, preferring new keys and falling back to legacy."""
+	if not config:
+		return {}
+	section = config.get(preferred_key)
+	if isinstance(section, Mapping):
+		return dict(section)
+	if legacy_key:
+		section = config.get(legacy_key)
+		if isinstance(section, Mapping):
+			return dict(section)
+	return {}
+
+
+def translate_label(label: str, translation: Mapping[str, str] | None) -> str:
+	"""Translate a label using the mapping if present; otherwise return original."""
+	if not translation:
+		return label
+	return translation.get(label, label)
 
 
 def get_top_communities(community_map: dict[int, str], top_n: int = 5) -> set[str]:
