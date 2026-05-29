@@ -3,6 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
+import numpy as np
 from scripts import *
 
 snakemake: Any
@@ -58,7 +59,7 @@ def main() -> None:
 	# 3. Apply the disparity filtration to the subgraph
 	print("[DEBUG] Calculating disparity graph constraints on the focal subgraph...")
 	disp_G = gc.get_disparity_graph(subgraph)
-	alphas = [0.001, 0.01, 0.05, 0.075 ,0.1, 1.0]
+	alphas = np.logspace(-3, 0, num=5).round(3)
 
 	# Set up plotting
 	fig, axes = plt.subplots(1, len(alphas), figsize=(3 * len(alphas), 5))
@@ -76,10 +77,8 @@ def main() -> None:
 		pos = nx.spring_layout(subgraph, seed=snakemake.config.get("seed", 42))
 
 	# Setup fixed styles (color, constant sizes, specific labels)
-	if 'color_community' in df.columns:
-		color_map = {int(row[id_col]): row['color_community'] for _, row in df.iterrows()}
-	else:
-		color_map = {n: "steelblue" for n in subgraph.nodes()}
+	color_community = utils.get_community_color(target_comm, communities=df['community'].unique())
+	color_map = {n: color_community for n in subgraph.nodes()}
 
 	label_col = 'as_display' if 'as_display' in df.columns else id_col
 	labels_map = {int(row[id_col]): str(row[label_col]) for _, row in df.iterrows()}
@@ -156,15 +155,23 @@ def main() -> None:
 				pos,
 				labels=current_labels,
 				ax=ax,
-				font_size=9,
+				font_size=6,
 				font_color="black",
-				bbox=dict(facecolor="white", edgecolor="black", boxstyle="round,pad=0.2", alpha=0.6)
+				bbox=dict(facecolor="white", edgecolor="black", boxstyle="round,pad=0.1", alpha=0.4)
 			)
 
 		ax.set_title(title)
 		ax.axis("off")
 
 		prev_nodes = current_nodes_set
+
+	# Use last subplot axis limit to set consistent limits across all subplots
+	i = len(alphas) - 1
+	xlim = axes[i].get_xlim()
+	ylim = axes[i].get_ylim()
+	for ax in axes:
+		ax.set_xlim(xlim)
+		ax.set_ylim(ylim)
 
 	plt.tight_layout()
 

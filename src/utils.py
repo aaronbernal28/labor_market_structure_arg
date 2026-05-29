@@ -561,3 +561,9 @@ def get_markov_time(resolution: float) -> float:
 
 	# Inverse relationship to match Leiden/Louvain behavior
 	return 1.0 / resolution
+
+
+def get_community_color(community_label, communities):
+	"""Assign a color based on pal_gephi palette, with 'Other' as gray."""
+	color_map = build_community_color_map(communities, other_label="Other")
+	return color_map.get(str(community_label), "gray")
