@@ -451,6 +451,32 @@ rule _17_phi_proximity:
 		"scripts/17_phi_proximity.py"
 
 
+rule _18_disparity_filtration_subgraph:
+	"""Extract disparity-filtration subgraph for a given graph.
+	Steps:
+	1. Load the projection graph and corresponding nodelist.
+	2. Filter the graph using one community (eg. C12) as the focal class.
+	3. For alpha in a small grid (eg. 0.0001, 0.001, 0.01, None):
+		a. Apply the disparity filtration to the subgraph.
+	4. Plot the resulting subgraphs side-by-side where each is
+		a. Colored by original community
+		b. Constant node size
+		c. Edge widths proportional to original weights (not disparity-filtered weights)
+		b. Layout is fixed across all subgraphs for comparability (eg. original graph position)
+		d. Labeled with code (as_display) nodes, only the new nodes respect the last plot.
+			(eg. Plot 1: alpha = 0.0001, nodes={1, 2}, labels={1, 2},
+			 Plot 2: alpha = 0.001, nodes={1, 2, 3}, labels={3},
+			 Plot 3: alpha = None, nodes={1, 2, 3, 4, 5}, labels={4, 5})
+	"""
+	input:
+		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf"
+	output:
+		"images/{dataset}/{class_}/18_disparity_filtration_subgraph/_{weight_function}_{alpha}_pos_{algorithm}_filtration.png",
+	script:
+		"scripts/18_disparity_filtration_subgraph.py"
+
+
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
 include: "rules/02_projection.smk"
