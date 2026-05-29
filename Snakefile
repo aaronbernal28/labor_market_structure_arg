@@ -469,10 +469,10 @@ rule _18_disparity_filtration_subgraph:
 			 Plot 3: alpha = None, nodes={1, 2, 3, 4, 5}, labels={4, 5})
 	"""
 	input:
-		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
-		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf"
+		nodelist="data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
+		graph="data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	output:
-		"images/{dataset}/{class_}/18_disparity_filtration_subgraph/_{weight_function}_{alpha}_pos_{algorithm}_filtration.png",
+		"images/{dataset}/{class_}/18_disparity_filtration_subgraph/_{weight_function}_{alpha}_pos_{algorithm}_filtration.png"
 	script:
 		"scripts/18_disparity_filtration_subgraph.py"
 

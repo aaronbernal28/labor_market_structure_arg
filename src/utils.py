@@ -220,7 +220,7 @@ def get_column_name(
 	raise ValueError(f"Invalid column index {col_index}. Must be 1 (CAES) or 0 (CIUO).")
 
 
-def original_caes_id(id: int) -> int:
+def original_caes_id(id: int, max_caes_id: int | None = None) -> int:
 	"""Recover original CAES ID from disambiguated ID."""
 	return id
 
@@ -243,6 +243,16 @@ def original_ciuo_id(id: int, max_caes_id: int | None = None) -> int:
 	Recover original CIUO ID from disambiguated ID.
 	"""
 	return id - _resolve_max_caes_id(max_caes_id)
+
+
+def original_id(id: int, class_index: int, max_caes_id: int | None = None) -> int:
+	"""Recover original CAES or CIUO ID from disambiguated ID based on class index."""
+	if class_index == 1:
+		return original_caes_id(id, max_caes_id)
+	elif class_index == 0:
+		return original_ciuo_id(id, max_caes_id)
+	else:
+		raise ValueError(f"Invalid class index {class_index}. Must be 0 (CIUO) or 1 (CAES).")
 
 
 def desambiated_caes_id(id: int) -> int:
