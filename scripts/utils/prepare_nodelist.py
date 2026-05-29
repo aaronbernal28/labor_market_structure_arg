@@ -9,14 +9,15 @@ CHARACTERISTIC_COLUMNS = [
 	"n_obs",
 	"total_workers_weighted",
 	"income_mean",
-	"income_q1",
+	"income_std",
 	"income_median",
-	"income_q3",
 	"female_pct",
 	"male_pct",
 	"public_sector_pct",
 	"nivel_ed_mean",
+	"nivel_ed_std",
 	"age_mean",
+	"age_std",
 	"age_median",
 ]
 

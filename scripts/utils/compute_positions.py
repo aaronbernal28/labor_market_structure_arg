@@ -15,14 +15,8 @@ def main() -> None:
 	input_metrics = metrics.summarize_graph(graph)
 	#utils.setup_networkx_backend(algorithm=None)
 
-	pos = gc.get_projection_positions(
-		graph,
-		seed=seed,
-		spring_layout_iterations=1000,
-		spring_layout_k=None,
-		rotate=False,
-		method="auto",
-	)
+	pos = nx.forceatlas2_layout(graph, seed=seed, weight="weight")
+	pos = {int(node_id): (float(x), float(y)) for node_id, (x, y) in pos.items()}
 	dataset_df = dl.insert_positions(dataset_df, pos, id_col=id_col)
 
 	log_lines: list[str] = []

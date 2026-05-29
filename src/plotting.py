@@ -993,6 +993,13 @@ def plot_projection_gradient(
 	  Falls back to degree when not provided.
 	- vmin / vmax: Explicit colormap range; defaults to the min/max of known values.
 	"""
+
+	if not nx.is_connected(graph):
+		largest_cc = max(nx.connected_components(graph), key=len)
+		graph = graph.subgraph(largest_cc)
+		if pos is not None:
+			pos = {node: pos[node] for node in graph.nodes() if node in pos}
+
 	# Restrict to nodes that have a position (largest-cc layout)
 	nodes = [n for n in graph.nodes() if n in pos]
 	values = np.array([node_values.get(n, np.nan) for n in nodes], dtype=float)

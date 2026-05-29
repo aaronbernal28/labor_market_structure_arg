@@ -2,12 +2,11 @@
 Graph construction helpers for bipartite and projected networks.
 """
 
-from typing import Dict, Optional, Tuple, Any
+from typing import Dict, Optional, Tuple, Any, Literal
 import networkx as nx
 import pandas as pd
 import numpy as np
 import src.communities as comm
-
 
 def clean_graph(graph: nx.Graph) -> nx.Graph:
 	"""Convert to a simple undirected graph and remove self-loops."""
@@ -380,9 +379,10 @@ def get_projection_positions(
 	spring_layout_iterations: int = 1000,
 	spring_layout_k: Optional[float] = None,
 	rotate: bool = False,
-	method: str = "spring",
-	threshold: float = 1e-8,
+	method: Literal["auto", "force", "energy", "spring"] = "auto",
+	threshold: float = 1e-4,
 	gravity: float = 1.0,
+	scale: float = 1.0,
 ) -> Dict[Any, Tuple[float, float]]:
 	"""
 	Calculate node positions for the projection graph using a force-directed layout.
@@ -425,6 +425,8 @@ def get_projection_positions(
 			threshold=threshold,
 			weight="weight",
 			gravity=gravity,
+			method=method,
+			scale=scale,
 		)
 
 	# 4. Rotate positions 90 degrees if requested

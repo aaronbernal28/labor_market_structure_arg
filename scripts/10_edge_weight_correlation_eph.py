@@ -100,7 +100,7 @@ def main() -> None:
 		processed_path = eph_to_processed[eph_file]
 
 		projection = nx.read_gexf(projection_path, node_type=int)
-		projection_metrics[eph_file] = metrics.summarize_graph(projection)
+		#projection_metrics[eph_file] = metrics.summarize_graph(projection)
 
 		df_wave = pd.read_csv(processed_path)
 		if id_col not in df_wave.columns:
@@ -227,17 +227,17 @@ def main() -> None:
 		lbl = k.label if k else eph_file
 		log_lines.append(f"  {j:>3d}. {eph_file} -> {lbl}")
 
-	log_lines.append("")
-	log_lines.append("PER-FILE PROJECTION METRICS (unfiltered):")
-	for eph_file in eph_files_sorted:
-		gm = projection_metrics.get(eph_file, {})
-		items = []
-		for k in ["n_nodes", "n_edges", "density", "avg_degree"]:
-			if k in gm:
-				items.append(f"{k}={gm[k]}")
-		log_lines.append(
-			f"  - {eph_file}: " + (", ".join(items) if items else "(no metrics)")
-		)
+	#log_lines.append("")
+	#log_lines.append("PER-FILE PROJECTION METRICS (unfiltered):")
+	#for eph_file in eph_files_sorted:
+	#	gm = projection_metrics.get(eph_file, {})
+	#	items = []
+	#	for k in ["n_nodes", "n_edges", "density", "avg_degree"]:
+	#		if k in gm:
+	#			items.append(f"{k}={gm[k]}")
+	#	log_lines.append(
+	#		f"  - {eph_file}: " + (", ".join(items) if items else "(no metrics)")
+	#	)
 
 	log_path = None
 	if hasattr(snakemake, "log") and snakemake.log:

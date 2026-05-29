@@ -10,7 +10,8 @@ ALGORITHMS_CIUO = ["leiden"]
 ALGORITHMS_ALL = ["louvain", "leiden", "infomap"]
 VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
-CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "income_mean", "nivel_ed_mean", "age_mean"] # in nodelist data
+CONTINUOUS_FEATURES = ["female_pct", "public_sector_pct", "income_median", "income_mean", "nivel_ed_mean", "age_mean",
+	"income_std", "nivel_ed_std", "age_std"] # in nodelist data
 LAYOUTS = ["spring_layout"]
 CLASSES = ["caes", "ciuo"]
 CLASSES_ALL = ["caes", "ciuo", "cno"]

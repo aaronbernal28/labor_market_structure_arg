@@ -39,7 +39,7 @@ def main() -> None:
 
 	# Cast nodes to int instantly to prevent string mismatch bugs
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
-	graph_metrics = metrics.summarize_graph(graph)
+	#graph_metrics = metrics.summarize_graph(graph)
 
 	if feature_name not in pos_df.columns:
 		raise KeyError(
@@ -102,7 +102,7 @@ def main() -> None:
 		row_count=len(pos_df),
 		column_count=len(pos_df.columns),
 	)
-	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	#log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 

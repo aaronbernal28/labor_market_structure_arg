@@ -26,6 +26,38 @@ def _weighted_average(values: pd.Series, weights: pd.Series) -> float:
 	return float(np.average(values, weights=weights))
 
 
+def _weighted_standard_deviation(
+	values: pd.Series,
+	weights: pd.Series,
+	ddof: int = 0,
+) -> float:
+	valid = values.notna() & weights.notna()
+	if not valid.any():
+		return float("nan")
+	values = _to_numeric(values[valid])
+	weights = _to_numeric(weights[valid])
+	valid = values.notna() & weights.notna()
+	if not valid.any():
+		return float("nan")
+	values = values[valid]
+	weights = weights[valid]
+	weights_sum = float(weights.sum())
+	if weights_sum == 0:
+		return float("nan")
+	mean = float(np.average(values, weights=weights))
+	variance = float(np.average((values - mean) ** 2, weights=weights))
+	if ddof:
+		effective_dof = weights_sum - float((weights**2).sum()) / weights_sum
+		if effective_dof <= 0:
+			return float("nan")
+		variance *= weights_sum / effective_dof
+	return float(np.sqrt(variance))
+
+
+def _groupby_apply_include_groups(flag: bool) -> dict[str, bool]:
+	return {"include_groups": flag}
+
+
 def _weighted_share(values: pd.Series, weights: pd.Series, target: int) -> float:
 	valid = values.notna() & weights.notna()
 	if not valid.any():
@@ -134,7 +166,7 @@ def compute_group_characteristics(
 					lambda g, region_value=r: _weighted_share(
 						g[region_col], g[calib_col], region_value
 					),
-					include_groups=False,
+					**_groupby_apply_include_groups(False),
 				)
 			else:
 				features[f"region_{r}_pct"] = valid_grouped[region_col].apply(
@@ -152,16 +184,20 @@ def compute_group_characteristics(
 		if calib_col in valid_age.columns:
 			features["age_mean"] = valid_age_grouped.apply(
 				lambda g: _weighted_average(g[age_col], g[calib_col]),
-				include_groups=False,
+				**_groupby_apply_include_groups(False),
+			)
+			features["age_std"] = valid_age_grouped.apply(
+				lambda g: _weighted_standard_deviation(g[age_col], g[calib_col]),
+				**_groupby_apply_include_groups(False),
 			)
 		else:
+			print(f"Warning: No calibration column found for income mean calculation. Using unweighted average. {calib_col} not found in data.")
 			features["age_mean"] = valid_age_grouped[age_col].mean()
 		features["age_min"] = valid_age_grouped[age_col].min()
 		features["age_q1"] = valid_age_grouped[age_col].quantile(0.25)
 		features["age_median"] = valid_age_grouped[age_col].median()
 		features["age_q3"] = valid_age_grouped[age_col].quantile(0.75)
 		features["age_max"] = valid_age_grouped[age_col].max()
-		features["age_std"] = valid_age_grouped[age_col].std()
 
 	if income_col in data.columns:
 		valid_income = data[data[income_col].notna()]
@@ -169,16 +205,20 @@ def compute_group_characteristics(
 		if calib_col in valid_income.columns:
 			features["income_mean"] = valid_income_grouped.apply(
 				lambda g: _weighted_average(g[income_col], g[calib_col]),
-				include_groups=False,
+				**_groupby_apply_include_groups(False),
+			)
+			features["income_std"] = valid_income_grouped.apply(
+				lambda g: _weighted_standard_deviation(g[income_col], g[calib_col]),
+				**_groupby_apply_include_groups(False),
 			)
 		else:
+			print(f"Warning: No calibration column found for income mean calculation. Using unweighted average. {calib_col} not found in data.")
 			features["income_mean"] = valid_income_grouped[income_col].mean()
 		features["income_min"] = valid_income_grouped[income_col].min()
 		features["income_q1"] = valid_income_grouped[income_col].quantile(0.25)
 		features["income_median"] = valid_income_grouped[income_col].median()
 		features["income_q3"] = valid_income_grouped[income_col].quantile(0.75)
 		features["income_max"] = valid_income_grouped[income_col].max()
-		features["income_std"] = valid_income_grouped[income_col].std()
 
 	if sex_col in data.columns:
 		valid_sex = data[data[sex_col].isin([1, 2])]
@@ -186,13 +226,14 @@ def compute_group_characteristics(
 		if calib_col in valid_sex.columns:
 			features["female_pct"] = valid_grouped.apply(
 				lambda g: _weighted_share(g[sex_col], g[calib_col], 2),
-				include_groups=False,
+				**_groupby_apply_include_groups(False),
 			)
 			features["male_pct"] = valid_grouped.apply(
 				lambda g: _weighted_share(g[sex_col], g[calib_col], 1),
-				include_groups=False,
+				**_groupby_apply_include_groups(False),
 			)
 		else:
+			print(f"Warning: No calibration column found for sex percentage calculation. Using unweighted average. {calib_col} not found in data.")
 			features["female_pct"] = valid_grouped[sex_col].apply(
 				lambda s: (s == 2).mean() * 100
 			)
@@ -203,7 +244,14 @@ def compute_group_characteristics(
 	if hours_col in data.columns:
 		valid_hours = data[data[hours_col].notna()]
 		valid_hours_grouped = valid_hours.groupby(col_group, dropna=True)
-		features["mean_hours_worked"] = valid_hours_grouped[hours_col].mean()
+		if calib_col in valid_hours.columns:
+			features["mean_hours_worked"] = valid_hours_grouped.apply(
+				lambda g: _weighted_average(g[hours_col], g[calib_col]),
+				**_groupby_apply_include_groups(False),
+			)
+		else:
+			print(f"Warning: No calibration column found for hours worked calculation. Using unweighted average. {calib_col} not found in data.")
+			features["mean_hours_worked"] = valid_hours_grouped[hours_col].mean()
 
 	if nivel_ed_col in data.columns:
 		valid_edu = data[data[nivel_ed_col].notna()]
@@ -211,9 +259,14 @@ def compute_group_characteristics(
 		if calib_col in valid_edu.columns:
 			features["nivel_ed_mean"] = valid_grouped.apply(
 				lambda g: _weighted_average(g[nivel_ed_col], g[calib_col]),
-				include_groups=False,
+				**_groupby_apply_include_groups(False),
+			)
+			features["nivel_ed_std"] = valid_grouped.apply(
+				lambda g: _weighted_standard_deviation(g[nivel_ed_col], g[calib_col]),
+				**_groupby_apply_include_groups(False),
 			)
 		else:
+			print(f"Warning: No calibration column found for education level calculation. Using unweighted average. {calib_col} not found in data.")
 			features["nivel_ed_mean"] = valid_grouped[nivel_ed_col].mean()
 
 	if category_col in data.columns:
@@ -232,9 +285,10 @@ def compute_group_characteristics(
 		if calib_col in valid_pub.columns:
 			features["public_sector_pct"] = valid_grouped.apply(
 				lambda g: _weighted_share(g[public_sector_col], g[calib_col], 1),
-				include_groups=False,
+				**_groupby_apply_include_groups(False),
 			)
 		else:
+			print(f"Warning: No calibration column found for public sector percentage calculation. Using unweighted average. {calib_col} not found in data.")
 			features["public_sector_pct"] = valid_grouped[public_sector_col].apply(
 				lambda s: (s == 1).mean() * 100
 			)

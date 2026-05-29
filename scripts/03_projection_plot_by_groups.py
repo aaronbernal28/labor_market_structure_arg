@@ -17,7 +17,7 @@ def main() -> None:
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
-	graph_metrics = metrics.summarize_graph(graph)
+	#graph_metrics = metrics.summarize_graph(graph)
 	graph_nodes = set(graph.nodes())
 	plot_df = pos_df[pos_df[id_col].astype(int).isin(graph_nodes)].copy()
 	if plot_df.empty:
@@ -185,7 +185,7 @@ def main() -> None:
 		row_count=len(pos_df),
 		column_count=len(pos_df.columns),
 	)
-	log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	#log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
 	log.add_notes(
 		log_lines,
 		"GROUP MODULARITY (WEIGHTED)",
