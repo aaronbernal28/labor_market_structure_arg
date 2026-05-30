@@ -13,7 +13,7 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	topo_method = snakemake.wildcards.get("topo_method", "disparity_filtration")
 
-	distance_matrix = gc.compute_distance_matrix(graph, method=topo_method)
+	distance_matrix = gc.compute_distance_matrix(graph, method=topo_method, resolution=100)
 	nodes = sorted(graph.nodes())
 	n_nodes = len(nodes)
 

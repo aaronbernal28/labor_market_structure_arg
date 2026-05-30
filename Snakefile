@@ -150,6 +150,7 @@ rule all:
 			topo_method=TOPO_METHOD,
 			distance_diagrams=DISTANCE_DIAGRAMS,
 		),
+		"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_leiden_filtration.png",
 
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''

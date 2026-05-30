@@ -20,7 +20,7 @@ def main() -> None:
 	def _t(label: str) -> str:
 		return utils.translate_label(label, translation)
 
-	distance_matrix = gc.compute_distance_matrix(graph, method=topo_method)
+	distance_matrix = gc.compute_distance_matrix(graph, method=topo_method, resolution=100)
 	nodes = sorted(graph.nodes())
 	n_nodes = len(nodes)
 
@@ -36,12 +36,20 @@ def main() -> None:
 		else:
 			labels[idx] = str(node_id)
 
+	diameter = np.max(distance_matrix[np.isfinite(distance_matrix)])
+	print(f"[DEBUG] Distance matrix computed with method '{topo_method}'.")
+	print(f"[DEBUG] Distance matrix shape: {distance_matrix.shape}")
+	print(f"[DEBUG] Distance matrix diameter: {diameter:.4f}")
+	thresh = diameter
+	print(f"[DEBUG] Using threshold: {thresh:.4f}")
+
 	# Compute persistence diagrams (thresh matches discrete scale)
 	diagrams = topo.compute_persistence(
 		distance_matrix,
 		maxdim=2,
-		thresh=100,
+		thresh=thresh,
 		coeff=2,
+		n_perm=None,
 	)
 
 	fig, axs = plt.subplots(1, 2, figsize=(12, 6))

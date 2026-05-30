@@ -550,22 +550,22 @@ def get_reference_backbone_alpha(
 	return 1.0
 
 
-def compute_distance_matrix(graph: nx.Graph, method: str) -> np.ndarray:
+def compute_distance_matrix(graph: nx.Graph, method: str, resolution: int = 100) -> np.ndarray:
 	"""Compute a distance matrix for the given graph and method."""
 	if method == "disparity_filtration":
-		return get_disparity_distance_matrix(graph)
+		return get_disparity_distance_matrix(graph, size=resolution)
 	elif method == "shortest_path":
 		return get_shortest_path_distance_matrix(graph)
 	else:
 		raise ValueError(f"Unknown distance matrix method '{method}'.")
 
 
-def _build_betas(alphas: np.ndarray, size: int = 100) -> np.ndarray:
+def _build_betas(alphas: np.ndarray | None, size: int = 100) -> np.ndarray:
 	"""Return a strictly increasing beta grid including 0 and 1."""
-	step = max(1, len(alphas) // max(1, size))
-	indexes = np.arange(start=0, stop=len(alphas), step=step, dtype=np.int_)
-	alphas_sorted = np.sort(alphas)
-	alphas_filtered = alphas_sorted[indexes]
+	#step = max(1, len(alphas) // max(1, size))
+	#indexes = np.arange(start=0, stop=len(alphas), step=step, dtype=np.int_)
+	#alphas_sorted = np.sort(alphas)
+	alphas_filtered = np.logspace(-6, 0, num=size, endpoint=True) #alphas_sorted[indexes]
 	betas = np.concatenate(([np.array([0.0]), alphas_filtered, np.array([1.0])]))
 	betas = np.unique(betas)
 	betas.sort()
@@ -597,12 +597,12 @@ def disparity_graph_get_alphas(disparity_graph: nx.Graph) -> np.ndarray:
 	return np.array(alphas)
 
 
-def get_disparity_distance_matrix(graph: nx.Graph) -> np.ndarray:
+def get_disparity_distance_matrix(graph: nx.Graph, size: int = 100) -> np.ndarray:
 	"""Compute a distance matrix for the given graph and method."""
 	disparity_graph = get_disparity_graph(graph)
 
-	alphas = disparity_graph_get_alphas(disparity_graph)
-	betas = _build_betas(alphas, size=100)
+	alphas = None #disparity_graph_get_alphas(disparity_graph)
+	betas = _build_betas(alphas, size=size)
 	nodes = sorted(graph.nodes())
 	node_index = {node: i for i, node in enumerate(nodes)}
 	n_nodes = len(nodes)
