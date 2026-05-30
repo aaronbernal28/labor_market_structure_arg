@@ -219,7 +219,7 @@ def main() -> None:
 				node_collection.set_zorder(4)
 
 		# Labeled highlighting ONLY the new nodes (or all nodes if alpha is small enough)
-		current_labels = {n: labels_map.get(n, str(n)) for n in new_nodes}
+		current_labels = {n: utils.original_id(int(labels_map.get(n, str(n))), class_index=snakemake.config[class_].get('partition', 1), max_caes_id=snakemake.config.get('max_caes_id')) for n in new_nodes}
 		if current_labels:
 			text_dict = nx.draw_networkx_labels(
 				filtered_G,
