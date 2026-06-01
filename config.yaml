@@ -243,3 +243,4 @@ translation:
   "Distance matrix d(u,v) (beta-index)": "Matriz de distancias d(u,v) (índice beta)"
   Other: "Otro"
   community: "Comunidad"
+  "Betweenness centrality": "Centralidad de intermediación"

@@ -54,6 +54,9 @@ def _build_label_map(
 
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
+	translation = snakemake.config.get("translation", {})
+	def _t(label: str) -> str:
+		return utils.translate_label(label, translation)
 
 	dataset = snakemake.wildcards["dataset"]
 	class_ = snakemake.wildcards["class_"]
@@ -121,6 +124,14 @@ def main() -> None:
 
 	top_nodes = results.head(5).copy()
 
+	color_community_1 = utils.get_community_color(
+		c1, communities=nodelist["community"].unique()
+	)
+
+	color_community_2 = utils.get_community_color(
+		c2, communities=nodelist["community"].unique()
+	)
+
 	figsize = tuple(snakemake.config.get("figsizes", {}).get("histogram", (10, 8)))
 	fig, ax = plt.subplots(figsize=figsize)
 	sns.histplot(
@@ -131,13 +142,18 @@ def main() -> None:
 		alpha=0.6,
 		kde=True,
 		ax=ax,
-		multiple="dodge"
+		multiple="dodge",
+		palette=[color_community_1, color_community_2],
+		hue_order=[c1, c2],
 	)
 	ax.set_title(
-		f"Betweenness Centrality: {class_.upper()} ({c1} vs {c2})"
+		f"{_t('Betweenness Centrality')}: {class_.upper()} ({c1} vs {c2})"
 	)
-	ax.set_xlabel("Betweenness centrality")
-	ax.set_ylabel("Count of nodes")
+	ax.set_xlabel(_t("Betweenness centrality"))
+	ax.set_ylabel(_t("node_count"))
+	legend = ax.get_legend()
+	if legend is not None:
+		legend.set_title(_t("community"))
 
 	y_max = ax.get_ylim()[1] if ax.get_ylim()[1] > 0 else 1.0
 	for i, (_, row) in enumerate(top_nodes.iterrows()):
