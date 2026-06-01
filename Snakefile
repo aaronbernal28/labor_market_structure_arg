@@ -478,6 +478,29 @@ rule _18_disparity_filtration_subgraph:
 		"scripts/18_disparity_filtration_subgraph.py"
 
 
+rule _19_public_policy_by_communities:
+	"""Initial exploration of public policy variables by communities.
+	Steps:
+	1. Load the projection graph and corresponding nodelist with community labels.
+	2. Filter the graph to only include nodes from two communities (eg. C12 vs C13).
+	3. Compute betweenness centrality for all nodes in the filtered graph.
+	4. Log the top 5 nodes by betweenness centrality Label (key).
+	5. Plot the betweenness centrality distribution as a histogram, with separate colors for each community. Highlight the top 5 nodes with labels on the plot.
+	"""
+	wildcard_constraints:
+		c1 = "C(?:0[1-9]|[12][0-9]|3[0-9])",
+		c2 = "C(?:0[1-9]|[12][0-9]|3[0-9])",
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
+		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
+	output:
+		"images/{dataset}/{class_}/19_public_policy_by_communities/_{weight_function}_{alpha}_{algorithm}_{c1}_{c2}_betweenness_centrality.png"
+	log:
+		"images/{dataset}/{class_}/19_public_policy_by_communities/_{weight_function}_{alpha}_{algorithm}_{c1}_{c2}_top_betweenness_centrality.log"
+	script:
+		"scripts/19_public_policy_by_communities.py"
+
+
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
 include: "rules/02_projection.smk"
