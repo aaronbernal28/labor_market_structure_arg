@@ -151,13 +151,13 @@ rule all:
 			distance_diagrams=DISTANCE_DIAGRAMS,
 		),
 		"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_leiden_filtration.png",
-		expand(
-			"images/eph/{eph_file}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log",
-			eph_file=EPH_FILES,
-			class_=["cno"],
-			weight_function=["hidalgo"],
-			topo_method=["disparity_filtration"],
-		)
+		#expand(
+		#	"images/eph/{eph_file}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log",
+		#	eph_file=EPH_FILES,
+		#	class_=["cno"],
+		#	weight_function=["hidalgo"],
+		#	topo_method=["disparity_filtration"],
+		#),
 
 
 rule _00_aed_report:
