@@ -9,7 +9,7 @@ rule _compute_persistence_diagram_distance:
 			class_="{class_}",
 			weight_function="{weight_function}",
 			topo_method="{topo_method}",
-			i=range(2),
+			i=range(25),
 		),
 	output:
 		"data/diagrams/{dataset}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
@@ -28,7 +28,7 @@ rule _compute_persistence_diagram_distance_eph:
 			class_="{class_}",
 			weight_function="{weight_function}",
 			topo_method="{topo_method}",
-			i=range(2),
+			i=range(25),
 		),
 	output:
 		"data/diagrams/eph/{eph_file}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
