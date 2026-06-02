@@ -21,6 +21,68 @@ def _write_empty(outputs: Iterable[str]) -> None:
 		_write_graph(empty, output_path)
 
 
+def _strength_sequence(graph: nx.Graph, nodes: list[int], scale: float) -> list[int]:
+	strengths = dict(graph.degree(weight="weight"))
+	seq = [max(0, int(round(strengths.get(node, 0.0) * scale))) for node in nodes]
+	if seq and sum(seq) % 2 != 0:
+		seq[0] += 1
+	return seq
+
+
+def _generate_wcm(graph: nx.Graph, scale: float, seed: int) -> nx.Graph:
+	"""Weighted configuration model with discretized strengths."""
+	nodes = list(graph.nodes())
+	strength_seq = _strength_sequence(graph, nodes, scale)
+	graph_multi = nx.configuration_model(strength_seq, seed=seed)
+
+	graph_wcm = nx.Graph()
+	for u, v in graph_multi.edges():
+		node_u, node_v = nodes[u], nodes[v]
+		if node_u == node_v:
+			continue
+		if graph_wcm.has_edge(node_u, node_v):
+			graph_wcm[node_u][node_v]["weight"] += 1.0 / scale
+		else:
+			graph_wcm.add_edge(node_u, node_v, weight=1.0 / scale)
+	return graph_wcm
+
+
+def _generate_ecm(graph: nx.Graph, seed: int) -> nx.Graph:
+	"""Enhanced configuration model (two-step / CReMb variant)."""
+	nodes = list(graph.nodes())
+	degrees = dict(graph.degree())
+	strengths = dict(graph.degree(weight="weight"))
+
+	m = graph.number_of_edges()
+	weight_total = sum(strengths.values()) / 2.0
+	degree_seq = [degrees[node] for node in nodes]
+
+	graph_multi = nx.configuration_model(degree_seq, seed=seed)
+	graph_ecm = nx.Graph()
+	if m == 0 or weight_total == 0.0:
+		return graph_ecm
+
+	rng = np.random.default_rng(seed + 1)
+	for u, v in graph_multi.edges():
+		node_u, node_v = nodes[u], nodes[v]
+		strength_u = strengths.get(node_u, 0.0)
+		strength_v = strengths.get(node_v, 0.0)
+		if strength_u == 0.0 or strength_v == 0.0:
+			continue
+		rate = (weight_total * degrees[node_u] * degrees[node_v]) / (
+			m * strength_u * strength_v
+		)
+		if rate <= 0.0:
+			continue
+		sampled_weight = float(rng.exponential(scale=1.0 / rate))
+		if graph_ecm.has_edge(node_u, node_v):
+			graph_ecm[node_u][node_v]["weight"] += sampled_weight
+		else:
+			graph_ecm.add_edge(node_u, node_v, weight=sampled_weight)
+
+	return graph_ecm
+
+
 def main() -> None:
 	logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
@@ -29,26 +91,21 @@ def main() -> None:
 	alpha = float(snakemake.wildcards.get("alpha", 0.05))
 	seed_base = int(snakemake.config["seed"])
 	resolution = float(snakemake.config["community"]["resolution"][class_])
+	wcm_scale = float(
+		snakemake.config.get("random_graphs", {}).get("wcm_scale", 1000.0)
+	)
 
 	graph = gc.clean_graph(graph)
 	metrics_empirical = metrics.summarize_graph(graph)
-	empirical_weights = [
-		data.get("weight", 0.0) for _, _, data in graph.edges(data=True)
-	]
-
-	outputs_er = [snakemake.output["er"]]
 	outputs_cm = [snakemake.output["cm"]]
-	outputs_ws = [snakemake.output["ws"]]
-	outputs_ba = [snakemake.output["ba"]]
-	outputs_sbm = [snakemake.output["sbm"]]
+	outputs_ecm = [snakemake.output["ecm"]]
 	num_realizations = 1
 
-	node_count, edge_count, degree_sequence, k_ws, m_ba, avg_degree = (
+	node_count, edge_count, _, _, _, avg_degree = (
 		metrics.get_empirical_stats(graph)
 	)
-	sbm_sizes, sbm_probs, sbm_blocks, sbm_modularity = gc.compute_sbm_parameters(
-		graph, resolution=resolution, seed=seed_base
-	)
+
+	strength_seq = _strength_sequence(graph, list(graph.nodes()), wcm_scale)
 
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)
@@ -63,12 +120,10 @@ def main() -> None:
 			f"Alpha: {alpha}",
 			f"Seed base: {seed_base}",
 			f"Resolution: {resolution}",
+			f"WCM scale: {wcm_scale}",
 			f"Realizations per model: {num_realizations}",
 			f"Avg degree: {avg_degree:.2f}",
-			f"WS k: {k_ws}",
-			f"BA m: {m_ba}",
-			f"SBM blocks: {sbm_blocks}",
-			f"SBM modularity: {sbm_modularity}",
+			f"WCM stub sum: {sum(strength_seq)}",
 		],
 	)
 	log.add_graph_metrics(log_lines, "Empirical backbone metrics", metrics_empirical)
@@ -81,49 +136,18 @@ def main() -> None:
 			"NOTES",
 			["Empirical graph is empty; writing empty graphs for all models."],
 		)
-		_write_empty(outputs_er + outputs_cm + outputs_ws + outputs_ba + outputs_sbm)
+		_write_empty(outputs_cm + outputs_ecm)
 		log.write_log(log_lines, log_path)
 		return
 
 	for idx in range(num_realizations):
 		seed = seed_base + int(snakemake.wildcards.get("i", idx))
 
-		graph_er = nx.gnm_random_graph(node_count, edge_count, seed=seed)
-		np.random.seed(seed + 1)
-		graph_er = gc.assign_resampled_weights(graph_er, empirical_weights)
-		_write_graph(graph_er, outputs_er[idx])
+		graph_wcm = _generate_wcm(graph, wcm_scale, seed=seed)
+		_write_graph(graph_wcm, outputs_cm[idx])
 
-		graph_cm_multi = nx.configuration_model(degree_sequence, seed=seed)
-		graph_cm = gc.clean_graph(graph_cm_multi)
-		np.random.seed(seed + 2)
-		graph_cm = gc.assign_resampled_weights(graph_cm, empirical_weights)
-		_write_graph(graph_cm, outputs_cm[idx])
-
-		if 0 < k_ws < node_count and k_ws % 2 == 0:
-			graph_ws = nx.watts_strogatz_graph(
-				node_count, k=k_ws, p=0.1, seed=seed
-			)
-			np.random.seed(seed + 3)
-			graph_ws = gc.assign_resampled_weights(graph_ws, empirical_weights)
-			_write_graph(graph_ws, outputs_ws[idx])
-		else:
-			logging.warning("Skipping WS %s: invalid k=%s for N=%s", idx, k_ws, node_count)
-
-		if 0 < m_ba < node_count:
-			graph_ba = nx.barabasi_albert_graph(node_count, m=m_ba, seed=seed)
-			np.random.seed(seed + 4)
-			graph_ba = gc.assign_resampled_weights(graph_ba, empirical_weights)
-			_write_graph(graph_ba, outputs_ba[idx])
-		else:
-			logging.warning("Skipping BA %s: invalid m=%s for N=%s", idx, m_ba, node_count)
-
-		if sbm_sizes and sbm_probs:
-			graph_sbm = nx.stochastic_block_model(sbm_sizes, sbm_probs, seed=seed)
-			np.random.seed(seed + 5)
-			graph_sbm = gc.assign_resampled_weights(graph_sbm, empirical_weights)
-			_write_graph(graph_sbm, outputs_sbm[idx])
-		else:
-			_write_graph(nx.empty_graph(node_count), outputs_sbm[idx])
+		graph_ecm = _generate_ecm(graph, seed=seed)
+		_write_graph(graph_ecm, outputs_ecm[idx])
 
 	log.write_log(log_lines, log_path)
 

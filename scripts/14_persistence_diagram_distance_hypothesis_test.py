@@ -10,10 +10,7 @@ snakemake: Any
 
 NULL_FAMILIES_DEFAULT = [
 	"configuration_model",
-	"watts_strogatz",
-	"barabasi_albert",
-	"stochastic_block_model",
-	"erdos_renyi",
+	"enhanced_configuration_model",
 ]
 
 
@@ -40,7 +37,7 @@ def _permutation_p_value(
 	seed: int,
 	two_sided: bool,
 ) -> float:
-	if sample_a.size == 0 or sample_b.size == 0:
+	if sample_a.size < 2 or sample_b.size < 2:
 		return float("nan")
 
 	# Difference in means
@@ -80,7 +77,7 @@ def _sig_stars(p_value: float, n_tests: int) -> str:
 def main() -> None:
 	df = pd.read_csv(snakemake.input[0])
 
-	required_cols = {"model_1", "model_2", "dimension", "bottleneck", "wasserstein"}
+	required_cols = {"model_1", "model_2", "dimension", "wasserstein"}
 	missing = required_cols - set(df.columns)
 	if missing:
 		raise KeyError(f"Missing required columns: {sorted(missing)}")
@@ -108,7 +105,7 @@ def main() -> None:
 	]
 
 	dimensions = sorted(df["dimension"].unique())
-	metrics = ["bottleneck", "wasserstein"]
+	metrics = ["wasserstein"] # Can add "bottleneck" back if desired, but it is much slower to compute and may not add much value beyond Wasserstein distance
 
 	samples: dict[str, dict[int, dict[str, dict[str, list[float]]]]] = {}
 	warnings: list[str] = []
@@ -194,11 +191,8 @@ def main() -> None:
 		log.add_notes(log_lines, "WARNINGS", warnings)
 
 	null_family_display_map = {
-		"barabasi_albert": "Barabasi-Albert",
 		"configuration_model": "Configuration Model",
-		"erdos_renyi": "Erdos-Renyi",
-		"stochastic_block_model": "Stochastic Block Model",
-		"watts_strogatz": "Watts-Strogatz",
+		"enhanced_configuration_model": "Enhanced Configuration Model",
 	}
 
 	for metric in metrics:
@@ -213,8 +207,8 @@ def main() -> None:
 			valid_dims = [
 				dim
 				for dim in dims_for_family
-				if len(dims_for_family[dim]["emp_null"][metric]) > 0
-				and len(dims_for_family[dim]["null_null"][metric]) > 0
+				if len(dims_for_family[dim]["emp_null"][metric]) >= 2
+				and len(dims_for_family[dim]["null_null"][metric]) >= 2
 			]
 			n_tests = len(valid_dims)
 			threshold = alpha / n_tests if n_tests > 0 else float("nan")
@@ -228,7 +222,7 @@ def main() -> None:
 				)
 
 				p_value = float("nan")
-				if emp_vals.size > 0 and null_vals.size > 0:
+				if emp_vals.size >= 2 and null_vals.size >= 2:
 					p_value = _permutation_p_value(
 						emp_vals,
 						null_vals,
@@ -236,6 +230,14 @@ def main() -> None:
 						_stable_seed(seed, family, dim, metric),
 						two_sided,
 					)
+				elif emp_vals.size > 0 and null_vals.size > 0:
+					warning = (
+						f"Skipping permutation test for family '{family}', dimension {dim}, "
+						f"metric '{metric}' because sample sizes are too small: "
+						f"n(E, N)={emp_vals.size}, n(N, N)={null_vals.size}."
+					)
+					if warning not in warnings:
+						warnings.append(warning)
 
 				mean_diff = (
 					float(emp_vals.mean() - null_vals.mean())

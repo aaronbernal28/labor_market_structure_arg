@@ -22,7 +22,7 @@ TOPO_METHOD = ["shortest_path", "disparity_filtration"]
 EPH_YEARS = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
 EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
 DATASETS_ALL = DATASETS + EPH_FILES
-NULL_GRAPH_MODELS = ["configuration_model", "watts_strogatz", "barabasi_albert", "stochastic_block_model", "erdos_renyi"]
+NULL_GRAPH_MODELS = ["configuration_model", "enhanced_configuration_model"]
 DISTANCE_DIAGRAMS = ["bottleneck", "wasserstein"]
 
 wildcard_constraints:
@@ -136,7 +136,7 @@ rule all:
 			weight_function=["hidalgo"],
 			class_=["cno"],
 		),
-		#"images/enes_all/ciuo/14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log",
+		"images/enes_all/ciuo/14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log",
 		expand(
 			"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}_gender.png",
 			weight_function=["hidalgo"],
@@ -151,6 +151,14 @@ rule all:
 			distance_diagrams=DISTANCE_DIAGRAMS,
 		),
 		"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_leiden_filtration.png",
+		expand(
+			"images/eph/{eph_file}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log",
+			eph_file=EPH_FILES,
+			class_=["cno"],
+			weight_function=["hidalgo"],
+			topo_method=["disparity_filtration"],
+		)
+
 
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''
@@ -412,6 +420,21 @@ rule _14_persistence_diagram_distance_hypothesis_test:
 		"data/diagrams/{dataset}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
 	output:
 		"images/{dataset}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log"
+	params:
+		alpha=0.05,
+		n_perm=10000,
+		two_sided=True,
+		seed=42,
+		null_families=NULL_GRAPH_MODELS,
+	script:
+		"scripts/14_persistence_diagram_distance_hypothesis_test.py"
+
+
+rule _14_persistence_diagram_distance_hypothesis_test_eph:
+	input:
+		"data/diagrams/eph/{eph_file}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
+	output:
+		"images/eph/{eph_file}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log"
 	params:
 		alpha=0.05,
 		n_perm=10000,

@@ -105,13 +105,25 @@ rule _compute_random_graphs:
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	output:
-		er ="data/graphs/{dataset}/{class_}/_random_graphs/erdos_renyi/_{weight_function}_{i}.gexf",
 		cm ="data/graphs/{dataset}/{class_}/_random_graphs/configuration_model/_{weight_function}_{i}.gexf",
-		ws ="data/graphs/{dataset}/{class_}/_random_graphs/watts_strogatz/_{weight_function}_{i}.gexf",
-		ba ="data/graphs/{dataset}/{class_}/_random_graphs/barabasi_albert/_{weight_function}_{i}.gexf",
-		sbm="data/graphs/{dataset}/{class_}/_random_graphs/stochastic_block_model/_{weight_function}_{i}.gexf"
+		ecm ="data/graphs/{dataset}/{class_}/_random_graphs/enhanced_configuration_model/_{weight_function}_{i}.gexf"
 	log:
 		"data/null_graphs/{dataset}/{class_}/_{weight_function}_random_graphs_{i}.log"
+	wildcard_constraints:
+		i = "\\d+"
+	script:
+		"../scripts/utils/compute_random_graphs.py"
+
+
+rule _compute_random_graphs_eph:
+	'''Compute random graphs for a given projection graph.'''
+	input:
+		"data/graphs/eph/{eph_file}/{class_}/projection_{weight_function}.gexf"
+	output:
+		cm ="data/graphs/eph/{eph_file}/{class_}/_random_graphs/configuration_model/_{weight_function}_{i}.gexf",
+		ecm ="data/graphs/eph/{eph_file}/{class_}/_random_graphs/enhanced_configuration_model/_{weight_function}_{i}.gexf"
+	log:
+		"data/null_graphs/eph/{eph_file}/{class_}/_{weight_function}_random_graphs_{i}.log"
 	wildcard_constraints:
 		i = "\\d+"
 	script:

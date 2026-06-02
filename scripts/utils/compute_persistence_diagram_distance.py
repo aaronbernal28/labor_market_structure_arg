@@ -37,14 +37,20 @@ def main() -> None:
 		print(f"Comparing empirical diagram to null model {null_model_labels[i]}...")
 
 		for dim in range(len(empirical_dgms)):
-			bottleneck = topo.bottleneck_distance(empirical_dgms[dim], null_dgms[dim])
-			wasserstein = topo.wasserstein_distance(empirical_dgms[dim], null_dgms[dim])
+			if empirical_dgms[dim].size == 0 and null_dgms[dim].size == 0:
+				# Both diagrams are empty; distance is zero.
+				#bottleneck = 0.0
+				wasserstein = 0.0
+			else:
+				#bottleneck = topo.bottleneck_distance(empirical_dgms[dim], null_dgms[dim])
+				wasserstein = topo.wasserstein_distance(empirical_dgms[dim], null_dgms[dim])
+
 			rows.append(
 				{
 					"model_1": Path(empirical_path).name,
 					"model_2": null_model_labels[i],
 					"dimension": dim,
-					"bottleneck": bottleneck,
+					#"bottleneck": bottleneck,
 					"wasserstein": wasserstein,
 				}
 			)
@@ -56,14 +62,14 @@ def main() -> None:
 				continue
 			null_dgms_2, null_dgms_1 = topo.align_diagrams(null_by_dims[i], null_by_dims[j])
 			for dim in range(len(null_dgms_1)):
-				bottleneck = topo.bottleneck_distance(null_dgms_1[dim], null_dgms_2[dim])
+				#bottleneck = topo.bottleneck_distance(null_dgms_1[dim], null_dgms_2[dim])
 				wasserstein = topo.wasserstein_distance(null_dgms_1[dim], null_dgms_2[dim])
 				rows.append(
 					{
 						"model_1": null_model_labels[i],
 						"model_2": null_model_labels[j],
 						"dimension": dim,
-						"bottleneck": bottleneck,
+						#"bottleneck": bottleneck,
 						"wasserstein": wasserstein,
 					}
 				)
