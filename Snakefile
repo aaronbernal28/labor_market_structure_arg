@@ -577,10 +577,10 @@ rule _20_persistence_diagram_umap_all:
 				topo_method=wc.topo_method,
 				i=range(10),
 			)
-
 	output:
-		"images/20_persistence_diagram_umap_all/_{weight_function}_{topo_method}_wasserstein_umap.png"
-
+		"images/20_persistence_diagram_umap_all/_{weight_function}_{topo_method}_wasserstein_umap_H0.png",
+		"images/20_persistence_diagram_umap_all/_{weight_function}_{topo_method}_wasserstein_umap_H1.png",
+		"images/20_persistence_diagram_umap_all/_{weight_function}_{topo_method}_wasserstein_umap_H2.png"
 	script:
 		"scripts/20_persistence_diagram_umap_all.py"
 
