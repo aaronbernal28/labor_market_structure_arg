@@ -6,6 +6,7 @@ import src.node_characteristics as nc
 import src.plotting as pl
 import src.utils as utils
 import src.logging_utils as log
+import src.topology as topo
 
 
-__all__ = ["comm", "dl", "gc", "metrics", "nc", "pl", "utils", "log"]
+__all__ = ["comm", "dl", "gc", "metrics", "nc", "pl", "utils", "log", "topo"]

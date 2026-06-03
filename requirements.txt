@@ -19,3 +19,4 @@ nx-cugraph-cu12==26.4.0
 cupy-cuda13x==14.0.1
 POT==0.9.6.post1
 ggsci==2.0.0
+umap-learn=0.5.12

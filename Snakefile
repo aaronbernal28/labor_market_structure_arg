@@ -524,6 +524,67 @@ rule _19_public_policy_by_communities:
 		"scripts/19_public_policy_by_communities.py"
 
 
+rule _20_persistence_diagram_umap_all:
+	"""UMAP projection of persistence diagram distances across all datasets and EPH waves.
+	Steps:
+	1. Load all persistence diagram distance matrices for all datasets and EPH waves.
+	2. For each distance matrix, extract the distance values for a specific weight function and topological method (eg. Hidalgo + disparity filtration).
+	3. Combine all distance values into a single dataframe, with columns for dataset/eph_file, class, weight function, topological method, and distance values.
+	4. Apply UMAP to the combined distance values to reduce them to 2 dimensions.
+	5. Plot the UMAP projection, coloring points by dataset/eph_file and shaping points by class. Optionally, annotate points with weight function and topological method.
+
+	Notes:
+	1. The real model must have high alpha and more vibrant colors.
+	2. Each null model should have a consistent color with its linked real model, but with lower alpha for better visualization of the real vs null contrast.
+	3. EPH palette: pal_observable("observable10", alpha=0.7)(10) from ggsci.observable import pal_observable
+	"""
+	input:
+		lambda wc:
+			expand(
+				"data/diagrams/{dataset}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
+				dataset=["enes_all"],
+				class_=["ciuo"],
+				weight_function=wc.weight_function,
+				topo_method=wc.topo_method,
+				allow_missing=True,
+			)
+			+
+			expand(
+				"data/diagrams/{dataset}/{class_}/_persistence_diagram/{null_model}/_{weight_function}_{i}_{topo_method}.csv",
+				null_model=NULL_GRAPH_MODELS,
+				dataset=["enes_all"],
+				class_=["ciuo"],
+				weight_function=wc.weight_function,
+				topo_method=wc.topo_method,
+				i=range(10),
+				allow_missing=True,
+			)
+			+
+			expand(
+				"data/diagrams/eph/{eph_file}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
+				eph_file=EPH_FILES,
+				class_=["cno"],
+				weight_function=wc.weight_function,
+				topo_method=wc.topo_method,
+			)
+			+
+			expand(
+				"data/diagrams/eph/{eph_file}/{class_}/_persistence_diagram/{null_model}/_{weight_function}_{i}_{topo_method}.csv",
+				null_model=NULL_GRAPH_MODELS,
+				eph_file=EPH_FILES,
+				class_=["cno"],
+				weight_function=wc.weight_function,
+				topo_method=wc.topo_method,
+				i=range(10),
+			)
+
+	output:
+		"images/20_persistence_diagram_umap_all/_{weight_function}_{topo_method}_wasserstein_umap.png"
+
+	script:
+		"scripts/20_persistence_diagram_umap_all.py"
+
+
 include: "rules/00_prepare.smk"
 include: "rules/01_bipartite.smk"
 include: "rules/02_projection.smk"

@@ -25,6 +25,13 @@ from scipy import stats
 LIGTHGRAY = "#a8a8a8"
 
 
+def _format_eph_series_label(label: str) -> str:
+	key = ut.parse_eph_file_key(label)
+	if key is None:
+		return label
+	return f"{key.period}T{key.year}"
+
+
 def sort_labels():
 	handles, labels = plt.gca().get_legend_handles_labels()
 	sorted_pairs = sorted(zip(labels, handles), key=lambda x: x[0])
