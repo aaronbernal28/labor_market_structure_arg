@@ -158,6 +158,7 @@ rule all:
 		#	weight_function=["hidalgo"],
 		#	topo_method=["disparity_filtration"],
 		#),
+		"images/20_persistence_diagram_umap_all/_hidalgo_disparity_filtration_wasserstein_umap_H1.png",
 
 
 rule _00_aed_report:
@@ -542,7 +543,7 @@ rule _20_persistence_diagram_umap_all:
 		lambda wc:
 			expand(
 				"data/diagrams/{dataset}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
-				dataset=["enes_all"],
+				dataset=["enes_all", "enes_2019", "enes_2021"],
 				class_=["ciuo"],
 				weight_function=wc.weight_function,
 				topo_method=wc.topo_method,
@@ -552,7 +553,7 @@ rule _20_persistence_diagram_umap_all:
 			expand(
 				"data/diagrams/{dataset}/{class_}/_persistence_diagram/{null_model}/_{weight_function}_{i}_{topo_method}.csv",
 				null_model=NULL_GRAPH_MODELS,
-				dataset=["enes_all"],
+				dataset=["enes_all", "enes_2019", "enes_2021"],
 				class_=["ciuo"],
 				weight_function=wc.weight_function,
 				topo_method=wc.topo_method,
