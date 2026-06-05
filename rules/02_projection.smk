@@ -78,13 +78,16 @@ rule _compute_alpha_sensitivity_eph:
 
 rule _compute_resolution_sensitivity:
 	"""Sensitivity of community detection to resolution parameter alpha. This will compare all algorithms also."""
+	wildcard_constraints:
+		# Resolution must be a 4 digit float
+		resolution = "\\d+\\.\\d+"
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
 	params:
 		algorithms = ALGORITHMS_ALL,
 	output:
-		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_{weight_function}_{alpha}.csv",
-		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_scores_{weight_function}_{alpha}.csv"
+		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_{weight_function}_{alpha}_{resolution}.csv",
+		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_scores_{weight_function}_{alpha}_{resolution}.csv"
 	script:
 		"../scripts/utils/compute_resolution_sensitivity.py"
 	#shell:

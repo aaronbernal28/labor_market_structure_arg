@@ -1,5 +1,5 @@
 configfile: "config.yaml"
-from numpy import logspace
+from numpy import logspace, geomspace
 
 
 DATASETS = ["enes_all", "enes_2019", "enes_2021", "enes_all_male", "enes_all_female"]
@@ -24,6 +24,7 @@ EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
 DATASETS_ALL = DATASETS + EPH_FILES
 NULL_GRAPH_MODELS = ["configuration_model", "enhanced_configuration_model"]
 DISTANCE_DIAGRAMS = ["bottleneck", "wasserstein"]
+RESOLUTIONS = geomspace(0.1, 30, num=40).round(4).tolist()
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS_ALL),
@@ -210,8 +211,15 @@ rule _02_bipartite_plot_by_groups:
 rule _03_resolution_sensitivity:
 	"""Sensitivity of community detection to resolution parameter alpha. This will compare all algorithms also."""
 	input:
-		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_{weight_function}_{alpha}.csv",
-		"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_scores_{weight_function}_{alpha}.csv"
+		lambda wc: expand(
+			["data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_{weight_function}_{alpha}_{resolution}.csv",
+			"data/processed/{dataset}/{class_}/_compute_resolution_sensitivity/_df_scores_{weight_function}_{alpha}_{resolution}.csv"],
+			resolution=RESOLUTIONS,
+			dataset=wc.dataset,
+			class_=wc.class_,
+			weight_function=wc.weight_function,
+			alpha=wc.alpha,
+		)
 	output:
 		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}.png",
 		"images/{dataset}/{class_}/03_resolution_sensitivity/_catplots_{weight_function}_{alpha}_AMI.png",

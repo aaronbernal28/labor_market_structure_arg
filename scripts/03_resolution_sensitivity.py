@@ -1,4 +1,5 @@
 from typing import Any
+from pathlib import Path
 from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -9,7 +10,7 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-algorithm_order = ["infomap", "louvain", "leiden"]
+algorithm_order = ["louvain","leiden", "infomap"]
 color_map = {"infomap": "#4B8BBE", "louvain": "#4CB391", "leiden": "#F8766D"}
 marker_map = {"infomap": "+", "louvain": "X", "leiden": "s"}
 
@@ -17,8 +18,34 @@ marker_map = {"infomap": "+", "louvain": "X", "leiden": "s"}
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 
-	df = pd.read_csv(snakemake.input[0])
-	df_scores = pd.read_csv(snakemake.input[1])
+	raw_inputs = list(snakemake.input)
+	if raw_inputs and isinstance(raw_inputs[0], (list, tuple)):
+		df_paths = list(raw_inputs[0])
+		df_scores_paths = list(raw_inputs[1])
+	else:
+		df_paths = []
+		df_scores_paths = []
+		for path in raw_inputs:
+			name = Path(str(path)).name
+			if name.startswith("_df_scores_"):
+				df_scores_paths.append(str(path))
+			elif name.startswith("_df_"):
+				df_paths.append(str(path))
+
+	if not df_paths or not df_scores_paths:
+		raise ValueError(
+			"Expected both _df_*.csv and _df_scores_*.csv inputs for "
+			"resolution sensitivity"
+		)
+
+	df = pd.read_csv(df_paths[0])
+	for path in df_paths[1:]:
+		df = pd.concat([df, pd.read_csv(path)], ignore_index=True)
+
+	df_scores = pd.read_csv(df_scores_paths[0])
+	for path in df_scores_paths[1:]:
+		df_scores = pd.concat([df_scores, pd.read_csv(path)], ignore_index=True)
+
 	class_ = str(snakemake.wildcards["class_"])
 	reference_resolution = float(snakemake.config["community"]["resolution"][class_])
 	translation = snakemake.config.get("translation", {})
