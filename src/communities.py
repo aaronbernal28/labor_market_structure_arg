@@ -312,23 +312,10 @@ def best_infomap_partition_random(
 	"""
 	Find the best Infomap partition by random sampling of markov_time values.
 	"""
-	rng = np.random.RandomState(seed)
 
-	# Sample resolution values uniformly
-	seeds = rng.randint(0, 10000, n_samples)
-
-	best_partition = None
-	best_score = -1.0
-
-	for seed in seeds:
-		# Use deterministic seed derived from base seed
-		partition, score = infomap_partition(
-			graph, resolution=resolution, seed=seed
-		)
-
-		if score > best_score:
-			best_partition = partition
-			best_score = score
+	best_partition, best_score = infomap_partition(
+		graph, resolution=resolution, seed=seed, num_trials=n_samples
+	)
 
 	return best_partition, best_score
 

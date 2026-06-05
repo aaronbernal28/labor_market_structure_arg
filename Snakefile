@@ -6,7 +6,7 @@ DATASETS = ["enes_all", "enes_2019", "enes_2021", "enes_all_male", "enes_all_fem
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
 ALGORITHMS_CAES = ["infomap"]
-ALGORITHMS_CIUO = ["leiden"]
+ALGORITHMS_CIUO = ["infomap"]
 ALGORITHMS_ALL = ["louvain", "leiden", "infomap"]
 VARIABLES = ["sex_id", "public_worker", "total_income", "education_mean"]
 DISCRETE_FEATURES = ["grupo", "community"] # in nodelist data
@@ -151,7 +151,11 @@ rule all:
 			topo_method=TOPO_METHOD,
 			distance_diagrams=DISTANCE_DIAGRAMS,
 		),
-		"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_leiden_filtration.png",
+		expand(
+			"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_{algorithm}_filtration.png",
+			class_=["caes", "ciuo"],
+			algorithm=ALGORITHMS_CIUO,
+		),
 		#expand(
 		#	"images/eph/{eph_file}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log",
 		#	eph_file=EPH_FILES,

@@ -41,17 +41,17 @@ def main() -> None:
 	graph = gc.graph_sort_nodes_by_id(graph)
 
 	communities, modularity = algorithm_func(
-		graph, seed=seed, n_samples=20, resolution=resolution
+		graph, seed=seed, n_samples=40, resolution=resolution
 	)
 
 	print(f"Raw communities detected: {len(set(communities.values()))}")
-	n_obs = nodelist_df.set_index(id_col)["n_obs"].to_dict()
-	communities = utils.relabel_communities_by_observations(
-		communities,
-		n_obs,
-		order="desc",
-		num_communities=None # snakemake.config["community"]["max"][class_],
-	)
+	#n_obs = nodelist_df.set_index(id_col)["n_obs"].to_dict()
+	#communities = utils.relabel_communities_by_observations(
+	#	communities,
+	#	n_obs,
+	#	order="desc",
+	#	num_communities=None # snakemake.config["community"]["max"][class_],
+	#)
 	communities = utils.filter_communities_by_size(communities, min_size=3)
 	num_communities = len(set(communities.values()))
 

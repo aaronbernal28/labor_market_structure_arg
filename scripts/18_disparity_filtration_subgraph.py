@@ -43,10 +43,10 @@ def main() -> None:
 	# 2. Filter the graph using one community as the focal class
 	if "community" in df.columns:
 		comm_counts = df["community"].value_counts()
-		if 12 in comm_counts:
-			target_comm = 12
-		elif "C12" in comm_counts:
-			target_comm = "C12"
+		if 8 in comm_counts:
+			target_comm = 8
+		elif "C08" in comm_counts:
+			target_comm = "C08"
 		else:
 			target_comm = comm_counts.idxmax()
 
