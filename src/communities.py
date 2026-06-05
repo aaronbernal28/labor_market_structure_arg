@@ -268,6 +268,7 @@ def infomap_partition(
 		seed=seed,
 		num_trials=num_trials,
 		markov_time=markov_time,
+		flow_model="undirected",
 	)
 
 	for node_id in node_to_id.values():

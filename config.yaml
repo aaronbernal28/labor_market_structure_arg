@@ -139,7 +139,7 @@ cmaps:
 community:
   resolution:
     caes: 5.62 # 10**(0.75)
-    ciuo: 1.77 # sqrt(10)
+    ciuo: 5.62 # sqrt(10)
     cno: 1.0
   max:
     caes: 15

@@ -63,6 +63,7 @@ def main() -> None:
 					graph,
 					seed=seed,
 					resolution=resolution,
+					num_trials=1, # Infomap's "trials" parameter is not a random seed, so we set it to 1 and rely on the seed for randomness
 				)
 			else:
 				raise NotImplementedError(
