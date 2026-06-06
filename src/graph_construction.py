@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import src.communities as comm
 
+
 def clean_graph(graph: nx.Graph) -> nx.Graph:
 	"""Convert to a simple undirected graph and remove self-loops."""
 	cleaned = nx.Graph(graph)
@@ -511,7 +512,6 @@ def disparity_filter_backbone(
 	edges = disparity_graph.edges(data=True)
 	edges = sorted(edges, key=lambda x: x[2].get("alpha", 1), reverse=False)
 
-
 	edges = [e for e in edges if e[2].get("alpha", 1) < alpha]
 	backbone.add_edges_from((u, v, {"weight": d.get("weight", 1)}) for u, v, d in edges)
 	print(f"Added {len(edges)} edges to backbone with alpha < {alpha}.")
@@ -544,13 +544,19 @@ def get_reference_backbone_alpha(
 	for u, v, data in edges:
 		nodes = nodes | {u, v}
 		if len(nodes) / n > coverage:
-			print(f"Reached {coverage:.2%} node coverage in backbone; stopping edge addition.")
-			print(f"Current alpha: {data.get('alpha', 1)}, nodes covered: {len(nodes)}/{n} ({len(nodes)/n:.2%})")
+			print(
+				f"Reached {coverage:.2%} node coverage in backbone; stopping edge addition."
+			)
+			print(
+				f"Current alpha: {data.get('alpha', 1)}, nodes covered: {len(nodes)}/{n} ({len(nodes) / n:.2%})"
+			)
 			return data.get("alpha", 1)
 	return 1.0
 
 
-def compute_distance_matrix(graph: nx.Graph, method: str, resolution: int = 100) -> np.ndarray:
+def compute_distance_matrix(
+	graph: nx.Graph, method: str, resolution: int = 100
+) -> np.ndarray:
 	"""Compute a distance matrix for the given graph and method."""
 	if method == "disparity_filtration":
 		return get_disparity_distance_matrix(graph, size=resolution)
@@ -562,10 +568,9 @@ def compute_distance_matrix(graph: nx.Graph, method: str, resolution: int = 100)
 
 def _build_betas(alphas: np.ndarray | None, size: int = 100) -> np.ndarray:
 	"""Return a strictly increasing beta grid including 0 and 1."""
-	#step = max(1, len(alphas) // max(1, size))
-	#indexes = np.arange(start=0, stop=len(alphas), step=step, dtype=np.int_)
-	#alphas_sorted = np.sort(alphas)
-	alphas_filtered = np.logspace(-6, 0, num=size, endpoint=True) #alphas_sorted[indexes]
+	alphas_filtered = np.logspace(
+		-6, 0, num=size, endpoint=True
+	)  # alphas_sorted[indexes]
 	betas = np.concatenate(([np.array([0.0]), alphas_filtered, np.array([1.0])]))
 	betas = np.unique(betas)
 	betas.sort()
@@ -601,7 +606,7 @@ def get_disparity_distance_matrix(graph: nx.Graph, size: int = 100) -> np.ndarra
 	"""Compute a distance matrix for the given graph and method."""
 	disparity_graph = get_disparity_graph(graph)
 
-	alphas = None #disparity_graph_get_alphas(disparity_graph)
+	alphas = None  # disparity_graph_get_alphas(disparity_graph)
 	betas = _build_betas(alphas, size=size)
 	nodes = sorted(graph.nodes())
 	node_index = {node: i for i, node in enumerate(nodes)}
@@ -635,7 +640,7 @@ def convert_weights_to_costs(graph: nx.Graph, prob_weight: bool = True) -> nx.Gr
 			# NOTE: if weight is zero, cost becomes infinite
 			# If weight is one, cost becomes zero (as expected for a perfect match)
 		elif weight >= 1.0:
-			cost = 1/float(np.log1p(weight)) if weight >= 1.0 else float("inf")
+			cost = 1 / float(np.log1p(weight)) if weight >= 1.0 else float("inf")
 		cost_graph.add_edge(u, v, cost=cost)
 	return cost_graph
 
@@ -700,7 +705,9 @@ def compute_sweep_alpha(
 			except ZeroDivisionError:
 				clustering_coeffs[i] = 0.0
 			try:
-				clustering_coeffs_weighted[i] = nx.average_clustering(backbone, weight="weight")
+				clustering_coeffs_weighted[i] = nx.average_clustering(
+					backbone, weight="weight"
+				)
 			except ZeroDivisionError:
 				clustering_coeffs_weighted[i] = 0.0
 		else:

@@ -17,7 +17,7 @@ def main() -> None:
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
-	#graph_metrics = metrics.summarize_graph(graph)
+	# graph_metrics = metrics.summarize_graph(graph)
 	graph_nodes = set(graph.nodes())
 	plot_df = pos_df[pos_df[id_col].astype(int).isin(graph_nodes)].copy()
 	if plot_df.empty:
@@ -136,9 +136,7 @@ def main() -> None:
 	local_modularity_rows: list[str] = []
 	for group_label in sorted(group_to_nodes.keys()):
 		nodes = group_to_nodes[group_label]
-		local_modularity = comm.local_modularity_weighted(
-			graph, nodes, gamma=1.0
-		)
+		local_modularity = comm.local_modularity_weighted(graph, nodes, gamma=1.0)
 		local_modularity_rows.append(
 			f"{group_label}: n={len(nodes)}, local_modularity={local_modularity:.6f}"
 		)
@@ -180,7 +178,7 @@ def main() -> None:
 		row_count=len(pos_df),
 		column_count=len(pos_df.columns),
 	)
-	#log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	# log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
 	log.add_notes(
 		log_lines,
 		"GROUP MODULARITY (WEIGHTED)",
@@ -190,7 +188,8 @@ def main() -> None:
 			if classic_modularity is not None
 			else "Classic modularity (partition): N/A",
 			f"Modularity (partition, exclude '{exclude_group_label}'): {classic_modularity_filtered:.6f}"
-			if discrete_feature == "ciuo3cat" and classic_modularity_filtered is not None
+			if discrete_feature == "ciuo3cat"
+			and classic_modularity_filtered is not None
 			else f"Classic modularity (partition, exclude '{exclude_group_label}'): N/A",
 		],
 	)

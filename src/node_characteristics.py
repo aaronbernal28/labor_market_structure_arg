@@ -191,7 +191,9 @@ def compute_group_characteristics(
 				**_groupby_apply_include_groups(False),
 			)
 		else:
-			print(f"Warning: No calibration column found for income mean calculation. Using unweighted average. {calib_col} not found in data.")
+			print(
+				f"Warning: No calibration column found for income mean calculation. Using unweighted average. {calib_col} not found in data."
+			)
 			features["age_mean"] = valid_age_grouped[age_col].mean()
 		features["age_min"] = valid_age_grouped[age_col].min()
 		features["age_q1"] = valid_age_grouped[age_col].quantile(0.25)
@@ -212,7 +214,9 @@ def compute_group_characteristics(
 				**_groupby_apply_include_groups(False),
 			)
 		else:
-			print(f"Warning: No calibration column found for income mean calculation. Using unweighted average. {calib_col} not found in data.")
+			print(
+				f"Warning: No calibration column found for income mean calculation. Using unweighted average. {calib_col} not found in data."
+			)
 			features["income_mean"] = valid_income_grouped[income_col].mean()
 		features["income_min"] = valid_income_grouped[income_col].min()
 		features["income_q1"] = valid_income_grouped[income_col].quantile(0.25)
@@ -233,7 +237,9 @@ def compute_group_characteristics(
 				**_groupby_apply_include_groups(False),
 			)
 		else:
-			print(f"Warning: No calibration column found for sex percentage calculation. Using unweighted average. {calib_col} not found in data.")
+			print(
+				f"Warning: No calibration column found for sex percentage calculation. Using unweighted average. {calib_col} not found in data."
+			)
 			features["female_pct"] = valid_grouped[sex_col].apply(
 				lambda s: (s == 2).mean() * 100
 			)
@@ -250,7 +256,9 @@ def compute_group_characteristics(
 				**_groupby_apply_include_groups(False),
 			)
 		else:
-			print(f"Warning: No calibration column found for hours worked calculation. Using unweighted average. {calib_col} not found in data.")
+			print(
+				f"Warning: No calibration column found for hours worked calculation. Using unweighted average. {calib_col} not found in data."
+			)
 			features["mean_hours_worked"] = valid_hours_grouped[hours_col].mean()
 
 	if nivel_ed_col in data.columns:
@@ -266,7 +274,9 @@ def compute_group_characteristics(
 				**_groupby_apply_include_groups(False),
 			)
 		else:
-			print(f"Warning: No calibration column found for education level calculation. Using unweighted average. {calib_col} not found in data.")
+			print(
+				f"Warning: No calibration column found for education level calculation. Using unweighted average. {calib_col} not found in data."
+			)
 			features["nivel_ed_mean"] = valid_grouped[nivel_ed_col].mean()
 
 	if category_col in data.columns:
@@ -288,7 +298,9 @@ def compute_group_characteristics(
 				**_groupby_apply_include_groups(False),
 			)
 		else:
-			print(f"Warning: No calibration column found for public sector percentage calculation. Using unweighted average. {calib_col} not found in data.")
+			print(
+				f"Warning: No calibration column found for public sector percentage calculation. Using unweighted average. {calib_col} not found in data."
+			)
 			features["public_sector_pct"] = valid_grouped[public_sector_col].apply(
 				lambda s: (s == 1).mean() * 100
 			)
@@ -311,5 +323,7 @@ def attach_group_characteristics(
 
 	result = nodelist_df.join(features_df, how="left")
 	if "n_obs" in result.columns:
-		result["n_obs"] = pd.to_numeric(result["n_obs"], errors="coerce").fillna(0).astype(float)
+		result["n_obs"] = (
+			pd.to_numeric(result["n_obs"], errors="coerce").fillna(0).astype(float)
+		)
 	return result

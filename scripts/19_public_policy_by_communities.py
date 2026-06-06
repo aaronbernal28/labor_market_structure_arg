@@ -47,7 +47,11 @@ def _build_label_map(
 			node_id = int(row[id_col])
 		except Exception:
 			continue
-		value = row[label_col] if label_col and label_col in nodelist.columns else row[id_col]
+		value = (
+			row[label_col]
+			if label_col and label_col in nodelist.columns
+			else row[id_col]
+		)
 		labels[node_id] = _format_label(value, class_index, max_caes_id) or str(node_id)
 	return labels
 
@@ -55,6 +59,7 @@ def _build_label_map(
 def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 	translation = snakemake.config.get("translation", {})
+
 	def _t(label: str) -> str:
 		return utils.translate_label(label, translation)
 
@@ -101,9 +106,13 @@ def main() -> None:
 		cost_graph = gc.convert_weights_to_costs(subgraph)
 		betweenness = nx.betweenness_centrality(cost_graph, weight="cost")
 	else:
-		raise NotImplementedError("Unweighted betweenness centrality is not implemented in this script.")
+		raise NotImplementedError(
+			"Unweighted betweenness centrality is not implemented in this script."
+		)
 
-	label_col_preferred = "as_display" if "as_display" in filtered_nodes.columns else label_col
+	label_col_preferred = (
+		"as_display" if "as_display" in filtered_nodes.columns else label_col
+	)
 	label_map = _build_label_map(
 		filtered_nodes,
 		id_col,
@@ -153,9 +162,7 @@ def main() -> None:
 		palette=[color_community_1, color_community_2],
 		hue_order=[c1, c2],
 	)
-	ax.set_title(
-		f"{_t('Betweenness Centrality')}: {class_.upper()} ({c1} vs {c2})"
-	)
+	ax.set_title("")
 	ax.set_xlabel(_t("Betweenness centrality"))
 	ax.set_ylabel(_t("node_count"))
 	legend = ax.get_legend()

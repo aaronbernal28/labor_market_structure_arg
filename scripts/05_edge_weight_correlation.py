@@ -34,17 +34,15 @@ def main() -> None:
 	nodelist = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 	community_col = _resolve_community_column(nodelist, algorithm)
 	pos_df = nodelist.dropna(subset=[id_col, community_col])
-	#max_group_code = snakemake.config["community"]["max"][class_]
-	#nodelist = nodelist[nodelist["community"] < utils.label_fn(max_group_code, len(str(max_group_code)))].copy()
 	pos_df = dl.filter_communities(
-			pos_df,
-			feature_col=community_col,
-			max_code=snakemake.config["community"]["max"].get(class_, 98),
-		)
+		pos_df,
+		feature_col=community_col,
+		max_code=snakemake.config["community"]["max"].get(class_, 98),
+	)
 
 	# Cast nodes to int instantly to prevent string mismatch bugs
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
-	#graph_metrics = metrics.summarize_graph(graph)
+	# graph_metrics = metrics.summarize_graph(graph)
 
 	if feature_name not in pos_df.columns:
 		raise KeyError(
@@ -69,7 +67,7 @@ def main() -> None:
 	)
 
 	feature_label = utils.translate_label(feature_name, translation)
-	default_title = f"{class_.upper()} - {feature_label}"
+	default_title = ""
 
 	pl.compute_and_plot_edge_correlation(
 		G=graph,
@@ -82,7 +80,7 @@ def main() -> None:
 		output_path=snakemake.output[0],
 		save=True,
 		perfect_line=False,
-		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_] /50.0,
+		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_] / 50.0,
 		figsize=snakemake.config["figsizes"]["edge_correlation"],
 	)
 
@@ -107,7 +105,7 @@ def main() -> None:
 		row_count=len(pos_df),
 		column_count=len(pos_df.columns),
 	)
-	#log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	# log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 

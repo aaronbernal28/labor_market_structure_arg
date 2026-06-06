@@ -17,9 +17,11 @@ def main() -> None:
 	weight_function = snakemake.wildcards["weight_function"]
 	feature = snakemake.wildcards.get("feature", "female_pct")
 	translation = snakemake.config.get("translation", {})
+
 	def _t(label: str) -> str:
 		return utils.translate_label(label, translation)
-	#utils.setup_networkx_backend(algorithm=None)
+
+	# utils.setup_networkx_backend(algorithm=None)
 
 	if class_ not in {"caes", "cno"}:
 		raise ValueError("This EPH-only script supports class_ in {'caes', 'cno'}.")
@@ -100,13 +102,11 @@ def main() -> None:
 		processed_path = eph_to_processed[eph_file]
 
 		projection = nx.read_gexf(projection_path, node_type=int)
-		#projection_metrics[eph_file] = metrics.summarize_graph(projection)
+		# projection_metrics[eph_file] = metrics.summarize_graph(projection)
 
 		df_wave = pd.read_csv(processed_path)
 		if id_col not in df_wave.columns:
-			raise KeyError(
-				f"Missing group id column '{id_col}' in {processed_path}."
-			)
+			raise KeyError(f"Missing group id column '{id_col}' in {processed_path}.")
 
 		# Use ponderation weights for computing group characteristics per wave
 		features_df = nc.compute_group_characteristics(
@@ -166,8 +166,17 @@ def main() -> None:
 	results = results.sort_values(["time_date", "alpha"], kind="mergesort")
 
 	# Prepare a tidy summary dataframe with date, assortativity and alpha for downstream work
-	_summary_cols = ["time_date", "pearson_r", "alpha", "eph_file", "time_label", "time_numeric"]
-	_summary_df = results.loc[:, [c for c in _summary_cols if c in results.columns]].copy()
+	_summary_cols = [
+		"time_date",
+		"pearson_r",
+		"alpha",
+		"eph_file",
+		"time_label",
+		"time_numeric",
+	]
+	_summary_df = results.loc[
+		:, [c for c in _summary_cols if c in results.columns]
+	].copy()
 	_summary_df = _summary_df.sort_values(["time_date", "alpha"], kind="mergesort")
 
 	print("Example of results dataframe:")
@@ -227,17 +236,6 @@ def main() -> None:
 		lbl = k.label if k else eph_file
 		log_lines.append(f"  {j:>3d}. {eph_file} -> {lbl}")
 
-	#log_lines.append("")
-	#log_lines.append("PER-FILE PROJECTION METRICS (unfiltered):")
-	#for eph_file in eph_files_sorted:
-	#	gm = projection_metrics.get(eph_file, {})
-	#	items = []
-	#	for k in ["n_nodes", "n_edges", "density", "avg_degree"]:
-	#		if k in gm:
-	#			items.append(f"{k}={gm[k]}")
-	#	log_lines.append(
-	#		f"  - {eph_file}: " + (", ".join(items) if items else "(no metrics)")
-	#	)
 
 	log_path = None
 	if hasattr(snakemake, "log") and snakemake.log:

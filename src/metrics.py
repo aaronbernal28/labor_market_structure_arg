@@ -156,7 +156,9 @@ def summarize_bipartite_graph(
 	assortativity = None
 	if metrics["edge_count"] > 0:
 		assortativity_value = nx.degree_assortativity_coefficient(graph, x=0, y=1)
-		assortativity_value_weighted = nx.degree_assortativity_coefficient(graph, x=0, y=1, weight="weight")
+		assortativity_value_weighted = nx.degree_assortativity_coefficient(
+			graph, x=0, y=1, weight="weight"
+		)
 		if math.isfinite(assortativity_value):
 			assortativity = float(assortativity_value)
 		if math.isfinite(assortativity_value_weighted):
@@ -171,7 +173,9 @@ def summarize_bipartite_graph(
 
 	if lcc_size > 1:
 		lcc_with_cost = gc.convert_weights_to_costs(lcc, prob_weight=False)
-		avg_path_length = float(nx.average_shortest_path_length(lcc_with_cost, weight="cost"))
+		avg_path_length = float(
+			nx.average_shortest_path_length(lcc_with_cost, weight="cost")
+		)
 	else:
 		avg_path_length = None
 
@@ -208,13 +212,19 @@ def log_graph_metrics(label: str, metrics: Dict[str, MetricValue]) -> None:
 	diameter_display = diameter if diameter is not None else "N/A"
 	print(f"Diameter (largest component): {diameter_display}")
 	if metrics.get("avg_path_length") is not None:
-		print(f"Average path length (largest component): {metrics['avg_path_length']:.4f}")
+		print(
+			f"Average path length (largest component): {metrics['avg_path_length']:.4f}"
+		)
 	print(f"Connected components: {metrics['connected_components']}")
 	if metrics.get("lcc_size") is not None:
 		lcc_percent = metrics.get("lcc_percent")
-		lcc_percent_display = f"{lcc_percent:.2f}%" if lcc_percent is not None else "N/A"
+		lcc_percent_display = (
+			f"{lcc_percent:.2f}%" if lcc_percent is not None else "N/A"
+		)
 		print(f"Largest component size: {metrics['lcc_size']} ({lcc_percent_display})")
 	if metrics.get("degree_assortativity") is not None:
 		print(f"Degree assortativity: {metrics['degree_assortativity']:.4f}")
 	if metrics.get("degree_assortativity_weighted") is not None:
-		print(f"Degree assortativity (weighted): {metrics['degree_assortativity_weighted']:.4f}")
+		print(
+			f"Degree assortativity (weighted): {metrics['degree_assortativity_weighted']:.4f}"
+		)

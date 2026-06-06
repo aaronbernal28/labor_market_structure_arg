@@ -10,7 +10,7 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-algorithm_order = ["louvain","leiden", "infomap"]
+algorithm_order = ["louvain", "leiden", "infomap"]
 color_map = {"infomap": "#4B8BBE", "louvain": "#4CB391", "leiden": "#F8766D"}
 marker_map = {"infomap": "+", "louvain": "X", "leiden": "s"}
 
@@ -49,6 +49,7 @@ def main() -> None:
 	class_ = str(snakemake.wildcards["class_"])
 	reference_resolution = float(snakemake.config["community"]["resolution"][class_])
 	translation = snakemake.config.get("translation", {})
+
 	def _t(label: str) -> str:
 		return utils.translate_label(label, translation)
 
@@ -157,7 +158,7 @@ def main() -> None:
 		g.set_axis_labels(_t("Resolution"), _t("Score"))
 		g.ax_joint.set_xscale("log")
 		g.ax_joint.grid(True)
-		output_path = str(snakemake.output[i+1])
+		output_path = str(snakemake.output[i + 1])
 
 		plt.savefig(output_path, bbox_inches="tight")
 		plt.close()

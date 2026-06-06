@@ -569,11 +569,22 @@ def bootstrap_se(df1, df2, caes_col, ciuo_col, rownames, colnames, B=1000, seed=
 
 def df_community_to_id(series: pd.Series) -> pd.Series:
 	"""Convert a Series of labels like 'C01' to integer IDs, leaving non-matching as NaN."""
-	return series.apply(lambda x: ut.label_to_id(x) if isinstance(x, str) and re.match(r"C\d+", x) else np.nan)
+	return series.apply(
+		lambda x: (
+			ut.label_to_id(x) if isinstance(x, str) and re.match(r"C\d+", x) else np.nan
+		)
+	)
 
-def filter_communities(df: pd.DataFrame, feature_col: str, max_code: int) -> pd.DataFrame:
-	print(f"Filtering communities in column '{feature_col}' with max_code={max_code}...")
-	print(f"Non nulls before filtering: {df[feature_col].notnull().sum()}, total rows: {len(df)}")
+
+def filter_communities(
+	df: pd.DataFrame, feature_col: str, max_code: int
+) -> pd.DataFrame:
+	print(
+		f"Filtering communities in column '{feature_col}' with max_code={max_code}..."
+	)
+	print(
+		f"Non nulls before filtering: {df[feature_col].notnull().sum()}, total rows: {len(df)}"
+	)
 	df[feature_col] = df[feature_col].fillna("C99")
 	print(f"Unique communities before filtering: {df[feature_col].unique()}")
 	mask = df_community_to_id(df[feature_col]) > max_code

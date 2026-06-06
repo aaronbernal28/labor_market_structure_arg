@@ -25,10 +25,7 @@ def main() -> None:
 	topo_method = snakemake.wildcards["topo_method"]
 
 	fig, axs = plt.subplots(1, 2, figsize=(14, 6))
-	fig.suptitle(
-		f"Persistence Diagrams by Gender ({class_}, {weight_function}, {topo_method})",
-		y=0.98,
-	)
+	fig.suptitle("")
 
 	pl.plot_persistence_diagrams(
 		male_diagrams,

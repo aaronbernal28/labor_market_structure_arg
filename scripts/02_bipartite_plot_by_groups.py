@@ -63,8 +63,8 @@ def main() -> None:
 		save=True,
 		figsize=snakemake.config["figsizes"]["bipartite"],
 		node_size_map=node_size_map_workers,
-		factor_node_size_caes=snakemake.config["FACTOR_NODE_SIZE"]["caes"]/15,
-		factor_node_size_ciuo=snakemake.config["FACTOR_NODE_SIZE"]["ciuo"]/15,
+		factor_node_size_caes=snakemake.config["FACTOR_NODE_SIZE"]["caes"] / 15,
+		factor_node_size_ciuo=snakemake.config["FACTOR_NODE_SIZE"]["ciuo"] / 15,
 	)
 
 	degrees = gc.degree_sequences(
@@ -90,19 +90,33 @@ def main() -> None:
 	ciuo_part = ciuo_meta.get("partition", 0)
 
 	caes_deg_list = sorted(
-		[(n, d) for n, d in bigraph.degree() if bigraph.nodes[n].get("bipartite") == caes_part],
+		[
+			(n, d)
+			for n, d in bigraph.degree()
+			if bigraph.nodes[n].get("bipartite") == caes_part
+		],
 		key=lambda x: x[1],
-		reverse=True
+		reverse=True,
 	)[:5]
 
 	ciuo_deg_list = sorted(
-		[(n, d) for n, d in bigraph.degree() if bigraph.nodes[n].get("bipartite") == ciuo_part],
+		[
+			(n, d)
+			for n, d in bigraph.degree()
+			if bigraph.nodes[n].get("bipartite") == ciuo_part
+		],
 		key=lambda x: x[1],
-		reverse=True
+		reverse=True,
 	)[:5]
 
-	caes_top_5 = [f"ID {n} (Degree: {d}, Group: {label_map_groups.get(n, 'N/A')})" for n, d in caes_deg_list]
-	ciuo_top_5 = [f"ID {n} (Degree: {d}, Group: {label_map_groups.get(n, 'N/A')})" for n, d in ciuo_deg_list]
+	caes_top_5 = [
+		f"ID {n} (Degree: {d}, Group: {label_map_groups.get(n, 'N/A')})"
+		for n, d in caes_deg_list
+	]
+	ciuo_top_5 = [
+		f"ID {n} (Degree: {d}, Group: {label_map_groups.get(n, 'N/A')})"
+		for n, d in ciuo_deg_list
+	]
 
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)

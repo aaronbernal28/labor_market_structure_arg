@@ -17,10 +17,13 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	topo_method = snakemake.wildcards.get("topo_method", "disparity_filtration")
 	translation = snakemake.config.get("translation", {})
+
 	def _t(label: str) -> str:
 		return utils.translate_label(label, translation)
 
-	distance_matrix = gc.compute_distance_matrix(graph, method=topo_method, resolution=100)
+	distance_matrix = gc.compute_distance_matrix(
+		graph, method=topo_method, resolution=100
+	)
 	nodes = sorted(graph.nodes())
 	n_nodes = len(nodes)
 
@@ -53,7 +56,7 @@ def main() -> None:
 	)
 
 	fig, axs = plt.subplots(1, 2, figsize=(12, 6))
-	fig.suptitle(_t("Persistence Diagram"), y=0.98)
+	fig.suptitle("")
 
 	# pl.plot_distance_histogram(
 	# 	distance_matrix,
@@ -65,7 +68,7 @@ def main() -> None:
 
 	pl.plot_persistence_diagrams(
 		diagrams,
-		title=_t("Persistence diagrams"),
+		title="",
 		ax=axs[0],
 		save=False,
 		translation=translation,
@@ -73,7 +76,7 @@ def main() -> None:
 
 	pl.plot_distance_heatmap(
 		distance_matrix,
-		title="Distance matrix d(u,v) (beta-index)",
+		title="",
 		labels=labels,
 		x_label=_t(class_),
 		y_label=_t(class_),

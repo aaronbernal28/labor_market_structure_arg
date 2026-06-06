@@ -21,11 +21,7 @@ def main() -> None:
 	nodes_largest_cc = np.array(metrics["nodes_largest_cc"])
 	reference_alpha = round(metrics["reference_alpha"], 4)
 
-	title = (
-		f"{snakemake.wildcards['dataset']} - "
-		f"{snakemake.wildcards['class_']} - "
-		f"{snakemake.wildcards['weight_function']}"
-	)
+	title = ""
 
 	pl.plot_alpha_sensitivity(
 		alphas=alphas,

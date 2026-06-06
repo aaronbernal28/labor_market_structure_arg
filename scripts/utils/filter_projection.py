@@ -9,7 +9,7 @@ snakemake: Any
 
 def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
-	#utils.setup_networkx_backend(algorithm=None)
+	# utils.setup_networkx_backend(algorithm=None)
 
 	alpha = float(snakemake.wildcards.get("alpha", "0.05"))
 	input_metrics = metrics.summarize_graph(graph)

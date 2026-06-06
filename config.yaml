@@ -120,11 +120,11 @@ figsizes:
   top_n_bar: [8, 4]
   edge_correlation: [6, 6]
   bipartite: [12, 8]
-  projection: [10, 10]
+  projection: [8, 8]
   stacked:
-    caes: [12, 3.5]
+    caes: [12, 3]
     ciuo: [12, 5]
-  heatmap: [16, 10]
+  heatmap: [18, 10]
   histogram: [8, 6]
   catplot: [10, 5]
 
@@ -249,3 +249,4 @@ translation:
   Other: "Otro"
   community: "Comunidad"
   "Betweenness centrality": "Centralidad de intermediación"
+  Workers : "Trabajadores"

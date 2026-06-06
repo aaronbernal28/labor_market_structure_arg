@@ -13,7 +13,7 @@ def main() -> None:
 	seed = int(snakemake.config["seed"])
 	dataset_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
 	input_metrics = metrics.summarize_graph(graph)
-	#utils.setup_networkx_backend(algorithm=None)
+	# utils.setup_networkx_backend(algorithm=None)
 
 	pos = nx.forceatlas2_layout(graph, seed=seed, weight="weight")
 	pos = {int(node_id): (float(x), float(y)) for node_id, (x, y) in pos.items()}

@@ -13,7 +13,9 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	topo_method = snakemake.wildcards.get("topo_method", "disparity_filtration")
 
-	distance_matrix = gc.compute_distance_matrix(graph, method=topo_method, resolution=100)
+	distance_matrix = gc.compute_distance_matrix(
+		graph, method=topo_method, resolution=100
+	)
 	nodes = sorted(graph.nodes())
 	n_nodes = len(nodes)
 
@@ -38,7 +40,8 @@ def main() -> None:
 	)
 	feature_counts = [len(dgm) for dgm in diagrams]
 	message_parts = [
-		f"{count} {dim}-dimensional features" for dim, count in enumerate(feature_counts)
+		f"{count} {dim}-dimensional features"
+		for dim, count in enumerate(feature_counts)
 	]
 	print(f"Computed persistence diagram with {', '.join(message_parts)}.")
 

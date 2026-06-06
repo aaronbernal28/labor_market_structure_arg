@@ -45,7 +45,7 @@ def _permutation_p_value(
 		return np.mean(a, axis=axis) - np.mean(b, axis=axis)
 
 	# Map your boolean to SciPy's alternative hypothesis string
-	alt_hyp = 'two-sided' if two_sided else 'greater'
+	alt_hyp = "two-sided" if two_sided else "greater"
 
 	rng = np.random.default_rng(seed)
 
@@ -53,7 +53,7 @@ def _permutation_p_value(
 	res = permutation_test(
 		data=(sample_a, sample_b),
 		statistic=statistic,
-		permutation_type='independent',
+		permutation_type="independent",
 		n_resamples=n_perm,
 		vectorized=True,
 		alternative=alt_hyp,
@@ -73,6 +73,7 @@ def _sig_stars(p_value: float, n_tests: int) -> str:
 	if p_value < 0.05 / n_tests:
 		return "*"
 	return ""
+
 
 def main() -> None:
 	df = pd.read_csv(snakemake.input[0])
@@ -105,7 +106,9 @@ def main() -> None:
 	]
 
 	dimensions = sorted(df["dimension"].unique())
-	metrics = ["wasserstein"] # Can add "bottleneck" back if desired, but it is much slower to compute and may not add much value beyond Wasserstein distance
+	metrics = [
+		"wasserstein"
+	]  # Can add "bottleneck" back if desired, but it is much slower to compute and may not add much value beyond Wasserstein distance
 
 	samples: dict[str, dict[int, dict[str, dict[str, list[float]]]]] = {}
 	warnings: list[str] = []
@@ -287,7 +290,9 @@ def main() -> None:
 				summary_rows.to_latex(
 					index=False,
 					float_format="%.2f",
-					formatters={"p-value": "{:,.4f}".format} if "p-value" in summary_rows.columns else None
+					formatters={"p-value": "{:,.4f}".format}
+					if "p-value" in summary_rows.columns
+					else None,
 				)
 			)
 
@@ -297,7 +302,9 @@ def main() -> None:
 			results.to_latex(
 				index=False,
 				float_format="%.2f",
-				formatters={"p-value": "{:,.4f}".format} if "p-value" in results.columns else None
+				formatters={"p-value": "{:,.4f}".format}
+				if "p-value" in results.columns
+				else None,
 			)
 		)
 

@@ -1,13 +1,19 @@
 """Topological data analysis functions."""
 
 import numpy as np
+
 # import kmapper as km
 from ripser import ripser
 
 
 def compute_persistence(distance_matrix, maxdim=2, thresh=np.inf, coeff=2, n_perm=100):
 	result = ripser(
-		distance_matrix, maxdim=maxdim, thresh=thresh, distance_matrix=True, coeff=coeff, n_perm=n_perm
+		distance_matrix,
+		maxdim=maxdim,
+		thresh=thresh,
+		distance_matrix=True,
+		coeff=coeff,
+		n_perm=n_perm,
 	)
 	return result["dgms"]
 
@@ -46,7 +52,9 @@ class DGMS_loader:
 		if path_csv is None:
 			path_csv = self.path_csv
 		# Conbine duplicate rows with the same dimension, birth, and death by counting occurrences
-		df = df.groupby(["dimension", "birth", "death"]).size().reset_index(name="count")
+		df = (
+			df.groupby(["dimension", "birth", "death"]).size().reset_index(name="count")
+		)
 		df.to_csv(path_csv, index=False)
 
 	def import_(self):
@@ -98,8 +106,7 @@ def bottleneck_distance(dgm1, dgm2):
 	for i in range(n1):
 		for j in range(n2):
 			cost_matrix[i, j] = max(
-				abs(dgm1[i, 0] - dgm2[j, 0]),
-				abs(dgm1[i, 1] - dgm2[j, 1])
+				abs(dgm1[i, 0] - dgm2[j, 0]), abs(dgm1[i, 1] - dgm2[j, 1])
 			)
 
 	# Top-right block (n1 x n1): match dgm1 points to their diagonal slots
@@ -136,6 +143,7 @@ def wasserstein_distance(
 	return float(
 		pot_wasserstein_distance(dgm_a, dgm_b, order=order, internal_p=internal_p)
 	)
+
 
 def load_diagrams_by_dimension(path: str) -> dict[int, np.ndarray]:
 	"""Load persistence diagrams and preserve their explicit dimensions."""

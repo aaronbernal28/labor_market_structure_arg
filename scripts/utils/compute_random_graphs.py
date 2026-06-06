@@ -96,14 +96,12 @@ def main() -> None:
 	)
 
 	graph = gc.clean_graph(graph)
-	#metrics_empirical = metrics.summarize_graph(graph)
+	# metrics_empirical = metrics.summarize_graph(graph)
 	outputs_cm = [snakemake.output["cm"]]
 	outputs_ecm = [snakemake.output["ecm"]]
 	num_realizations = 1
 
-	node_count, edge_count, _, _, _, avg_degree = (
-		metrics.get_empirical_stats(graph)
-	)
+	node_count, edge_count, _, _, _, avg_degree = metrics.get_empirical_stats(graph)
 
 	strength_seq = _strength_sequence(graph, list(graph.nodes()), wcm_scale)
 
@@ -126,7 +124,7 @@ def main() -> None:
 			f"WCM stub sum: {sum(strength_seq)}",
 		],
 	)
-	#log.add_graph_metrics(log_lines, "Empirical backbone metrics", metrics_empirical)
+	# log.add_graph_metrics(log_lines, "Empirical backbone metrics", metrics_empirical)
 
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 
@@ -142,7 +140,9 @@ def main() -> None:
 
 	for idx in range(num_realizations):
 		seed = seed_base + int(snakemake.wildcards.get("i", idx))
-		print(f"Generating random graphs (realization {idx + 1}/{num_realizations}). Seed = {seed}.")
+		print(
+			f"Generating random graphs (realization {idx + 1}/{num_realizations}). Seed = {seed}."
+		)
 
 		graph_wcm = _generate_wcm(graph, wcm_scale, seed=seed)
 		_write_graph(graph_wcm, outputs_cm[idx])

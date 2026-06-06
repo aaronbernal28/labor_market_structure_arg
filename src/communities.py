@@ -6,9 +6,9 @@ from typing import Any, Dict, List, Tuple
 
 import networkx as nx
 from networkx.algorithms.community import (
-    girvan_newman,
-    louvain_communities,
-    modularity,
+	girvan_newman,
+	louvain_communities,
+	modularity,
 )
 import numpy as np
 import igraph as ig
@@ -18,14 +18,20 @@ import src.utils as ut
 
 
 def louvain_partition(
-	graph: nx.Graph, resolution: float = 1.0, seed: int = 28, markov_time: float | None = None
+	graph: nx.Graph,
+	resolution: float = 1.0,
+	seed: int = 28,
+	markov_time: float | None = None,
 ) -> Tuple[Dict[int, int], float]:
 	"""
 	Run Louvain and return the partition map plus modularity.
 	"""
 	try:
 		communities_list = louvain_communities(
-			graph, weight="weight", resolution=resolution, seed=seed,# backend="cugraph"
+			graph,
+			weight="weight",
+			resolution=resolution,
+			seed=seed,  # backend="cugraph"
 		)
 	except NotImplementedError as exc:
 		print("Falling back to CPU-based Louvain implementation (may be slower)")
@@ -68,9 +74,7 @@ def best_louvain_partition_random(
 
 	for seed in seeds:
 		# Use deterministic seed derived from base seed
-		partition, score = louvain_partition(
-			graph, resolution=resolution, seed=seed
-		)
+		partition, score = louvain_partition(graph, resolution=resolution, seed=seed)
 
 		if score > best_score:
 			best_partition = partition
@@ -169,46 +173,49 @@ def best_louvain_partition_search(
 
 
 def leiden_partition(
-    graph: nx.Graph, resolution: float = 1.0, seed: int = 28, markov_time: float | None = None
+	graph: nx.Graph,
+	resolution: float = 1.0,
+	seed: int = 28,
+	markov_time: float | None = None,
 ) -> Tuple[Dict[int, int], float]:
-    """
-    Run Leiden using leidenalg and return the partition map plus modularity.
-    """
-    # Convert NetworkX graph to iGraph
-    nodes = sorted(list(graph.nodes()))
-    node_to_idx = {node: i for i, node in enumerate(nodes)}
+	"""
+	Run Leiden using leidenalg and return the partition map plus modularity.
+	"""
+	# Convert NetworkX graph to iGraph
+	nodes = sorted(list(graph.nodes()))
+	node_to_idx = {node: i for i, node in enumerate(nodes)}
 
-    ig_graph = ig.Graph(len(nodes), directed=False)
-    edges = []
-    weights = []
-    for u, v, data in graph.edges(data=True):
-        edges.append((node_to_idx[u], node_to_idx[v]))
-        weights.append(data.get("weight", 1.0))
+	ig_graph = ig.Graph(len(nodes), directed=False)
+	edges = []
+	weights = []
+	for u, v, data in graph.edges(data=True):
+		edges.append((node_to_idx[u], node_to_idx[v]))
+		weights.append(data.get("weight", 1.0))
 
-    ig_graph.add_edges(edges)
-    ig_graph.es["weight"] = weights
+	ig_graph.add_edges(edges)
+	ig_graph.es["weight"] = weights
 
-    # Run Leiden
-    partition = la.find_partition(
-        ig_graph,
-        la.RBConfigurationVertexPartition,
-        resolution_parameter=resolution,
-        weights="weight",
-        seed=seed
-    )
+	# Run Leiden
+	partition = la.find_partition(
+		ig_graph,
+		la.RBConfigurationVertexPartition,
+		resolution_parameter=resolution,
+		weights="weight",
+		seed=seed,
+	)
 
-    # Convert back to dict format: node -> community_id
-    communities = {}
-    communities_list = []
-    for i, comm in enumerate(partition):
-        community_nodes = [nodes[idx] for idx in comm]
-        communities_list.append(set(community_nodes))
-        for node in community_nodes:
-            communities[node] = i
+	# Convert back to dict format: node -> community_id
+	communities = {}
+	communities_list = []
+	for i, comm in enumerate(partition):
+		community_nodes = [nodes[idx] for idx in comm]
+		communities_list.append(set(community_nodes))
+		for node in community_nodes:
+			communities[node] = i
 
-    # Calculate modularity score using NetworkX utility for consistency
-    score = modularity(graph, communities_list, weight="weight", resolution=1.0)
-    return communities, score
+	# Calculate modularity score using NetworkX utility for consistency
+	score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+	return communities, score
 
 
 def best_leiden_partition_random(
@@ -230,9 +237,7 @@ def best_leiden_partition_random(
 
 	for seed in seeds:
 		# Use deterministic seed derived from base seed
-		partition, score = leiden_partition(
-			graph, resolution=resolution, seed=seed
-		)
+		partition, score = leiden_partition(graph, resolution=resolution, seed=seed)
 
 		if score > best_score:
 			best_partition = partition
@@ -366,25 +371,26 @@ def best_partition(
 			best_partition = partition
 	return best_partition, best_score
 
+
 def local_modularity_weighted(
-		graph: nx.Graph,
-		nodes: set[int],
-		gamma: float = 1.0,
-	) -> float:
-		strength_total = sum(dict(graph.degree(weight="weight")).values())
-		if strength_total == 0:
-			return 0.0
+	graph: nx.Graph,
+	nodes: set[int],
+	gamma: float = 1.0,
+) -> float:
+	strength_total = sum(dict(graph.degree(weight="weight")).values())
+	if strength_total == 0:
+		return 0.0
 
-		strength_community = 0.0
-		for node in nodes:
-			strength_community += graph.degree(node, weight="weight")
+	strength_community = 0.0
+	for node in nodes:
+		strength_community += graph.degree(node, weight="weight")
 
-		internal_weight = 0.0
-		for node in nodes:
-			for neighbor in graph.neighbors(node):
-				if neighbor in nodes:
-					internal_weight += graph[node][neighbor].get("weight", 1.0)
+	internal_weight = 0.0
+	for node in nodes:
+		for neighbor in graph.neighbors(node):
+			if neighbor in nodes:
+				internal_weight += graph[node][neighbor].get("weight", 1.0)
 
-		fraction_real = internal_weight / strength_total
-		fraction_expected = (strength_community / strength_total) ** 2
-		return fraction_real - (gamma * fraction_expected)
+	fraction_real = internal_weight / strength_total
+	fraction_expected = (strength_community / strength_total) ** 2
+	return fraction_real - (gamma * fraction_expected)

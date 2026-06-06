@@ -19,9 +19,11 @@ class EphKey:
 	label: str
 	raw: str
 
+
 def setup_networkx_backend(algorithm: str | None = None) -> None:
 	try:
 		from networkx import config
+
 		if algorithm == "leiden":
 			config.backend_priority = ["cugraph", "networkx"]
 		else:
@@ -177,7 +179,9 @@ def build_community_color_map(
 		for label in labels
 		if not _is_missing_label(label) and str(label) != other_label
 	]
-	np.random.seed(len(set(clean_labels)))  # Seed based on number of unique labels for consistency
+	np.random.seed(
+		len(set(clean_labels))
+	)  # Seed based on number of unique labels for consistency
 	unique_labels = sorted(set(clean_labels), key=_community_sort_key)
 	if unique_labels:
 		gephi_colors_func = pal_gephi(palette=palette)
@@ -189,7 +193,9 @@ def build_community_color_map(
 	else:
 		color_map = {}
 
-	if any(str(label) == other_label for label in labels if not _is_missing_label(label)):
+	if any(
+		str(label) == other_label for label in labels if not _is_missing_label(label)
+	):
 		color_map[other_label] = "gray"
 	return color_map
 
@@ -260,7 +266,9 @@ def original_id(id: int, class_index: int, max_caes_id: int | None = None) -> in
 	elif class_index == 0:
 		return original_ciuo_id(id, max_caes_id)
 	else:
-		raise ValueError(f"Invalid class index {class_index}. Must be 0 (CIUO) or 1 (CAES).")
+		raise ValueError(
+			f"Invalid class index {class_index}. Must be 0 (CIUO) or 1 (CAES)."
+		)
 
 
 def desambiated_caes_id(id: int) -> int:
@@ -345,9 +353,7 @@ def relabel_communities_by_observations(
 	# Sort communities by their total aggregated weight, using old_id as tie-break for reproducibility
 	is_desc = order.lower() == "desc"
 	sorted_communities = sorted(
-		community_weights.items(),
-		key=lambda item: (item[1], item[0]),
-		reverse=is_desc
+		community_weights.items(), key=lambda item: (item[1], item[0]), reverse=is_desc
 	)
 
 	# Create mapping from old community ID to new ID
@@ -432,7 +438,9 @@ def filter_communities_by_observations(
 	}
 
 
-def compute_node_neighbor_mean(G, feature_map: Mapping, *, weight_attr: str = "weight") -> dict:
+def compute_node_neighbor_mean(
+	G, feature_map: Mapping, *, weight_attr: str = "weight"
+) -> dict:
 	"""Compute weighted (or unweighted) average neighbor feature for each node.
 
 	Returns a dict mapping node -> average(neighbor_feature_values). Only nodes
@@ -490,7 +498,7 @@ def compute_node_sizes(
 			weighted_degree[v] += w
 
 	size_map = {
-		node: max(min_size, weighted_degree.get(node, 0.0) * float(factor)*5.0)
+		node: max(min_size, weighted_degree.get(node, 0.0) * float(factor) * 5.0)
 		for node in nodes_list
 	}
 	return size_map
@@ -549,6 +557,7 @@ def get_top_mean_assortativity_communities(
 	sorted_comms = sorted(comm_mean.items(), key=lambda kv: kv[1], reverse=reverse)
 	top = [comm for comm, _ in sorted_comms[:top_k]]
 	return top
+
 
 def get_markov_time(resolution: float) -> float:
 	"""

@@ -16,7 +16,7 @@ TRYS = 20
 def main() -> None:
 	graph = nx.read_gexf(snakemake.input[0], node_type=int)
 	algorithms = sorted(list(snakemake.params["algorithms"]))
-	#utils.setup_networkx_backend(algorithm=algorithms[1])
+	# utils.setup_networkx_backend(algorithm=algorithms[1])
 	resolution = float(snakemake.wildcards["resolution"])
 
 	rng = np.random.default_rng(snakemake.config["seed"])
@@ -63,7 +63,7 @@ def main() -> None:
 					graph,
 					seed=seed,
 					resolution=resolution,
-					num_trials=1, # Infomap's "trials" parameter is not a random seed, so we set it to 1 and rely on the seed for randomness
+					num_trials=1,  # Infomap's "trials" parameter is not a random seed, so we set it to 1 and rely on the seed for randomness
 				)
 			else:
 				raise NotImplementedError(
@@ -88,11 +88,13 @@ def main() -> None:
 				],
 				ignore_index=True,
 			)
-			#communities = utils.relabel_communities_by_observations(
-			#	communities, order="desc"
-			#)
+			# communities = utils.relabel_communities_by_observations(
+			# communities, order="desc"
+			# )
 			nodes_sorted = sorted(list(graph.nodes()))
-			nodes_sorted_communities_labels.append([communities[n] for n in nodes_sorted])
+			nodes_sorted_communities_labels.append(
+				[communities[n] for n in nodes_sorted]
+			)
 
 		# Compute pairwise AMI/NMI between all partitions for this algorithm/resolution
 		print(

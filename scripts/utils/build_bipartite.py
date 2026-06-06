@@ -28,9 +28,7 @@ def main() -> None:
 		ciuo_partition=snakemake.config["ciuo"]["partition"],
 	)
 
-	translation = utils.get_config_section(
-		snakemake.config, "translation"
-	)
+	translation = utils.get_config_section(snakemake.config, "translation")
 	label_caes = utils.translate_label("Sector", translation)
 	label_ciuo = utils.translate_label("Ocupacion", translation)
 	partition_labels = {

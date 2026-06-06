@@ -24,7 +24,7 @@ def main() -> None:
 	graph = graph.subgraph(nodelist_df[id_col].unique()).copy()
 
 	algorithm = snakemake.wildcards["algorithm"].lower()
-	#utils.setup_networkx_backend(algorithm=algorithm)
+	# utils.setup_networkx_backend(algorithm=algorithm)
 
 	if algorithm == "louvain":
 		algorithm_func = comm.best_louvain_partition_random
@@ -45,13 +45,13 @@ def main() -> None:
 	)
 
 	print(f"Raw communities detected: {len(set(communities.values()))}")
-	#n_obs = nodelist_df.set_index(id_col)["n_obs"].to_dict()
-	#communities = utils.relabel_communities_by_observations(
-	#	communities,
-	#	n_obs,
-	#	order="desc",
-	#	num_communities=None # snakemake.config["community"]["max"][class_],
-	#)
+	# n_obs = nodelist_df.set_index(id_col)["n_obs"].to_dict()
+	# communities = utils.relabel_communities_by_observations(
+	# communities,
+	# n_obs,
+	# order="desc",
+	# num_communities=None # snakemake.config["community"]["max"][class_],
+	# )
 	communities = utils.filter_communities_by_size(communities, min_size=3)
 	num_communities = len(set(communities.values()))
 
@@ -117,7 +117,9 @@ def main() -> None:
 			continue
 
 		community_nodes = set(group[id_col].astype(int).tolist())
-		local_modularity = comm.local_modularity_weighted(graph, community_nodes, gamma=1.0)
+		local_modularity = comm.local_modularity_weighted(
+			graph, community_nodes, gamma=1.0
+		)
 
 		dominant_groups_str = "NA"
 		if group_col and group_col in group.columns:
@@ -125,9 +127,9 @@ def main() -> None:
 			dominant_groups_items = [
 				f"{idx} ({count})" for idx, count in dominant_groups.items()
 			]
-			dominant_groups_str = "\\makecell[l]{" + " \\\\ ".join(
-				dominant_groups_items
-			) + "}"
+			dominant_groups_str = (
+				"\\makecell[l]{" + " \\\\ ".join(dominant_groups_items) + "}"
+			)
 
 		female_mean = _mean_or_none(group, "female_pct")
 		public_mean = _mean_or_none(group, "public_sector_pct")
@@ -157,10 +159,10 @@ def main() -> None:
 	nodelist_df = nodelist_df.dropna(subset=["community"])
 	# Filtering greater that Cxx groups:
 	nodelist_df = dl.filter_communities(
-			nodelist_df,
-			feature_col="community",
-			max_code=snakemake.config["community"]["max"].get(class_, 98),
-		)
+		nodelist_df,
+		feature_col="community",
+		max_code=snakemake.config["community"]["max"].get(class_, 98),
+	)
 	community_map = nodelist_df.set_index(id_col)["community"].to_dict()
 
 	pl.plot_community_boxplots(
@@ -195,7 +197,7 @@ def main() -> None:
 		df_index=nodelist_idx,
 		group_col=group_col,
 		community_map=community_map,
-		title=f"{class_.upper()} - Distribucion por comunidad ({algorithm})",
+		title="",
 		output_path=snakemake.output[1],
 		group_color_map=group_color_map,
 		legend_title=group_col,

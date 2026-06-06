@@ -55,8 +55,6 @@ def _edge_alpha_from_weight(
 	alpha_min: float = 0.05,
 ) -> float:
 	"""Map an edge weight to an alpha in [alpha_min, min(alpha_max, 0.6)]."""
-	#print(f"Calculating edge alpha for weight {weight} with max weight {max_weight}")
-	#print(f"Using alpha range [{alpha_min}, {alpha_max}]")
 	alpha_cap = min(float(alpha_max), 0.6)
 	alpha_floor = max(0.0, float(alpha_min))
 	if alpha_floor > alpha_cap:
@@ -138,12 +136,16 @@ def plot_heatmap(
 
 def _wrap_labels(df: pd.DataFrame) -> pd.DataFrame:
 	wrapped = df.copy()
+	# Text Wrapping Configuration
 	col_wrap_width = 15
 	idx_wrap_width = 35
-	wrapped.columns = [
-		textwrap.fill(str(c), width=col_wrap_width) for c in wrapped.columns
+
+	wrapped_columns = [
+		textwrap.fill(str(col), width=col_wrap_width) for col in df.columns
 	]
-	wrapped.index = [textwrap.fill(str(i), width=idx_wrap_width) for i in wrapped.index]
+	wrapped_index = [textwrap.fill(str(idx), width=idx_wrap_width) for idx in df.index]
+	wrapped.columns = wrapped_columns
+	wrapped.index = wrapped_index
 	return wrapped
 
 
@@ -153,11 +155,11 @@ def _style_heatmap_axes(ax, title: str) -> None:
 	plt.xticks(rotation=0)
 	plt.yticks(rotation=0)
 	ax.set_yticklabels(ax.get_yticklabels(), ha="left")
-	ax.tick_params(axis="y", pad=12)
+	ax.tick_params(axis="y", pad=190)
 	ax.tick_params(left=False, top=False)
 	ax.set_xlabel("")
 	ax.set_ylabel("")
-	ax.set_title(title, pad=12)
+	ax.set_title(title)
 
 
 def plot_rejection_heatmap(
@@ -169,6 +171,7 @@ def plot_rejection_heatmap(
 	output_path: Path,
 	save: bool = True,
 	figsize: tuple | None = None,
+	title: str = "",
 ) -> None:
 	"""Heatmap of p-values: black below Bonferroni threshold, YlOrRd above it."""
 	from matplotlib.colors import ListedColormap
@@ -184,11 +187,6 @@ def plot_rejection_heatmap(
 	df = pd.DataFrame(p_values, index=rownames, columns=colnames)
 	df = _wrap_labels(df)
 	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
-	n_rejected = int(rejected.sum())
-	title = (
-		f"Prueba de Wald - p-valores (Bonferroni alpha/d = {bonferroni_threshold:.3g})\n"
-		f"n rechazadas = {n_rejected} / {rejected.size} ({100 * n_rejected / rejected.size:.1f}%)"
-	)
 
 	n_black = 25
 	n_total = max(256, int(round(n_black / bonferroni_threshold)))
@@ -241,6 +239,7 @@ def plot_delta_heatmap(
 	output_path: Path,
 	save: bool = True,
 	figsize: tuple | None = None,
+	title: str = "",
 ) -> None:
 	"""Diverging heatmap showing delta_hat annotations in scientific notation."""
 
@@ -256,7 +255,6 @@ def plot_delta_heatmap(
 	df = _wrap_labels(df)
 	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
 	abs_max = np.max(np.abs(delta_hat))
-	title = "Diferencia estimada delta = p(ENES 2019) - p(ESAyPP 2021)"
 	fig, ax = plt.subplots(figsize=figsize)
 	sns.heatmap(
 		df,
@@ -284,6 +282,7 @@ def plot_bootstrap_se_heatmap(
 	output_path: Path,
 	save: bool = True,
 	figsize: tuple | None = None,
+	title: str = "",
 ) -> None:
 	"""Heatmap of bootstrap SE estimates (B=1000) for the delta proportions."""
 
@@ -298,7 +297,6 @@ def plot_bootstrap_se_heatmap(
 	df = pd.DataFrame(se_boot, index=rownames, columns=colnames)
 	df = _wrap_labels(df)
 	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
-	title = "Bootstrap SE de delta (B=1000)"
 	fig, ax = plt.subplots(figsize=figsize)
 	sns.heatmap(
 		df,
@@ -391,9 +389,7 @@ def draw_bipartite_by_color(
 		}
 		print("Using custom node size map for sizing.")
 	else:
-		size_map = {
-			node: float(degree) for node, degree in graph.degree()
-		}
+		size_map = {node: float(degree) for node, degree in graph.degree()}
 		print("No node size map provided; using degree for sizing.")
 
 	caes_nodes = [
@@ -415,7 +411,9 @@ def draw_bipartite_by_color(
 		pos,
 		nodelist=caes_nodes,
 		node_color=[color_map.get(int(node), LIGTHGRAY) for node in caes_nodes],
-		node_size=[np.sqrt(size_map[node]) * factor_node_size_caes for node in caes_nodes],
+		node_size=[
+			np.sqrt(size_map[node]) * factor_node_size_caes for node in caes_nodes
+		],
 		node_shape="^",
 		alpha=0.7,
 		edgecolors="#000000",
@@ -426,7 +424,9 @@ def draw_bipartite_by_color(
 		pos,
 		nodelist=ciuo_nodes,
 		node_color=[color_map.get(int(node), LIGTHGRAY) for node in ciuo_nodes],
-		node_size=[np.sqrt(size_map[node]) * factor_node_size_ciuo for node in ciuo_nodes],
+		node_size=[
+			np.sqrt(size_map[node]) * factor_node_size_ciuo for node in ciuo_nodes
+		],
 		node_shape="o",
 		alpha=0.7,
 		edgecolors="#000000",
@@ -873,10 +873,7 @@ def plot_projection_by_group(
 		for node in graph.nodes()
 	}
 	if node_size_map is not None:
-		size_map = {
-			node: float(node_size_map.get(node, 1.0))
-			for node in graph.nodes()
-		}
+		size_map = {node: float(node_size_map.get(node, 1.0)) for node in graph.nodes()}
 	else:
 		size_map = ut.compute_node_sizes(
 			graph,
@@ -1098,7 +1095,11 @@ def plot_projection_gradient(
 	sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
 	sm.set_array([])
 	cbar = fig.colorbar(sm, ax=ax, shrink=0.4, pad=-0.15)
-	cbar.set_label(ut.translate_label(colorbar_label, translation) if translation else colorbar_label)
+	cbar.set_label(
+		ut.translate_label(colorbar_label, translation)
+		if translation
+		else colorbar_label
+	)
 
 	if title is not None:
 		ax.set_title(ut.translate_label(title, translation) if translation else title)
@@ -1185,8 +1186,8 @@ def plot_stacked_by_group(
 	)
 
 	# Format y-axis labels as C0, C1, ...
-	#yticks = ax.get_yticks()
-	#ax.set_yticklabels([f"C{int(y)}" for y in yticks])
+	# yticks = ax.get_yticks()
+	# ax.set_yticklabels([f"C{int(y)}" for y in yticks])
 
 	# Remove axis borders
 	ax.spines["top"].set_visible(False)
@@ -1476,6 +1477,7 @@ def mean_color(colors):
 	print(res)
 	return res
 
+
 def color_letra_map_caes(
 	caes_df: pd.DataFrame, letra_col: str, base_color_col: str
 ) -> Dict[str, str]:
@@ -1525,18 +1527,15 @@ def color_ciuo3cat_map_ciuo(
 	if palette is None:
 		try:
 			import yaml
+
 			with open("config.yaml", "r") as f:
 				palette = yaml.safe_load(f).get("palette", {}).get(cat_col)
 		except Exception:
 			pass
 	if palette:
-		labels = (
-			ciuo_df[cat_col].dropna().astype(str).unique().tolist()
-		)
+		labels = ciuo_df[cat_col].dropna().astype(str).unique().tolist()
 		labels = sorted(labels)
-		return {
-			label: palette[idx % len(palette)] for idx, label in enumerate(labels)
-		}
+		return {label: palette[idx % len(palette)] for idx, label in enumerate(labels)}
 	return ciuo_df.groupby(cat_col)[base_color_col].apply(mean_color).to_dict()
 
 
@@ -1581,6 +1580,8 @@ def plot_top_n_bar(
 	ax.xaxis.set_major_formatter(
 		plt.FuncFormatter(lambda x, loc: "{:,}".format(int(x)))
 	)
+	# Sparcer x-axis ticks
+	ax.xaxis.set_major_locator(plt.MaxNLocator(nbins=5, integer=True))
 
 	# Remove axis borders
 	ax.spines["top"].set_visible(False)
@@ -1749,7 +1750,7 @@ def plot_alpha_sensitivity(
 	color_clust_weighted = "mediumseagreen"
 	color_mod = "darkorchid"
 	color_lcc = "firebrick"
-	reference_alpha=round(reference_alpha, 4)
+	reference_alpha = round(reference_alpha, 4)
 
 	(l1,) = ax.plot(
 		alphas, nodes_with_edges, color=color_nodes, linewidth=2, label="Nodos"
@@ -1811,7 +1812,7 @@ def plot_alpha_sensitivity(
 	)
 	lines.append(vline)
 
-	ax.legend(handles=lines)
+	ax.legend(handles=lines, loc="upper left")
 	ax.set_title(title)
 	ax.set_xlabel("Alfa")
 	ax.tick_params(axis="y")
@@ -1883,7 +1884,11 @@ def plot_alpha_sensitivity_multi_series(
 	use_date_scale = all(ts is not None for ts in series_dates)
 	if use_date_scale:
 		series_date_nums = np.array(
-			[mdates.date2num(ts.to_pydatetime()) for ts in series_dates if ts is not None],
+			[
+				mdates.date2num(ts.to_pydatetime())
+				for ts in series_dates
+				if ts is not None
+			],
 			dtype=float,
 		)
 		norm = mpl.colors.Normalize(
@@ -1966,14 +1971,16 @@ def plot_alpha_sensitivity_multi_series(
 			)
 
 	# Metric legend only (avoid giant eph_file legend)
-	ax.legend(handles=proxy_lines, loc="best")
+	ax.legend(handles=proxy_lines, loc="upper left")
 
 	# Colorbar encodes series order (chronological index)
 	sm = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.Greys)
 	sm.set_array([])
 	cbar = fig.colorbar(sm, ax=ax, pad=0.02)
 	if use_date_scale:
-		locator = mdates.AutoDateLocator(minticks=2, maxticks=max(2, int(max_cbar_ticks)))
+		locator = mdates.AutoDateLocator(
+			minticks=2, maxticks=max(2, int(max_cbar_ticks))
+		)
 		cbar.ax.yaxis.set_major_locator(locator)
 		cbar.ax.yaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
 		cbar.set_label("EPH (fecha)")
@@ -2041,12 +2048,12 @@ def compute_and_plot_edge_correlation(
 		return
 
 	if highlight_communities is None:
-		#highlight_set = ut.get_top_mean_assortativity_communities(
-		#	G, feature_map, community_map, top_k=7, order="desc"
-		#) + ut.get_top_mean_assortativity_communities(
-		#	G, feature_map, community_map, top_k=2, order="asc"
-		#)
-		highlight_set = set([f'C{i:02d}' for i in range(11)])
+		# highlight_set = ut.get_top_mean_assortativity_communities(
+		# G, feature_map, community_map, top_k=7, order="desc"
+		# ) + ut.get_top_mean_assortativity_communities(
+		# G, feature_map, community_map, top_k=2, order="asc"
+		# )
+		highlight_set = set([f"C{i:02d}" for i in range(11)])
 	else:
 		highlight_set = set(highlight_communities)
 
@@ -2063,9 +2070,7 @@ def compute_and_plot_edge_correlation(
 	# Plot
 	plt.figure(figsize=figsize)
 	raw_node_sizes_plot = [
-		float(
-			np.sqrt(raw_node_sizes.get(u, 1.0)) * factor_node_size
-		)
+		float(np.sqrt(raw_node_sizes.get(u, 1.0)) * factor_node_size)
 		for u in plotted_nodes
 	]
 	node_colors = [_node_color(u) for u in plotted_nodes]
@@ -2152,11 +2157,7 @@ def compute_and_plot_edge_correlation(
 	else:
 		print("Correlacion nula: el genero se distribuye aleatoriamente en la red.")
 
-	plt.title(
-		f"{title}\nAsortatividad (Pearson r): {pearson_r:.4f} (p={p_value:.4e})"
-		if title
-		else None,
-	)
+	plt.title("")
 	plt.xlabel("X_i")
 	plt.ylabel("Y_i")
 	# Set y-limits to be the same as x-limits to maintain a square aspect ratio
@@ -2262,9 +2263,7 @@ def plot_community_boxplots(
 			legend=False,
 			order=sorted(df_nodes["community"].unique(), reverse=True),
 		)
-		ax.set_title(
-			f"{class_.upper()} - {metric_title} {dist_suffix} ({algorithm})"
-		)
+		ax.set_title(f"{class_.upper()} - {metric_title} {dist_suffix} ({algorithm})")
 		ax.set_xlabel(metric_title)
 		ax.set_ylabel(community_label)
 
@@ -2289,7 +2288,9 @@ def plot_correlation_matrix(
 	cols = [c for c in cols if c in df.columns]
 	corr = df[cols].corr()
 	if translation:
-		display_map = {col: ut.translate_label(col, translation) for col in corr.columns}
+		display_map = {
+			col: ut.translate_label(col, translation) for col in corr.columns
+		}
 		corr = corr.rename(index=display_map, columns=display_map)
 
 	fig, ax = plt.subplots(figsize=(8, 6))
@@ -2309,6 +2310,7 @@ def plot_weighted_histograms(
 	title="Feature Distributions",
 	output_path=None,
 	translation: Mapping[str, str] | None = None,
+	subtitle: bool = False,
 ):
 	cols = [c for c in features if c in df.columns]
 	n_cols = len(cols)
@@ -2341,7 +2343,10 @@ def plot_weighted_histograms(
 			color="steelblue",
 			edgecolor="black",
 		)
-		ax.set_title(f"Distribution of {display_col}")
+		if subtitle:
+			ax.set_title(f"Distribution of {display_col}")
+		else:
+			ax.set_title("")
 		ax.set_xlabel(display_col)
 		if weights is not None:
 			ax.set_ylabel("Weighted Count")

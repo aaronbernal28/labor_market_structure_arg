@@ -34,9 +34,7 @@ def main() -> None:
 	nodelist = snakemake.config[class_name]
 	id = nodelist["id"]
 	max_caes_id = snakemake.config["max_caes_id"]
-	palette_map = utils.get_config_section(
-		snakemake.config, "palette"
-	)
+	palette_map = utils.get_config_section(snakemake.config, "palette")
 
 	if class_name == "caes":
 		df_nodelist = dl.load_nodelist_caes(

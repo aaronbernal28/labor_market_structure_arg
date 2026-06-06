@@ -103,7 +103,9 @@ def main() -> None:
 	df_enes["total_income"] = np.log1p(df_enes["total_income"])
 	df_enes[output_id_caes] = df_enes[output_id_caes].astype(int)
 	df_enes[output_id_ciuo] = df_enes[output_id_ciuo].astype(int)
-	df_enes["nivel_ed"] = pd.to_numeric(df_enes["nivel_ed"], errors="coerce").clip(lower=0, upper=10)
+	df_enes["nivel_ed"] = pd.to_numeric(df_enes["nivel_ed"], errors="coerce").clip(
+		lower=0, upper=10
+	)
 
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)

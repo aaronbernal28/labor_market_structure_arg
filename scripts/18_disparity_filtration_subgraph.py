@@ -71,9 +71,7 @@ def main() -> None:
 
 	# Set up plotting
 	fig, axes = plt.subplots(1, len(alphas), figsize=(3 * len(alphas), 5))
-	fig.suptitle(
-		f"Disparity Filtration (Focal Community: {target_comm})", y=1.05, fontsize=16
-	)
+	fig.suptitle("")
 
 	# Fixed layout across all subgraphs
 	pos = {}
@@ -219,7 +217,14 @@ def main() -> None:
 				node_collection.set_zorder(4)
 
 		# Labeled highlighting ONLY the new nodes (or all nodes if alpha is small enough)
-		current_labels = {n: utils.original_id(int(labels_map.get(n, str(n))), class_index=snakemake.config[class_].get('partition', 1), max_caes_id=snakemake.config.get('max_caes_id')) for n in new_nodes}
+		current_labels = {
+			n: utils.original_id(
+				int(labels_map.get(n, str(n))),
+				class_index=snakemake.config[class_].get("partition", 1),
+				max_caes_id=snakemake.config.get("max_caes_id"),
+			)
+			for n in new_nodes
+		}
 		if current_labels:
 			text_dict = nx.draw_networkx_labels(
 				filtered_G,

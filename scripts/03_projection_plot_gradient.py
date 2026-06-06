@@ -14,7 +14,7 @@ def main() -> None:
 	id_col = snakemake.config[class_]["id"]
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
-	#graph_metrics = metrics.summarize_graph(graph)
+	# graph_metrics = metrics.summarize_graph(graph)
 
 	feature = getattr(snakemake.wildcards, "continuous_feature", None)
 	if feature is None:
@@ -99,7 +99,7 @@ def main() -> None:
 		row_count=len(pos_df),
 		column_count=len(pos_df.columns),
 	)
-	#log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
+	# log.add_graph_metrics(log_lines, "Projection metrics", graph_metrics)
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 

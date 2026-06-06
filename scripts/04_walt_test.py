@@ -85,16 +85,31 @@ def weighted_wald_test_comparison_proportions(
 	print(f"Min p-value: {np.min(p_values):.2e}")
 
 	return {
-		"delta_hat": delta_hat, "se": se, "W": W, "p_values": p_values,
-		"bonferroni_threshold": bonferroni_threshold, "rejected": rejected,
-		"n1": n1, "n2": n2, "p1": p1, "p2": p2, "counts1": counts1, "counts2": counts2,
+		"delta_hat": delta_hat,
+		"se": se,
+		"W": W,
+		"p_values": p_values,
+		"bonferroni_threshold": bonferroni_threshold,
+		"rejected": rejected,
+		"n1": n1,
+		"n2": n2,
+		"p1": p1,
+		"p2": p2,
+		"counts1": counts1,
+		"counts2": counts2,
 	}
 
 
 def weighted_bootstrap_se(
-	df1: pd.DataFrame, df2: pd.DataFrame, caes_col: str, ciuo_col: str,
-	weight_col: str, rownames: list[str], colnames: list[str],
-	B: int = 1000, seed: int = 28,
+	df1: pd.DataFrame,
+	df2: pd.DataFrame,
+	caes_col: str,
+	ciuo_col: str,
+	weight_col: str,
+	rownames: list[str],
+	colnames: list[str],
+	B: int = 1000,
+	seed: int = 28,
 ) -> np.ndarray:
 	deltas = np.zeros((B, len(rownames), len(colnames)))
 
@@ -106,7 +121,9 @@ def weighted_bootstrap_se(
 
 	for b in range(B):
 		s1 = df1.sample(n=n1, replace=True, weights=prob1, random_state=seed + 2 * b)
-		s2 = df2.sample(n=n2, replace=True, weights=prob2, random_state=seed + 2 * b + 1)
+		s2 = df2.sample(
+			n=n2, replace=True, weights=prob2, random_state=seed + 2 * b + 1
+		)
 
 		ct1 = (
 			pd.crosstab(s1[caes_col], s1[ciuo_col])
@@ -218,17 +235,31 @@ def main() -> None:
 			B=bootstrap_B,
 		)
 	else:
-		print("Using unweighted proportions and unweighted bootstrap (ponderation missing).")
+		print(
+			"Using unweighted proportions and unweighted bootstrap (ponderation missing)."
+		)
 		test_results = dl.wald_test_comparison_proportions(
-			df_2019, df_2021, caes_col, ciuo_col, rownames, colnames, alpha=alpha,
+			df_2019,
+			df_2021,
+			caes_col,
+			ciuo_col,
+			rownames,
+			colnames,
+			alpha=alpha,
 		)
 		se_boot = dl.bootstrap_se(
-			df_2019, df_2021, caes_col, ciuo_col, rownames, colnames, B=bootstrap_B,
+			df_2019,
+			df_2021,
+			caes_col,
+			ciuo_col,
+			rownames,
+			colnames,
+			B=bootstrap_B,
 		)
 
 	# Extract first digit labels for better readability in plots
-	rownames_plot = [label.split(".")[0] for label in rownames]
-	colnames_plot = [label.split(".")[0] for label in colnames]
+	rownames_plot = rownames  # [label.split(".")[0] for label in rownames]
+	colnames_plot = colnames  # [label.split(".")[0] for label in colnames]
 
 	pl.plot_bootstrap_se_heatmap(
 		se_boot,
@@ -330,12 +361,14 @@ def main() -> None:
 		r"\toprule",
 		r"\textbf{\gls{caes}} & \textbf{\gls{ciuo}} & \textbf{$\hat{\delta}$} &",
 		r"\textbf{SE boot} & \textbf{p-valor} & \textbf{sig.} \\",
-		r"\midrule"
+		r"\midrule",
 	]
 
 	for _, row in top5_df.iterrows():
 		latex_lines.append(f"{row[caes_col]} &")
-		latex_lines.append(f"{row[ciuo_col]} & {row['delta_hat']:.6f} & {row['se_boot']:.6f} & {row['p_value']:e} & {row['sig']} \\\\")
+		latex_lines.append(
+			f"{row[ciuo_col]} & {row['delta_hat']:.6f} & {row['se_boot']:.6f} & {row['p_value']:e} & {row['sig']} \\\\"
+		)
 
 	latex_lines.append(r"\bottomrule")
 	latex_lines.append(r"\end{tabular}%")

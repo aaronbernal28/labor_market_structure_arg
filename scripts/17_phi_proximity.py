@@ -10,7 +10,9 @@ import seaborn as sns
 snakemake: Any
 
 
-def _sample_pairs(nodes: list[int], sample_size: int | None, seed: int) -> list[tuple[int, int]]:
+def _sample_pairs(
+	nodes: list[int], sample_size: int | None, seed: int
+) -> list[tuple[int, int]]:
 	if len(nodes) < 2:
 		return []
 
@@ -48,7 +50,9 @@ def _build_neighbor_maps(
 	for node in nodes:
 		nb = graph[node]
 		neighbors[node] = set(nb)
-		weights[node] = {nbr: float(data.get("weight", 1.0)) for nbr, data in nb.items()}
+		weights[node] = {
+			nbr: float(data.get("weight", 1.0)) for nbr, data in nb.items()
+		}
 	return neighbors, weights
 
 
@@ -67,9 +71,7 @@ def main() -> None:
 	other_partition = 1 - partition
 
 	nodes = [
-		node
-		for node in graph.nodes
-		if graph.nodes[node].get("bipartite") == partition
+		node for node in graph.nodes if graph.nodes[node].get("bipartite") == partition
 	]
 	other_nodes = [
 		node
@@ -133,7 +135,9 @@ def main() -> None:
 	if results_df.empty:
 		raise ValueError("No valid node pairs found for phi proximity plots.")
 
-	figsize = tuple(snakemake.config.get("figsizes", {}).get("edge_correlation", (6, 6)))
+	figsize = tuple(
+		snakemake.config.get("figsizes", {}).get("edge_correlation", (6, 6))
+	)
 
 	fig, ax = plt.subplots(figsize=figsize)
 	sns.scatterplot(
@@ -145,7 +149,7 @@ def main() -> None:
 		edgecolor="none",
 		ax=ax,
 	)
-	ax.set_title("Phi weighted vs unweighted")
+	ax.set_title("")
 	ax.set_xlabel("phi_unweighted")
 	ax.set_ylabel("phi_weighted")
 	phi_out = Path(snakemake.output[0])

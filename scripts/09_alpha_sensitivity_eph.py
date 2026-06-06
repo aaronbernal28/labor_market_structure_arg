@@ -85,7 +85,9 @@ def main() -> None:
 		nodes_with_edges = np.array(metrics_data["nodes_with_edges"])
 		edge_counts = np.array(metrics_data["edge_counts"])
 		clustering_coeffs = np.array(metrics_data["clustering_coeffs"])
-		clustering_coeffs_weighted = np.array(metrics_data["clustering_coeffs_weighted"])
+		clustering_coeffs_weighted = np.array(
+			metrics_data["clustering_coeffs_weighted"]
+		)
 		nodes_largest_cc = np.array(metrics_data["nodes_largest_cc"])
 		reference_alpha = round(float(metrics_data["reference_alpha"]), 4)
 
@@ -100,7 +102,7 @@ def main() -> None:
 		if isinstance(gm, dict):
 			graph_metrics[eph_file] = gm
 
-	title = f"EPH - {class_} - {weight_function}"
+	title = ""
 	pl.plot_alpha_sensitivity_multi_series(
 		alphas=alphas,
 		series_labels=eph_files_sorted,

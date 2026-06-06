@@ -10,9 +10,7 @@ def main() -> None:
 	plt.style.use("src/styles/publication.mplstyle")
 	meta_caes = snakemake.config["caes"]
 	meta_ciuo = snakemake.config["ciuo"]
-	translation = utils.get_config_section(
-		snakemake.config, "translation"
-	)
+	translation = utils.get_config_section(snakemake.config, "translation")
 	df_nodelist_caes = pd.read_csv(snakemake.input[1], dtype={meta_caes["id"]: int})
 	df_nodelist_ciuo = pd.read_csv(snakemake.input[2], dtype={meta_ciuo["id"]: int})
 	df_individual = pd.read_csv(snakemake.input[0])
@@ -28,7 +26,7 @@ def main() -> None:
 		val_col=val_col_caes,
 		color_col="",
 		title="",
-		xlabel="Workers",
+		xlabel=utils.translate_label("Workers", translation),
 		figsize=snakemake.config["figsizes"]["top_n_bar"],
 		output_path=snakemake.output[0],
 		save=True,
@@ -45,7 +43,7 @@ def main() -> None:
 		val_col=val_col_ciuo,
 		color_col="",
 		title="",
-		xlabel="Workers",
+		xlabel=utils.translate_label("Workers", translation),
 		figsize=snakemake.config["figsizes"]["top_n_bar"],
 		output_path=snakemake.output[1],
 		save=True,
@@ -60,7 +58,7 @@ def main() -> None:
 		df=df_individual,
 		features=features_to_plot,
 		calib_col=calib_col,
-		title=f"Feature Distributions ({dataset_name})",
+		title="",
 		output_path=snakemake.output[2],
 		translation=translation,
 	)
@@ -69,7 +67,7 @@ def main() -> None:
 		df=df_individual,
 		features=features_for_corr,
 		calib_col=calib_col,
-		title=f"Correlation Matrix ({dataset_name})",
+		title="",
 		output_path=snakemake.output[3],
 		translation=translation,
 	)

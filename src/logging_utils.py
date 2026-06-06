@@ -79,7 +79,8 @@ def add_graph_metrics(
 		else "Average path length (largest component): N/A",
 		f"Connected components: {metrics.get('connected_components')}",
 		f"Largest component size: {metrics.get('lcc_size')} ({metrics.get('lcc_percent'):.2f}%)"
-		if metrics.get("lcc_size") is not None and metrics.get("lcc_percent") is not None
+		if metrics.get("lcc_size") is not None
+		and metrics.get("lcc_percent") is not None
 		else "Largest component size: N/A",
 		f"Degree assortativity: {metrics.get('degree_assortativity'):.4f}"
 		if metrics.get("degree_assortativity") is not None
@@ -109,9 +110,7 @@ def add_bipartite_degree_strength_latex(
 	entries: list[str] = []
 	entries.append(r"\begin{table}[H]")
 	entries.append(r"\centering")
-	entries.append(
-		r"\begin{tabular}{lrrrrrrrrr}"
-	)
+	entries.append(r"\begin{tabular}{lrrrrrrrrr}")
 	entries.append(r"\hline")
 	entries.append(
 		r"Grupo & n & k\_mean & k\_median & k\_min & k\_max & s\_mean & s\_median & s\_min & s\_max \\"

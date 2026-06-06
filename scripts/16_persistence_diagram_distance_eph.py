@@ -1,4 +1,3 @@
-
 from math import ceil
 from pathlib import Path
 from typing import Any
@@ -55,7 +54,9 @@ def _load_waves() -> tuple[list[str], list[dict[int, np.ndarray]]]:
 		key=lambda item: _wave_sort_key(item[0]),
 	)
 	wave_labels = [label for label, _ in wave_items]
-	wave_diagrams = [topo.load_diagrams_by_dimension(str(path)) for _, path in wave_items]
+	wave_diagrams = [
+		topo.load_diagrams_by_dimension(str(path)) for _, path in wave_items
+	]
 	return wave_labels, wave_diagrams
 
 
@@ -72,7 +73,9 @@ def _compute_distance_matrices(
 	if n_waves == 0:
 		return {}
 
-	max_dim = max((max(diagrams.keys(), default=-1) for diagrams in wave_diagrams), default=-1)
+	max_dim = max(
+		(max(diagrams.keys(), default=-1) for diagrams in wave_diagrams), default=-1
+	)
 	if max_dim < 0:
 		return {}
 
@@ -124,7 +127,9 @@ def _plot_faceted_heatmaps(
 ) -> None:
 	dimensions = sorted(matrices)
 	if not dimensions:
-		raise ValueError("No persistence diagram dimensions were found in the input files.")
+		raise ValueError(
+			"No persistence diagram dimensions were found in the input files."
+		)
 
 	n_cols = min(3, len(dimensions))
 	n_rows = ceil(len(dimensions) / n_cols)
@@ -140,7 +145,11 @@ def _plot_faceted_heatmaps(
 	for ax in axes[len(dimensions) :]:
 		ax.remove()
 
-	valid_maxima = [float(np.nanmax(matrix)) for matrix in matrices.values() if np.isfinite(matrix).any()]
+	valid_maxima = [
+		float(np.nanmax(matrix))
+		for matrix in matrices.values()
+		if np.isfinite(matrix).any()
+	]
 	vmax = max(valid_maxima) if valid_maxima else 1.0
 	if not np.isfinite(vmax) or vmax <= 0:
 		vmax = 1.0
@@ -153,7 +162,9 @@ def _plot_faceted_heatmaps(
 	for ax, dim in zip(plot_axes, dimensions):
 		df = pd.DataFrame(matrices[dim], index=wave_labels, columns=wave_labels)
 		mask = df.isna()
-		local_max = float(np.nanmax(matrices[dim])) if np.isfinite(matrices[dim]).any() else 1.0
+		local_max = (
+			float(np.nanmax(matrices[dim])) if np.isfinite(matrices[dim]).any() else 1.0
+		)
 		if not np.isfinite(local_max) or local_max <= 0:
 			local_max = 1.0
 		local_norm = Normalize(vmin=0.0, vmax=local_max)
@@ -184,14 +195,9 @@ def _plot_faceted_heatmaps(
 			pad=0.04,
 		)
 		if ax == plot_axes[-1]:  # Only label the last colorbar for cleanliness
-			colorbar.set_label(
-				f"{_t(metric.title())} {_t('distance')} (3er Trim)"
-			)
+			colorbar.set_label(f"{_t(metric.title())} {_t('distance')} (3er Trim)")
 
-	fig.suptitle(
-		f"{_t('EPH Persistence Diagram Distance')} - {metric.title()} ({class_}, {weight_function}, {topo_method})",
-		y=0.99,
-	)
+	fig.suptitle("")
 
 	fig.savefig(output_path, bbox_inches="tight")
 	plt.close(fig)
@@ -209,17 +215,17 @@ def main() -> None:
 	wave_labels, wave_diagrams = _load_waves()
 	print(f"Loaded EPH waves in order: {', '.join(wave_labels)}")
 	detected_dims = sorted(
-		{
-			dim
-			for diagrams in wave_diagrams
-			for dim in diagrams.keys()
-		}
+		{dim for diagrams in wave_diagrams for dim in diagrams.keys()}
 	)
-	print(f"Detected persistence dimensions: {', '.join(str(dim) for dim in detected_dims) if detected_dims else 'none'}")
+	print(
+		f"Detected persistence dimensions: {', '.join(str(dim) for dim in detected_dims) if detected_dims else 'none'}"
+	)
 	for label, diagrams_by_dim in zip(wave_labels, wave_diagrams):
 		missing_dims = [dim for dim in detected_dims if dim not in diagrams_by_dim]
 		if missing_dims:
-			print(f"Wave {label} is missing dimensions: {', '.join(str(dim) for dim in missing_dims)}")
+			print(
+				f"Wave {label} is missing dimensions: {', '.join(str(dim) for dim in missing_dims)}"
+			)
 
 	matrices = _compute_distance_matrices(wave_diagrams, wave_labels, metric)
 	if not matrices:
