@@ -71,7 +71,14 @@ def main() -> None:
 	max_caes_id = snakemake.config.get("max_caes_id")
 
 	nodelist = pd.read_csv(snakemake.input[1], dtype={id_col: int})
+
 	community_col = "community"
+	nodelist = dl.filter_communities(
+		nodelist,
+		feature_col=community_col,
+		max_code=snakemake.config["community"]["max"].get(class_, 98),
+	)
+
 	if community_col not in nodelist.columns:
 		raise KeyError(
 			f"Community column '{community_col}' not found in {snakemake.input[1]}"
