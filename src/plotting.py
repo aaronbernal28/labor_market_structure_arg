@@ -2040,11 +2040,12 @@ def compute_and_plot_edge_correlation(
 		return
 
 	if highlight_communities is None:
-		highlight_set = ut.get_top_mean_assortativity_communities(
-			G, feature_map, community_map, top_k=7, order="desc"
-		) + ut.get_top_mean_assortativity_communities(
-			G, feature_map, community_map, top_k=2, order="asc"
-		)
+		#highlight_set = ut.get_top_mean_assortativity_communities(
+		#	G, feature_map, community_map, top_k=7, order="desc"
+		#) + ut.get_top_mean_assortativity_communities(
+		#	G, feature_map, community_map, top_k=2, order="asc"
+		#)
+		highlight_set = set([f'C{i:02d}' for i in range(11)])
 	else:
 		highlight_set = set(highlight_communities)
 

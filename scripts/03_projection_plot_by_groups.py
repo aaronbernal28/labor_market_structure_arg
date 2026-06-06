@@ -33,18 +33,13 @@ def main() -> None:
 		raise ValueError(
 			f"Discrete feature '{discrete_feature}' not found in positions dataframe."
 		)
+
 	if discrete_feature == "community":
-		# max_group_code = snakemake.config["community"]["max"][class_]
-		# threshold_label = utils.label_fn(max_group_code, 2)
-
-		plot_df[discrete_feature] = plot_df[discrete_feature].fillna("Other")
-		# mask = plot_df[discrete_feature] > threshold_label
-		# plot_df.loc[mask, discrete_feature] = "Other"
-		# for col in plot_df.columns:
-		# 	if "color" in col:
-		# 		plot_df.loc[mask, col] = "gray"
-
-		plot_df[discrete_feature] = plot_df[discrete_feature].fillna("Other")
+		plot_df = dl.filter_communities(
+			plot_df,
+			feature_col=discrete_feature,
+			max_code=snakemake.config["community"]["max"].get(class_, 98),
+		)
 
 	group_map = {
 		int(node): group

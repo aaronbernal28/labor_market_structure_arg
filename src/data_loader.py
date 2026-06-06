@@ -8,6 +8,7 @@ import src.utils as ut
 import pandas as pd
 import numpy as np
 from scipy import stats
+import re
 
 from src.plotting import (
 	color_map_caes,
@@ -564,3 +565,24 @@ def bootstrap_se(df1, df2, caes_col, ciuo_col, rownames, colnames, B=1000, seed=
 		)
 		deltas[b] = ct1 / len(df1) - ct2 / len(df2)
 	return deltas.std(axis=0, ddof=1)
+
+
+def df_community_to_id(series: pd.Series) -> pd.Series:
+	"""Convert a Series of labels like 'C01' to integer IDs, leaving non-matching as NaN."""
+	return series.apply(lambda x: ut.label_to_id(x) if isinstance(x, str) and re.match(r"C\d+", x) else np.nan)
+
+def filter_communities(df: pd.DataFrame, feature_col: str, max_code: int) -> pd.DataFrame:
+	print(f"Filtering communities in column '{feature_col}' with max_code={max_code}...")
+	print(f"Non nulls before filtering: {df[feature_col].notnull().sum()}, total rows: {len(df)}")
+	df[feature_col] = df[feature_col].fillna("C99")
+	print(f"Unique communities before filtering: {df[feature_col].unique()}")
+	mask = df_community_to_id(df[feature_col]) > max_code
+	print(f"Communities to filter out: {df.loc[mask, feature_col].unique()}")
+	df.loc[mask, feature_col] = "Other"
+	for col in df.columns:
+		print(f"Processing column '{col}' for color filtering...")
+		if "color" in col:
+			df.loc[mask, col] = "gray"
+	df[feature_col] = df[feature_col].astype(str)
+	print(f"Unique communities after filtering: {df[feature_col].unique()}")
+	return df

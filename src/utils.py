@@ -96,6 +96,14 @@ def label_fn(c, pad=2):
 	return f"C{str(int(c)).zfill(pad)}" if isinstance(c, int) else str(c)
 
 
+def label_to_id(label: str) -> int:
+	"""Convert a label like 'C01' back to an integer ID."""
+	m = re.match(r"C(\d+)", label)
+	if m:
+		return int(m.group(1))
+	raise ValueError(f"Invalid label format: {label}. Expected format like 'C01'.")
+
+
 @lru_cache(maxsize=1000)
 def parse_color_from_string(color_str: str):
 	color_str_clean = color_str.strip()
