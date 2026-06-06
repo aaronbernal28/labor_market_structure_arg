@@ -164,6 +164,16 @@ rule all:
 		#	topo_method=["disparity_filtration"],
 		#),
 		"images/20_persistence_diagram_umap_all/_hidalgo_disparity_filtration_wasserstein_umap_H1.png",
+		expand(
+			"images/{dataset}/{class_}/19_public_policy_by_communities/_{weight_function}_{alpha}_{algorithm}_{c1}_{c2}_betweenness_centrality.png",
+			dataset=["enes_all"],
+			class_=["ciuo"],
+			weight_function=["hidalgo"],
+			alpha=ALPHA_CIUO,
+			algorithm=ALGORITHMS_CIUO,
+			c1=["C03"],
+			c2=["C09"],
+		),
 
 
 rule _00_aed_report:
