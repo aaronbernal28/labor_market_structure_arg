@@ -156,9 +156,12 @@ def main() -> None:
 
 	nodelist_df = nodelist_df.dropna(subset=["community"])
 	# Filtering greater that Cxx groups:
-	max_group_code = int(snakemake.config["community"]["max"][class_])
-	community_codes = nodelist_df["community"].astype(str).str.extract(r"C(\d+)", expand=False).astype(int)
-	nodelist_df = nodelist_df[community_codes < max_group_code].copy()
+	nodelist_df = dl.filter_communities(
+			nodelist_df,
+			feature_col="community",
+			max_code=snakemake.config["community"]["max"].get(class_, 98),
+		)
+	community_map = nodelist_df.set_index(id_col)["community"].to_dict()
 
 	pl.plot_community_boxplots(
 		df_nodes=nodelist_df,
@@ -191,12 +194,12 @@ def main() -> None:
 	pl.plot_stacked_by_group(
 		df_index=nodelist_idx,
 		group_col=group_col,
-		community_map=communities_int,
+		community_map=community_map,
 		title=f"{class_.upper()} - Distribucion por comunidad ({algorithm})",
 		output_path=snakemake.output[1],
 		group_color_map=group_color_map,
 		legend_title=group_col,
-		figsize=tuple(snakemake.config["figsizes"]["stacked"]),
+		figsize=tuple(snakemake.config["figsizes"]["stacked"].get(class_, (6, 4))),
 		save=True,
 		percentage=False,
 		translation=translation,

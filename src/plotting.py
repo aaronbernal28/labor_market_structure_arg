@@ -1113,7 +1113,7 @@ def plot_projection_gradient(
 def plot_stacked_by_group(
 	df_index: pd.DataFrame,
 	group_col: str,
-	community_map: Dict[int, int],
+	community_map: Dict[int, str],
 	title: str,
 	output_path: Path,
 	weights: str | None = None,
@@ -1166,9 +1166,10 @@ def plot_stacked_by_group(
 			plot_kwargs["figsize"] = figsize
 		ax = ct.plot(**plot_kwargs)
 
-	x_label = "Porcentaje (%)" if percentage else "Cantidad"
+	x_label = "Porcentaje (%)" if percentage else "Cantidad de nodos"
 	if translation:
 		x_label = ut.translate_label(x_label, translation)
+		ax.set_ylabel(ut.translate_label(ax.get_ylabel(), translation))
 		if title is not None:
 			title = ut.translate_label(title, translation)
 	ax.set_xlabel(x_label)
@@ -1184,8 +1185,8 @@ def plot_stacked_by_group(
 	)
 
 	# Format y-axis labels as C0, C1, ...
-	yticks = ax.get_yticks()
-	ax.set_yticklabels([f"C{int(y)}" for y in yticks])
+	#yticks = ax.get_yticks()
+	#ax.set_yticklabels([f"C{int(y)}" for y in yticks])
 
 	# Remove axis borders
 	ax.spines["top"].set_visible(False)
