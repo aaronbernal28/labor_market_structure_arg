@@ -15,7 +15,17 @@ def main() -> None:
 	input_metrics = metrics.summarize_graph(graph)
 	# utils.setup_networkx_backend(algorithm=None)
 
-	pos = nx.forceatlas2_layout(graph, seed=seed, weight="weight")
+	# Use graph_sort_nodes_by_id to guarantee a stable node iteration order.
+	# NOTE: nx.Graph(graph.subgraph(sorted(...))) looks sorted but is NOT —
+	# subgraph() ignores the order of the iterable and always returns nodes in
+	# the graph's internal dict order. Building a fresh graph with nodes added
+	# in sorted order is the only way to make forceatlas2_layout deterministic
+	# across re-generated upstream GEXF files.
+	pos = nx.forceatlas2_layout(
+		gc.graph_sort_nodes_by_id(graph),
+		seed=seed,
+		weight="weight",
+	)
 	pos = {int(node_id): (float(x), float(y)) for node_id, (x, y) in pos.items()}
 	dataset_df = dl.insert_positions(dataset_df, pos, id_col=id_col)
 

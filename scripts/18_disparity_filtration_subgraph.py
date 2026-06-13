@@ -70,18 +70,23 @@ def main() -> None:
 	alphas = np.logspace(-3, 0, num=6).round(3)
 
 	# Set up plotting
-	fig, axes = plt.subplots(1, len(alphas), figsize=(3 * len(alphas), 5))
+	n_rows = 2
+	n_cols = int(np.ceil(len(alphas) / n_rows))
+	fig, axes = plt.subplots(n_rows, n_cols, figsize=(5 * n_cols, 4.5 * n_rows))
+	axes = axes.flatten()
 	fig.suptitle("")
 
 	# Fixed layout across all subgraphs
 	pos = {}
 	for _, row in df.iterrows():
 		if "pos_x" in row and "pos_y" in row:
-			pos[int(row[id_col])] = (row["pos_x"], row["pos_y"])
+			pos[int(row[id_col])] = (float(row["pos_x"]), float(row["pos_y"]))
+		elif "x" in row and "y" in row:
+			pos[int(row[id_col])] = (float(row["x"]), float(row["y"]))
 
 	# Fallback if coordinates are missing in nodelist
 	if not pos:
-		print("[DEBUG] Nodelist lacks 'pos_x'/'pos_y', computing spring layout...")
+		print("[DEBUG] Nodelist lacks 'pos_x'/'pos_y' or 'x'/'y', computing spring layout...")
 		pos = nx.spring_layout(subgraph, seed=snakemake.config.get("seed", 42))
 
 	# Setup fixed styles (color, constant sizes, specific labels)
@@ -226,12 +231,23 @@ def main() -> None:
 			for n in new_nodes
 		}
 		if current_labels:
+			# Shift labels upwards slightly so they don't cover the nodes.
+			# We calculate the y-range dynamically to support both layouts.
+			y_coords = [pos[node][1] for node in current_labels if node in pos]
+			if y_coords:
+				y_range = max(y_coords) - min(y_coords)
+				y_offset = 0.04 * y_range if y_range > 0 else 0.04
+			else:
+				y_offset = 0.04
+
+			pos_labels = {node: (coords[0], coords[1] + y_offset) for node, coords in pos.items()}
+
 			text_dict = nx.draw_networkx_labels(
 				filtered_G,
-				pos,
+				pos_labels,
 				labels=current_labels,
 				ax=ax,
-				font_size=7,
+				font_size=10,
 				font_color="black",
 				bbox=dict(
 					facecolor="white",
@@ -259,7 +275,7 @@ def main() -> None:
 		loc="lower center",
 		ncol=2,
 		fontsize=12,
-		bbox_to_anchor=(0.5, -0.05),
+		bbox_to_anchor=(0.5, -0.02),
 		frameon=False,
 	)
 

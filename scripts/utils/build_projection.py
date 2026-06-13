@@ -43,6 +43,8 @@ def main() -> None:
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
 
+	# Reindex with sorted node order before writing
+	projection = nx.Graph(projection.subgraph(sorted(projection.nodes())))
 	nx.write_gexf(projection, snakemake.output[0])
 
 
