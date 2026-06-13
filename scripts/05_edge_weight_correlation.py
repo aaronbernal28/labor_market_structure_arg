@@ -69,7 +69,7 @@ def main() -> None:
 	feature_label = utils.translate_label(feature_name, translation)
 	default_title = ""
 
-	pl.compute_and_plot_edge_correlation(
+	pearson_r, p_value = pl.compute_and_plot_edge_correlation(
 		G=graph,
 		feature_map=feature_map,
 		color_map=color_map,
@@ -97,6 +97,8 @@ def main() -> None:
 			f"Feature: {feature_name}",
 			f"Community column: {community_col}",
 			f"Communities: {len(set(community_map.values()))}",
+			f"Asortativity: {pearson_r:.4f}",
+			f"P-value: {p_value:.4e}",
 		],
 	)
 	log.add_dataframe_info(

@@ -3,7 +3,7 @@ Plotting utilities extracted from the exploratory notebook.
 """
 
 from pathlib import Path
-from typing import Dict, Iterable, Mapping
+from typing import Dict, Iterable, Mapping, Tuple
 import src.utils as ut
 
 from persim import plot_diagrams as persim_plot_diagrams
@@ -2027,7 +2027,7 @@ def compute_and_plot_edge_correlation(
 	save: bool = True,
 	perfect_line: bool = True,
 	figsize: tuple | None = None,
-) -> None:
+) -> Tuple[float, float]:
 	"""Scatter of node feature vs weighted average-neighbor feature.
 
 	This function also prints and embeds the Pearson correlation (assortativity)
@@ -2045,7 +2045,7 @@ def compute_and_plot_edge_correlation(
 		print(
 			f"Advertencia: no hay suficientes puntos validos para calcular la correlacion de {title}."
 		)
-		return
+		return 0.0, 1.0
 
 	if highlight_communities is None:
 		# highlight_set = ut.get_top_mean_assortativity_communities(
@@ -2173,6 +2173,7 @@ def compute_and_plot_edge_correlation(
 		plt.close()
 	else:
 		plt.show()
+	return pearson_r, p_value
 
 
 def compute_edge_assortativity_pearson(
