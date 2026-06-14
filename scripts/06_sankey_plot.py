@@ -138,8 +138,8 @@ def main() -> None:
 	)
 	fig.update_layout(
 		title_text=None,
-		width=1200,
-		height=800,
+		width=700,
+		height=700,
 	)
 
 	fig.write_image(str(snakemake.output[0]), scale=2)
