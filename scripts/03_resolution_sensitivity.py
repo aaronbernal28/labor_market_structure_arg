@@ -87,7 +87,17 @@ def main() -> None:
 		label=_t("reference resolution"),
 		zorder=1,
 	)
-	ax.legend(title=_t("algorithm"))
+	if str(snakemake.output[0]).endswith("_catplots_hidalgo_0.05.png"):
+		ax.legend(
+			title="",
+			frameon=True,
+			facecolor="white",
+			edgecolor="black",
+			framealpha=0.7,
+			fancybox=True,
+		)
+	elif ax.get_legend() is not None:
+		ax.get_legend().remove()
 	ax.grid(True)
 	ax.set_xscale("log")
 	ax.set_xlabel(_t("Resolution"))
@@ -145,15 +155,8 @@ def main() -> None:
 			label=_t("reference resolution"),
 		)
 		legend_handles, legend_labels = g.ax_joint.get_legend_handles_labels()
-		label_to_handle = dict(zip(legend_labels, legend_handles))
-		g.ax_joint.legend(
-			[
-				label_to_handle[label]
-				for label in algorithm_order + [_t("reference resolution")]
-			],
-			algorithm_order + [_t("reference resolution")],
-			title=_t("algorithm"),
-		)
+		if g.ax_joint.get_legend() is not None:
+			g.ax_joint.get_legend().remove()
 
 		g.set_axis_labels(_t("Resolution"), _t("Score"))
 		g.ax_joint.set_xscale("log")
@@ -201,7 +204,8 @@ def main() -> None:
 		label=_t("reference resolution"),
 		zorder=1,
 	)
-	ax.legend(title=_t("algorithm"))
+	if ax.get_legend() is not None:
+		ax.get_legend().remove()
 	ax.grid(True)
 	ax.set_xscale("log")
 	ax.set_xlabel(_t("Resolution"))
