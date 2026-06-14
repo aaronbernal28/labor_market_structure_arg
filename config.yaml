@@ -127,6 +127,7 @@ figsizes:
   heatmap: [18, 10]
   histogram: [8, 6]
   catplot: [10, 5]
+  resolution: [4, 4]
 
 # Colormaps for continuous-feature projection plots.
 cmaps:
@@ -143,6 +144,14 @@ community:
     caes: 5.62 # 10**(0.75)
     ciuo: 5.62 # sqrt(10)
     cno: 1.0
+    "0.05":
+      caes: 5.62
+      ciuo: 5.62
+      cno: 1.0
+    "1.00":
+      caes: 1.0
+      ciuo: 1.0
+      cno: 1.0
   max:
     caes: 15
     ciuo: 20

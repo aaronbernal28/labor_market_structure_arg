@@ -54,8 +54,8 @@ def main() -> None:
 		return utils.translate_label(label, translation)
 
 	# Plotting general trends in number of communities
-	figsize = snakemake.config["figsizes"]["catplot"]
-	fig, ax = plt.subplots()
+	figsize = snakemake.config["figsizes"]["resolution"]
+	fig, ax = plt.subplots(figsize=figsize)
 	for algorithm in algorithm_order:
 		algorithm_data = df[df["algorithm"] == algorithm]
 		ax.scatter(
@@ -167,7 +167,7 @@ def main() -> None:
 		plt.close()
 
 	# Modularity violin plot by algorithm
-	fig, ax = plt.subplots()
+	fig, ax = plt.subplots(figsize=figsize)
 	for algorithm in algorithm_order:
 		algorithm_data = df[df["algorithm"] == algorithm]
 		ax.scatter(
@@ -180,7 +180,7 @@ def main() -> None:
 			zorder=2,
 		)
 	# Add label with all negatives values omitted, vertically separated
-	group_neg = df.groupby("algorithm")["modularity"].apply(lambda x: x[x < 0].count())
+	group_neg = df.groupby("algorithm")["modularity"].apply(lambda x: x[x < -0.1].count())
 	label_y_base = 0.05
 	label_y_step = 0.06
 	for idx, algorithm in enumerate(algorithm_order):
