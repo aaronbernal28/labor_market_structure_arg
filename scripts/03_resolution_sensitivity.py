@@ -149,7 +149,7 @@ def main() -> None:
 		g.ax_joint.legend(
 			[
 				label_to_handle[label]
-				for label in algorithm_order + ["reference resolution"]
+				for label in algorithm_order + [_t("reference resolution")]
 			],
 			algorithm_order + [_t("reference resolution")],
 			title=_t("algorithm"),
@@ -192,6 +192,16 @@ def main() -> None:
 				verticalalignment="bottom",
 				fontsize="small",
 			)
+	ax.vlines(
+		x=reference_resolution,
+		ymin=-0.1,
+		ymax=1.1,
+		linestyles="dashed",
+		color="gray",
+		label=_t("reference resolution"),
+		zorder=1,
+	)
+	ax.legend(title=_t("algorithm"))
 	ax.grid(True)
 	ax.set_xscale("log")
 	ax.set_xlabel(_t("Resolution"))

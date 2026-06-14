@@ -15,8 +15,10 @@ infomap==2.9.2
 bs4==0.0.2
 xlrd==2.0.2
 statsmodels==0.14.6
-nx-cugraph-cu12==26.4.0
-cupy-cuda13x==14.0.1
+#nx-cugraph-cu12==26.4.0
+#cupy-cuda13x==14.0.1
 POT==0.9.6.post1
 ggsci==2.0.0
-umap-learn=0.5.12
+umap-learn==0.5.12
+igraph==1.0.0
+leidenalg==0.12.0
