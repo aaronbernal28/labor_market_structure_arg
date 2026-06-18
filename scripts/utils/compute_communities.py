@@ -1,5 +1,7 @@
 import random
 from typing import Any
+
+from narwhals import col
 from scripts import *
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -96,18 +98,55 @@ def main() -> None:
 	def _mean_or_none(df: pd.DataFrame, col: str) -> float | None:
 		if col not in df.columns:
 			return None
-		series = df[col].dropna()
-		if series.empty:
-			return None
-		return float(series.mean())
+		if "n_obs" in df.columns:
+			valid_df = df[[col, "n_obs"]].dropna()
+			if valid_df.empty:
+				return None
+			total_obs = valid_df["n_obs"].sum()
+			if total_obs == 0:
+				return None
+			return float((valid_df[col] * valid_df["n_obs"]).sum() / total_obs)
+		else:
+			series = df[col].dropna()
+			if series.empty:
+				return None
+			return float(series.mean())
 
 	def _median_or_none(df: pd.DataFrame, col: str) -> float | None:
 		if col not in df.columns:
 			return None
-		series = df[col].dropna()
-		if series.empty:
-			return None
-		return float(series.median())
+
+		if "n_obs" in df.columns:
+			valid_df = df[[col, "n_obs"]].dropna()
+			if valid_df.empty:
+				return None
+
+			total_obs = valid_df["n_obs"].sum()
+			if total_obs == 0:
+				return None
+
+			# Sort by the column values and reset index to ensure clean positional lookups
+			valid_df = valid_df.sort_values(col).reset_index(drop=True)
+
+			# Find the cumulative sum of weights and the halfway cutoff
+			cumsum = valid_df["n_obs"].cumsum()
+			cutoff = total_obs / 2.0
+
+			# If the cumulative sum hits exactly the midpoint, average it with the next value
+			if (cumsum == cutoff).any():
+				pos = cumsum[cumsum == cutoff].index[0]
+				val1 = valid_df.loc[pos, col]
+				val2 = valid_df.loc[pos + 1, col]
+				return float((val1 + val2) / 2.0)
+			else:
+				# Otherwise, take the first value that pushes the cumulative sum over 50%
+				return float(valid_df.loc[cumsum > cutoff, col].iloc[0])
+
+		else:
+			series = df[col].dropna()
+			if series.empty:
+				return None
+			return float(series.median())
 
 	rows: list[str] = []
 	rows.append(
