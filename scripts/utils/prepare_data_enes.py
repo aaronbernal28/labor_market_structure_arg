@@ -29,7 +29,7 @@ def main() -> None:
 	default_features = default_cfg.get("features", {})
 
 	df_enes = pd.read_csv(
-		SOURCE if SOURCE else URL, sep=";" if dataset == "enes_2019" else ","
+		SOURCE if SOURCE else URL, sep=";" if "2019" in dataset else ","
 	)
 	df_enes = dl.lcd_load_enes_base(
 		df_enes=df_enes,

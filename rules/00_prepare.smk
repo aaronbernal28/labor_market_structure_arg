@@ -5,9 +5,9 @@ rule prepare_data_enes:
 	- Cleaning the data
 	'''
 	wildcard_constraints:
-		dataset = "enes_2019|enes_2021"
+		dataset = "enes_2019|enes_2021|enes_2019_unweighted|enes_2021_unweighted"
 	input:
-		lambda wildcards: "data/raw/base_enespersonas_2021.csv" if wildcards.dataset == "enes_2021" else "data/raw/base_enespersonas.csv"
+		lambda wildcards: "data/raw/base_enespersonas_2021.csv" if "2021" in wildcards.dataset else "data/raw/base_enespersonas.csv"
 	output:
 		"data/processed/{dataset}.csv"
 	log:
@@ -29,6 +29,19 @@ rule prepare_enes_all:
 		"../scripts/utils/prepare_data_enes_all.py"
 
 
+rule prepare_enes_all_unweighted:
+	'''Merge the unweighted ENES 2019 and 2021 datasets into a single dataset.'''
+	input:
+		"data/processed/enes_2019_unweighted.csv",
+		"data/processed/enes_2021_unweighted.csv"
+	output:
+		"data/processed/enes_all_unweighted.csv"
+	log:
+		"data/processed/enes_all_unweighted/prepare_enes_all.log"
+	script:
+		"../scripts/utils/prepare_data_enes_all.py"
+
+
 rule prepare_enes_all_by_gender:
 	"""Partition ENES all data into male/female subsets."""
 	input:
@@ -38,6 +51,19 @@ rule prepare_enes_all_by_gender:
 		"data/processed/enes_all_female.csv"
 	log:
 		"data/processed/enes_all/prepare_enes_all_by_gender.log"
+	script:
+		"../scripts/utils/prepare_data_enes_all_gender.py"
+
+
+rule prepare_enes_all_by_gender_unweighted:
+	"""Partition unweighted ENES all data into male/female subsets."""
+	input:
+		"data/processed/enes_all_unweighted.csv"
+	output:
+		"data/processed/enes_all_male_unweighted.csv",
+		"data/processed/enes_all_female_unweighted.csv"
+	log:
+		"data/processed/enes_all_unweighted/prepare_enes_all_by_gender.log"
 	script:
 		"../scripts/utils/prepare_data_enes_all_gender.py"
 

@@ -67,7 +67,7 @@ def best_louvain_partition_random(
 	rng = np.random.RandomState(seed)
 
 	# Sample resolution values uniformly
-	seeds = rng.randint(0, 10000, n_samples)
+	seeds = rng.randint(0, 10000, n_samples).tolist()
 
 	best_partition = None
 	best_score = -1.0
@@ -230,7 +230,7 @@ def best_leiden_partition_random(
 	rng = np.random.RandomState(seed)
 
 	# Sample resolution values uniformly
-	seeds = rng.randint(0, 10000, n_samples)
+	seeds = rng.randint(0, 10000, n_samples).tolist()
 
 	best_partition = None
 	best_score = -1.0

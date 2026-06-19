@@ -2,7 +2,11 @@ configfile: "config.yaml"
 from numpy import logspace, geomspace
 
 
-DATASETS = ["enes_all", "enes_2019", "enes_2021", "enes_all_male", "enes_all_female"]
+DATASETS = [
+	"enes_all", "enes_2019", "enes_2021", "enes_all_male", "enes_all_female",
+	"enes_all_unweighted", "enes_2019_unweighted", "enes_2021_unweighted",
+	"enes_all_male_unweighted", "enes_all_female_unweighted"
+]
 NODELIST = ["caes", "ciuo"]
 WEIGHT_FUNCTIONS = ["hidalgo", "unweighted_hidalgo", "dot_product", "cosine"]
 ALGORITHMS_CAES = ["infomap"]
@@ -31,7 +35,7 @@ wildcard_constraints:
 	class_ = "|".join(CLASSES_ALL),
 	weight_function = "|".join(WEIGHT_FUNCTIONS),
 	algorithm = "|".join(ALGORITHMS_ALL),
-	alpha = "|".join(ALPHAS_ALL),
+	alpha = "\\d+\\.\\d+",
 	topo_method = "|".join(TOPO_METHOD),
 	eph_file = "|".join(EPH_FILES),
 	distance_diagrams = "|".join(DISTANCE_DIAGRAMS)
@@ -169,7 +173,7 @@ rule all:
 			dataset=["enes_all"],
 			class_=["ciuo"],
 			weight_function=["hidalgo"],
-			alpha=ALPHA_CIUO,
+			alpha=["0.05"],
 			algorithm=ALGORITHMS_CIUO,
 			c1=["C03"],
 			c2=["C09"],
