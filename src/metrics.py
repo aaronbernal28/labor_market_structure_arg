@@ -183,7 +183,7 @@ def summarize_bipartite_graph(
 		{
 			"bipartite_density": bipartite_density,
 			"degree_assortativity": assortativity,
-			"degree_assortativity_weighted": assortativity_weighted,
+			"degree_assortativity_weighted": assortativity_weighted if 'assortativity_weighted' in locals() else None,
 			"lcc_size": lcc_size,
 			"lcc_percent": lcc_percent,
 			"avg_path_length": avg_path_length,

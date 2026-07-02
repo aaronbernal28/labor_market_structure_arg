@@ -29,13 +29,13 @@ def main() -> None:
 
 	pl.plot_persistence_diagrams(
 		male_diagrams,
-		title="Male",
+		title="Red de varones",
 		ax=axs[0],
 		save=False,
 	)
 	pl.plot_persistence_diagrams(
 		female_diagrams,
-		title="Female",
+		title="Red de mujeres",
 		ax=axs[1],
 		save=False,
 	)

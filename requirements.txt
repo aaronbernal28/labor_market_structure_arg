@@ -21,4 +21,4 @@ POT==0.9.6.post1
 ggsci==2.0.0
 umap-learn==0.5.12
 igraph==1.0.0
-leidenalg==0.12.0
+leidenalg==0.11.0

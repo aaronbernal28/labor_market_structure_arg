@@ -4,6 +4,7 @@ from numpy import logspace, geomspace
 
 DATASETS = [
 	"enes_all", "enes_2019", "enes_2021", "enes_all_male", "enes_all_female",
+	"enes_all_white_collar", "enes_all_blue_collar",
 	"enes_all_unweighted", "enes_2019_unweighted", "enes_2021_unweighted",
 	"enes_all_male_unweighted", "enes_all_female_unweighted"
 ]
@@ -178,6 +179,7 @@ rule all:
 			c1=["C03"],
 			c2=["C09"],
 		),
+		"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration_collar.png",
 
 
 rule _00_aed_report:
@@ -610,6 +612,21 @@ rule _20_persistence_diagram_umap_all:
 		"images/20_persistence_diagram_umap_all/_{weight_function}_{topo_method}_wasserstein_umap_H2.png"
 	script:
 		"scripts/20_persistence_diagram_umap_all.py"
+
+
+rule _21_persistence_diagram_collar:
+	"""Compare white collar vs blue collar persistence diagrams side-by-side.
+	On CIUO, the two ciuo3cat are:
+		Blue collar: "3. Trabajadores manuales"
+		White collar: "1. Trabajadores  no manuales"
+	"""
+	input:
+		white_collar="data/diagrams/enes_all_white_collar/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
+		blue_collar="data/diagrams/enes_all_blue_collar/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv"
+	output:
+		"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}_collar.png"
+	script:
+		"scripts/21_persistence_diagram_collar.py"
 
 
 include: "rules/00_prepare.smk"

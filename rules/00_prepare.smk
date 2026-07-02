@@ -68,6 +68,20 @@ rule prepare_enes_all_by_gender_unweighted:
 		"../scripts/utils/prepare_data_enes_all_gender.py"
 
 
+rule prepare_enes_all_by_collar:
+	"""Partition ENES all data into white-collar / blue-collar subsets."""
+	input:
+		enes_all="data/processed/enes_all.csv",
+		nodelist_ciuo="data/processed/enes_all/nodelist_ciuo.csv"
+	output:
+		"data/processed/enes_all_white_collar.csv",
+		"data/processed/enes_all_blue_collar.csv"
+	log:
+		"data/processed/enes_all/prepare_enes_all_by_collar.log"
+	script:
+		"../scripts/utils/prepare_data_enes_all_collar.py"
+
+
 rule prepare_nodelist:
 	'''Add coloring and features information to the nodelist infered from the one ENES dataset.'''
 	input:
