@@ -217,16 +217,32 @@ reference/
 main.bbl
 main.synctex(busy)
 
-data/raw/
-data/graphs/eph
-# images/
-data/raw/base_enespersonas_2021.csv
-data/raw/metadata_base_enespersonas.csv
-main.*
-!main.tex
-images_new/
-data/raw/base_enespersonas.csv
-#ruff.toml
-scripts/deprecated/
 .snakemake/
-data/raw/private_surveys/
+
+# Ignore all raw survey data
+data/raw/
+
+# Ignore all processed survey data
+data/processed/enes_all/nodelist_ciuo.csv
+data/processed/eph/usu_individual_t316.csv
+data/processed/eph/usu_individual_t317.csv
+data/processed/eph/usu_individual_T318..csv
+data/processed/eph/Usu_individual_T319.csv
+data/processed/eph/usu_individual_T320.csv
+data/processed/eph/usu_individual_T321.xls.csv
+data/processed/eph/usu_individual_T322.csv
+data/processed/eph/usu_individual_T323.csv
+data/processed/eph/usu_individual_T324.csv
+data/processed/eph/usu_individual_T325.csv
+data/processed/enes_2019_unweighted.csv
+data/processed/enes_2019.csv
+data/processed/enes_2021_unweighted.csv
+data/processed/enes_2021.csv
+data/processed/enes_all_blue_collar.csv
+data/processed/enes_all_female_unweighted.csv
+data/processed/enes_all_female.csv
+data/processed/enes_all_male_unweighted.csv
+data/processed/enes_all_male.csv
+data/processed/enes_all_unweighted.csv
+data/processed/enes_all_white_collar.csv
+data/processed/enes_all.csv
