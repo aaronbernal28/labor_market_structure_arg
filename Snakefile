@@ -184,7 +184,19 @@ rule all:
 		"data/graphs/enes_all/ciuo/zenodo_ciuo_hidalgo_0.05_infomap.gexf",
 
 
+rule prepare_all_datasets:
+	input:
+		expand("data/processed/{dataset}.csv", dataset=DATASETS),
+		expand("data/processed/eph/{eph_file}.csv", eph_file=EPH_FILES)
 
+rule prepare_all_bipartite_graphs:
+	input:
+		expand("data/graphs/{dataset}/bipartite.gexf", dataset=DATASETS),
+		expand("data/graphs/eph/{eph_file}/bipartite_eph.gexf", eph_file=EPH_FILES)
+
+rule prepare_all_nodelists:
+	input:
+		expand("data/processed/{dataset}/nodelist_{class_}.csv", dataset=DATASETS, class_=CLASSES)
 
 rule _00_aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''

@@ -223,7 +223,6 @@ main.synctex(busy)
 data/raw/
 
 # Ignore all processed survey data
-data/processed/enes_all/nodelist_ciuo.csv
 data/processed/eph/usu_individual_t316.csv
 data/processed/eph/usu_individual_t317.csv
 data/processed/eph/usu_individual_T318..csv
