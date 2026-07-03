@@ -180,6 +180,10 @@ rule all:
 			c2=["C09"],
 		),
 		"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration_collar.png",
+		"data/graphs/enes_all/caes/zenodo_caes_hidalgo_0.05_infomap.gexf",
+		"data/graphs/enes_all/ciuo/zenodo_ciuo_hidalgo_0.05_infomap.gexf",
+
+
 
 
 rule _00_aed_report:
