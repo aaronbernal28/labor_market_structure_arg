@@ -221,6 +221,7 @@ main.synctex(busy)
 
 # Ignore all raw survey data
 data/raw/
+data/raw2/
 
 # Ignore all processed survey data
 data/processed/eph/usu_individual_t316.csv

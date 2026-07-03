@@ -44,15 +44,8 @@ wildcard_constraints:
 
 rule all:
 	input:
-		"images/enes_all/00_aed_report/aed_top_sectors.png",
-		"images/enes_all/00_aed_report/aed_top_occupations.png",
-		"images/enes_all/00_aed_report/aed_distributions.png",
-		"images/enes_all/00_aed_report/aed_correlation_matrix.png",
-		"images/enes_all/01_biadjacency_matrix_heatmap/biadjacency_matrix_heatmap.png",
 		"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
 		"images/enes_all/02_bipartite_plot_by_groups/bipartite_degree_dist.png",
-		"images/enes_all/04_walt_test/walt_test_bootstrap_se.png",
-		"images/enes_all/06_sankey_plot/sankey_plot.png",
 		expand(
 			"images/enes_all/{class_}/07_alpha_sensitivity/_{weight_function}.png",
 			class_=CLASSES,
@@ -119,19 +112,9 @@ rule all:
 			topo_method=TOPO_METHOD,
 		),
 		expand(
-			"data/processed/eph/{eph_file}.csv",
-			eph_file=EPH_FILES
-		),
-		expand(
 			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}.png",
 			class_=["caes", "cno"],
 			weight_function=["hidalgo"],
-		),
-		expand(
-			"images/eph/{class_}/10_edge_weight_correlation/_{weight_function}_{feature}.png",
-			class_=["caes", "cno"],
-			weight_function=["hidalgo"],
-			feature=["female_pct"],
 		),
 		expand(
 			"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_{weight_function}_backbone.png",
@@ -434,7 +417,7 @@ rule _12_betweenness_centrality_ai:
 			eph_file=EPH_FILES,
 			weight_function=wildcards.weight_function,
 		),
-		nodelist="data/raw/nodelist_cno.csv",
+		nodelist="data/processed/eph/nodelist_cno.csv",
 	output:
 		"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_{weight_function}_backbone.png"
 	log:
