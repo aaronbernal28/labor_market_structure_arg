@@ -7,7 +7,7 @@ rule prepare_data_enes:
 	wildcard_constraints:
 		dataset = "enes_2019|enes_2021|enes_2019_unweighted|enes_2021_unweighted"
 	input:
-		lambda wildcards: "data/raw/base_enespersonas_2021.csv" if "2021" in wildcards.dataset else "data/raw/base_enespersonas.csv"
+		lambda wildcards: "data/raw/private_surveys/base_enespersonas_2021.csv" if "2021" in wildcards.dataset else "data/raw/base_enespersonas.csv"
 	output:
 		"data/processed/{dataset}.csv"
 	log:
@@ -132,7 +132,7 @@ rule prepare_eph_all:
 rule _11_ponderations_test:
 	'''Test the ponderations for the ENES 2021 dataset.'''
 	input:
-		"data/raw/base_enespersonas_2021.csv",
+		"data/raw/private_surveys/base_enespersonas_2021.csv",
 		"data/raw/base_enespersonas.csv"
 	output:
 		"images/enes_all/ponderations_test_histogram.png"

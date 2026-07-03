@@ -65,19 +65,25 @@ labor_market_structure_arg/
 └── images/
 ```
 
-## Data Inputs
+## Data Inputs and Availability
 
-Expected raw files in `data/raw/`:
+### Data Inputs
 
-- `base_enespersonas.csv` (ENES 2019; downloadable)
-- `base_enespersonas_2021.csv` (ESAyPP 2021; add manually)
-- `nodelist_caes.csv`
-- `nodelist_ciuo.csv`
+Expected raw files:
+
+- `base_enespersonas.csv` in `data/raw/` (ENES 2019; downloadable)
+- `base_enespersonas_2021.csv` in `data/raw/private_surveys/` (ESAyPP 2021; private, add manually)
+- `nodelist_caes.csv` in `data/raw/`
+- `nodelist_ciuo.csv` in `data/raw/`
 
 Main data references:
 
 - ENES PISAC 2019: https://datos.gob.ar/sq/dataset/mincyt-pisac---programa-investigacion-sobre-sociedad-argentina-contemporanea
 - ESAyPP 2021: Encuesta sobre Estructura Social y Politicas Publicas 2021
+
+### Data Availability Statement
+
+> *The raw microdata from certain surveys used in this study are not publicly available. However, to ensure topological and algorithmic reproducibility, processed node lists (`nodelist_ciuo.csv`) and bipartite and unipartite graph projections in GEXF format (`projection_hidalgo.gexf` for CIUO and CAES) are provided. The source code to generate the networks from scratch is included, but will require access to the original data upon request.*
 
 ## Installation
 

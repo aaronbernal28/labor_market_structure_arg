@@ -49,7 +49,7 @@ datasets:
       nivel_ed: "nivel_ed" # < 11
 
   enes_2021:
-    source: data/raw/base_enespersonas_2021.csv
+    source: data/raw/private_surveys/base_enespersonas_2021.csv
     url: null
     year: 2021
     id_1: "CUEST"
@@ -84,7 +84,7 @@ datasets:
       nivel_ed: "nivel_ed"
 
   enes_2021_unweighted:
-    source: data/raw/base_enespersonas_2021.csv
+    source: data/raw/private_surveys/base_enespersonas_2021.csv
     url: null
     year: 2021
     id_1: "CUEST"

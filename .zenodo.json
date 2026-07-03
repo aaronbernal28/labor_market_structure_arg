@@ -1,0 +1,22 @@
+{
+  "title": "Occupational and Industry Networks: A Network Analysis of the Labor Market Structure",
+  "description": "Repository of code and processed data (graphs and node lists) for the analysis of the labor market structure through network science. Includes graph projections for ISCO and CAES codes.",
+  "creators": [
+    {
+      "name": "Bernal Huanca, Aaron",
+      "affiliation": "FCEyN"
+    }
+  ],
+  "keywords": [
+    "network-science",
+    "labor-market",
+    "bipartite-graphs",
+    "topological-data-analysis",
+    "occupations",
+    "productive-structure",
+    "demographic-segmentation"
+  ],
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "MIT"
+}
