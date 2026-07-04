@@ -219,6 +219,17 @@ main.synctex(busy)
 
 .snakemake/
 
+# macOS and Windows system artifacts
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Generated pipeline outputs (not committed; reproduced by running snakemake)
+data/diagrams/
+
 # Ignore all raw survey data
 data/raw/
 data/raw2/

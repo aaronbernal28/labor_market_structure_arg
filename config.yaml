@@ -300,3 +300,23 @@ translation:
   Communities: "Comunidades"
   Modularity: "Modularidad"
   negative values: "valores negativos"
+
+# =============================================================
+# PANEL DE EXPERIMENTACIÓN
+# Modifica solo esta sección para explorar variantes del pipeline.
+# Snakemake construirá únicamente los targets listados aquí.
+# Para reproducir todos los resultados del manuscrito: snakemake thesis_all
+# =============================================================
+run_experiments:
+  # Dataset(s) a utilizar. Opciones: enes_all | enes_2019 | enes_2021
+  datasets_to_build:   ["enes_all"]
+  # Clasificación ocupacional. Opciones: ciuo | caes
+  classes_to_build:    ["ciuo"]
+  # Umbral del Filtro de Disparidad. Cualquier decimal entre 0.01 y 1.00
+  alphas_to_build:     ["0.05"]
+  # Algoritmo de detección de comunidades. Opciones: infomap | leiden | louvain
+  algorithms_to_build: ["infomap"]
+  # Variables discretas para colorear nodos en el grafo de proyección
+  discrete_features:   ["grupo", "community"]
+  # Variables continuas para los gradientes de color
+  continuous_features: ["female_pct", "income_mean", "nivel_ed_mean"]

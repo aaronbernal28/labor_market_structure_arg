@@ -42,129 +42,98 @@ wildcard_constraints:
 	distance_diagrams = "|".join(DISTANCE_DIAGRAMS)
 
 
+# =============================================================
+# PANEL DE EXPERIMENTACIÓN (leído de config.yaml > run_experiments)
+# Edita config.yaml para cambiar qué targets construye `snakemake`.
+# =============================================================
+_EXP             = config.get("run_experiments", {})
+TARGET_DATASETS  = _EXP.get("datasets_to_build",   ["enes_all"])
+TARGET_CLASSES   = _EXP.get("classes_to_build",    ["ciuo"])
+TARGET_ALPHAS    = _EXP.get("alphas_to_build",     ["0.05"])
+TARGET_ALGOS     = _EXP.get("algorithms_to_build", ["infomap"])
+TARGET_DISC      = _EXP.get("discrete_features",   ["grupo", "community"])
+TARGET_CONT      = _EXP.get("continuous_features", ["female_pct", "income_mean", "nivel_ed_mean"])
+
+
 rule all:
+	"""
+	BUILDS: targets defined in run_experiments section of config.yaml.
+	DEFAULT: reproduces the main projection plots from the manuscript (alpha=0.05, infomap, ciuo).
+	To reproduce ALL manuscript outputs: snakemake thesis_all --cores all
+	"""
 	input:
-		"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
-		"images/enes_all/02_bipartite_plot_by_groups/bipartite_degree_dist.png",
 		expand(
-			"images/enes_all/{class_}/07_alpha_sensitivity/_{weight_function}.png",
-			class_=CLASSES,
+			"images/{dataset}/{class_}/03_projection_plot_by_groups/_{weight_function}_{alpha}_pos_{algorithm}_{feature}.png",
+			dataset=TARGET_DATASETS,
+			class_=TARGET_CLASSES,
 			weight_function=["hidalgo"],
+			alpha=TARGET_ALPHAS,
+			algorithm=TARGET_ALGOS,
+			feature=TARGET_DISC,
 		),
-		#expand(
-		#	["images/enes_all/caes/03_resolution_sensitivity/_catplots_{weight_function}_{alpha_caes}.png",
-		#	"images/enes_all/ciuo/03_resolution_sensitivity/_catplots_{weight_function}_{alpha_ciuo}.png"],
-		#	weight_function=["hidalgo"],
-		#	alpha_caes=ALPHA_CAES,
-		#	alpha_ciuo=ALPHA_CIUO,
-		#),
 		expand(
-			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm_caes}_{discrete_feature}.png",
-			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm_ciuo}_{discrete_feature}.png"],
+			"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{feature}.png",
+			dataset=TARGET_DATASETS,
+			class_=TARGET_CLASSES,
 			weight_function=["hidalgo"],
-			alpha_caes=ALPHA_CAES,
-			alpha_ciuo=ALPHA_CIUO,
-			algorithm_caes=ALGORITHMS_CAES,
-			algorithm_ciuo=ALGORITHMS_CIUO,
-			discrete_feature=["community"],
-		),
-		expand(
-			["images/enes_all/caes/03_projection_plot_by_groups/_{weight_function}_{alpha_caes}_pos_{algorithm_caes}_{discrete_feature}.png",
-			"images/enes_all/ciuo/03_projection_plot_by_groups/_{weight_function}_{alpha_ciuo}_pos_{algorithm_ciuo}_{discrete_feature}.png"],
-			weight_function=["hidalgo"],
-			alpha_caes=ALPHA_CAES,
-			alpha_ciuo=ALPHA_CIUO,
-			algorithm_caes=ALGORITHMS_CAES, # Any caes algorithm, since discrete feature is grupo which is independent of communities
-			algorithm_ciuo=ALGORITHMS_CIUO,
-			discrete_feature=["grupo"],
-		),
-		expand(
-			["images/enes_all/caes/03_projection_plot_gradient/_{weight_function}_{alpha_caes}_pos_{discrete_feature}.png",
-			"images/enes_all/ciuo/03_projection_plot_gradient/_{weight_function}_{alpha_ciuo}_pos_{discrete_feature}.png"],
-			weight_function=["hidalgo"],
-			alpha_caes=ALPHA_CAES,
-			alpha_ciuo=ALPHA_CIUO,
-			discrete_feature=CONTINUOUS_FEATURES,
-		),
-		expand(
-			["images/enes_all/caes/03_communities/_distribution_{weight_function}_{alpha_caes}_{algorithm_caes}.png",
-			"images/enes_all/ciuo/03_communities/_distribution_{weight_function}_{alpha_ciuo}_{algorithm_ciuo}.png"],
-			weight_function=["hidalgo"],
-			alpha_caes=ALPHA_CAES,
-			alpha_ciuo=ALPHA_CIUO,
-			algorithm_caes=ALGORITHMS_CAES,
-			algorithm_ciuo=ALGORITHMS_CIUO,
-		),
-		expand(
-			["images/enes_all/caes/05_edge_weight_correlation/_{weight_function}_{alpha_caes}_pos_{algorithm_caes}_{continuous_feature}.png",
-			"images/enes_all/ciuo/05_edge_weight_correlation/_{weight_function}_{alpha_ciuo}_pos_{algorithm_ciuo}_{continuous_feature}.png"],
-			weight_function=["hidalgo"],
-			algorithm_caes=ALGORITHMS_CAES,
-			algorithm_ciuo=ALGORITHMS_CIUO,
-			alpha_caes=ALPHA_CAES,
-			alpha_ciuo=ALPHA_CIUO,
-			continuous_feature=CONTINUOUS_FEATURES,
-		),
-		expand(
-			"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}.png",
-			weight_function=["hidalgo"],
-			class_=CLASSES,
-			topo_method=TOPO_METHOD,
-		),
-		expand(
-			"images/eph/{class_}/09_alpha_sensitivity/_{weight_function}.png",
-			class_=["caes", "cno"],
-			weight_function=["hidalgo"],
-		),
-		expand(
-			"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_{weight_function}_backbone.png",
-			weight_function=["hidalgo"],
-		),
-		expand(
-			"images/eph/{class_}/13_preferential_attachment/_{weight_function}.png",
-			weight_function=["hidalgo"],
-			class_=["cno"],
-		),
-		"images/enes_all/ciuo/14_persistence_diagram_distance_hypothesis_test/_hidalgo_disparity_filtration.log",
-		expand(
-			"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}_gender.png",
-			weight_function=["hidalgo"],
-			class_=CLASSES,
-			topo_method=["disparity_filtration"],
-		),
-		expand(
-			"images/eph/{class_}/16_persistence_diagram_distance/_{weight_function}_{topo_method}_heatmap_{distance_diagrams}.png",
-			class_=["caes", "cno"],
-			weight_function=["hidalgo"],
-			topo_method=TOPO_METHOD,
-			distance_diagrams=DISTANCE_DIAGRAMS,
-		),
-		expand(
-			"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_{algorithm}_filtration.png",
-			class_=["caes", "ciuo"],
-			algorithm=ALGORITHMS_CIUO,
-		),
-		#expand(
-		#	"images/eph/{eph_file}/{class_}/14_persistence_diagram_distance_hypothesis_test/_{weight_function}_{topo_method}.log",
-		#	eph_file=EPH_FILES,
-		#	class_=["cno"],
-		#	weight_function=["hidalgo"],
-		#	topo_method=["disparity_filtration"],
-		#),
+			alpha=TARGET_ALPHAS,
+			feature=TARGET_CONT,
+		),# Definimos los inputs de la tesis que no requieren datos de la EPH
+THESIS_INPUTS = [
+	# 02 — Bipartite graph
+	"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
+	# 03 — Projection plots by groups (ciuo)
+	"images/enes_all/ciuo/03_projection_plot_by_groups/_hidalgo_0.05_pos_infomap_community.png",
+	"images/enes_all/ciuo/03_projection_plot_by_groups/_hidalgo_0.05_pos_infomap_grupo.png",
+	# 03 — Projection gradient plots (ciuo)
+	"images/enes_all/ciuo/03_projection_plot_gradient/_hidalgo_0.05_pos_female_pct.png",
+	"images/enes_all/ciuo/03_projection_plot_gradient/_hidalgo_0.05_pos_income_mean.png",
+	"images/enes_all/ciuo/03_projection_plot_gradient/_hidalgo_0.05_pos_nivel_ed_mean.png",
+	# 03 — Communities distribution (ciuo)
+	"images/enes_all/ciuo/03_communities/_distribution_hidalgo_0.05_infomap.png",
+	# 05 — Edge-weight correlation (ciuo)
+	"images/enes_all/ciuo/05_edge_weight_correlation/_hidalgo_0.05_pos_infomap_female_pct.png",
+	"images/enes_all/ciuo/05_edge_weight_correlation/_hidalgo_0.05_pos_infomap_income_mean.png",
+	"images/enes_all/ciuo/05_edge_weight_correlation/_hidalgo_0.05_pos_infomap_nivel_ed_mean.png",
+	# 07 — Alpha sensitivity (ciuo)
+	"images/enes_all/ciuo/07_alpha_sensitivity/_hidalgo.png",
+	# 08 — Persistence diagrams (ciuo)
+	"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration.png",
+	"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration_gender.png",
+	"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration_collar.png",
+	# 18 — Disparity filtration subgraph (ciuo)
+	"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_infomap_filtration.png",
+	# 19 — Public policy by communities (ciuo)
+	"images/enes_all/ciuo/19_public_policy_by_communities/_hidalgo_0.05_infomap_C03_C09_betweenness_centrality.png",
+	# Zenodo GEXF exports
+	"data/graphs/enes_all/caes/zenodo_caes_hidalgo_1.00_louvain.gexf",
+	"data/graphs/enes_all/ciuo/zenodo_ciuo_hidalgo_1.00_louvain.gexf",
+]
+
+# Si hay archivos EPH crudos en data/raw/eph/, agregamos los análisis de redes dinámicas
+if EPH_FILES:
+	THESIS_INPUTS.extend([
+		# 09 — Alpha sensitivity EPH (caes)
+		"images/eph/caes/09_alpha_sensitivity/_hidalgo.png",
+		# 12 — Betweenness centrality AI (cno)
+		"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_hidalgo_backbone.png",
+		# 13 — Preferential attachment (cno)
+		"images/eph/cno/13_preferential_attachment/_hidalgo.png",
+		# 16 — Persistence diagram distance EPH (cno)
+		"images/eph/cno/16_persistence_diagram_distance/_hidalgo_disparity_filtration_heatmap_wasserstein.png",
+		# 20 — Persistence diagram UMAP all (depende de diagramas de persistencia de EPH)
 		"images/20_persistence_diagram_umap_all/_hidalgo_disparity_filtration_wasserstein_umap_H1.png",
-		expand(
-			"images/{dataset}/{class_}/19_public_policy_by_communities/_{weight_function}_{alpha}_{algorithm}_{c1}_{c2}_betweenness_centrality.png",
-			dataset=["enes_all"],
-			class_=["ciuo"],
-			weight_function=["hidalgo"],
-			alpha=["0.05"],
-			algorithm=ALGORITHMS_CIUO,
-			c1=["C03"],
-			c2=["C09"],
-		),
-		"images/enes_all/ciuo/08_persistence_diagram/_hidalgo_disparity_filtration_collar.png",
-		"data/graphs/enes_all/caes/zenodo_caes_hidalgo_0.05_infomap.gexf",
-		"data/graphs/enes_all/ciuo/zenodo_ciuo_hidalgo_0.05_infomap.gexf",
+	])
+
+
+rule thesis_all:
+	"""
+	REPRODUCES: one representative output per pipeline rule, all from ciuo class.
+	Runs the full manuscript analysis. Dynamic networks chapters are skipped if EPH files are missing.
+	Usage: snakemake thesis_all --cores all
+	"""
+	input:
+		THESIS_INPUTS
 
 
 rule prepare_all_datasets:
