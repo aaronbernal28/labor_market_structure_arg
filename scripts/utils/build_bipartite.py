@@ -26,6 +26,7 @@ def main() -> None:
 		logscale=False,
 		caes_partition=snakemake.config["caes"]["partition"],
 		ciuo_partition=snakemake.config["ciuo"]["partition"],
+		max_caes_id=snakemake.config["max_caes_id"],
 	)
 
 	translation = utils.get_config_section(snakemake.config, "translation")

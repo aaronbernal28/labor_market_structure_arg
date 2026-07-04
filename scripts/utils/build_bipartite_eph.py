@@ -23,6 +23,7 @@ def main() -> None:
 		logscale=False,
 		caes_partition=snakemake.config["caes"]["partition"],
 		ciuo_partition=snakemake.config["cno"]["partition"],
+		max_caes_id=snakemake.config["max_caes_id"],
 	)
 
 	metric_results = metrics.summarize_graph(graph)

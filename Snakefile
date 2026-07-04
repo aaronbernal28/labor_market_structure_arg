@@ -43,8 +43,8 @@ wildcard_constraints:
 
 
 # =============================================================
-# PANEL DE EXPERIMENTACIÓN (leído de config.yaml > run_experiments)
-# Edita config.yaml para cambiar qué targets construye `snakemake`.
+# EXPERIMENTATION PANEL (config.yaml > run_experiments)
+# Edit config.yaml to change which targets are built by `snakemake`.
 # =============================================================
 _EXP             = config.get("run_experiments", {})
 TARGET_DATASETS  = _EXP.get("datasets_to_build",   ["enes_all"])
