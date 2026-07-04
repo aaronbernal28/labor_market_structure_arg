@@ -236,7 +236,6 @@ def main() -> None:
 		lbl = k.label if k else eph_file
 		log_lines.append(f"  {j:>3d}. {eph_file} -> {lbl}")
 
-
 	log_path = None
 	if hasattr(snakemake, "log") and snakemake.log:
 		log_path = snakemake.log[0]

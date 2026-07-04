@@ -46,6 +46,10 @@ def main() -> None:
 	# Reindex with sorted node order before writing
 	projection = nx.Graph(projection.subgraph(sorted(projection.nodes())))
 	nx.write_gexf(projection, snakemake.output[0])
+	utils.update_gexf_metadata(
+		filepath=snakemake.output[0],
+		creator="NetworkX + Labor Market Structure Pipeline",
+	)
 
 
 if __name__ == "__main__":

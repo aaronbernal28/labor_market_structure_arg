@@ -69,7 +69,7 @@ def main() -> None:
 	df_nodelist = nc.attach_group_characteristics(
 		nodelist_df=df_nodelist,
 		features_df=new_features,
-		keep_columns=CHARACTERISTIC_COLUMNS + ["original_" + id]
+		keep_columns=CHARACTERISTIC_COLUMNS + ["original_" + id],
 	)
 	df_nodelist = df_nodelist.reset_index()
 

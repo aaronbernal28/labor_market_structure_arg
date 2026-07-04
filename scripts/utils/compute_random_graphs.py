@@ -90,7 +90,9 @@ def main() -> None:
 	class_ = snakemake.wildcards["class_"]
 	alpha = float(snakemake.wildcards.get("alpha", 0.05))
 	seed_base = int(snakemake.config["seed"])
-	resolution = float(snakemake.config["community"]["resolution"][f"{alpha:.2f}"][class_])
+	resolution = float(
+		snakemake.config["community"]["resolution"][f"{alpha:.2f}"][class_]
+	)
 	wcm_scale = float(
 		snakemake.config.get("random_graphs", {}).get("wcm_scale", 1000.0)
 	)

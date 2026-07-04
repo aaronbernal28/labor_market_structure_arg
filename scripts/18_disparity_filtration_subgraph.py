@@ -86,7 +86,9 @@ def main() -> None:
 
 	# Fallback if coordinates are missing in nodelist
 	if not pos:
-		print("[DEBUG] Nodelist lacks 'pos_x'/'pos_y' or 'x'/'y', computing spring layout...")
+		print(
+			"[DEBUG] Nodelist lacks 'pos_x'/'pos_y' or 'x'/'y', computing spring layout..."
+		)
 		pos = nx.spring_layout(subgraph, seed=snakemake.config.get("seed", 42))
 
 	# Setup fixed styles (color, constant sizes, specific labels)
@@ -240,7 +242,9 @@ def main() -> None:
 			else:
 				y_offset = 0.04
 
-			pos_labels = {node: (coords[0], coords[1] + y_offset) for node, coords in pos.items()}
+			pos_labels = {
+				node: (coords[0], coords[1] + y_offset) for node, coords in pos.items()
+			}
 
 			text_dict = nx.draw_networkx_labels(
 				filtered_G,

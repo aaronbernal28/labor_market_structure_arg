@@ -30,6 +30,10 @@ datasets:
     - name: "nivel_ed"
       type: "float"
       default: NaN
+  labels:
+    enes_all: "ENES 2019 + ENES 2021"
+    enes_2019: "ENES 2019"
+    enes_2021: "ENES 2021"
 
   enes_2019:
     source: data/raw/base_enespersonas.csv

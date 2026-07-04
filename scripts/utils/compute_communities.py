@@ -18,7 +18,9 @@ def main() -> None:
 	dataset = snakemake.wildcards["dataset"]
 	alpha = float(snakemake.wildcards.get("alpha", 0.05))
 	seed = int(snakemake.config["seed"])
-	resolution = float(snakemake.config["community"]["resolution"][f"{alpha:.2f}"][class_])
+	resolution = float(
+		snakemake.config["community"]["resolution"][f"{alpha:.2f}"][class_]
+	)
 
 	id_col = snakemake.config[class_]["id"]
 	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})

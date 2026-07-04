@@ -180,7 +180,9 @@ def main() -> None:
 			zorder=2,
 		)
 	# Add label with all negatives values omitted, vertically separated
-	group_neg = df.groupby("algorithm")["modularity"].apply(lambda x: x[x < -0.1].count())
+	group_neg = df.groupby("algorithm")["modularity"].apply(
+		lambda x: x[x < -0.1].count()
+	)
 	label_y_base = 0.05
 	label_y_step = 0.06
 	for idx, algorithm in enumerate(algorithm_order):
