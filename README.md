@@ -1,5 +1,5 @@
 # Labor Market Structure in Argentina
-### A Network Analysis of Occupational Mobility Using the ENES Dataset
+### A Network Analysis of Occupational Mobility Using the ENES AND ESAyPP Datasets
 
 **Author:** Aaron Bernal Huanca — Licenciatura en Ciencia de Datos, FCEyN, UBA
 
@@ -9,8 +9,9 @@
 
 ## Overview
 
-This repository contains the full Snakemake pipeline used to construct, filter, and analyze
-labor-market networks from the ENES (Encuesta Nacional sobre Estructura Social) dataset.
+This repository contains the full Snakemake workflow used to construct, filter, and analyze
+labor-market networks from the ENES (Encuesta Nacional sobre Estructura Social) and
+ESAyPP (Encuesta Nacional sobre la Estructura Social de Argentina y Políticas Públicas) datasets.
 The pipeline builds bipartite graphs linking workers to occupational (ISCO-08) and sectoral
 (CAES-01) categories, applies the Hidalgo Disparity and disparity filter to extract a statistically significant
 backbone, detects community structure, and produces all figures reported in the thesis.
@@ -99,10 +100,10 @@ To reproduce **all** outputs from every chapter of the thesis (one representativ
 figure per pipeline rule), run:
 
 ```bash
-snakemake thesis_all --cores all
+snakemake thesis_resume --cores all
 ```
 
-> **Note:** `thesis_all` requires access to the EPH time-series data for the
+> **Note:** `thesis_resume` requires access to the EPH time-series data for the
 > dynamic network chapters (7+). ENES-only chapters will run without EPH data.
 
 ---
@@ -115,24 +116,24 @@ The pipeline is fully parameterized. To explore alternative network topologies,
 ```yaml
 # config.yaml — run_experiments panel
 run_experiments:
-  datasets_to_build:   ["enes_all"]
-  classes_to_build:    ["ciuo"]
-  alphas_to_build:     ["0.05"]          # ← change threshold here
-  algorithms_to_build: ["infomap"]       # ← change algorithm here
-  discrete_features:   ["grupo", "community"]
-  continuous_features: ["female_pct", "income_mean", "nivel_ed_mean"]
+	datasets_to_build:   ["enes_all"]
+	classes_to_build:    ["ciuo"]
+	alphas_to_build:     ["0.05"]          # ← change threshold here
+	algorithms_to_build: ["infomap"]       # ← change algorithm here
+	discrete_features:   ["grupo", "community"]
+	continuous_features: ["female_pct", "income_mean", "nivel_ed_mean"]
 ```
 
 **Example:** Add a stricter threshold (α = 0.25) and compare Leiden vs Infomap:
 
 ```yaml
 run_experiments:
-  datasets_to_build:   ["enes_all"]
-  classes_to_build:    ["ciuo"]
-  alphas_to_build:     ["0.05", "0.25"]
-  algorithms_to_build: ["infomap", "leiden"]
-  discrete_features:   ["community"]
-  continuous_features: ["female_pct"]
+	datasets_to_build:   ["enes_all"]
+	classes_to_build:    ["ciuo"]
+	alphas_to_build:     ["0.05", "0.25"]
+	algorithms_to_build: ["infomap", "leiden"]
+	discrete_features:   ["community"]
+	continuous_features: ["female_pct"]
 ```
 
 Then run `snakemake --cores all`. Snakemake detects the missing targets and
@@ -175,7 +176,7 @@ Snakemake will automatically:
 
 **Visualize the execution DAG:**
 ```bash
-snakemake --dag | dot -Tpng > images/dag.png
+snakemake --dag dot thesis_resume | dot -Tpng -o thesis_resume_dag.png
 ```
 
 **Dry run (show what would be built without executing):**
@@ -199,15 +200,28 @@ export CUDA_PATH=/usr
 
 ## Citation
 
-If you use this pipeline or data in your research, please cite:
+If you use the ocupational graph in your research, please cite:
 
 ```bibtex
-@misc{bernal2025labormarket,
-  author    = {Bernal Huanca, Aaron},
-  title     = {Labor Market Structure in Argentina: A Network Approach},
-  year      = {2025},
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.XXXXXXX},
-  url       = {https://doi.org/10.5281/zenodo.XXXXXXX}
+@dataset{bernal2026projection,
+	author    = {Bernal Huanca, Aaron},
+	title     = {Projection of Argentinian Industry-Occupation Space onto Occupations using Hidalgo Proximity},
+	year      = {2026},
+	publisher = {Zenodo},
+	doi       = {10.5281/zenodo.21185520},
+	url       = {https://doi.org/10.5281/zenodo.21185520}
+}
+```
+
+If you use this pipeline in your research, please cite:
+
+```bibtex
+@misc{bernal2026labormarket,
+	author    = {Bernal Huanca, Aaron},
+	title     = {Occupational and Industry Networks: A Network Analysis of the Labor Market Structure},
+	year      = {2026},
+	publisher = {Zenodo},
+	doi       = {10.5281/zenodo.21185520},
+	url       = {https://doi.org/10.5281/zenodo.21185520}
 }
 ```

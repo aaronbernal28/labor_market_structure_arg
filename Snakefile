@@ -59,7 +59,7 @@ rule all:
 	"""
 	BUILDS: targets defined in run_experiments section of config.yaml.
 	DEFAULT: reproduces the main projection plots from the manuscript (alpha=0.05, infomap, ciuo).
-	To reproduce ALL manuscript outputs: snakemake thesis_all --cores all
+	To reproduce ALL manuscript outputs: snakemake thesis_resume --cores all
 	"""
 	input:
 		expand(
@@ -78,7 +78,9 @@ rule all:
 			weight_function=["hidalgo"],
 			alpha=TARGET_ALPHAS,
 			feature=TARGET_CONT,
-		),# Definimos los inputs de la tesis que no requieren datos de la EPH
+		),
+
+# Define thesis inputs that do not require EPH data
 THESIS_INPUTS = [
 	# 02 — Bipartite graph
 	"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
@@ -106,11 +108,11 @@ THESIS_INPUTS = [
 	# 19 — Public policy by communities (ciuo)
 	"images/enes_all/ciuo/19_public_policy_by_communities/_hidalgo_0.05_infomap_C03_C09_betweenness_centrality.png",
 	# Zenodo GEXF exports
-	"data/graphs/enes_all/caes/zenodo_caes_hidalgo_1.00_louvain.gexf",
-	"data/graphs/enes_all/ciuo/zenodo_ciuo_hidalgo_1.00_louvain.gexf",
+	"data/public_archive/enes_all/caes/zenodo_caes_hidalgo_0.05_infomap.gexf",
+	"data/public_archive/enes_all/ciuo/zenodo_ciuo_hidalgo_0.05_infomap.gexf",
 ]
 
-# Si hay archivos EPH crudos en data/raw/eph/, agregamos los análisis de redes dinámicas
+# If raw EPH files are present in data/raw/eph/, add dynamic network analyses
 if EPH_FILES:
 	THESIS_INPUTS.extend([
 		# 09 — Alpha sensitivity EPH (caes)
@@ -121,16 +123,16 @@ if EPH_FILES:
 		"images/eph/cno/13_preferential_attachment/_hidalgo.png",
 		# 16 — Persistence diagram distance EPH (cno)
 		"images/eph/cno/16_persistence_diagram_distance/_hidalgo_disparity_filtration_heatmap_wasserstein.png",
-		# 20 — Persistence diagram UMAP all (depende de diagramas de persistencia de EPH)
+		# 20 — Persistence diagram UMAP all (depends on EPH diagrams)
 		"images/20_persistence_diagram_umap_all/_hidalgo_disparity_filtration_wasserstein_umap_H1.png",
 	])
 
 
-rule thesis_all:
+rule thesis_resume:
 	"""
 	REPRODUCES: one representative output per pipeline rule, all from ciuo class.
 	Runs the full manuscript analysis. Dynamic networks chapters are skipped if EPH files are missing.
-	Usage: snakemake thesis_all --cores all
+	Usage: snakemake thesis_resume --cores all
 	"""
 	input:
 		THESIS_INPUTS
@@ -150,7 +152,7 @@ rule prepare_all_nodelists:
 	input:
 		expand("data/processed/{dataset}/nodelist_{class_}.csv", dataset=DATASETS, class_=CLASSES)
 
-rule _00_aed_report:
+rule aed_report:
 	'''AED: Análisis Exploratorio de Datos on ENES datasets'''
 	input:
 		"data/processed/{dataset}.csv",
@@ -167,7 +169,7 @@ rule _00_aed_report:
 		"scripts/00_aed_report.py"
 
 
-rule _01_biadjacency_matrix_heatmap:
+rule biadjacency_matrix_heatmap:
 	'''Cross tabular matrix on frequency in the ENES datasets.'''
 	input:
 		"data/processed/{dataset}.csv",
@@ -181,7 +183,7 @@ rule _01_biadjacency_matrix_heatmap:
 		"scripts/01_biadjacency_matrix_heatmap.py"
 
 
-rule _02_bipartite_plot_by_groups:
+rule bipartite_plot_by_groups:
 	'''Plot bipartite graph from graph.'''
 	input:
 		"data/graphs/{dataset}/bipartite.gexf",
@@ -196,7 +198,7 @@ rule _02_bipartite_plot_by_groups:
 		"scripts/02_bipartite_plot_by_groups.py"
 
 
-rule _03_resolution_sensitivity:
+rule resolution_sensitivity:
 	"""Sensitivity of community detection to resolution parameter alpha. This will compare all algorithms also."""
 	input:
 		lambda wc: expand(
@@ -221,7 +223,7 @@ rule _03_resolution_sensitivity:
 	#	"export CUDA_PATH=/usr"
 
 
-rule _03_projection_plot_by_groups:
+rule projection_plot_by_groups:
 	'''Plot projection graph from graph.
 	Example:
 	snakemake -j1 images/03_projection_plot_by_groups/_enes_all_false_ciuo_weighted_hidalgo_weight_1.0000_pos_louvain_community.png'''
@@ -236,7 +238,7 @@ rule _03_projection_plot_by_groups:
 		"scripts/03_projection_plot_by_groups.py"
 
 
-rule _03_projection_plot_gradient:
+rule projection_plot_gradient:
 	'''Plot projection graph from graph.'''
 	input:
 		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv",
@@ -249,7 +251,7 @@ rule _03_projection_plot_gradient:
 		"scripts/03_projection_plot_gradient.py"
 
 
-rule _04_walt_test:
+rule walt_test:
 	'''Walt test on datasets enes_2019 vs enes_2021.'''
 	input:
 		"data/processed/enes_2019.csv",
@@ -266,7 +268,7 @@ rule _04_walt_test:
 		"scripts/04_walt_test.py"
 
 
-rule _05_edge_weight_correlation:
+rule edge_weight_correlation:
 	'''Correlation between edge weights in projection graphs.'''
 	input:
 		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv", # get community class from column louvain
@@ -279,7 +281,7 @@ rule _05_edge_weight_correlation:
 		"scripts/05_edge_weight_correlation.py"
 
 
-rule _06_sankey_plot:
+rule sankey_plot:
 	'''Sankey plot of communities.'''
 	input:
 		"data/processed/{dataset}.csv",
@@ -293,7 +295,7 @@ rule _06_sankey_plot:
 		"scripts/06_sankey_plot.py"
 
 
-rule _07_alpha_sensitivity:
+rule alpha_sensitivity:
 	input:
 		"data/processed/{dataset}/{class_}/_alpha_sensitivity/_{weight_function}.json"
 	output:
@@ -304,7 +306,7 @@ rule _07_alpha_sensitivity:
 		"scripts/07_alpha_sensitivity.py"
 
 
-rule _08_persistence_diagram:
+rule persistence_diagram:
 	input:
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
 	output:
@@ -315,7 +317,7 @@ rule _08_persistence_diagram:
 		"scripts/08_persistence_diagram.py"
 
 
-rule _15_persistence_diagram_gender:
+rule persistence_diagram_gender:
 	"""Compare male vs female persistence diagrams side-by-side."""
 	input:
 		male="data/diagrams/enes_all_male/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
@@ -326,7 +328,7 @@ rule _15_persistence_diagram_gender:
 		"scripts/15_persistence_diagram_gender.py"
 
 
-rule _09_alpha_sensitivity_eph:
+rule alpha_sensitivity_eph:
 	"""Alpha-sensitivity sweep across all EPH projection graphs.
 	Produces a single combined plot per (class_, weight_function), overlaying
 	all EPH series with colormap gradients.
@@ -351,7 +353,7 @@ rule _09_alpha_sensitivity_eph:
 		"scripts/09_alpha_sensitivity_eph.py"
 
 
-rule _10_edge_weight_correlation_eph:
+rule edge_weight_correlation_eph:
 	"""Time-series assortativity (Pearson r) across EPH waves.
 
 	Produces a single combined plot per (class_, weight_function, feature), overlaying
@@ -378,7 +380,7 @@ rule _10_edge_weight_correlation_eph:
 		"scripts/10_edge_weight_correlation_eph.py"
 
 
-rule _12_betweenness_centrality_ai:
+rule betweenness_centrality_ai:
 	"""Time-series of betweenness centrality for AI-related occupations in CNO projections."""
 	input:
 		projections=lambda wildcards: expand(
@@ -395,7 +397,7 @@ rule _12_betweenness_centrality_ai:
 		"scripts/12_betweenness_centrality_ai.py"
 
 
-rule _13_preferential_attachment:
+rule preferential_attachment:
 	"""Estimate the preferential attachment exponent alpha for EPH projections."""
 	input:
 		projections=lambda wildcards: sorted(expand(
@@ -412,7 +414,7 @@ rule _13_preferential_attachment:
 		"scripts/13_preferential_attachment.py"
 
 
-rule _14_persistence_diagram_distance_hypothesis_test:
+rule persistence_diagram_distance_hypothesis_test:
 	input:
 		"data/diagrams/{dataset}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
 	output:
@@ -427,7 +429,7 @@ rule _14_persistence_diagram_distance_hypothesis_test:
 		"scripts/14_persistence_diagram_distance_hypothesis_test.py"
 
 
-rule _14_persistence_diagram_distance_hypothesis_test_eph:
+rule persistence_diagram_distance_hypothesis_test_eph:
 	input:
 		"data/diagrams/eph/{eph_file}/{class_}/_persistence_diagram_distance/_{weight_function}_{topo_method}.csv"
 	output:
@@ -442,7 +444,7 @@ rule _14_persistence_diagram_distance_hypothesis_test_eph:
 		"scripts/14_persistence_diagram_distance_hypothesis_test.py"
 
 
-rule _16_persistence_diagram_distance_eph:
+rule persistence_diagram_distance_eph:
 	"""Compute distance between persistence diagrams between EPH waves.
 	"""
 	input:
@@ -459,7 +461,7 @@ rule _16_persistence_diagram_distance_eph:
 		"scripts/16_persistence_diagram_distance_eph.py"
 
 
-rule _17_phi_proximity:
+rule phi_proximity:
 	"""Phi proximity plots from bipartite graphs."""
 	input:
 		"data/graphs/{dataset}/bipartite.gexf"
@@ -472,7 +474,7 @@ rule _17_phi_proximity:
 		"scripts/17_phi_proximity.py"
 
 
-rule _18_disparity_filtration_subgraph:
+rule disparity_filtration_subgraph:
 	"""Extract disparity-filtration subgraph for a given graph.
 	Steps:
 	1. Load the projection graph and corresponding nodelist.
@@ -498,7 +500,7 @@ rule _18_disparity_filtration_subgraph:
 		"scripts/18_disparity_filtration_subgraph.py"
 
 
-rule _19_public_policy_by_communities:
+rule public_policy_by_communities:
 	"""Initial exploration of public policy variables by communities.
 	Steps:
 	1. Load the projection graph and corresponding nodelist with community labels.
@@ -521,7 +523,7 @@ rule _19_public_policy_by_communities:
 		"scripts/19_public_policy_by_communities.py"
 
 
-rule _20_persistence_diagram_umap_all:
+rule persistence_diagram_umap_all:
 	"""UMAP projection of persistence diagram distances across all datasets and EPH waves.
 	Steps:
 	1. Load all persistence diagram distance matrices for all datasets and EPH waves.
@@ -582,7 +584,7 @@ rule _20_persistence_diagram_umap_all:
 		"scripts/20_persistence_diagram_umap_all.py"
 
 
-rule _21_persistence_diagram_collar:
+rule persistence_diagram_collar:
 	"""Compare white collar vs blue collar persistence diagrams side-by-side.
 	On CIUO, the two ciuo3cat are:
 		Blue collar: "3. Trabajadores manuales"

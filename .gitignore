@@ -213,6 +213,7 @@ reference/
 *.gz
 *.sty
 *.pdf
+*.lnk
 %OUTDIR%/main.bbl
 main.bbl
 main.synctex(busy)

@@ -129,7 +129,7 @@ rule prepare_eph_all:
 		expand("data/processed/eph/{eph_file}.csv", eph_file=EPH_FILES)
 
 
-rule _11_ponderations_test:
+rule ponderations_test:
 	'''Test the ponderations for the ENES 2021 dataset.'''
 	input:
 		"data/raw/private_surveys/base_enespersonas_2021.csv",
