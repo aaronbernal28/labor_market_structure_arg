@@ -108,8 +108,8 @@ THESIS_INPUTS = [
 	# 19 — Public policy by communities (ciuo)
 	"images/enes_all/ciuo/19_public_policy_by_communities/_hidalgo_0.05_infomap_C03_C09_betweenness_centrality.png",
 	# Zenodo GEXF exports
-	"data/public_archive/enes_all/caes/zenodo_caes_hidalgo_1.00_leiden.gexf",
-	"data/public_archive/enes_all/ciuo/zenodo_ciuo_hidalgo_1.00_leiden.gexf",
+	"data/enes_all/caes/zenodo_projection_hidalgo_0.05_infomap.gexf",
+	"data/enes_all/ciuo/zenodo_projection_hidalgo_0.05_infomap.gexf",
 ]
 
 # If raw EPH files are present in data/raw/eph/, add dynamic network analyses

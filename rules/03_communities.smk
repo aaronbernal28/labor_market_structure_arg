@@ -30,9 +30,9 @@ rule export_zenodo_graph:
 		graph="data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
 		nodelist="data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv"
 	output:
-		graph="data/public_archive/{dataset}/{class_}/zenodo_{class_}_{weight_function}_{alpha}_{algorithm}.gexf"
+		graph="data/{dataset}/{class_}/zenodo_projection_{weight_function}_{alpha}_{algorithm}.gexf"
 	log:
-		"data/public_archive/{dataset}/{class_}/zenodo_{class_}_{weight_function}_{alpha}_{algorithm}.log"
+		"data/{dataset}/{class_}/zenodo_projection_{weight_function}_{alpha}_{algorithm}.log"
 	script:
 		"../scripts/utils/export_zenodo_graph.py"
 

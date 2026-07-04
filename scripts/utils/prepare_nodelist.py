@@ -63,17 +63,23 @@ def main() -> None:
 
 	new_features = nc.compute_group_characteristics(enes_df=df_enes, col_group=id)
 	for col in CHARACTERISTIC_COLUMNS:
-		if col not in new_features.columns:
+		if col not in new_features.columns and col not in df_nodelist.columns:
 			new_features[col] = pd.NA
 
 	df_nodelist = nc.attach_group_characteristics(
 		nodelist_df=df_nodelist,
 		features_df=new_features,
-		keep_columns=CHARACTERISTIC_COLUMNS,
+		keep_columns=CHARACTERISTIC_COLUMNS + ["original_" + id]
 	)
 	df_nodelist = df_nodelist.reset_index()
 
 	df_nodelist[id] = df_nodelist[id].astype(int)
+
+	if "original_" + id in df_nodelist.columns:
+		cols = [id, "original_" + id] + [
+			col for col in df_nodelist.columns if col not in (id, "original_" + id)
+		]
+		df_nodelist = df_nodelist[cols]
 
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)
