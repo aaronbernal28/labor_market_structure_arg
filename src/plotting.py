@@ -240,12 +240,24 @@ def plot_delta_heatmap(
 	save: bool = True,
 	figsize: tuple | None = None,
 	title: str = "",
+	logscale: bool = False,
+	logscale_vmin: float = 1e-3,
 ) -> None:
 	"""Diverging heatmap showing delta_hat annotations in scientific notation."""
+	linthresh = 0.0001
+
+	# Scale delta_hat and adjust threshold/labels dynamically if logscale is True
+	if logscale:
+		delta_hat = delta_hat / logscale_vmin
+		linthresh = linthresh / logscale_vmin
+		exponent = abs(int(np.log10(logscale_vmin)))
+		cbar_label = rf"$\delta \times 10^{{{exponent}}}$"
+	else:
+		cbar_label = "delta"
 
 	# Smart formatting: hide extreme values, automatic scientific notation for others
 	def format_delta(v):
-		if abs(v) < 0.0001:  # Hide essentially zero differences
+		if abs(v) < linthresh:  # Hide essentially zero differences
 			return ""
 		else:
 			return f"{v:.3g}"
@@ -255,6 +267,7 @@ def plot_delta_heatmap(
 	df = _wrap_labels(df)
 	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
 	abs_max = np.max(np.abs(delta_hat))
+
 	fig, ax = plt.subplots(figsize=figsize)
 	sns.heatmap(
 		df,
@@ -265,7 +278,7 @@ def plot_delta_heatmap(
 		vmin=-abs_max,
 		vmax=abs_max,
 		cbar=True,
-		cbar_kws={"shrink": 0.35, "label": "delta"},
+		cbar_kws={"shrink": 0.35, "label": cbar_label},
 	)
 	_style_heatmap_axes(ax, title)
 	if save:
