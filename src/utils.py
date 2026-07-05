@@ -168,7 +168,7 @@ def _community_sort_key(label: object) -> tuple[int, int | str]:
 def build_community_color_map(
 	labels: Iterable[object],
 	*,
-	other_label: str = "Other",
+	other_label: str = "Otros",
 	palette: str = "default",
 ) -> dict[str, str]:
 	"""Return a label->color map using the Gephi palette for communities."""
@@ -203,7 +203,7 @@ def build_community_color_map(
 def build_node_color_map_from_communities(
 	community_map: Mapping[int, object],
 	*,
-	other_label: str = "Other",
+	other_label: str = "Otros",
 	palette: str = "default",
 ) -> dict[int, str]:
 	"""Return a node->color map based on community labels."""
@@ -582,7 +582,7 @@ def get_markov_time(resolution: float) -> float:
 
 def get_community_color(community_label, communities):
 	"""Assign a color based on pal_gephi palette, with 'Other' as gray."""
-	color_map = build_community_color_map(communities, other_label="Other")
+	color_map = build_community_color_map(communities, other_label="Otros")
 	return color_map.get(str(community_label), "gray")
 
 

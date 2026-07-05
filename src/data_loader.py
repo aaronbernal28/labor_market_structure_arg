@@ -591,7 +591,7 @@ def filter_communities(
 	print(f"Unique communities before filtering: {df[feature_col].unique()}")
 	mask = df_community_to_id(df[feature_col]) > max_code
 	print(f"Communities to filter out: {df.loc[mask, feature_col].unique()}")
-	df.loc[mask, feature_col] = "Other"
+	df.loc[mask, feature_col] = "Otros"
 	for col in df.columns:
 		print(f"Processing column '{col}' for color filtering...")
 		if "color" in col:

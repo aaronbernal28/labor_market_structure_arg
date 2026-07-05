@@ -212,6 +212,9 @@ alpha_sensitivity:
   reference_coverage_threshold: 0.99
   default_alpha_eph: 0.001
 
+disparity_filtration:
+  target_community: 8
+
 # Palettes for categorical features.
 palette:
   ciuo1diglabel: ["#374E55", "#DF8F44", "#00A1D5", "#B24745", "#79AF97", "#6A6599", "#80796B", "#05897B", "#5C068C","#333333"]

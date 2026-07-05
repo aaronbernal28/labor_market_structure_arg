@@ -72,7 +72,7 @@ def main() -> None:
 
 	if discrete_feature == "community" and group_color_map is not None:
 		# Always render non-community nodes in gray.
-		group_color_map.setdefault("Other", "gray")
+		group_color_map.setdefault("Otros", "gray")
 
 	print(f"Using discrete feature '{discrete_feature}' for grouping.")
 	print(f"Group mapping: {set(group_map.values())}")
@@ -87,7 +87,7 @@ def main() -> None:
 		unique_groups = sorted(set(group_map.values()))
 		group_color_map = utils.build_community_color_map(
 			unique_groups,
-			other_label="Other",
+			other_label="Otros",
 		)
 
 	if pos:

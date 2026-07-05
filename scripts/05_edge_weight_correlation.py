@@ -63,7 +63,7 @@ def main() -> None:
 
 	color_map = utils.build_node_color_map_from_communities(
 		community_map,
-		other_label="Other",
+		other_label="Otros",
 	)
 
 	feature_label = utils.translate_label(feature_name, translation)

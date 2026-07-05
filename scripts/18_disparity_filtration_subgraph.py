@@ -48,15 +48,24 @@ def main() -> None:
 
 	# 2. Filter the graph using one community as the focal class
 	if "community" in df.columns:
-		comm_counts = df["community"].value_counts()
-		if 8 in comm_counts:
-			target_comm = 8
-		elif "C08" in comm_counts:
-			target_comm = "C08"
+		target_comm = getattr(snakemake.params, "target_community", 8)
+		# Ensure target_comm type matches the column type
+		comm_unique = df["community"].unique()
+		if target_comm not in comm_unique:
+			# Try standard alternative formats
+			target_comm_str = f"C{target_comm:02d}" if isinstance(target_comm, int) else str(target_comm)
+			if target_comm_str in comm_unique:
+				target_comm = target_comm_str
+			elif str(target_comm) in comm_unique:
+				target_comm = str(target_comm)
+			else:
+				# Fallback to the largest community if not found
+				comm_counts = df["community"].value_counts()
+				target_comm = comm_counts.idxmax()
+				print(f"[DEBUG] Target community {target_comm} not found. Falling back to largest: {target_comm}")
 		else:
-			target_comm = comm_counts.idxmax()
+			print(f"[DEBUG] Focal community determined from params: {target_comm}")
 
-		print(f"[DEBUG] Focal community determined: {target_comm}")
 		focal_nodes = df[df["community"] == target_comm][id_col].tolist()
 	else:
 		target_comm = "All"
@@ -126,7 +135,7 @@ def main() -> None:
 				keep_isolates=False,
 			)
 			val_str = f"{a:.3g}"
-		title = rf"$\beta_{{{i}}} = {val_str}$"
+		title = rf"$\alpha_{{{i}}} = {val_str}$"
 
 		current_nodelist = list(filtered_G.nodes())
 		current_nodes_set = set(current_nodelist)

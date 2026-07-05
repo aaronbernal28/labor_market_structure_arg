@@ -41,7 +41,7 @@ def main() -> None:
 		# Ensure non-community labels are rendered in gray.
 		feature_series = feature_series.replace(
 			{
-				"Other": pd.NA,
+				"Otros": pd.NA,
 				"other": pd.NA,
 				"None": pd.NA,
 				"none": pd.NA,
