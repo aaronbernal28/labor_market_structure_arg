@@ -22,6 +22,12 @@ def main() -> None:
 	except OSError:
 		print("[DEBUG] Custom matplotlib style not found, using default.")
 
+	# Load translations from configuration
+	translation = snakemake.config.get("translation", {})
+
+	def _t(label: str) -> str:
+		return utils.translate_label(label, translation)
+
 	nodelist_path = snakemake.input["nodelist"]
 	graph_path = snakemake.input["graph"]
 	output_path = snakemake.output[0]
@@ -110,7 +116,7 @@ def main() -> None:
 		# Alpha = 1.0 implies no filtering (None)
 		if a == 1.0:
 			filtered_G = subgraph.copy()
-			title = r"$\alpha = None$ (Full Subgraph)"
+			val_str = "1.0"
 		else:
 			filtered_G = gc.disparity_filter_backbone(
 				original_graph=subgraph,
@@ -119,7 +125,8 @@ def main() -> None:
 				mode="or",
 				keep_isolates=False,
 			)
-			title = rf"$\alpha = {a}$"
+			val_str = f"{a:.3g}"
+		title = rf"$\beta_{{{i}}} = {val_str}$"
 
 		current_nodelist = list(filtered_G.nodes())
 		current_nodes_set = set(current_nodelist)
@@ -269,10 +276,10 @@ def main() -> None:
 
 	# Add a custom legend for the simplices at the bottom center of the figure
 	triangle_patch = mpatches.Patch(
-		color="deepskyblue", alpha=0.35, label="2-Simplices (Triangles)"
+		color="deepskyblue", alpha=0.35, label=_t("2-Simplex (Triangles)")
 	)
 	tetra_patch = mpatches.Patch(
-		color="crimson", alpha=0.25, label="3-Simplices (Tetrahedra / 4-Cliques)"
+		color="crimson", alpha=0.25, label=_t("3-Simplex (Tetrahedra / 4-Cliques)")
 	)
 	fig.legend(
 		handles=[triangle_patch, tetra_patch],

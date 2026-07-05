@@ -294,6 +294,8 @@ translation:
   "Persistence diagrams": "Diagramas de persistencia"
   "Persistence Diagram": "Diagrama de persistencia"
   "Distance matrix d(u,v) (beta-index)": "Matriz de distancias d(u,v) (índice beta)"
+  "2-Simplex (Triangles)": "2-Simplices (Triángulos)"
+  "3-Simplex (Tetrahedra / 4-Cliques)": "3-Simplices (Tetraedros / 4-cliques)"
   Other: "Otro"
   community: "Comunidad"
   "Betweenness centrality": "Centralidad de intermediación"
