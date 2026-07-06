@@ -16,6 +16,17 @@ def main() -> None:
 	translation = snakemake.config.get("translation", {})
 	pos_df = pd.read_csv(snakemake.input[0], dtype={id_col: int})
 
+	dataset = snakemake.wildcards.get("dataset", "")
+	dataset_cfg = snakemake.config["datasets"].get(dataset, {})
+	node_size_metric = dataset_cfg.get("node_size", None)
+	if node_size_metric is None and "_unweighted" in dataset:
+		node_size_metric = "n_obs"
+
+	node_size_map = None
+	if node_size_metric and node_size_metric in pos_df.columns:
+		node_size_map = pos_df.set_index(id_col)[node_size_metric].to_dict()
+		node_size_map = {int(k): float(v) for k, v in node_size_map.items()}
+
 	graph = nx.read_gexf(snakemake.input[1], node_type=int)
 	# graph_metrics = metrics.summarize_graph(graph)
 	graph_nodes = set(graph.nodes())
@@ -152,6 +163,7 @@ def main() -> None:
 		save=True,
 		method="energy",
 		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_],
+		node_size_map=node_size_map,
 		pos=pos,
 		edge_alpha=snakemake.config["EDGE_ALPHA"][class_],
 		node_alpha=snakemake.config["NODE_ALPHA"],

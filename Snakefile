@@ -137,6 +137,15 @@ rule thesis_resume:
 	input:
 		THESIS_INPUTS
 
+rule chapter_5_unweighted:
+	input:
+		# Chapter 5 (completo)
+		"images/enes_all_unweighted/ciuo/03_projection_plot_by_groups/_hidalgo_1.00_pos_louvain_grupo.png",
+		"images/enes_all_unweighted/ciuo/03_projection_plot_by_groups/_hidalgo_1.00_pos_louvain_community.png",
+		"images/enes_all_unweighted/ciuo/03_projection_plot_gradient/_hidalgo_1.00_pos_female_pct.png",
+		"images/enes_all_unweighted/ciuo/03_communities/_distribution_hidalgo_1.00_louvain.png",
+		"images/enes_all_unweighted/ciuo/05_edge_weight_correlation/_hidalgo_1.00_pos_louvain_female_pct.png",
+
 
 rule prepare_all_datasets:
 	input:
@@ -494,6 +503,8 @@ rule disparity_filtration_subgraph:
 	input:
 		nodelist="data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
 		graph="data/graphs/{dataset}/{class_}/projection_{weight_function}.gexf"
+	params:
+		target_community=config.get("disparity_filtration", {}).get("target_community", 8)
 	output:
 		"images/{dataset}/{class_}/18_disparity_filtration_subgraph/_{weight_function}_{alpha}_pos_{algorithm}_filtration.png"
 	script:

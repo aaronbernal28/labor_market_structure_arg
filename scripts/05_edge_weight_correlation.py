@@ -69,18 +69,34 @@ def main() -> None:
 	feature_label = utils.translate_label(feature_name, translation)
 	default_title = ""
 
+	factor_node_size = snakemake.config["FACTOR_NODE_SIZE"][class_] / 50.0
+	if "_unweighted" in snakemake.wildcards.get("dataset", ""):
+		factor_node_size *= 150.0
+
+	highlight_communities = None
+	highlight_cfg = snakemake.config.get("highlight_communities", {})
+	dataset_name = snakemake.wildcards.get("dataset", "")
+	if dataset_name in highlight_cfg:
+		dataset_cfg = highlight_cfg[dataset_name]
+		if class_ in dataset_cfg:
+			class_cfg = dataset_cfg[class_]
+			if algorithm in class_cfg:
+				alg_cfg = class_cfg[algorithm]
+				if feature_name in alg_cfg:
+					highlight_communities = alg_cfg[feature_name]
+
 	pearson_r, p_value = pl.compute_and_plot_edge_correlation(
 		G=graph,
 		feature_map=feature_map,
 		color_map=color_map,
 		community_map=community_map,
 		node_size_map=node_size_map,
-		highlight_communities=None,
+		highlight_communities=highlight_communities,
 		title=default_title,
 		output_path=snakemake.output[0],
 		save=True,
 		perfect_line=False,
-		factor_node_size=snakemake.config["FACTOR_NODE_SIZE"][class_] / 50.0,
+		factor_node_size=factor_node_size,
 		figsize=snakemake.config["figsizes"]["edge_correlation"],
 	)
 

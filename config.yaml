@@ -80,6 +80,7 @@ datasets:
     id_ciuo: "v183ciuo"
     id_cno: "v183cno"
     ponderation: null
+    node_size: "n_obs"
     features:
       sex_id: "v109"
       public_worker: "v188"
@@ -98,6 +99,7 @@ datasets:
     id_ciuo: "CIUO_encuestado"
     id_cno: null
     ponderation: null
+    node_size: "n_obs"
     features:
      sex_id: "SEXO"
      public_worker: "M3_7"
@@ -329,3 +331,10 @@ run_experiments:
   discrete_features:   ["grupo", "community"]
   # Continuous features for color gradients
   continuous_features: ["female_pct", "income_mean", "nivel_ed_mean"]
+
+highlight_communities:
+  enes_all_unweighted:
+    ciuo:
+      louvain:
+        female_pct: ["C6", "C5", "C1", "C0"]
+

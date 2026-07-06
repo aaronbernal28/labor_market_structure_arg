@@ -53,7 +53,11 @@ def main() -> None:
 		comm_unique = df["community"].unique()
 		if target_comm not in comm_unique:
 			# Try standard alternative formats
-			target_comm_str = f"C{target_comm:02d}" if isinstance(target_comm, int) else str(target_comm)
+			target_comm_str = (
+				f"C{target_comm:02d}"
+				if isinstance(target_comm, int)
+				else str(target_comm)
+			)
 			if target_comm_str in comm_unique:
 				target_comm = target_comm_str
 			elif str(target_comm) in comm_unique:
@@ -62,7 +66,9 @@ def main() -> None:
 				# Fallback to the largest community if not found
 				comm_counts = df["community"].value_counts()
 				target_comm = comm_counts.idxmax()
-				print(f"[DEBUG] Target community {target_comm} not found. Falling back to largest: {target_comm}")
+				print(
+					f"[DEBUG] Target community {target_comm} not found. Falling back to largest: {target_comm}"
+				)
 		else:
 			print(f"[DEBUG] Focal community determined from params: {target_comm}")
 

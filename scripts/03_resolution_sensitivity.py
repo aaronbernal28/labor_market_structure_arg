@@ -84,7 +84,7 @@ def main() -> None:
 		ymax=df["num_communities"].max(),
 		linestyles="dashed",
 		color="gray",
-		label= r"$\gamma = " + str(reference_resolution) + r"$",
+		label=r"$\gamma = " + str(reference_resolution) + r"$",
 		zorder=1,
 	)
 	if str(snakemake.output[0]).endswith("_catplots_hidalgo_0.05.png"):
@@ -152,7 +152,7 @@ def main() -> None:
 			ymax=data_subset["score"].max(),
 			linestyles="dashed",
 			color="gray",
-			label= r"$\gamma = " + str(reference_resolution) + r"$",
+			label=r"$\gamma = " + str(reference_resolution) + r"$",
 		)
 		legend_handles, legend_labels = g.ax_joint.get_legend_handles_labels()
 		if g.ax_joint.get_legend() is not None:
@@ -203,7 +203,7 @@ def main() -> None:
 		ymax=1.1,
 		linestyles="dashed",
 		color="gray",
-		label= r"$\gamma = " + str(reference_resolution) + r"$",
+		label=r"$\gamma = " + str(reference_resolution) + r"$",
 		zorder=1,
 	)
 	if ax.get_legend() is not None:
