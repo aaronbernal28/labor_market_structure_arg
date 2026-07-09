@@ -111,8 +111,7 @@ To reproduce **every figure cited in the thesis** (one representative output per
 snakemake thesis_resume --cores all
 ```
 
-> **Note:** The EPH-dependent rules (Chapters 9, 12, 13, 16, 20) require raw EPH files to be
-> placed in `data/raw/eph/`. The ENES-only rules run without them.
+> **Note:** The EPH-dependent rules (Chapters 9, 13, 16) require the pre-calculated EPH bipartite graphs placed in `data/graphs/eph/`.
 
 ---
 
@@ -149,7 +148,7 @@ because they are the primary outputs cited in the manuscript and must remain rep
 | `data/enes_all/caes/zenodo_projection_hidalgo_0.05_infomap.gexf` | CAES projection backbone for public release |
 | `data/enes_all/ciuo/zenodo_projection_hidalgo_0.05_infomap.gexf` | CIUO projection backbone for public release |
 
-### Dynamic EPH Outputs (built only when `data/raw/eph/` is populated)
+### Dynamic EPH Outputs (built only when `data/graphs/eph/` is populated)
 
 | # | Output path | Description |
 |---|---|---|

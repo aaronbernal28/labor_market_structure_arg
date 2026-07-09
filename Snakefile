@@ -26,6 +26,8 @@ ALPHAS_ALL = ALPHA_CAES + ALPHA_CIUO
 TOPO_METHOD = ["shortest_path", "disparity_filtration"]
 EPH_YEARS = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
 EPH_FILES = glob_wildcards("data/raw/eph/{eph_file}.csv").eph_file
+if not EPH_FILES:
+	EPH_FILES = glob_wildcards("data/graphs/eph/{eph_file}/bipartite_eph.gexf").eph_file
 DATASETS_ALL = DATASETS + EPH_FILES
 NULL_GRAPH_MODELS = ["configuration_model", "enhanced_configuration_model"]
 DISTANCE_DIAGRAMS = ["bottleneck", "wasserstein"]
@@ -117,14 +119,10 @@ if EPH_FILES:
 	THESIS_INPUTS.extend([
 		# 09 — Alpha sensitivity EPH (caes)
 		"images/eph/caes/09_alpha_sensitivity/_hidalgo.png",
-		# 12 — Betweenness centrality AI (cno)
-		"images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_hidalgo_backbone.png",
 		# 13 — Preferential attachment (cno)
 		"images/eph/cno/13_preferential_attachment/_hidalgo.png",
 		# 16 — Persistence diagram distance EPH (cno)
 		"images/eph/cno/16_persistence_diagram_distance/_hidalgo_disparity_filtration_heatmap_wasserstein.png",
-		# 20 — Persistence diagram UMAP all (depends on EPH diagrams)
-		"images/20_persistence_diagram_umap_all/_hidalgo_disparity_filtration_wasserstein_umap_H1.png",
 	])
 
 

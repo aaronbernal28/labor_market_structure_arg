@@ -126,13 +126,12 @@ def main() -> None:
 	# Fit line
 	fit_y = preferential_attachment_func(k_vals, A_fit, alpha_fit)
 	plt.loglog(
-		k_vals, fit_y, "r--", label=f"Fit: $\\Pi(k) \propto k^{{{alpha_fit:.2f}}}$"
+		k_vals, fit_y, "r--", label=fr"Fit: $\Pi(k) \propto k^{{{alpha_fit:.2f}}}$",
 	)
 
-	plt.xlabel("Degree $k$ at $T_0$")
-	plt.ylabel("Attachment Probability $\Pi(k)$")
+	plt.xlabel(r"Degree $k$")
+	plt.ylabel(r"Attachment Probability $\Pi(k)$")
 	plt.title("")
-	plt.legend()
 	plt.grid(True, which="both", ls="-", alpha=0.2)
 
 	plt.savefig(snakemake.output.plot, bbox_inches="tight")
