@@ -19,7 +19,7 @@ def main() -> None:
 	alpha = float(snakemake.wildcards.get("alpha", 0.05))
 	seed = int(snakemake.config["seed"])
 	resolution = float(
-		snakemake.config["community"]["resolution"][f"{alpha:.2f}"][class_]
+		snakemake.config["community"]["resolution"].get(f"{alpha:.2f}", {}).get(class_, 1.0)
 	)
 
 	id_col = snakemake.config[class_]["id"]

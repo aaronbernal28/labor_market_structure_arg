@@ -258,3 +258,6 @@ data/processed/enes_all_male.csv
 data/processed/enes_all_unweighted.csv
 data/processed/enes_all_white_collar.csv
 data/processed/enes_all.csv
+reproducibility_report.md
+# Ignore all processed survey data
+data/*

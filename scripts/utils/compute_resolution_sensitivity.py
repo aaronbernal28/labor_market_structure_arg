@@ -10,7 +10,7 @@ nx.config.warnings_to_ignore.add("cache")
 
 snakemake: Any
 
-TRYS = 20
+TRYS = 30
 
 
 def main() -> None:
@@ -20,6 +20,10 @@ def main() -> None:
 	resolution = float(snakemake.wildcards["resolution"])
 
 	rng = np.random.default_rng(snakemake.config["seed"])
+	if TRYS < 2:
+		raise ValueError(
+			f"TRYS must be at least 2 to compute pairwise AMI/NMI, but got {TRYS}"
+		)
 	seeds = rng.integers(low=0, high=2**16 - 1, size=TRYS).tolist()
 
 	# Create empty DataFrame with explicit dtypes for columns
