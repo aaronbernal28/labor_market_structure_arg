@@ -3,7 +3,7 @@
 
 **Author:** Aaron Bernal Huanca — Licenciatura en Ciencia de Datos, FCEyN, UBA
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21185520.svg)](https://doi.org/10.5281/zenodo.21185520)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21288647.svg)](https://doi.org/10.5281/zenodo.21288647)
 
 ---
 
@@ -420,3 +420,10 @@ If you use this workflow in your research, please cite:
 	url       = {https://doi.org/10.5281/zenodo.21185520}
 }
 ```
+
+---
+
+## License
+
+The software code and Snakemake workflows in this repository are licensed under the [MIT License](LICENSE).
+The processed datasets (graphs and node lists) are licensed under a [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).

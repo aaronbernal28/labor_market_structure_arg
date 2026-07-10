@@ -1,10 +1,10 @@
 {
   "title": "Occupational and Industry Networks: A Network Analysis of the Labor Market Structure",
-  "description": "Repository of code and processed data (graphs and node lists) for the analysis of the labor market structure through network science. Includes graph projections for ISCO and CAES codes.",
+  "description": "This repository contains the complete Snakemake computational workflow and processed structural data (bipartite graphs and node lists) used to analyze the labor market structure in Argentina. The research investigates occupational mobility, demographic segmentation, and the productive structure by leveraging microdata from the ENES (Encuesta Nacional sobre Estructura Social, 2019 and 2021) and EPH (Encuesta Permanente de Hogares, INDEC) surveys.\n\nUsing advanced network science and topological data analysis (TDA), the workflow constructs bipartite graphs linking workers to occupational (CIUO-08) and sectoral (CAES-01) categories. These graphs are then projected using Hidalgo based Proximity weighting and filtered via the Disparity Filter to extract the structural backbone of the labor market. The codebase includes automated procedures for community detection (Infomap, Leiden, Louvain), persistence diagrams, UMAP projections, and temporal analyses of preferential attachment.",
   "creators": [
     {
       "name": "Bernal Huanca, Aaron",
-      "affiliation": "FCEyN"
+      "affiliation": "FCEyN, UBA"
     }
   ],
   "keywords": [
@@ -14,7 +14,10 @@
     "topological-data-analysis",
     "occupations",
     "productive-structure",
-    "demographic-segmentation"
+    "demographic-segmentation",
+    "Argentina",
+    "snakemake",
+    "socioeconomic-mobility"
   ],
   "upload_type": "software",
   "access_right": "open",
