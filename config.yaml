@@ -33,7 +33,7 @@ datasets:
   labels:
     enes_all: "ENES 2019 + ENES 2021"
     enes_2019: "ENES 2019"
-    enes_2021: "ENES 2021"
+    esaypp_2021: "ENES 2021"
 
   enes_2019:
     source: data/raw/base_enespersonas.csv
@@ -52,8 +52,8 @@ datasets:
       age: "v108"
       nivel_ed: "nivel_ed" # < 11
 
-  enes_2021:
-    source: data/raw/private_surveys/base_enespersonas_2021.csv
+  esaypp_2021:
+    source: data/raw/base_enespersonas_2021.csv
     url: null
     year: 2021
     id_1: "CUEST"
@@ -88,8 +88,8 @@ datasets:
       age: "v108"
       nivel_ed: "nivel_ed"
 
-  enes_2021_unweighted:
-    source: data/raw/private_surveys/base_enespersonas_2021.csv
+  esaypp_2021_unweighted:
+    source: data/raw/base_enespersonas_2021.csv
     url: null
     year: 2021
     id_1: "CUEST"
@@ -319,7 +319,7 @@ translation:
 # To reproduce all results of the manuscript: snakemake thesis_resume
 # =============================================================
 run_experiments:
-  # Dataset(s) to use. Options: enes_all | enes_2019 | enes_2021
+  # Dataset(s) to use. Options: enes_all | enes_2019 | esaypp_2021
   datasets_to_build:   ["enes_all"]
   # Occupational classification. Options: ciuo | caes
   classes_to_build:    ["ciuo"]

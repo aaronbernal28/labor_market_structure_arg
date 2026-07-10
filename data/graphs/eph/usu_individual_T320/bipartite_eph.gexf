@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
-  <meta lastmodifieddate="2026-07-04">
+  <meta lastmodifieddate="2026-07-10">
     <creator>NetworkX + Labor Market Structure Pipeline</creator>
   <description>Bipartite graph of sectors and occupations from EPH data (file: usu_individual_T320). Parameters: CAES ID field = 'v182caes', CNO ID field = 'v183cno', CAES partition = 1, CNO partition = 0.</description></meta>
   <graph defaultedgetype="undirected" mode="static" name="">

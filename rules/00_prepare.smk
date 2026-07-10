@@ -5,9 +5,9 @@ rule prepare_data_enes:
 	- Cleaning the data
 	'''
 	wildcard_constraints:
-		dataset = "enes_2019|enes_2021|enes_2019_unweighted|enes_2021_unweighted"
+		dataset = "enes_2019|esaypp_2021|enes_2019_unweighted|esaypp_2021_unweighted"
 	input:
-		lambda wildcards: "data/raw/private_surveys/base_enespersonas_2021.csv" if "2021" in wildcards.dataset else "data/raw/base_enespersonas.csv"
+		lambda wildcards: "data/raw/base_enespersonas_2021.csv" if "2021" in wildcards.dataset else "data/raw/base_enespersonas.csv"
 	output:
 		"data/processed/{dataset}.csv"
 	log:
@@ -20,7 +20,7 @@ rule prepare_enes_all:
 	'''Merge the ENES 2019 and 2021 datasets into a single dataset.'''
 	input:
 		"data/processed/enes_2019.csv",
-		"data/processed/enes_2021.csv"
+		"data/processed/esaypp_2021.csv"
 	output:
 		"data/processed/enes_all.csv"
 	log:
@@ -33,7 +33,7 @@ rule prepare_enes_all_unweighted:
 	'''Merge the unweighted ENES 2019 and 2021 datasets into a single dataset.'''
 	input:
 		"data/processed/enes_2019_unweighted.csv",
-		"data/processed/enes_2021_unweighted.csv"
+		"data/processed/esaypp_2021_unweighted.csv"
 	output:
 		"data/processed/enes_all_unweighted.csv"
 	log:
@@ -132,7 +132,7 @@ rule prepare_eph_all:
 rule ponderations_test:
 	'''Test the ponderations for the ENES 2021 dataset.'''
 	input:
-		"data/raw/private_surveys/base_enespersonas_2021.csv",
+		"data/raw/base_enespersonas_2021.csv",
 		"data/raw/base_enespersonas.csv"
 	output:
 		"images/enes_all/ponderations_test_histogram.png"

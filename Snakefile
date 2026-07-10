@@ -3,9 +3,9 @@ from numpy import logspace, geomspace
 
 
 DATASETS = [
-	"enes_all", "enes_2019", "enes_2021", "enes_all_male", "enes_all_female",
+	"enes_all", "enes_2019", "esaypp_2021", "enes_all_male", "enes_all_female",
 	"enes_all_white_collar", "enes_all_blue_collar",
-	"enes_all_unweighted", "enes_2019_unweighted", "enes_2021_unweighted",
+	"enes_all_unweighted", "enes_2019_unweighted", "esaypp_2021_unweighted",
 	"enes_all_male_unweighted", "enes_all_female_unweighted"
 ]
 NODELIST = ["caes", "ciuo"]
@@ -259,10 +259,10 @@ rule projection_plot_gradient:
 
 
 rule wald_test:
-	'''Wald test on datasets enes_2019 vs enes_2021.'''
+	'''Wald test on datasets enes_2019 vs esaypp_2021.'''
 	input:
 		"data/processed/enes_2019.csv",
-		"data/processed/enes_2021.csv",
+		"data/processed/esaypp_2021.csv",
 		"data/processed/enes_all/nodelist_caes.csv", # irrelevant which enes dataset we use
 		"data/processed/enes_all/nodelist_ciuo.csv"
 	output:
@@ -550,7 +550,7 @@ rule persistence_diagram_umap_all:
 		lambda wc:
 			expand(
 				"data/diagrams/{dataset}/{class_}/_persistence_diagram/_{weight_function}_{topo_method}.csv",
-				dataset=["enes_all", "enes_2019", "enes_2021"],
+				dataset=["enes_all", "enes_2019", "esaypp_2021"],
 				class_=["ciuo"],
 				weight_function=wc.weight_function,
 				topo_method=wc.topo_method,
@@ -560,7 +560,7 @@ rule persistence_diagram_umap_all:
 			expand(
 				"data/diagrams/{dataset}/{class_}/_persistence_diagram/{null_model}/_{weight_function}_{i}_{topo_method}.csv",
 				null_model=NULL_GRAPH_MODELS,
-				dataset=["enes_all", "enes_2019", "enes_2021"],
+				dataset=["enes_all", "enes_2019", "esaypp_2021"],
 				class_=["ciuo"],
 				weight_function=wc.weight_function,
 				topo_method=wc.topo_method,

@@ -8,9 +8,9 @@ rule compute_projection:
 		"images/{dataset}/{class_}/compute_projection_{weight_function}.log"
 	wildcard_constraints:
 		dataset = "|".join([
-			"enes_2019", "enes_2021", "enes_all", "enes_all_male", "enes_all_female",
+			"enes_2019", "esaypp_2021", "enes_all", "enes_all_male", "enes_all_female",
 			"enes_all_white_collar", "enes_all_blue_collar",
-			"enes_2019_unweighted", "enes_2021_unweighted", "enes_all_unweighted",
+			"enes_2019_unweighted", "esaypp_2021_unweighted", "enes_all_unweighted",
 			"enes_all_male_unweighted", "enes_all_female_unweighted"
 		])
 	script:

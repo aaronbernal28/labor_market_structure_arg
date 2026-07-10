@@ -36,7 +36,7 @@ def main() -> None:
 
 	# 2. Read datasets (low_memory=False to suppress DtypeWarnings)
 	try:
-		enes_2021 = pd.read_csv(path_2021)
+		esaypp_2021 = pd.read_csv(path_2021)
 	except Exception as e:
 		raise RuntimeError(f"Failed to read ENES 2021 file at {path_2021}: {e}")
 
@@ -69,7 +69,7 @@ def main() -> None:
 	skipped_cols: list[str] = []
 	alpha = 0.05
 	N_base = len(enes_base)
-	N_2021 = len(enes_2021)
+	N_2021 = len(esaypp_2021)
 
 	if not f_col_actual:
 		print(
@@ -84,7 +84,7 @@ def main() -> None:
 		for pc in hardcoded_ponds:
 			# Check for column with whitespace stripped
 			pc_actual = next(
-				(c for c in enes_2021.columns if str(c).strip() == pc), None
+				(c for c in esaypp_2021.columns if str(c).strip() == pc), None
 			)
 
 			if not pc_actual:
@@ -92,7 +92,7 @@ def main() -> None:
 				skipped_cols.append(pc)
 				continue
 
-			pc_vals = pd.to_numeric(enes_2021[pc_actual], errors="coerce").dropna()
+			pc_vals = pd.to_numeric(esaypp_2021[pc_actual], errors="coerce").dropna()
 			n_pc_valid = len(pc_vals)
 
 			if n_pc_valid == 0 or n_base_valid == 0:
@@ -128,7 +128,7 @@ def main() -> None:
 		log_lines.append("SNAKEMAKE: overview not available")
 
 	log.add_dataframe_info(log_lines, "ENES base", N_base, enes_base.shape[1])
-	log.add_dataframe_info(log_lines, "ENES 2021", N_2021, enes_2021.shape[1])
+	log.add_dataframe_info(log_lines, "ENES 2021", N_2021, esaypp_2021.shape[1])
 	log.add_notes(
 		log_lines,
 		"Ponderations comparison (Different Size Sample KS-Test)",
@@ -205,7 +205,7 @@ def main() -> None:
 		for i, (idx, row) in enumerate(plot_df.iterrows()):
 			ax = axes[i]
 			pc = row["pond_col"]
-			pc_vals = pd.to_numeric(enes_2021[pc], errors="coerce").dropna()
+			pc_vals = pd.to_numeric(esaypp_2021[pc], errors="coerce").dropna()
 
 			sns.histplot(
 				pc_vals,

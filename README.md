@@ -168,14 +168,14 @@ specific targets via the CLI or when editing `config.yaml`.
 |---|---|
 | `enes_all` | ENES 2019 + ENES 2021 combined (weighted) |
 | `enes_2019` | ENES PISAC 2019 only (weighted) |
-| `enes_2021` | ESAyPP 2021 only (weighted) |
+| `esaypp_2021` | ESAyPP 2021 only (weighted) |
 | `enes_all_male` | `enes_all` filtered to male respondents |
 | `enes_all_female` | `enes_all` filtered to female respondents |
 | `enes_all_white_collar` | `enes_all` filtered to non-manual workers |
 | `enes_all_blue_collar` | `enes_all` filtered to manual workers |
 | `enes_all_unweighted` | `enes_all` without survey weights (raw counts) |
 | `enes_2019_unweighted` | `enes_2019` without survey weights |
-| `enes_2021_unweighted` | `enes_2021` without survey weights |
+| `esaypp_2021_unweighted` | `esaypp_2021` without survey weights |
 | `enes_all_male_unweighted` | Male subset, unweighted |
 | `enes_all_female_unweighted` | Female subset, unweighted |
 
