@@ -28,9 +28,16 @@ def main() -> None:
 	dataset_features = dataset_input.get("features", {})
 	default_features = default_cfg.get("features", {})
 
-	df_enes = pd.read_csv(
-		SOURCE if SOURCE else URL, sep=";" if "2019" in dataset else ","
-	)
+	import os
+
+	if SOURCE and os.path.exists(SOURCE):
+		df_enes = pd.read_csv(SOURCE, sep=";" if "2019" in dataset else ",")
+	elif URL:
+		df_enes = pd.read_csv(URL, sep=";" if "2019" in dataset else ",")
+	else:
+		raise FileNotFoundError(
+			f"Source file '{SOURCE}' was not found and no remote URL is configured."
+		)
 	df_enes = dl.lcd_load_enes_base(
 		df_enes=df_enes,
 		id_1=ID_1,

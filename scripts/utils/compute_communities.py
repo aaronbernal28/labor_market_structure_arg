@@ -18,7 +18,9 @@ def main() -> None:
 	dataset = snakemake.wildcards["dataset"]
 	alpha = float(snakemake.wildcards.get("alpha", 0.05))
 	seed = int(snakemake.config["seed"])
-	resolution = float(snakemake.config["community"]["resolution"][f"{alpha:.2f}"][class_])
+	resolution = float(
+		snakemake.config["community"]["resolution"].get(f"{alpha:.2f}", {}).get(class_, 1.0)
+	)
 
 	id_col = snakemake.config[class_]["id"]
 	nodelist_df = pd.read_csv(snakemake.input[1], dtype={id_col: int})
@@ -44,7 +46,7 @@ def main() -> None:
 	graph = gc.graph_sort_nodes_by_id(graph)
 
 	communities, modularity = algorithm_func(
-		graph, seed=seed, n_samples=40, resolution=resolution
+		graph, seed=seed, n_samples=100, resolution=resolution
 	)
 
 	print(f"Raw communities detected: {len(set(communities.values()))}")
@@ -93,7 +95,7 @@ def main() -> None:
 	def _fmt_number(value: float | None) -> str:
 		if value is None or pd.isna(value):
 			return "NA"
-		return f"{value:.2f}"
+		return f"\\num{{{value:.2f}}}"
 
 	def _mean_or_none(df: pd.DataFrame, col: str) -> float | None:
 		if col not in df.columns:
@@ -165,7 +167,7 @@ def main() -> None:
 		if group_col and group_col in group.columns:
 			dominant_groups = group[group_col].value_counts().head(3)
 			dominant_groups_items = [
-				f"{idx} ({count})" for idx, count in dominant_groups.items()
+				f"{idx} (\\num{{{count}}})" for idx, count in dominant_groups.items()
 			]
 			dominant_groups_str = (
 				"\\makecell[l]{" + " \\\\ ".join(dominant_groups_items) + "}"
@@ -182,7 +184,7 @@ def main() -> None:
 				workers_millions = float(workers_series.sum()) / 1_000_000
 
 		rows.append(  # Formato para latex table
-			f"{comm_id} & {dominant_groups_str} & {_fmt_number(female_mean)} & {_fmt_number(public_mean)} & {_fmt_number(age_median)} & {_fmt_number(income_median)} & {local_modularity:.4f} & {workers_millions:.4f} \\\\ \\hline"
+			f"\\texttt{{{comm_id}}} & {dominant_groups_str} & {_fmt_number(female_mean)} & {_fmt_number(public_mean)} & {_fmt_number(age_median)} & {_fmt_number(income_median)} & \\num{{{local_modularity:.4f}}} & \\num{{{workers_millions:.4f}}} \\\\ \\hline"
 		)
 
 	log.add_notes(log_lines, "NODELIST WITH COMMUNITIES", rows)

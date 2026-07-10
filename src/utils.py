@@ -168,7 +168,7 @@ def _community_sort_key(label: object) -> tuple[int, int | str]:
 def build_community_color_map(
 	labels: Iterable[object],
 	*,
-	other_label: str = "Other",
+	other_label: str = "Otros",
 	palette: str = "default",
 ) -> dict[str, str]:
 	"""Return a label->color map using the Gephi palette for communities."""
@@ -203,7 +203,7 @@ def build_community_color_map(
 def build_node_color_map_from_communities(
 	community_map: Mapping[int, object],
 	*,
-	other_label: str = "Other",
+	other_label: str = "Otros",
 	palette: str = "default",
 ) -> dict[int, str]:
 	"""Return a node->color map based on community labels."""
@@ -582,5 +582,78 @@ def get_markov_time(resolution: float) -> float:
 
 def get_community_color(community_label, communities):
 	"""Assign a color based on pal_gephi palette, with 'Other' as gray."""
-	color_map = build_community_color_map(communities, other_label="Other")
+	color_map = build_community_color_map(communities, other_label="Otros")
 	return color_map.get(str(community_label), "gray")
+
+
+def update_gexf_metadata(
+	filepath: str,
+	creator: str,
+	description: str | None = None,
+	keywords: str | None = None,
+	lastmodifieddate: str | None = None,
+) -> None:
+	"""Update a GEXF file's XML metadata attributes to include creator, description, keywords, date, and defaultedgetype."""
+	import xml.etree.ElementTree as ET
+	import datetime
+
+	# Parse the xml file
+	tree = ET.parse(filepath)
+	root = tree.getroot()
+
+	# Extract namespace from root tag
+	ns = ""
+	if root.tag.startswith("{"):
+		ns = root.tag.split("}")[0].strip("{")
+
+	if ns:
+		ET.register_namespace("", ns)
+		meta_tag = f"{{{ns}}}meta"
+		creator_tag = f"{{{ns}}}creator"
+		description_tag = f"{{{ns}}}description"
+		keywords_tag = f"{{{ns}}}keywords"
+		graph_tag = f"{{{ns}}}graph"
+	else:
+		meta_tag = "meta"
+		creator_tag = "creator"
+		description_tag = "description"
+		keywords_tag = "keywords"
+		graph_tag = "graph"
+
+	meta = root.find(meta_tag)
+	if meta is None:
+		meta = ET.Element(meta_tag)
+		root.insert(0, meta)
+
+	if lastmodifieddate is None:
+		lastmodifieddate = datetime.date.today().strftime("%Y-%m-%d")
+	meta.set("lastmodifieddate", lastmodifieddate)
+
+	# Find or create creator
+	creator_elem = meta.find(creator_tag)
+	if creator_elem is None:
+		creator_elem = ET.SubElement(meta, creator_tag)
+	creator_elem.text = creator
+
+	# Find or create description
+	if description is not None:
+		desc_elem = meta.find(description_tag)
+		if desc_elem is None:
+			desc_elem = ET.SubElement(meta, description_tag)
+		desc_elem.text = description
+
+	# Find or create keywords
+	if keywords is not None:
+		kw_elem = meta.find(keywords_tag)
+		if kw_elem is None:
+			kw_elem = ET.SubElement(meta, keywords_tag)
+		kw_elem.text = keywords
+
+	# Check graph element for defaultedgetype
+	graph_elem = root.find(graph_tag)
+	if graph_elem is not None:
+		if "defaultedgetype" not in graph_elem.attrib:
+			graph_elem.set("defaultedgetype", "undirected")
+
+	# Write back
+	tree.write(filepath, encoding="utf-8", xml_declaration=True)

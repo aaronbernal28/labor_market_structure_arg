@@ -240,12 +240,24 @@ def plot_delta_heatmap(
 	save: bool = True,
 	figsize: tuple | None = None,
 	title: str = "",
+	logscale: bool = False,
+	logscale_vmin: float = 1e-3,
 ) -> None:
 	"""Diverging heatmap showing delta_hat annotations in scientific notation."""
+	linthresh = 0.0001
+
+	# Scale delta_hat and adjust threshold/labels dynamically if logscale is True
+	if logscale:
+		delta_hat = delta_hat / logscale_vmin
+		linthresh = linthresh / logscale_vmin
+		exponent = abs(int(np.log10(logscale_vmin)))
+		cbar_label = rf"$\delta \times 10^{{{exponent}}}$"
+	else:
+		cbar_label = "delta"
 
 	# Smart formatting: hide extreme values, automatic scientific notation for others
 	def format_delta(v):
-		if abs(v) < 0.0001:  # Hide essentially zero differences
+		if abs(v) < linthresh:  # Hide essentially zero differences
 			return ""
 		else:
 			return f"{v:.3g}"
@@ -255,6 +267,7 @@ def plot_delta_heatmap(
 	df = _wrap_labels(df)
 	annot_df = pd.DataFrame(annot, index=df.index, columns=df.columns)
 	abs_max = np.max(np.abs(delta_hat))
+
 	fig, ax = plt.subplots(figsize=figsize)
 	sns.heatmap(
 		df,
@@ -265,7 +278,7 @@ def plot_delta_heatmap(
 		vmin=-abs_max,
 		vmax=abs_max,
 		cbar=True,
-		cbar_kws={"shrink": 0.35, "label": "delta"},
+		cbar_kws={"shrink": 0.35, "label": cbar_label},
 	)
 	_style_heatmap_axes(ax, title)
 	if save:
@@ -873,7 +886,13 @@ def plot_projection_by_group(
 		for node in graph.nodes()
 	}
 	if node_size_map is not None:
-		size_map = {node: float(node_size_map.get(node, 1.0)) for node in graph.nodes()}
+		size_map = {
+			node: max(
+				10.0,
+				float(node_size_map.get(node, 1.0)) * float(factor_node_size) * 0.5,
+			)
+			for node in graph.nodes()
+		}
 	else:
 		size_map = ut.compute_node_sizes(
 			graph,
@@ -1020,7 +1039,12 @@ def plot_projection_gradient(
 	node_colors = [colormap(norm(v)) if np.isfinite(v) else "lightgray" for v in values]
 	node_color_by_node = {n: c for n, c in zip(nodes, node_colors)}
 	if node_size_map is not None:
-		size_map = {n: float(node_size_map.get(n, 1.0)) for n in nodes}
+		size_map = {
+			n: max(
+				10.0, float(node_size_map.get(n, 1.0)) * float(factor_node_size) * 0.5
+			)
+			for n in nodes
+		}
 	else:
 		size_map = ut.compute_node_sizes(
 			graph,
@@ -2059,11 +2083,24 @@ def compute_and_plot_edge_correlation(
 
 	raw_node_sizes = node_size_map or {}
 
+	highlight_ids = set()
+	for item in highlight_set:
+		try:
+			highlight_ids.add(ut.label_to_id(str(item)))
+		except ValueError:
+			highlight_ids.add(item)
+
 	def _node_color(node_id: int) -> str:
-		if highlight_set and community_map is not None:
+		if highlight_ids and community_map is not None:
 			community = community_map.get(node_id)
-			if community in highlight_set:
-				return color_map.get(node_id, LIGTHGRAY)
+			if community is not None:
+				try:
+					comm_id = ut.label_to_id(str(community))
+					if comm_id in highlight_ids:
+						return color_map.get(node_id, LIGTHGRAY)
+				except ValueError:
+					if community in highlight_ids:
+						return color_map.get(node_id, LIGTHGRAY)
 			return LIGTHGRAY  # light gray for non-highlighted nodes
 		return color_map.get(node_id, LIGTHGRAY)
 
@@ -2119,15 +2156,30 @@ def compute_and_plot_edge_correlation(
 		)
 	# Add a legend for the communities
 	if community_map is not None:
+		added_legend_ids = set()
 		for node_id, node_community in community_map.items():
-			if node_community in sorted(highlight_set):
-				plt.scatter(
-					[],
-					[],
-					color=color_map.get(node_id, LIGTHGRAY),
-					label=node_community,
-				)
-				highlight_set.remove(node_community)  # Avoid duplicate legend entries
+			try:
+				comm_id = ut.label_to_id(str(node_community))
+				if comm_id in highlight_ids and comm_id not in added_legend_ids:
+					plt.scatter(
+						[],
+						[],
+						color=color_map.get(node_id, LIGTHGRAY),
+						label=node_community,
+					)
+					added_legend_ids.add(comm_id)
+			except ValueError:
+				if (
+					node_community in highlight_ids
+					and node_community not in added_legend_ids
+				):
+					plt.scatter(
+						[],
+						[],
+						color=color_map.get(node_id, LIGTHGRAY),
+						label=node_community,
+					)
+					added_legend_ids.add(node_community)
 
 	# Add regression line on top to show trend
 	sns.regplot(

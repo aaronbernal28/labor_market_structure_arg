@@ -164,6 +164,7 @@ def load_nodelist_caes(
 	"""Load CAES node metadata and normalize labels."""
 	caes_df = pd.read_csv(caes_path)
 	caes_df[caes_id] = caes_df[caes_id].astype(int)
+	caes_df["original_" + caes_id] = caes_df[caes_id]
 	caes_df[caes_id] = caes_df[caes_id].apply(lambda x: ut.desambiated_caes_id(x))
 	caes_df = caes_df.set_index(caes_id)
 	caes_df[caes_letra_col] = caes_df[caes_letra_col].apply(lambda x: x.split(";")[0])
@@ -197,6 +198,7 @@ def load_nodelist_ciuo(
 	"""Load CIUO node metadata and normalize labels."""
 	ciuo_df = pd.read_csv(ciuo_path)
 	ciuo_df[ciuo_id] = ciuo_df[ciuo_id].astype(int)
+	ciuo_df["original_" + ciuo_id] = ciuo_df[ciuo_id]
 	ciuo_df[ciuo_id] = ciuo_df[ciuo_id].apply(
 		lambda x: ut.desambiated_ciuo_id(x, max_caes_id)
 	)
@@ -589,7 +591,7 @@ def filter_communities(
 	print(f"Unique communities before filtering: {df[feature_col].unique()}")
 	mask = df_community_to_id(df[feature_col]) > max_code
 	print(f"Communities to filter out: {df.loc[mask, feature_col].unique()}")
-	df.loc[mask, feature_col] = "Other"
+	df.loc[mask, feature_col] = "Otros"
 	for col in df.columns:
 		print(f"Processing column '{col}' for color filtering...")
 		if "color" in col:

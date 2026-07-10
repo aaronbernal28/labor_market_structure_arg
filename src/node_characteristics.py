@@ -58,6 +58,12 @@ def _groupby_apply_include_groups(flag: bool) -> dict[str, bool]:
 	return {"include_groups": flag}
 
 
+def _safe_groupby_apply(grouped, func, **kwargs) -> pd.Series:
+	if grouped.ngroups == 0:
+		return pd.Series(dtype=float)
+	return grouped.apply(func, **kwargs)
+
+
 def _weighted_share(values: pd.Series, weights: pd.Series, target: int) -> float:
 	valid = values.notna() & weights.notna()
 	if not valid.any():
@@ -162,7 +168,8 @@ def compute_group_characteristics(
 		valid_grouped = valid_region.groupby(col_group, dropna=True)
 		for r in range(1, 9):
 			if calib_col in valid_region.columns:
-				features[f"region_{r}_pct"] = valid_grouped.apply(
+				features[f"region_{r}_pct"] = _safe_groupby_apply(
+					valid_grouped,
 					lambda g, region_value=r: _weighted_share(
 						g[region_col], g[calib_col], region_value
 					),
@@ -182,11 +189,13 @@ def compute_group_characteristics(
 		valid_age = data[data[age_col].notna()]
 		valid_age_grouped = valid_age.groupby(col_group, dropna=True)
 		if calib_col in valid_age.columns:
-			features["age_mean"] = valid_age_grouped.apply(
+			features["age_mean"] = _safe_groupby_apply(
+				valid_age_grouped,
 				lambda g: _weighted_average(g[age_col], g[calib_col]),
 				**_groupby_apply_include_groups(False),
 			)
-			features["age_std"] = valid_age_grouped.apply(
+			features["age_std"] = _safe_groupby_apply(
+				valid_age_grouped,
 				lambda g: _weighted_standard_deviation(g[age_col], g[calib_col]),
 				**_groupby_apply_include_groups(False),
 			)
@@ -205,11 +214,13 @@ def compute_group_characteristics(
 		valid_income = data[data[income_col].notna()]
 		valid_income_grouped = valid_income.groupby(col_group, dropna=True)
 		if calib_col in valid_income.columns:
-			features["income_mean"] = valid_income_grouped.apply(
+			features["income_mean"] = _safe_groupby_apply(
+				valid_income_grouped,
 				lambda g: _weighted_average(g[income_col], g[calib_col]),
 				**_groupby_apply_include_groups(False),
 			)
-			features["income_std"] = valid_income_grouped.apply(
+			features["income_std"] = _safe_groupby_apply(
+				valid_income_grouped,
 				lambda g: _weighted_standard_deviation(g[income_col], g[calib_col]),
 				**_groupby_apply_include_groups(False),
 			)
@@ -228,11 +239,13 @@ def compute_group_characteristics(
 		valid_sex = data[data[sex_col].isin([1, 2])]
 		valid_grouped = valid_sex.groupby(col_group, dropna=True)
 		if calib_col in valid_sex.columns:
-			features["female_pct"] = valid_grouped.apply(
+			features["female_pct"] = _safe_groupby_apply(
+				valid_grouped,
 				lambda g: _weighted_share(g[sex_col], g[calib_col], 2),
 				**_groupby_apply_include_groups(False),
 			)
-			features["male_pct"] = valid_grouped.apply(
+			features["male_pct"] = _safe_groupby_apply(
+				valid_grouped,
 				lambda g: _weighted_share(g[sex_col], g[calib_col], 1),
 				**_groupby_apply_include_groups(False),
 			)
@@ -251,7 +264,8 @@ def compute_group_characteristics(
 		valid_hours = data[data[hours_col].notna()]
 		valid_hours_grouped = valid_hours.groupby(col_group, dropna=True)
 		if calib_col in valid_hours.columns:
-			features["mean_hours_worked"] = valid_hours_grouped.apply(
+			features["mean_hours_worked"] = _safe_groupby_apply(
+				valid_hours_grouped,
 				lambda g: _weighted_average(g[hours_col], g[calib_col]),
 				**_groupby_apply_include_groups(False),
 			)
@@ -265,11 +279,13 @@ def compute_group_characteristics(
 		valid_edu = data[data[nivel_ed_col].notna()]
 		valid_grouped = valid_edu.groupby(col_group, dropna=True)
 		if calib_col in valid_edu.columns:
-			features["nivel_ed_mean"] = valid_grouped.apply(
+			features["nivel_ed_mean"] = _safe_groupby_apply(
+				valid_grouped,
 				lambda g: _weighted_average(g[nivel_ed_col], g[calib_col]),
 				**_groupby_apply_include_groups(False),
 			)
-			features["nivel_ed_std"] = valid_grouped.apply(
+			features["nivel_ed_std"] = _safe_groupby_apply(
+				valid_grouped,
 				lambda g: _weighted_standard_deviation(g[nivel_ed_col], g[calib_col]),
 				**_groupby_apply_include_groups(False),
 			)
@@ -293,7 +309,8 @@ def compute_group_characteristics(
 		valid_pub = data[data[public_sector_col].notna()]
 		valid_grouped = valid_pub.groupby(col_group, dropna=True)
 		if calib_col in valid_pub.columns:
-			features["public_sector_pct"] = valid_grouped.apply(
+			features["public_sector_pct"] = _safe_groupby_apply(
+				valid_grouped,
 				lambda g: _weighted_share(g[public_sector_col], g[calib_col], 1),
 				**_groupby_apply_include_groups(False),
 			)

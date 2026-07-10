@@ -1,0 +1,594 @@
+v183ciuo,original_v183ciuo,ciuolabel,ciuo1diglabel,ciuo3cat,ciuolabel_color,ciuo1diglabel_color,ciuo3cat_color,n_obs,total_workers_weighted,income_mean,income_std,income_median,female_pct,male_pct,public_sector_pct,nivel_ed_mean,nivel_ed_std,age_mean,age_std,age_median
+10000,0,Oc. Militares,0. Oc. militares,3. Trabajadores manuales,"(0.001462, 0.000466, 0.013866, 1.0)",#333333,#17becf,0.0,,,,,,,,,,,,
+10001,1,Of. FF.AA.,0. Oc. militares,3. Trabajadores manuales,"(0.001462, 0.000466, 0.013866, 1.0)",#333333,#17becf,0.0,,,,,,,,,,,,
+10002,2,Suboficiales FF.AA.,0. Oc. militares,3. Trabajadores manuales,"(0.001462, 0.000466, 0.013866, 1.0)",#333333,#17becf,0.0,,,,,,,,,,,,
+10003,3,Miemb. FF.AA n/c,0. Oc. militares,3. Trabajadores manuales,"(0.001462, 0.000466, 0.013866, 1.0)",#333333,#17becf,0.0,,,,,,,,,,,,
+10011,11,Of. FF.AA.,0. Oc. militares,1. Trabajadores  no manuales,"(0.001462, 0.000466, 0.013866, 1.0)",#333333,#cccccc,0.0,,,,,,,,,,,,
+10021,21,Suboficiales FF.AA.,0. Oc. militares,3. Trabajadores manuales,"(0.001462, 0.000466, 0.013866, 1.0)",#333333,#17becf,0.0,,,,,,,,,,,,
+10031,31,Miemb. FF.AA n/c,0. Oc. militares,3. Trabajadores manuales,"(0.001462, 0.000466, 0.013866, 1.0)",#333333,#17becf,0.0,,,,,,,,,,,,
+10110,110,Of. FF.AA.,0. Oc. militares,1. Trabajadores  no manuales,"(0.003299, 0.002249, 0.024239, 1.0)",#333333,#cccccc,6053.66,6053.66,9.25,0.12,9.18,0.0,100.0,100.0,8.32,1.33,34.63,18.29,41.0
+10210,210,Suboficiales FF.AA.,0. Oc. militares,3. Trabajadores manuales,"(0.007676, 0.006136, 0.046836, 1.0)",#333333,#17becf,12182.0,12182.0,9.17,0.54,9.05,0.0,100.0,100.0,4.88,0.51,57.69,20.01,52.0
+10310,310,Miemb. FF.AA n/c,0. Oc. militares,3. Trabajadores manuales,"(0.013995, 0.011225, 0.071862, 1.0)",#333333,#17becf,74752.68,74752.68,8.97,0.44,8.84,0.0,100.0,90.46,5.65,1.27,47.63,15.79,40.0
+11000,1000,Dir. Y Ger.,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.09299, 0.045583, 0.234358, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11100,1100,Dir. Admin. Pública,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.110536, 0.047399, 0.262912, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11110,1110,Miemb. Poder judicial,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.110536, 0.047399, 0.262912, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11111,1111,Miemb. Poder legislativo,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.110536, 0.047399, 0.262912, 1.0)",#374E55,#cccccc,5126.14,5126.14,10.04,0.0,10.04,0.0,100.0,100.0,8.0,0.0,48.0,0.0,48.0
+11112,1112,Direct. Adm. Pública,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.110536, 0.047399, 0.262912, 1.0)",#374E55,#cccccc,11278.0,11278.0,9.59,0.72,9.21,0.0,100.0,100.0,5.59,1.5,57.16,13.88,58.0
+11113,1113,Jefes de pequeñas poblaciones,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.110536, 0.047399, 0.262912, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11114,1114,Dir. Org. Interés especial,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.110536, 0.047399, 0.262912, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11120,1120,Ger. Generales,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.110536, 0.047399, 0.262912, 1.0)",#374E55,#cccccc,1941.66,1941.66,9.76,0.0,9.76,0.0,100.0,0.0,8.0,0.0,54.0,0.0,54.0
+11200,1200,Dir. adm. y com.,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.122908, 0.047536, 0.281624, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11210,1210,Dir. adm. y serv.,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,281.0,281.0,7.9,0.0,7.9,0.0,100.0,0.0,4.0,0.0,79.0,0.0,79.0
+11211,1211,Dir. Financieros,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,4986.0,4986.0,8.6,0.62,8.29,0.0,100.0,0.0,8.7,0.71,66.15,24.11,72.0
+11212,1212,Dir. RR.HH.,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,1773.0,1773.0,9.85,0.73,10.05,0.0,100.0,60.86,6.86,1.16,44.78,10.25,53.0
+11213,1213,Dir. Pol. y planificación,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,212.0,212.0,10.55,0.0,10.55,0.0,100.0,100.0,5.0,0.0,70.0,0.0,70.0
+11219,1219,Dir. Servicios n/c,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,2762.0,2762.0,8.3,0.33,8.34,0.0,100.0,0.0,7.9,1.0,53.47,20.4,55.5
+11220,1220,Dir. Ventas y com,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11221,1221,Dir. Ventas y com,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,53675.42,53675.42,8.82,0.77,8.52,0.0,100.0,0.0,7.37,1.96,50.9,12.7,56.0
+11222,1222,Dir. Publicidad y rel públicas,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,777.0,777.0,9.24,0.0,9.24,0.0,100.0,0.0,5.0,0.0,72.0,0.0,72.0
+11223,1223,Dir R&D,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.129285, 0.047293, 0.290788, 1.0)",#374E55,#cccccc,4047.1,4047.1,,,,0.0,100.0,0.0,,,,,
+11300,1300,Dir. Producción,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.142378, 0.046242, 0.308553, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11310,1310,Dir. Prod agropecuaria,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.142378, 0.046242, 0.308553, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11311,1311,Dir. Prod agropecuaria,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.142378, 0.046242, 0.308553, 1.0)",#374E55,#cccccc,14398.0,14398.0,8.82,0.39,9.08,0.0,100.0,8.45,6.41,2.33,58.8,20.48,71.5
+11312,1312,Dir. Prod pisicultura,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.142378, 0.046242, 0.308553, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11320,1320,"Dir. Ind manufacturera, minería",1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,1300.0,1300.0,,,,0.0,100.0,0.0,7.0,0.0,67.0,0.0,67.0
+11321,1321,Dir. Ind manufacturera,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,30017.33,30017.33,8.99,0.74,8.85,0.0,100.0,2.22,5.46,2.61,58.95,15.02,57.0
+11322,1322,Dir. minería,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,6254.33,6254.33,9.92,0.3,9.98,0.0,100.0,60.02,5.84,1.38,59.68,11.04,45.0
+11323,1323,Dir. emp. construcción,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,3091.53,3091.53,9.11,0.0,9.11,0.0,100.0,0.0,9.0,0.0,38.0,0.0,38.0
+11324,1324,"Dir. emp. abastecimiento, distribución y afines",1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,16490.0,16490.0,9.46,0.46,9.43,0.0,100.0,51.42,4.31,0.83,58.94,14.25,59.5
+11330,1330,Dir. serv. IT,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,3581.85,3581.85,8.29,0.0,8.29,0.0,100.0,8.46,8.33,0.47,45.47,12.21,41.0
+11340,1340,Dir. serv. profesionales,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11341,1341,Dir. Cuidados infantiles,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11342,1342,Dir. serv. salud,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,4742.0,4742.0,9.71,0.22,9.71,0.0,100.0,5.8,7.18,1.99,58.39,13.58,57.5
+11343,1343,Dir. Cuid. Pers edad.,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11344,1344,Dir. bienestar social,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,781.0,781.0,9.9,0.65,9.81,0.0,100.0,0.0,6.4,2.97,64.42,11.9,66.0
+11345,1345,Dir. Serv. Educación,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,24914.94,24914.94,9.53,0.56,9.61,0.0,100.0,89.84,7.26,1.52,58.76,8.59,60.5
+11346,1346,Ger bancos y serv financieros,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,23741.06,23741.06,9.35,0.71,9.62,0.0,100.0,70.27,6.43,1.89,62.71,9.48,64.0
+11349,1349,Dir. serv. profesionales,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.149073, 0.045468, 0.317085, 1.0)",#374E55,#cccccc,33104.31,33104.31,8.61,0.37,9.16,0.0,100.0,47.47,6.23,1.84,62.74,8.4,55.0
+11400,1400,Ger. Hoteles y restaurantes,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.162689, 0.043554, 0.333277, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11410,1410,Ger. hot. y rest.,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.162689, 0.043554, 0.333277, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11411,1411,Ger. Hoteles,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.162689, 0.043554, 0.333277, 1.0)",#374E55,#cccccc,14221.59,14221.59,7.52,1.49,8.78,0.0,100.0,0.0,5.56,1.24,40.43,10.96,43.5
+11412,1412,Ger. Restaurantes,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.162689, 0.043554, 0.333277, 1.0)",#374E55,#cccccc,18581.15,18581.15,8.81,0.37,8.86,0.0,100.0,0.0,8.69,0.46,35.18,8.31,38.0
+11420,1420,Ger. Com. Por mayor,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.162689, 0.043554, 0.333277, 1.0)",#374E55,#cccccc,62428.87,62428.87,9.12,0.57,9.11,0.0,100.0,0.0,5.29,1.37,56.46,14.16,50.0
+11430,1430,Ger. n/c,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.169575, 0.042489, 0.340874, 1.0)",#374E55,#cccccc,0.0,,,,,,,,,,,,
+11431,1431,"Ger cent. Deportivos, esparicmiento y culturales",1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.169575, 0.042489, 0.340874, 1.0)",#374E55,#cccccc,6667.73,6667.73,9.16,0.29,9.21,0.0,100.0,0.0,5.77,1.78,49.98,16.79,40.0
+11439,1439,Ger. Serv. n/c,1. Gerentes y directivos,1. Trabajadores  no manuales,"(0.169575, 0.042489, 0.340874, 1.0)",#374E55,#cccccc,12227.03,12227.03,10.15,0.55,9.21,0.0,100.0,7.88,7.39,1.32,62.2,7.69,64.0
+12000,2000,Profesionales científicos e intelectuales,2. Profesionales,1. Trabajadores  no manuales,"(0.271347, 0.040922, 0.411976, 1.0)",#DF8F44,#cccccc,9715.62,9715.62,9.17,0.33,9.21,0.0,100.0,43.14,8.83,0.37,45.64,16.03,49.0
+12100,2100,Prof. ciencia e ingeniería,2. Profesionales,1. Trabajadores  no manuales,"(0.284321, 0.043933, 0.416608, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12111,2111,Físicos y astrónomos,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12112,2112,Meteorólogos,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,560.0,560.0,9.76,0.0,9.76,0.0,100.0,100.0,7.0,0.0,45.0,0.0,45.0
+12113,2113,Químicos,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,552.0,552.0,9.62,0.0,9.62,0.0,100.0,0.0,8.0,0.0,25.0,0.0,25.0
+12114,2114,Geólogos y geofísicos,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,1407.8,1407.8,8.81,0.0,8.81,0.0,100.0,46.6,9.0,0.0,50.0,0.0,50.0
+12120,2120,"Matemáticos, actuarios y estadísticos",2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,949.0,949.0,10.17,0.0,10.17,0.0,100.0,100.0,5.0,0.0,70.0,0.0,70.0
+12130,2130,Prof. Biología,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,1331.72,1331.72,,,,0.0,100.0,49.24,9.0,0.0,28.0,0.0,28.0
+12131,2131,"Biólogos, botánicos, zoólogos y afines",2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,3758.03,3758.03,9.76,0.09,9.76,0.0,100.0,14.29,9.0,0.0,56.41,10.54,42.0
+12132,2132,Agrónomos y afines,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,16243.0,16243.0,9.33,0.67,9.4,0.0,100.0,68.84,9.0,0.0,44.28,15.42,43.5
+12133,2133,Prof. Protec. med.ambiental,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,2908.25,2908.25,9.24,0.04,9.21,0.0,100.0,84.56,6.84,1.79,34.19,4.0,38.0
+12140,2140,Ingenieros,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,8017.88,8017.88,9.17,0.61,8.99,0.0,100.0,81.38,9.0,0.0,60.97,12.58,64.5
+12141,2141,Ing. Industriales y producción,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,3879.93,3879.93,10.02,0.48,9.83,0.0,100.0,59.0,9.0,0.0,52.48,15.42,45.5
+12142,2142,Ingenieros civiles,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,28983.18,28983.18,9.19,0.53,8.99,0.0,100.0,46.33,8.83,0.55,48.76,12.99,51.5
+12143,2143,Ing. med.ambiental,2. Profesionales,1. Trabajadores  no manuales,"(0.290763, 0.045644, 0.418637, 1.0)",#DF8F44,#cccccc,881.0,881.0,9.47,0.0,9.47,0.0,100.0,100.0,9.0,0.0,36.0,0.0,36.0
+12144,2144,Ing. Mecánicos,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12145,2145,Ing. Químicos,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,4257.0,4257.0,9.5,0.16,9.44,0.0,100.0,0.0,9.0,0.0,55.53,3.72,57.0
+12146,2146,Ing. Met. Y minas,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12149,2149,Ingenieros n/c,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,17561.48,17561.48,9.06,0.87,9.39,0.0,100.0,6.71,8.81,0.39,43.66,13.21,49.0
+12150,2150,Ing. Electrotécnología,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,3583.0,3583.0,9.31,0.0,9.31,0.0,100.0,0.0,9.0,0.0,28.0,0.0,28.0
+12151,2151,Ing. Electricista,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,2443.23,2443.23,9.79,0.01,9.78,0.0,100.0,55.18,8.84,0.37,38.4,9.53,30.0
+12152,2152,Ing. Electrónicos,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,11004.04,11004.04,9.43,0.78,9.62,0.0,100.0,38.14,8.43,0.83,43.83,9.83,39.0
+12153,2153,Ing. Telecomunicaciones,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,8484.6,8484.6,9.56,0.21,9.18,0.0,100.0,82.07,9.0,0.0,54.62,1.46,52.0
+12160,2160,"Arquitectos, urbanistas, agrimensores y diseñadores",2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12161,2161,Arquitectos,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,49960.45,49960.45,9.5,0.83,9.35,0.0,100.0,15.12,9.0,0.0,53.15,19.05,51.0
+12162,2162,Arquitectos paisajistas,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12163,2163,Dis. Prendas y productos,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,44455.17,44455.17,9.51,0.61,9.26,0.0,100.0,0.0,6.47,1.84,41.8,12.79,38.0
+12164,2164,Urbanistas e ingenieros de tránsito,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12165,2165,Cartógrafos y agrimensores,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,22011.42,22011.42,8.98,1.1,9.23,0.0,100.0,3.72,6.55,1.95,67.06,2.44,66.5
+12166,2166,Dis. gráficos,2. Profesionales,1. Trabajadores  no manuales,"(0.297178, 0.04747, 0.420491, 1.0)",#DF8F44,#cccccc,28504.11,28504.11,9.02,0.41,8.84,0.0,100.0,8.26,7.59,1.66,38.12,9.01,36.0
+12200,2200,Prof. Salud,2. Profesionales,1. Trabajadores  no manuales,"(0.303568, 0.049396, 0.422182, 1.0)",#DF8F44,#cccccc,541.0,541.0,7.31,0.0,7.31,0.0,100.0,100.0,9.0,0.0,53.0,0.0,53.0
+12210,2210,Médicos,2. Profesionales,1. Trabajadores  no manuales,"(0.303568, 0.049396, 0.422182, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12211,2211,Médicos generales,2. Profesionales,1. Trabajadores  no manuales,"(0.303568, 0.049396, 0.422182, 1.0)",#DF8F44,#cccccc,34003.01,34003.01,9.37,0.58,9.57,0.0,100.0,43.66,9.0,0.0,56.78,16.24,56.5
+12212,2212,Médicos especialistas,2. Profesionales,1. Trabajadores  no manuales,"(0.303568, 0.049396, 0.422182, 1.0)",#DF8F44,#cccccc,33586.66,33586.66,9.29,0.79,9.3,0.0,100.0,30.83,8.86,0.74,54.77,10.57,55.5
+12220,2220,Prof. Enfermería y partería,2. Profesionales,1. Trabajadores  no manuales,"(0.309935, 0.051407, 0.423721, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12221,2221,Prof. Enfermería y partería,2. Profesionales,1. Trabajadores  no manuales,"(0.309935, 0.051407, 0.423721, 1.0)",#DF8F44,#cccccc,12876.67,12876.67,9.21,0.0,9.21,0.0,100.0,29.77,9.0,0.0,62.0,0.0,62.0
+12222,2222,Prof. Partería,2. Profesionales,1. Trabajadores  no manuales,"(0.309935, 0.051407, 0.423721, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12230,2230,Prof. Medicina tradicional y alternativa,2. Profesionales,1. Trabajadores  no manuales,"(0.309935, 0.051407, 0.423721, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12240,2240,Paramédicos,2. Profesionales,1. Trabajadores  no manuales,"(0.309935, 0.051407, 0.423721, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12250,2250,Veterinarios,2. Profesionales,1. Trabajadores  no manuales,"(0.309935, 0.051407, 0.423721, 1.0)",#DF8F44,#cccccc,18673.29,18673.29,9.51,0.65,9.62,0.0,100.0,3.65,9.0,0.0,51.17,14.4,46.0
+12260,2260,Prof. Salud,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12261,2261,Dentistas,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,18556.88,18556.88,9.27,0.86,8.87,0.0,100.0,0.0,8.85,0.53,47.32,11.17,42.5
+12262,2262,Farmacéuticos,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,1064.0,1064.0,8.92,0.09,8.85,0.0,100.0,0.0,7.73,0.96,51.2,10.18,55.0
+12263,2263,Prof. Salud e higiene laboral,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,311.28,311.28,,,,0.0,100.0,0.0,,,,,
+12264,2264,Fisioterapeutas,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,3171.0,3171.0,9.44,1.01,9.61,0.0,100.0,26.65,8.59,0.62,38.63,10.2,34.5
+12265,2265,Dietistas y nutricionistas,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12266,2266,Audiólogos y logopedas,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12267,2267,Optometristas,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12269,2269,Prof. Salud n/c,2. Profesionales,1. Trabajadores  no manuales,"(0.316282, 0.05349, 0.425116, 1.0)",#DF8F44,#cccccc,2512.09,2512.09,8.61,0.0,8.61,0.0,100.0,86.38,9.0,0.0,28.82,11.14,34.5
+12300,2300,Prof. Enseñanza gral,2. Profesionales,1. Trabajadores  no manuales,"(0.32261, 0.055634, 0.426377, 1.0)",#DF8F44,#cccccc,137010.45,137010.45,9.23,0.56,9.08,0.0,100.0,79.45,7.53,1.21,43.61,12.18,47.0
+12310,2310,Prof. Universitarios y ed superior,2. Profesionales,1. Trabajadores  no manuales,"(0.32261, 0.055634, 0.426377, 1.0)",#DF8F44,#cccccc,72834.49,72834.49,9.41,0.62,9.13,0.0,100.0,78.64,8.55,0.78,54.34,18.86,57.0
+12320,2320,Prof. Form. Profesional,2. Profesionales,1. Trabajadores  no manuales,"(0.32261, 0.055634, 0.426377, 1.0)",#DF8F44,#cccccc,3894.89,3894.89,8.55,0.6,8.69,0.0,100.0,48.75,6.55,1.95,60.9,3.9,60.0
+12330,2330,Prof. Secundarios,2. Profesionales,1. Trabajadores  no manuales,"(0.32261, 0.055634, 0.426377, 1.0)",#DF8F44,#cccccc,113494.4,113494.4,9.04,0.5,9.0,0.0,100.0,75.49,7.55,1.33,42.38,12.23,44.5
+12340,2340,Maest. Primaria y preescolar,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12341,2341,Maest. Primaria,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,58611.04,58611.04,9.0,0.59,8.7,0.0,100.0,69.66,7.15,1.15,43.21,13.91,39.0
+12342,2342,Maest. Preescolar,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,1491.0,1491.0,6.69,0.0,6.69,0.0,100.0,0.0,5.0,0.0,40.0,0.0,40.0
+12350,2350,Prof. Enseñanza,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12351,2351,Esp. Mét. Pedagógicos,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,836.0,836.0,9.24,0.51,8.44,0.0,100.0,100.0,7.64,1.01,57.81,9.16,56.0
+12352,2352,Ed. Nec. Especiales,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,11239.0,11239.0,6.42,0.2,7.46,0.0,100.0,78.37,6.01,0.09,24.05,0.56,27.0
+12353,2353,Profesores idiomas,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,7139.65,7139.65,9.65,0.32,9.53,0.0,100.0,32.14,7.96,0.94,33.58,9.16,31.0
+12354,2354,Profesores música,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,25467.94,25467.94,9.11,0.6,8.99,0.0,100.0,37.11,6.78,1.26,41.66,24.16,28.0
+12355,2355,Profesores arte,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,16537.9,16537.9,8.84,0.25,8.84,0.0,100.0,62.66,7.3,1.95,40.27,15.17,31.0
+12356,2356,Inst. IT,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,5058.0,5058.0,8.71,0.41,8.89,0.0,100.0,0.0,7.45,0.79,44.8,8.05,38.0
+12359,2359,Prof. enseñanza,2. Profesionales,1. Trabajadores  no manuales,"(0.328921, 0.057827, 0.427511, 1.0)",#DF8F44,#cccccc,12185.36,12185.36,9.02,0.71,8.84,0.0,100.0,48.69,7.82,0.93,39.68,13.77,42.0
+12400,2400,Esp. Admin pública,2. Profesionales,1. Trabajadores  no manuales,"(0.335217, 0.06006, 0.428524, 1.0)",#DF8F44,#cccccc,2355.0,2355.0,7.31,0.0,7.31,0.0,100.0,0.0,9.0,0.0,34.0,0.0,34.0
+12410,2410,Esp. Finanzas,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12411,2411,Contables,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,77424.33,77424.33,9.41,0.87,9.26,0.0,100.0,15.26,8.93,0.36,46.46,14.37,50.0
+12412,2412,Asesores financieros y en inversiones,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,40623.09,40623.09,9.26,0.58,9.24,0.0,100.0,15.3,5.0,0.0,79.6,8.16,87.0
+12413,2413,An. financieros,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,5466.0,5466.0,9.73,0.49,9.62,0.0,100.0,15.02,8.48,0.5,49.13,12.98,55.0
+12420,2420,Esp. Org y adm.,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12421,2421,An. gestión y organización,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,944.0,944.0,8.94,0.49,8.64,0.0,100.0,23.52,6.47,0.85,51.53,15.27,42.0
+12422,2422,Esp. Pol. Administración,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,1223.0,1223.0,8.64,0.84,8.89,0.0,100.0,0.0,8.36,0.48,65.42,11.5,62.0
+12423,2423,Esp. Pol. Y serv. Personal,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,3693.66,3693.66,9.21,0.0,9.21,0.0,100.0,56.8,8.0,0.0,27.0,0.0,27.0
+12424,2424,Esp. Formación personal,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12430,2430,"Prof. Venta, comercialización",2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12431,2431,Prof. Publicidad y marketing,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,24479.99,24479.99,9.17,0.65,9.41,0.0,100.0,16.27,7.55,1.14,45.67,12.41,52.5
+12432,2432,Prof. Rel. Públicas,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,9507.57,9507.57,,,,0.0,100.0,94.97,,,,,
+12433,2433,Prof. Ventas médicas,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,24304.33,24304.33,8.77,0.72,8.99,0.0,100.0,0.0,7.63,1.3,59.56,10.56,63.0
+12434,2434,Prof. Ventas IT,2. Profesionales,1. Trabajadores  no manuales,"(0.3415, 0.062325, 0.429425, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12500,2500,Profesionales IT,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12510,2510,Des. Y An. Software,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12511,2511,An. de sistemas,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,42869.11,42869.11,9.42,0.43,9.31,0.0,100.0,7.91,8.1,0.9,37.97,7.08,38.0
+12512,2512,Des. software,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,22034.83,22034.83,9.31,0.68,9.38,0.0,100.0,46.6,7.94,1.32,34.26,12.36,31.0
+12513,2513,Des. Web y multimedia,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,5313.0,5313.0,8.49,0.76,7.88,0.0,100.0,0.0,7.0,0.0,39.41,5.44,35.0
+12514,2514,Programadores,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,19736.54,19736.54,,,,0.0,100.0,4.18,,,,,
+12519,2519,Des. Y An. Software,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,2405.24,2405.24,,,,0.0,100.0,0.0,,,,,
+12520,2520,Esp. Bases de datos,2. Profesionales,1. Trabajadores  no manuales,"(0.354032, 0.066925, 0.430906, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12521,2521,Adm. Base de datos,2. Profesionales,1. Trabajadores  no manuales,"(0.360284, 0.069247, 0.431497, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12522,2522,Admin. sistemas,2. Profesionales,1. Trabajadores  no manuales,"(0.360284, 0.069247, 0.431497, 1.0)",#DF8F44,#cccccc,15994.17,15994.17,,,,0.0,100.0,0.0,,,,,
+12523,2523,Prof. Redes informáticas,2. Profesionales,1. Trabajadores  no manuales,"(0.360284, 0.069247, 0.431497, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12529,2529,Esp. Bases de datos,2. Profesionales,1. Trabajadores  no manuales,"(0.360284, 0.069247, 0.431497, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12600,2600,"Prof. Derecho, Cs Sociales",2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,1269.0,1269.0,9.43,0.0,9.43,0.0,100.0,100.0,8.0,0.0,33.0,0.0,33.0
+12610,2610,Prof. Derecho,2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12611,2611,Abogados,2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,120188.62,120188.62,9.35,0.94,9.16,0.0,100.0,23.87,8.8,0.87,44.4,14.77,45.0
+12612,2612,Jueces,2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,28253.99,28253.99,9.64,0.56,9.39,0.0,100.0,100.0,9.0,0.0,47.48,9.72,58.0
+12619,2619,Prof. Derecho n/c,2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,13691.76,13691.76,9.82,0.88,9.73,0.0,100.0,84.35,8.93,0.26,57.56,14.47,58.5
+12620,2620,"Archivistas, bibliotecarios, curadores y afines",2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12621,2621,Archivistas y curadores de museos,2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12622,2622,"Bibliotecarios, documentalistas y afines",2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,1959.29,1959.29,8.89,0.19,8.08,0.0,100.0,69.48,3.07,0.57,30.89,0.92,27.0
+12630,2630,Esp. cs. Sociales,2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,1352.0,1352.0,9.75,0.0,9.75,0.0,100.0,100.0,9.0,0.0,38.0,0.0,38.0
+12631,2631,Economistas,2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,3029.0,3029.0,9.44,0.62,9.18,0.0,100.0,0.0,9.0,0.0,72.03,11.99,67.0
+12632,2632,"Sociólogos, antropólogos y afines",2. Profesionales,1. Trabajadores  no manuales,"(0.372768, 0.073915, 0.4324, 1.0)",#DF8F44,#cccccc,3004.42,3004.42,,,,0.0,100.0,66.77,9.0,0.0,68.0,0.0,68.0
+12633,2633,"Filósofos, historiadores y especialistas en ciencias políticas",2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12634,2634,Psicólogos,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,14472.93,14472.93,9.46,0.71,9.21,0.0,100.0,51.73,9.0,0.0,41.13,12.45,35.5
+12635,2635,Prof. Trabajo social,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,7288.32,7288.32,9.03,0.21,9.0,0.0,100.0,90.04,9.0,0.0,32.06,2.46,32.5
+12636,2636,Prof. Religiosos,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,386.0,386.0,,,,0.0,100.0,100.0,9.0,0.0,47.0,0.0,47.0
+12640,2640,Aut. periodistas y lingüistas,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12641,2641,Aut. escritores,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,2959.0,2959.0,8.73,0.37,8.85,0.0,100.0,63.64,8.36,0.48,52.74,12.94,53.0
+12642,2642,Periodistas,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,32656.24,32656.24,8.83,0.13,8.86,0.0,100.0,18.73,7.71,1.37,36.81,6.97,36.0
+12643,2643,"Traductores, intérpretes y lingüistas",2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12650,2650,Artistas creativos e interpretativos,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,0.0,,,,,,,,,,,,
+12651,2651,Artistaplásticos,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,12005.11,12005.11,9.51,0.11,9.29,0.0,100.0,0.0,7.84,0.67,69.6,10.11,49.5
+12652,2652,"Músicos, cantantes y compositores",2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,48515.98,48515.98,8.87,0.89,8.57,0.0,100.0,34.36,6.24,1.74,37.62,13.6,35.0
+12653,2653,Bailarines y coreógrafos,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,19916.0,19916.0,8.74,0.0,8.74,0.0,100.0,0.0,5.0,0.0,41.0,0.0,41.0
+12654,2654,Dir. cine teatro,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,5690.77,5690.77,8.76,0.61,8.92,0.0,100.0,30.07,7.73,1.13,39.31,14.43,45.0
+12655,2655,Actores,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,5621.46,5621.46,8.06,0.33,8.17,0.0,100.0,0.0,5.66,2.27,25.77,9.05,22.0
+12656,2656,"Locutores de radio, televisión y otros med.s de comunicación",2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,12274.45,12274.45,8.75,1.04,8.06,0.0,100.0,0.0,7.01,2.56,47.92,20.11,27.0
+12659,2659,Artistas creativos e interpretativos no clasificados bajo otros epígrafes,2. Profesionales,1. Trabajadores  no manuales,"(0.379001, 0.076253, 0.432719, 1.0)",#DF8F44,#cccccc,4640.0,4640.0,8.76,0.22,8.92,0.0,100.0,0.0,4.75,1.89,42.36,8.04,40.0
+13000,3000,Téc. Y prof. N. Medio. mediop,3. Técnicos,1. Trabajadores  no manuales,"(0.434987, 0.097069, 0.432039, 1.0)",#00A1D5,#cccccc,813.0,813.0,,,,0.0,100.0,100.0,8.0,0.0,29.0,0.0,29.0
+13100,3100,Prof. med. ciencia e ingeniería,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13110,3110,Téc. Cs. Físicas e ingeniería,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,1475.0,1475.0,9.76,0.0,9.76,0.0,100.0,26.17,8.26,0.44,50.67,12.31,44.0
+13111,3111,Téc. cs. físicas y químicas,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,5406.47,5406.47,9.13,0.62,9.39,0.0,100.0,47.94,7.62,1.33,37.96,11.96,46.0
+13112,3112,Téc. Ing. Civil,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,39016.81,39016.81,8.55,0.76,8.79,0.0,100.0,6.93,5.19,1.8,52.66,18.2,50.0
+13113,3113,Electrotécnicos,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,22602.46,22602.46,9.41,0.06,9.32,0.0,100.0,1.38,7.76,0.42,55.0,6.38,51.0
+13114,3114,Téc. electrónica,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,15592.89,15592.89,8.9,0.62,9.16,0.0,100.0,13.06,6.91,1.52,43.07,4.22,42.5
+13115,3115,Téc. Ing. mecánica,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,12200.57,12200.57,9.27,0.76,9.21,0.0,100.0,14.2,7.41,1.46,48.31,17.71,53.0
+13116,3116,Téc. química industrial,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,5140.0,5140.0,9.26,0.7,9.59,0.0,100.0,66.95,7.82,1.13,42.5,16.11,36.0
+13117,3117,"Tec. Ingeniería, industria y minas",3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,8701.14,8701.14,9.64,0.52,9.49,0.0,100.0,17.23,7.96,1.4,42.1,9.94,46.0
+13118,3118,Dibujant. Técnicos,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,7037.73,7037.73,8.34,0.44,8.54,0.0,100.0,28.59,5.45,0.74,42.13,19.86,46.5
+13119,3119,Téc. Cs. Físicas,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,9983.0,9983.0,9.04,0.78,8.85,0.0,100.0,0.0,5.63,1.16,55.58,16.55,40.0
+13120,3120,"Supv. Construcción, ingeniería y construcción",3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,29885.0,29885.0,8.94,1.15,8.99,0.0,100.0,41.64,5.09,2.06,52.61,18.98,56.0
+13121,3121,Supv. Ingeniería y minas,3. Técnicos,1. Trabajadores  no manuales,"(0.453651, 0.103848, 0.430498, 1.0)",#00A1D5,#cccccc,6385.09,6385.09,10.52,0.37,10.64,0.0,100.0,36.57,6.34,1.71,39.66,7.75,38.0
+13122,3122,Supv. Ind. manufactureras,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,84094.52,84094.52,9.22,0.62,9.1,0.0,100.0,7.31,4.48,1.46,45.77,18.94,46.5
+13123,3123,Sup. Construcción,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,38535.8,38535.8,8.8,0.81,8.81,0.0,100.0,22.48,4.16,2.07,54.6,22.14,53.0
+13130,3130,Téc. Ctrl. procesos,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,2033.0,2033.0,10.43,0.0,10.43,0.0,100.0,0.0,5.0,0.0,31.0,0.0,31.0
+13131,3131,Op. Prod. Energia,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,19851.39,19851.39,9.61,0.57,9.62,0.0,100.0,24.54,4.98,1.4,57.04,13.51,49.5
+13132,3132,Op. Incineradores y plantas de agua,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,5835.17,5835.17,9.39,0.4,9.22,0.0,100.0,45.45,4.11,1.37,45.93,9.14,50.0
+13133,3133,Cont. Inst químicas,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,5039.0,5039.0,9.51,0.4,9.32,0.0,100.0,0.0,5.28,2.08,47.65,11.95,48.5
+13134,3134,Op. Refinamiento petroleo y gas,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,10097.22,10097.22,10.09,0.54,10.09,0.0,100.0,19.61,6.02,1.99,42.08,11.82,42.5
+13135,3135,Cont. prod. metales,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,1781.0,1781.0,9.28,0.03,9.28,0.0,100.0,0.0,3.99,1.0,73.45,3.5,73.5
+13139,3139,Téc. Ctrl. Procesos n/c,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,2497.06,2497.06,10.7,0.0,10.7,0.0,100.0,0.0,3.0,0.0,41.0,0.0,41.0
+13140,3140,Téc. Cs. biológicas y afines,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13141,3141,Téc. Cs. Biológicas,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13142,3142,Téc. agropecuarios,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,3256.0,3256.0,8.52,0.28,8.52,0.0,100.0,39.1,7.3,2.46,38.04,14.05,52.0
+13143,3143,Téc. forestales,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13150,3150,Técnicos navegación marítima y aeronáutica,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,1867.0,1867.0,9.43,0.0,9.43,0.0,100.0,100.0,7.0,0.0,41.0,0.0,41.0
+13151,3151,Of. Maquinistas navegación,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,4995.29,4995.29,9.22,0.0,9.22,0.0,100.0,17.54,3.0,0.0,46.0,0.0,46.0
+13152,3152,"Capitanes, oficiales de cubierta y prácticos",3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,5848.59,5848.59,9.17,0.38,9.26,0.0,100.0,52.24,4.2,0.91,61.44,12.26,60.0
+13153,3153,Pilotos de aviación y afines,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,6348.0,6348.0,9.77,0.23,9.77,0.0,100.0,78.21,6.53,1.33,51.46,14.86,56.0
+13154,3154,Cont. tráf. aéreo,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13155,3155,Téc. Seg. aeronáutica,3. Técnicos,1. Trabajadores  no manuales,"(0.459875, 0.106089, 0.429846, 1.0)",#00A1D5,#cccccc,2423.0,2423.0,9.39,0.0,9.39,0.0,100.0,0.0,7.0,0.0,24.0,0.0,24.0
+13200,3200,Prof. med. salud,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,4089.97,4089.97,8.73,0.27,8.72,0.0,100.0,87.21,6.04,1.0,46.22,6.49,46.5
+13210,3210,Téc. médicos y farmacéuticos,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13211,3211,Téc. diagnóstico y tratamiento médico,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,25306.07,25306.07,8.78,0.47,8.92,0.0,100.0,9.65,6.89,0.45,35.36,8.56,36.0
+13212,3212,Téc. Lab. médicos,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,4828.65,4828.65,8.31,1.12,7.56,0.0,100.0,82.16,3.34,2.5,75.41,14.16,66.0
+13213,3213,Téc. farmacéuticos,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,5289.4,5289.4,8.98,0.13,8.87,0.0,100.0,24.35,5.24,0.66,31.16,4.87,30.0
+13214,3214,Téc. prótesis médicas y dentales,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,2453.25,2453.25,8.92,0.47,9.11,0.0,100.0,0.0,4.26,1.86,65.09,20.46,57.0
+13220,3220,Prof. med. enfermería y partería,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13221,3221,Prof. med. enfermería,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,61407.12,61407.12,8.77,0.53,8.52,0.0,100.0,51.49,6.08,1.53,51.23,11.01,53.5
+13222,3222,Prof. med. partería,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13230,3230,Prof. med. medicina tradicional y alternativa,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,3807.26,3807.26,,,,0.0,100.0,0.0,,,,,
+13232,3232,Prof. med. medicina tradicional y alternativa,3. Técnicos,1. Trabajadores  no manuales,"(0.472328, 0.110547, 0.428334, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13240,3240,Téc. veterinarios,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,872.0,872.0,8.66,0.0,8.66,0.0,100.0,100.0,5.0,0.0,30.0,0.0,30.0
+13250,3250,Prof med. salud,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13251,3251,Aux. y ay. Dentista,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13252,3252,Téc. Doc. Sanitaria,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,858.0,858.0,9.29,0.0,9.29,0.0,100.0,100.0,6.0,0.0,48.0,0.0,48.0
+13253,3253,T ra. Comu. Salud,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,3261.15,3261.15,7.74,0.0,7.74,0.0,100.0,58.54,5.49,2.5,42.6,17.5,42.5
+13254,3254,Téc. optometría y ópticos,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13255,3255,Téc. fisioterapeutas,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,8620.45,8620.45,8.35,1.14,8.76,0.0,100.0,0.0,7.6,2.24,34.93,11.5,39.5
+13256,3256,Asistentes médicos,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,5707.0,5707.0,9.28,0.31,9.14,0.0,100.0,33.85,8.15,1.37,36.47,9.72,32.0
+13257,3257,Insp. Salud y laboral,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,12904.43,12904.43,8.98,1.18,9.48,0.0,100.0,79.26,7.37,1.32,37.09,18.96,39.0
+13258,3258,Ay. de ambulancias,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,549.0,549.0,9.13,0.0,9.13,0.0,100.0,0.0,5.0,0.0,47.0,0.0,47.0
+13259,3259,Prof med. salud n/c,3. Técnicos,1. Trabajadores  no manuales,"(0.478558, 0.112764, 0.427475, 1.0)",#00A1D5,#cccccc,1825.58,1825.58,,,,0.0,100.0,38.7,5.0,0.0,90.0,0.0,90.0
+13300,3300,Prof. Med. Financieros,3. Técnicos,1. Trabajadores  no manuales,"(0.484789, 0.114974, 0.426548, 1.0)",#00A1D5,#cccccc,3230.0,3230.0,9.81,0.53,10.13,0.0,100.0,47.31,8.4,0.91,62.27,3.15,62.0
+13310,3310,Prof. Med. Finanzas y matemáticas,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,6879.0,6879.0,8.79,0.83,9.45,0.0,100.0,0.0,5.24,0.65,68.93,11.03,73.0
+13311,3311,"Ag. bolsa, cambio y otros servicios financieros",3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,6939.7,6939.7,9.16,0.28,9.35,0.0,100.0,0.0,8.11,1.23,31.5,9.48,30.0
+13312,3312,Of. Préstamos y créditos,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,16714.79,16714.79,8.98,0.34,9.41,0.0,100.0,1.97,5.14,0.63,25.61,14.32,65.0
+13313,3313,Tenedores de libros,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,28882.0,28882.0,8.97,0.5,8.85,0.0,100.0,15.24,5.24,1.67,50.01,19.44,67.0
+13314,3314,Prof. med. estadística y afines,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,2608.3,2608.3,,,,0.0,100.0,100.0,,,,,
+13315,3315,Tasadores,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,7443.0,7443.0,6.39,1.07,7.7,0.0,100.0,0.0,7.66,0.95,32.97,16.75,53.5
+13320,3320,Ag. comerciales y corredores,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,8038.0,8038.0,9.25,0.38,9.16,0.0,100.0,0.0,5.83,1.73,40.12,14.65,36.0
+13321,3321,Ag. de seguros,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,52110.47,52110.47,9.2,0.44,9.27,0.0,100.0,0.0,6.21,1.49,45.49,12.23,49.5
+13322,3322,Rep. Comerciales,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,79473.19,79473.19,8.98,0.67,8.87,0.0,100.0,0.0,5.52,1.68,50.71,15.49,47.5
+13323,3323,Ag. de compras,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,16360.21,16360.21,9.02,0.62,8.85,0.0,100.0,20.26,6.1,1.58,37.91,9.77,37.0
+13324,3324,Ag. de compras y consignatarios,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,2988.0,2988.0,9.34,0.51,9.31,0.0,100.0,0.0,5.46,1.08,53.13,7.34,56.5
+13330,3330,Ag. serv. comerciales,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13331,3331,Dec. o gest. aduana,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,18265.45,18265.45,9.27,0.68,9.21,0.0,100.0,71.13,6.25,1.16,53.21,12.43,56.0
+13332,3332,Org. Eventos y conferencias,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,12385.57,12385.57,6.99,0.38,6.69,0.0,100.0,9.13,8.0,0.0,24.64,7.48,30.5
+13333,3333,Ag. de empleo y contratistas de mano de obra,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,17346.59,17346.59,9.14,0.82,8.96,0.0,100.0,0.0,4.45,1.54,43.7,14.78,47.0
+13334,3334,Ag. inmobiliarios,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,40034.34,40034.34,9.16,0.93,9.27,0.0,100.0,0.0,6.9,1.63,50.86,15.39,59.0
+13339,3339,Ag. serv. comerciales n/c,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,1269.0,1269.0,9.61,0.0,9.61,0.0,100.0,0.0,5.0,0.0,35.0,0.0,35.0
+13340,3340,Secretarios administrativos y especializados,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,18005.0,18005.0,8.89,0.74,8.57,0.0,100.0,65.69,6.22,2.08,49.41,13.82,54.0
+13341,3341,Supv. Secretaría,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,33217.84,33217.84,9.25,0.55,9.07,0.0,100.0,67.86,6.7,1.88,49.68,18.3,53.0
+13342,3342,Secretarios jurídicos,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,11664.01,11664.01,9.28,1.09,8.52,0.0,100.0,34.92,7.22,1.97,42.94,9.89,40.0
+13343,3343,Secretarios administrativos y ejecutivos,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,3181.0,3181.0,9.14,0.76,9.26,0.0,100.0,43.26,7.58,1.72,52.65,16.13,57.5
+13344,3344,Secretarios médicos,3. Técnicos,1. Trabajadores  no manuales,"(0.491022, 0.117179, 0.425552, 1.0)",#00A1D5,#cccccc,9347.25,9347.25,9.12,0.0,9.12,0.0,100.0,51.37,5.54,1.37,26.16,5.47,32.0
+13350,3350,Ag. adm. pública para la aplicación de la ley y afines,3. Técnicos,1. Trabajadores  no manuales,"(0.497257, 0.119379, 0.424488, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13351,3351,Ag. aduana e inspectores de fronteras,3. Técnicos,1. Trabajadores  no manuales,"(0.497257, 0.119379, 0.424488, 1.0)",#00A1D5,#cccccc,777.33,777.33,,,,0.0,100.0,100.0,,,,,
+13352,3352,Ag. adm. tributaria,3. Técnicos,1. Trabajadores  no manuales,"(0.497257, 0.119379, 0.424488, 1.0)",#00A1D5,#cccccc,1460.0,1460.0,9.89,0.0,9.89,0.0,100.0,100.0,9.0,0.0,55.0,0.0,55.0
+13353,3353,Ag. seg. Social,3. Técnicos,1. Trabajadores  no manuales,"(0.497257, 0.119379, 0.424488, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13354,3354,Ag. serv. licencias y permisos,3. Técnicos,1. Trabajadores  no manuales,"(0.497257, 0.119379, 0.424488, 1.0)",#00A1D5,#cccccc,8552.0,8552.0,8.52,0.32,8.78,0.0,100.0,60.33,7.57,0.5,43.53,22.45,60.0
+13355,3355,Insp. De policía,3. Técnicos,1. Trabajadores  no manuales,"(0.497257, 0.119379, 0.424488, 1.0)",#00A1D5,#cccccc,22946.34,22946.34,9.2,0.54,9.01,0.0,100.0,100.0,5.74,1.36,48.9,14.88,57.0
+13359,3359,Ag. adm. pública para la aplicacion de la ley y afines no clasificados bajo otros epígrafes,3. Técnicos,1. Trabajadores  no manuales,"(0.497257, 0.119379, 0.424488, 1.0)",#00A1D5,#cccccc,9643.75,9643.75,8.64,0.74,8.95,0.0,100.0,87.59,4.31,2.67,47.92,10.52,49.0
+13400,3400,Prof. med. jurídico,3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13410,3410,Prof. Med. Jurídicos y sociales,3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,13635.0,13635.0,9.06,0.68,9.21,0.0,100.0,5.77,4.33,1.22,43.4,3.83,44.0
+13411,3411,Prof. med. derecho,3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,26311.71,26311.71,9.67,0.9,9.06,0.0,100.0,63.88,7.51,1.21,52.11,18.62,41.0
+13412,3412,Traby asist. Sociales nivel medio,3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,11949.18,11949.18,8.83,0.36,8.85,0.0,100.0,62.51,4.41,2.1,44.82,5.92,43.0
+13413,3413,Aux. laicos religiones,3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,748.0,748.0,8.85,0.0,8.85,0.0,100.0,0.0,8.0,0.0,44.0,0.0,44.0
+13420,3420,Ent. deportivos,3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13421,3421,Atletas y deportistas,3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,9913.2,9913.2,9.33,0.0,9.33,0.0,100.0,0.0,5.0,0.0,26.0,0.0,26.0
+13422,3422,"Ent. Deportivos, arbitros",3. Técnicos,1. Trabajadores  no manuales,"(0.503493, 0.121575, 0.423356, 1.0)",#00A1D5,#cccccc,27222.97,27222.97,8.89,0.95,9.03,0.0,100.0,18.19,4.97,1.91,36.08,13.31,35.5
+13423,3423,Inst. ed física,3. Técnicos,1. Trabajadores  no manuales,"(0.50973, 0.123769, 0.422156, 1.0)",#00A1D5,#cccccc,41828.69,41828.69,8.53,0.48,8.06,0.0,100.0,24.14,6.28,1.81,36.92,11.97,38.5
+13430,3430,"Prof. med. Act culturales, artísticas y humanas",3. Técnicos,1. Trabajadores  no manuales,"(0.50973, 0.123769, 0.422156, 1.0)",#00A1D5,#cccccc,419.0,419.0,7.09,0.0,7.09,0.0,100.0,100.0,6.0,0.0,26.0,0.0,26.0
+13431,3431,Fotógrafos,3. Técnicos,1. Trabajadores  no manuales,"(0.50973, 0.123769, 0.422156, 1.0)",#00A1D5,#cccccc,37913.44,37913.44,8.88,0.31,8.67,0.0,100.0,35.3,4.5,0.96,48.49,8.83,49.0
+13432,3432,Dis. De interior,3. Técnicos,1. Trabajadores  no manuales,"(0.50973, 0.123769, 0.422156, 1.0)",#00A1D5,#cccccc,3019.74,3019.74,8.94,0.0,8.94,0.0,100.0,0.0,9.0,0.0,45.0,0.0,45.0
+13433,3433,"Téc. arte, museos y bibliotecas",3. Técnicos,1. Trabajadores  no manuales,"(0.50973, 0.123769, 0.422156, 1.0)",#00A1D5,#cccccc,4426.73,4426.73,8.24,0.0,8.24,0.0,100.0,22.68,8.0,0.0,27.0,0.0,27.0
+13434,3434,Chefs,3. Técnicos,1. Trabajadores  no manuales,"(0.50973, 0.123769, 0.422156, 1.0)",#00A1D5,#cccccc,21343.05,21343.05,9.32,0.64,8.89,0.0,100.0,2.14,5.81,1.86,30.44,9.81,32.5
+13435,3435,Prof med. Act artísticas y culturales,3. Técnicos,1. Trabajadores  no manuales,"(0.50973, 0.123769, 0.422156, 1.0)",#00A1D5,#cccccc,22708.0,22708.0,8.72,1.09,8.51,0.0,100.0,5.3,5.48,1.92,33.02,10.61,31.0
+13500,3500,Téc. IT,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13510,3510,Téc. Op. IT n/c,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13511,3511,Téc. Op. IT,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,1916.53,1916.53,8.41,0.18,8.5,0.0,100.0,0.0,8.27,0.45,28.1,1.78,29.0
+13512,3512,Téc. Asistencia IT,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,18308.2,18308.2,9.04,0.75,8.82,0.0,100.0,33.9,7.64,0.77,34.46,5.62,36.0
+13513,3513,Téc. redes y sistemas de computadores,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,23960.76,23960.76,8.75,0.33,8.66,0.0,100.0,41.76,6.73,1.31,29.79,5.4,30.0
+13514,3514,Técnicos Web,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,5570.31,5570.31,,,,0.0,100.0,0.0,4.0,0.0,16.0,0.0,16.0
+13520,3520,Téc. telecomunicaciones y radiodifusión,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,0.0,,,,,,,,,,,,
+13521,3521,Téc. radiodifusión y grabación audio visual,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,40901.84,40901.84,8.81,0.73,8.75,0.0,100.0,34.21,6.42,2.57,37.45,14.7,36.0
+13522,3522,Téc. Ing. telecomunicaciones,3. Técnicos,1. Trabajadores  no manuales,"(0.522206, 0.12815, 0.419549, 1.0)",#00A1D5,#cccccc,785.0,785.0,,,,0.0,100.0,100.0,6.0,0.0,33.0,0.0,33.0
+14000,4000,Apoyo administrativo,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.603139, 0.157151, 0.395891, 1.0)",#B24745,#cccccc,396.96,396.96,,,,0.0,100.0,0.0,,,,,
+14100,4100,Oficinistas n/c,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.621685, 0.164184, 0.388781, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14110,4110,Oficinistas,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.621685, 0.164184, 0.388781, 1.0)",#B24745,#cccccc,454890.46,454890.46,8.91,0.74,8.78,0.0,100.0,49.31,6.25,1.86,45.63,17.44,45.0
+14120,4120,Secretarios (general),4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.621685, 0.164184, 0.388781, 1.0)",#B24745,#cccccc,21546.14,21546.14,8.95,0.82,8.8,0.0,100.0,35.53,5.71,2.05,48.92,21.05,62.5
+14130,4130,Op. Maq oficina,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.621685, 0.164184, 0.388781, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14131,4131,Op. Pros de texto y mecanógrafos,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.621685, 0.164184, 0.388781, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14132,4132,Grab. De datos,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.621685, 0.164184, 0.388781, 1.0)",#B24745,#cccccc,3314.0,3314.0,9.35,0.0,9.35,0.0,100.0,0.0,5.0,0.0,47.0,0.0,47.0
+14200,4200,Emp. Trato directo con el público,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.633998, 0.168992, 0.383704, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14210,4210,Cobradores y pagadores,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.633998, 0.168992, 0.383704, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14211,4211,Cajeros bancos y afines,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.633998, 0.168992, 0.383704, 1.0)",#B24745,#cccccc,27974.02,27974.02,9.4,0.28,9.43,0.0,100.0,39.05,6.19,1.47,59.56,14.13,56.5
+14212,4212,Recep. apuestas y afines,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.633998, 0.168992, 0.383704, 1.0)",#B24745,#cccccc,38425.09,38425.09,8.9,0.75,8.64,0.0,100.0,2.38,5.16,0.98,42.59,12.5,38.0
+14213,4213,Prestamistas,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,477.0,477.0,8.29,0.0,8.29,0.0,100.0,0.0,7.0,0.0,32.0,0.0,32.0
+14214,4214,Cobradres,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,16829.33,16829.33,8.4,1.3,8.56,0.0,100.0,0.0,5.46,1.37,49.29,15.95,45.5
+14220,4220,Emp. Serv. Información,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14221,4221,Emp. Ag. Viajes,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,10934.72,10934.72,8.44,0.89,8.51,0.0,100.0,4.33,5.28,0.79,39.41,11.32,37.5
+14222,4222,Emp. cent. Llamadas,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,40950.65,40950.65,8.67,0.66,8.34,0.0,100.0,15.4,5.32,1.64,36.01,19.23,30.0
+14223,4223,Telefonistas,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,34016.39,34016.39,9.35,0.78,8.83,0.0,100.0,45.04,6.15,1.7,41.76,17.77,30.0
+14224,4224,Recepcionistas de hoteles,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,7553.19,7553.19,8.24,0.64,8.75,0.0,100.0,0.0,3.78,1.81,64.28,17.76,36.0
+14225,4225,Emp. Informaciónes,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,23153.83,23153.83,8.36,0.72,8.34,0.0,100.0,56.08,6.11,1.83,37.01,9.97,37.0
+14226,4226,Recepcionistas (general),4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,66358.47,66358.47,8.82,0.54,8.42,0.0,100.0,26.09,4.72,2.82,43.59,14.83,37.0
+14227,4227,Encuestadores y entrevistadores,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,2181.0,2181.0,9.16,0.52,8.88,0.0,100.0,26.36,7.26,0.44,39.15,3.08,37.5
+14229,4229,Emp. Serv. Información,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.640135, 0.171438, 0.381065, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14300,4300,Emp. Contables y materiales,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14310,4310,Aux. contables y financieros,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14311,4311,Emp. Contabilidad,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,82404.01,82404.01,8.37,1.07,8.68,0.0,100.0,38.75,6.62,1.96,48.04,21.02,49.0
+14312,4312,Emp. Serv. Estadísticos,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,4018.0,4018.0,8.79,0.1,8.8,0.0,100.0,66.05,6.36,1.89,59.93,23.01,74.0
+14313,4313,Emp. Nóminas,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,14799.24,14799.24,9.01,0.44,9.16,0.0,100.0,57.81,6.61,1.33,59.49,16.0,57.0
+14320,4320,Emp. Registro materiales,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14321,4321,Emp. Ctrl. Abastecimiento,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,76767.96,76767.96,9.03,0.64,9.06,0.0,100.0,13.31,5.64,1.91,39.95,14.68,41.0
+14322,4322,Emp. Apoyo producción,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,1487.0,1487.0,8.22,0.21,8.52,0.0,100.0,0.0,4.97,0.17,37.92,16.66,27.0
+14323,4323,Emp. Serv. Transporte,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.652369, 0.176421, 0.375586, 1.0)",#B24745,#cccccc,58397.64,58397.64,9.09,0.72,8.7,0.0,100.0,17.2,6.13,2.01,47.01,16.0,53.5
+14400,4400,Pers. Administrativo,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.66454, 0.181539, 0.369846, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14410,4410,Pers. Administrativo n/c,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14411,4411,Emp. bibliotecas,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,4280.9,4280.9,5.02,0.0,5.02,0.0,100.0,51.53,4.0,0.0,18.0,0.0,18.0
+14412,4412,Emp. Serv. Correos,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,44139.8,44139.8,8.6,0.72,8.29,0.0,100.0,46.31,3.95,1.77,43.02,22.84,52.0
+14413,4413,"Cod. datos, correctores de pruebas de imprenta y afines",4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14414,4414,Escribientes públicos,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,0.0,,,,,,,,,,,,
+14415,4415,Emp. archivos,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,11008.34,11008.34,8.99,0.0,8.99,0.0,100.0,45.19,8.08,1.69,31.05,11.73,32.0
+14416,4416,Emp. Serv. De personal,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,26056.41,26056.41,8.84,0.53,8.99,0.0,100.0,81.79,5.98,1.47,34.77,7.12,37.0
+14419,4419,Apoyo administrativo,4. Trabajadores administrativos,1. Trabajadores  no manuales,"(0.670599, 0.184153, 0.366879, 1.0)",#B24745,#cccccc,13891.95,13891.95,9.08,0.62,9.05,0.0,100.0,24.36,5.81,1.4,49.03,10.61,41.5
+15000,5000,Trab. servicios y vendedores de comercios y mercados,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.758422, 0.229097, 0.315266, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15100,5100,Trab. Serv. Personales,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.775059, 0.239667, 0.303526, 1.0)",#79AF97,#f1f22e,658.0,658.0,,,,0.0,100.0,0.0,5.0,0.0,39.0,0.0,39.0
+15110,5110,Serv. Pasajeros,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.775059, 0.239667, 0.303526, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15111,5111,Aux. serv. abordo,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.775059, 0.239667, 0.303526, 1.0)",#79AF97,#f1f22e,9770.24,9770.24,,,,0.0,100.0,0.0,,,,,
+15112,5112,Cobradores transporte público,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.775059, 0.239667, 0.303526, 1.0)",#79AF97,#f1f22e,1097.0,1097.0,8.48,0.2,8.52,0.0,100.0,85.14,5.35,2.31,64.27,21.1,47.0
+15113,5113,Guías de turismo,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.775059, 0.239667, 0.303526, 1.0)",#79AF97,#f1f22e,2967.87,2967.87,8.91,0.33,8.58,0.0,100.0,14.42,6.84,1.99,46.01,8.44,43.0
+15120,5120,Cocineros,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,162020.11,162020.11,8.6,1.16,8.61,0.0,100.0,5.13,4.37,1.74,46.03,17.36,42.5
+15130,5130,Camareros,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15131,5131,Camarero mesas,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,129313.81,129313.81,8.44,0.75,8.4,0.0,100.0,1.31,5.7,1.92,34.64,13.03,31.0
+15132,5132,Camarer barra,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,37895.82,37895.82,7.56,0.74,7.6,0.0,100.0,0.0,4.92,0.96,21.98,2.83,21.0
+15140,5140,"Peluqueros, especialistas en tratamientos de belleza y afines",5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15141,5141,Peluqueros,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,40911.29,40911.29,8.97,0.5,8.92,0.0,100.0,2.71,4.71,1.38,48.7,14.74,51.5
+15142,5142,Esp. Trat belleza,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15150,5150,Sup. Mantenimiento y limpieza,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15151,5151,Sup. Mantenimiento y limpieza hoteles y establecimientos,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,13360.0,13360.0,8.26,0.76,8.6,0.0,100.0,73.07,3.39,1.24,66.99,18.15,51.0
+15152,5152,Ecónomos y mayordomos domésticos,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,3613.0,3613.0,8.72,0.26,8.7,0.0,100.0,82.54,5.89,2.67,44.56,8.94,50.0
+15153,5153,Conserjes,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.780517, 0.243327, 0.299523, 1.0)",#79AF97,#f1f22e,288279.72,288279.72,8.9,0.64,8.9,0.0,100.0,42.06,4.35,1.84,47.23,15.03,52.0
+15160,5160,Trab serv. Personales,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.785929, 0.247056, 0.295477, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15161,5161,"Astrólogos, adivinadores y afines",5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.785929, 0.247056, 0.295477, 1.0)",#79AF97,#f1f22e,2427.0,2427.0,8.4,0.29,8.39,0.0,100.0,0.0,4.71,0.45,49.69,10.48,48.0
+15162,5162,Acompañantes y ayudantes de cámara,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.785929, 0.247056, 0.295477, 1.0)",#79AF97,#f1f22e,1120.76,1120.76,,,,0.0,100.0,0.0,,,,,
+15163,5163,Pers. pompas fúnebres y embalsamadores,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.785929, 0.247056, 0.295477, 1.0)",#79AF97,#f1f22e,6492.0,6492.0,8.92,0.72,8.15,0.0,100.0,14.22,3.93,0.38,26.71,10.11,29.5
+15164,5164,Cuid. de animales,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.785929, 0.247056, 0.295477, 1.0)",#79AF97,#f1f22e,7248.0,7248.0,7.03,0.57,6.79,0.0,100.0,0.0,3.39,0.84,31.31,17.49,29.0
+15165,5165,Inst. autoescuela,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.785929, 0.247056, 0.295477, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15169,5169,Trab. Serv. personales no clasificados bajo otros epígrafes,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.785929, 0.247056, 0.295477, 1.0)",#79AF97,#f1f22e,2974.0,2974.0,7.22,0.72,7.52,0.0,100.0,0.0,4.62,0.92,20.93,1.39,21.5
+15200,5200,Vendedores,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15210,5210,Vend. callejeros y de puestos de mercado,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15211,5211,Vend. quioscos y de puestos de mercado,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,32700.2,32700.2,7.71,1.09,7.83,0.0,100.0,0.0,4.14,1.41,38.19,18.04,44.0
+15212,5212,Vend. Ambulantes comida,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,26947.58,26947.58,7.24,1.02,7.88,0.0,100.0,0.0,3.32,1.05,33.45,20.98,38.0
+15220,5220,Comerciantes y vendedores de tiendas y almacenes,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15221,5221,Comerciantes,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,522797.6,522797.6,8.69,0.78,8.7,0.0,100.0,0.0,4.78,1.7,48.86,15.03,51.0
+15222,5222,Supv. Tiendas y almacenes,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,62317.72,62317.72,8.96,0.67,9.07,0.0,100.0,4.8,6.05,1.63,42.51,12.82,39.5
+15223,5223,Vendedores,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.791293, 0.250856, 0.29139, 1.0)",#79AF97,#f1f22e,618013.12,618013.12,8.47,0.8,8.51,0.0,100.0,0.73,4.93,1.85,36.09,16.25,32.0
+15230,5230,Cajeros y expendedores de billetes,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,109061.11,109061.11,8.51,0.62,8.59,0.0,100.0,2.7,5.18,1.35,31.64,12.52,30.0
+15240,5240,Vendedores n/c,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15241,5241,"Modelos de moda, arte y publicidad",5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15242,5242,Dem. tiendas,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,25099.0,25099.0,8.75,0.81,8.53,0.0,100.0,0.0,4.55,1.67,35.46,12.64,32.5
+15243,5243,Vend. puerta a puerta,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,18390.48,18390.48,7.2,1.38,7.82,0.0,100.0,0.0,4.53,2.28,31.97,12.48,31.0
+15244,5244,Vend. Telefónicos,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,14672.96,14672.96,8.4,0.15,8.57,0.0,100.0,0.0,5.91,1.32,24.2,1.72,24.0
+15245,5245,Exp. Gasolineras,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,34919.08,34919.08,8.74,0.35,8.78,0.0,100.0,7.69,4.64,1.38,33.42,13.31,32.0
+15246,5246,Vend. comidas al mostrador,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,14687.84,14687.84,8.6,0.39,8.74,0.0,100.0,10.53,4.3,2.29,49.06,17.14,52.0
+15249,5249,Vendedoren/c,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.796607, 0.254728, 0.287264, 1.0)",#79AF97,#f1f22e,1601.0,1601.0,6.88,0.58,6.55,0.0,100.0,0.0,3.0,0.0,39.95,20.28,35.0
+15300,5300,Trab. Cuidados personales,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.801871, 0.258674, 0.283099, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15310,5310,Cuid. niños y auxiliares de maestros,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.807082, 0.262692, 0.278898, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15311,5311,Cuid. de niños,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.807082, 0.262692, 0.278898, 1.0)",#79AF97,#f1f22e,26555.71,26555.71,7.12,1.17,7.94,0.0,100.0,16.63,4.55,1.67,27.0,16.0,27.0
+15312,5312,Aux. de maestros,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.807082, 0.262692, 0.278898, 1.0)",#79AF97,#f1f22e,22555.15,22555.15,8.24,0.57,8.7,0.0,100.0,90.49,6.52,1.55,38.43,15.71,38.0
+15320,5320,Trab. Cuid. Personales en servicios de salud,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.807082, 0.262692, 0.278898, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15321,5321,Trab. Cuid. Pers. instituciones,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.807082, 0.262692, 0.278898, 1.0)",#79AF97,#f1f22e,15426.29,15426.29,8.19,0.06,8.16,0.0,100.0,18.14,3.09,1.38,45.51,23.47,40.0
+15322,5322,Trab. Cuid. personales,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.807082, 0.262692, 0.278898, 1.0)",#79AF97,#f1f22e,31987.03,31987.03,9.44,0.45,9.51,0.0,100.0,0.0,3.33,0.82,55.74,10.14,59.0
+15329,5329,Trab. Cuid. Pers servicios de salud n/c,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.807082, 0.262692, 0.278898, 1.0)",#79AF97,#f1f22e,1431.0,1431.0,9.16,0.0,9.16,0.0,100.0,100.0,6.0,0.0,25.0,0.0,25.0
+15400,5400,Serv. Protección,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.817341, 0.270954, 0.27039, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15410,5410,Serv. Protección,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.817341, 0.270954, 0.27039, 1.0)",#79AF97,#f1f22e,0.0,,,,,,,,,,,,
+15411,5411,Bomberos,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.817341, 0.270954, 0.27039, 1.0)",#79AF97,#f1f22e,11562.63,11562.63,9.23,0.87,8.83,0.0,100.0,85.46,4.81,1.03,32.53,10.09,28.0
+15412,5412,Policías,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.817341, 0.270954, 0.27039, 1.0)",#79AF97,#f1f22e,212340.44,212340.44,8.9,0.87,8.99,0.0,100.0,99.32,5.15,1.66,41.43,16.13,40.0
+15413,5413,Guar. de prisión,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.817341, 0.270954, 0.27039, 1.0)",#79AF97,#f1f22e,28482.96,28482.96,9.06,0.47,8.91,0.0,100.0,100.0,4.38,1.27,40.26,11.18,35.0
+15414,5414,Guardias de protección,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.817341, 0.270954, 0.27039, 1.0)",#79AF97,#f1f22e,270637.32,270637.32,8.71,0.78,8.75,0.0,100.0,23.73,4.25,1.55,42.65,15.52,45.0
+15419,5419,Serv. Protección n/c,5. Trabajadores de servicios y ventas,2. Trabajadores de servicios y ventas,"(0.822386, 0.275197, 0.266085, 1.0)",#79AF97,#f1f22e,27679.57,27679.57,8.4,0.76,8.57,0.0,100.0,89.03,5.59,1.15,37.6,12.5,31.5
+16000,6000,"Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros",6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.890341, 0.347957, 0.198286, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16100,6100,Agricultores y trabajadores calificados de explotaciones agropecuarias con destino al mercado,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,10316.88,10316.88,8.41,0.75,9.21,0.0,100.0,14.21,5.13,2.23,45.94,15.72,45.0
+16110,6110,Agricultores y trabajadores calificados de jardines y de cultivos para el mercado,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,6750.0,6750.0,8.21,0.19,8.29,0.0,100.0,0.0,2.2,1.44,62.54,12.79,54.0
+16111,6111,Agricultores y trabajadores calificados de cultivos extensivos,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,80564.43,80564.43,8.47,0.63,8.15,0.0,100.0,9.41,3.59,0.95,46.02,16.97,49.5
+16112,6112,Agricultores y trabajadores calificados de plantaciones de árboles y arbustos,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,16776.08,16776.08,7.6,1.1,7.98,0.0,100.0,5.07,3.69,1.82,50.11,20.62,64.0
+16113,6113,"Agricultores y trabajadores calificados de huertas, invernaderos, viveros y jardines",6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,84463.09,84463.09,8.08,0.91,8.34,0.0,100.0,3.3,3.39,1.56,47.06,16.94,40.0
+16114,6114,Agricultores y trabajadores calificados de cultivos mixtos,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,297.55,297.55,,,,0.0,100.0,0.0,,,,,
+16120,6120,Criadores y trabajadores pecuarios calificados de la cría de animales para el mercado y afines,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,1489.0,1489.0,7.86,0.0,7.86,0.0,100.0,0.0,3.0,0.0,86.0,0.0,86.0
+16121,6121,Criadores de ganado,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,51342.14,51342.14,8.76,1.03,8.63,0.0,100.0,0.0,4.29,2.14,44.37,16.48,48.5
+16122,6122,Avicultores y trabajadores calificados de la avicultura,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,12990.0,12990.0,8.34,0.77,8.16,0.0,100.0,0.0,4.34,2.33,39.49,12.88,33.0
+16123,6123,Apicultores y sericultores y trabajadores calificados de la apicultura y la sericultura,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,1423.12,1423.12,8.64,0.75,8.5,0.0,100.0,0.0,5.96,2.46,59.47,18.67,63.0
+16129,6129,Criadores y trabajadores pecuarios calificados de la cría de animales no clasificados bajo otros epígrafes,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16130,6130,Prod y trab agrop,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.902003, 0.364492, 0.184116, 1.0)",#6A6599,#17becf,54027.17,54027.17,8.92,0.87,8.74,0.0,100.0,0.0,5.28,2.23,59.67,20.28,52.0
+16200,6200,"Trab. forestales calificados, pescadores y cazadores",6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.90939, 0.375856, 0.174563, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16210,6210,Trab. forestales calificados y afines,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.912966, 0.381636, 0.169755, 1.0)",#6A6599,#17becf,1100.55,1100.55,7.82,0.0,7.82,0.0,100.0,55.61,2.0,0.0,67.0,0.0,67.0
+16220,6220,"Pescadores, cazadores y tramperos",6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.912966, 0.381636, 0.169755, 1.0)",#6A6599,#17becf,3811.0,3811.0,7.55,0.78,8.61,0.0,100.0,0.0,3.5,1.24,40.61,4.45,42.5
+16221,6221,Trab. acuicultura,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.912966, 0.381636, 0.169755, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16222,6222,Pescadores de agua dulce y en aguas costeras,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.912966, 0.381636, 0.169755, 1.0)",#6A6599,#17becf,4232.0,4232.0,7.81,0.4,8.05,0.0,100.0,0.0,3.0,0.92,54.97,30.29,51.5
+16223,6223,Pescadores de alta mar,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.912966, 0.381636, 0.169755, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16224,6224,Cazadores y tramperos,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.912966, 0.381636, 0.169755, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16300,6300,"Trab. agropecuarios, pescadores, cazadores y recolectores de subsistencia",6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.919879, 0.393389, 0.16007, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16310,6310,Trab. agrícolas de subsistencia,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.919879, 0.393389, 0.16007, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16320,6320,Trab. agropecuarios de subsistencia,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.923215, 0.399359, 0.155193, 1.0)",#6A6599,#17becf,1272.05,1272.05,,,,0.0,100.0,0.0,,,,,
+16330,6330,Trab. agropecuarios de subsistencia,6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.923215, 0.399359, 0.155193, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+16340,6340,"Pescadores, cazadores, tramperos y recolectores de subsistencia",6. Trabajadores agropecuarios,3. Trabajadores manuales,"(0.923215, 0.399359, 0.155193, 1.0)",#6A6599,#17becf,0.0,,,,,,,,,,,,
+17000,7000,"Oficiales, oprarios y artesanos",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.969163, 0.515946, 0.063488, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17100,7100,Of. Y op. Construcción,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.97259, 0.529798, 0.053324, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17110,7110,Of. Y op. Construcción,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,18740.0,18740.0,8.35,0.98,8.91,0.0,100.0,7.95,3.63,1.28,40.52,13.78,42.0
+17111,7111,Constructore,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,68207.37,68207.37,9.18,0.65,8.95,0.0,100.0,1.43,3.94,1.42,44.99,9.35,46.0
+17112,7112,Albañiles,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,1327117.0,1327117.0,8.41,0.72,8.29,0.0,100.0,4.64,3.37,1.17,41.04,16.79,38.0
+17113,7113,"Mamposteros, tronzadores, labrantes y grabadores de piedra",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,25606.22,25606.22,8.26,0.39,8.52,0.0,100.0,0.0,3.18,0.95,40.95,13.23,38.0
+17114,7114,Op en cemento armado,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,6060.0,6060.0,8.26,0.53,7.97,0.0,100.0,0.0,3.84,1.78,41.95,16.46,30.0
+17115,7115,Carpinteros de armar y de obra blanca,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,89889.26,89889.26,8.35,0.75,8.35,0.0,100.0,5.47,3.24,1.26,48.7,20.82,40.5
+17119,7119,Of. Y op. Construcción,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,29919.0,29919.0,8.48,0.77,8.7,0.0,100.0,0.0,3.97,1.28,32.11,15.56,31.0
+17120,7120,Of. Y op. Construcción,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17121,7121,Techadores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,19011.1,19011.1,8.22,0.47,8.26,0.0,100.0,0.0,3.97,1.27,47.28,18.23,43.5
+17122,7122,Parqueteros y colocadores de suelos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,6096.0,6096.0,8.28,0.31,8.44,0.0,100.0,0.0,3.04,0.2,44.21,10.9,50.0
+17123,7123,Revocadores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,30188.55,30188.55,8.17,0.52,8.01,0.0,100.0,0.0,3.89,0.47,31.1,14.57,66.0
+17124,7124,Innst. material aislante y de insonorización,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,6591.84,6591.84,,,,0.0,100.0,0.0,5.0,0.0,42.0,0.0,42.0
+17125,7125,Cristaleros,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,12491.0,12491.0,9.28,0.4,9.09,0.0,100.0,0.0,3.37,0.84,45.75,14.2,42.0
+17126,7126,Fontaneros e instaladores de tuberías,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,150280.08,150280.08,8.61,0.62,8.52,0.0,100.0,3.68,4.24,2.1,47.16,16.74,43.0
+17127,7127,Méc. Refrigreación,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,71390.43,71390.43,8.63,0.56,8.88,0.0,100.0,1.47,5.38,1.29,40.21,12.81,42.0
+17130,7130,"Pintores, limpiadores de fachadas y afines",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17131,7131,Pintores y empapeladores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,227154.8,227154.8,8.38,0.85,8.3,0.0,100.0,1.46,3.91,1.67,38.29,15.58,40.5
+17132,7132,Barnizadores y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,20105.14,20105.14,8.22,0.81,8.59,0.0,100.0,0.0,4.28,1.34,40.51,18.36,44.0
+17133,7133,Limpiadores de fachadas y deshollinadores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.974176, 0.53678, 0.048392, 1.0)",#80796B,#17becf,1903.0,1903.0,8.85,0.0,8.85,0.0,100.0,0.0,3.0,0.0,47.0,0.0,47.0
+17200,7200,Of. Y op. Metalurgia,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,14306.09,14306.09,8.84,0.1,8.85,0.0,100.0,6.75,4.44,2.26,55.66,17.45,55.5
+17210,7210,"Moldeadores, soldadores, chapistas, caldereros, montadores de estructuras metálicas y afines",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,36485.94,36485.94,8.6,0.46,8.7,0.0,100.0,18.13,3.86,0.92,51.89,20.51,49.0
+17211,7211,Moldeadores y macheros,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,17035.16,17035.16,8.69,0.31,8.57,0.0,100.0,4.07,4.93,0.88,39.26,12.16,38.0
+17212,7212,Soldadores y oxicortadores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,143908.18,143908.18,8.58,0.76,8.7,0.0,100.0,7.73,3.91,1.39,43.21,17.09,40.0
+17213,7213,Chapistas y caldereros,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,93050.91,93050.91,9.0,0.65,8.7,0.0,100.0,1.3,3.81,1.65,42.23,14.6,48.0
+17214,7214,Montadores de estructuras metálicas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,16351.97,16351.97,8.63,0.33,8.7,0.0,100.0,0.0,3.89,1.19,38.64,16.18,35.0
+17215,7215,Aparejadores y empalmadores de cables,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,3265.0,3265.0,8.41,0.46,8.16,0.0,100.0,0.0,3.48,0.88,29.45,5.27,35.0
+17220,7220,"Herreros, herramentistas y afines",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,8966.0,8966.0,8.7,0.52,8.88,0.0,100.0,0.0,3.87,2.11,50.54,20.45,57.0
+17221,7221,Herreros y forjadores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.977092, 0.55085, 0.03905, 1.0)",#80796B,#17becf,132266.07,132266.07,8.76,0.64,8.66,0.0,100.0,5.56,3.8,1.28,39.41,15.87,42.0
+17222,7222,Herramentistas y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,35653.34,35653.34,8.79,0.64,8.69,0.0,100.0,6.33,4.7,1.84,50.94,20.75,54.5
+17223,7223,Reg. Y Op. máquinas herramientas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,43298.19,43298.19,8.45,0.49,8.51,0.0,100.0,1.06,4.15,1.74,47.75,19.98,49.0
+17224,7224,Pulidores de metales y afiladores de herramientas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,4505.06,4505.06,9.39,0.31,9.11,0.0,100.0,0.0,4.19,1.22,44.1,12.38,55.0
+17230,7230,Méc y rep. Maquinaria,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,14924.05,14924.05,7.62,0.62,8.5,0.0,100.0,65.12,6.67,0.74,72.94,18.69,52.5
+17231,7231,Mec. Vehículos de motor,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,407790.57,407790.57,8.43,0.79,8.51,0.0,100.0,1.37,4.09,1.42,44.5,20.28,42.0
+17232,7232,Méc y re. Motores de avión,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17233,7233,Méc. Maq. Agrícola,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,99303.49,99303.49,8.84,0.77,8.88,0.0,100.0,21.69,3.72,1.73,50.65,18.52,49.0
+17234,7234,Rep. Bicicletas y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.978422, 0.557937, 0.034931, 1.0)",#80796B,#17becf,16381.46,16381.46,8.14,0.56,8.15,0.0,100.0,11.42,3.42,0.84,43.27,12.1,42.0
+17300,7300,Art. Y Op. Artes gráficas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,3173.0,3173.0,,,,0.0,100.0,0.0,3.0,0.0,56.0,0.0,56.0
+17310,7310,Artesanos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,3876.0,3876.0,8.52,0.0,8.52,0.0,100.0,0.0,2.91,1.41,40.9,17.53,53.0
+17311,7311,Méc. Y rep. Instrumentos de presición,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,8259.37,8259.37,8.63,0.4,8.41,0.0,100.0,0.0,4.61,0.49,50.37,18.67,60.5
+17312,7312,Fab. Y afi. Inst musicales,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,259.0,259.0,9.11,0.0,9.11,0.0,100.0,0.0,5.0,0.0,63.0,0.0,63.0
+17313,7313,"Joyeros, orfebres y plateros",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,4871.98,4871.98,9.24,0.91,9.0,0.0,100.0,0.0,4.31,1.71,68.24,18.24,64.0
+17314,7314,"Alfareros y afines (barro, arcilla y abrasivos)",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,22764.29,22764.29,7.89,1.35,8.12,0.0,100.0,0.0,2.9,1.6,45.02,23.47,32.0
+17315,7315,"Sopladores, modeladores, laminadores, cortadores y pulidores de vidrio",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,7147.0,7147.0,8.8,0.15,8.85,0.0,100.0,0.0,4.87,2.15,51.03,20.28,41.0
+17316,7316,"Redactores de carteles, pintores decorativos y grabadores",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,8029.86,8029.86,9.59,0.41,9.21,0.0,100.0,0.0,6.66,2.04,42.81,11.44,48.0
+17317,7317,"Artesano madera, cestería y materiales similares",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,5849.74,5849.74,7.62,1.13,8.01,0.0,100.0,0.0,3.98,1.47,38.58,3.21,40.0
+17318,7318,"Artesano tejidos, el cuero y materiales similares",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,23633.45,23633.45,7.65,0.6,7.82,0.0,100.0,0.0,4.29,2.05,45.72,17.28,48.5
+17319,7319,Artesanon/c,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,2115.0,2115.0,8.36,0.89,8.45,0.0,100.0,0.0,5.13,2.46,40.56,9.22,40.0
+17320,7320,Of. Y Op. Art gráficas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,1411.0,1411.0,8.98,0.0,8.98,0.0,100.0,100.0,5.0,0.0,49.0,0.0,49.0
+17321,7321,"Cajistas, tipógrafos y afines",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,1102.79,1102.79,7.7,0.0,7.7,0.0,100.0,0.0,4.0,0.0,65.0,0.0,65.0
+17322,7322,Impresores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,31284.44,31284.44,8.67,0.66,8.59,0.0,100.0,0.0,4.51,0.7,36.17,13.73,37.5
+17323,7323,Encuadernadores y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.980824, 0.572209, 0.028508, 1.0)",#80796B,#17becf,2257.0,2257.0,8.7,0.0,8.7,0.0,100.0,66.06,5.0,0.0,57.67,25.57,49.0
+17400,7400,Trab. electricidad y la elecrotecnología,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.982881, 0.586606, 0.024661, 1.0)",#80796B,#17becf,13400.49,13400.49,,,,0.0,100.0,0.0,,,,,
+17410,7410,Inst. y rep. electricos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.983779, 0.593849, 0.02377, 1.0)",#80796B,#17becf,3249.0,3249.0,10.4,0.31,10.51,0.0,100.0,66.36,3.65,1.89,43.36,4.72,45.0
+17411,7411,Electricistas de obras y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.983779, 0.593849, 0.02377, 1.0)",#80796B,#17becf,201568.76,201568.76,8.7,0.85,8.57,0.0,100.0,14.78,4.82,1.55,44.91,14.61,45.0
+17412,7412,Méc. Electricistas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.983779, 0.593849, 0.02377, 1.0)",#80796B,#17becf,91119.49,91119.49,8.77,0.83,8.52,0.0,100.0,9.05,5.0,1.93,41.91,15.39,41.0
+17413,7413,Inst. y rep líneas eléctricas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.983779, 0.593849, 0.02377, 1.0)",#80796B,#17becf,49533.61,49533.61,8.95,0.69,8.75,0.0,100.0,38.74,3.7,1.02,45.61,13.79,54.5
+17420,7420,Inst. y rep electrónicos y telecomunicaciones,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.983779, 0.593849, 0.02377, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17421,7421,Méc. Y rep. Electrónicos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.983779, 0.593849, 0.02377, 1.0)",#80796B,#17becf,53152.64,53152.64,8.91,0.72,8.57,0.0,100.0,13.97,6.26,2.08,36.03,12.52,36.0
+17422,7422,Inst. y rep IT,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.983779, 0.593849, 0.02377, 1.0)",#80796B,#17becf,65824.42,65824.42,8.97,0.7,8.99,0.0,100.0,23.63,5.27,2.38,39.53,14.37,39.0
+17500,7500,Op. Proces alimentos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17510,7510,Of. Y Op elab alimentos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,9684.0,9684.0,9.33,0.34,9.19,0.0,100.0,0.0,5.77,1.17,59.72,19.4,42.5
+17511,7511,"Carniceros, pescaderos y afines",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,135348.09,135348.09,8.36,0.68,8.48,0.0,100.0,0.09,3.53,1.25,37.41,15.91,35.0
+17512,7512,"Panaderos, pasteleros y confiteros",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,153715.63,153715.63,8.51,1.01,8.57,0.0,100.0,0.0,3.67,1.49,42.58,16.9,39.5
+17513,7513,Op. Elab. Lácteos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,1767.83,1767.83,,,,0.0,100.0,0.0,,,,,
+17514,7514,Op. Cons. Frutas y vegetales,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,920.33,920.33,,,,0.0,100.0,0.0,,,,,
+17515,7515,Catadores y clasificadores de alimentos y bebidas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,13692.06,13692.06,8.92,0.56,9.04,0.0,100.0,0.0,5.01,2.89,46.74,20.87,53.5
+17516,7516,Elab. Tábaco,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,434.0,434.0,8.85,0.0,8.85,0.0,100.0,0.0,7.0,0.0,39.0,0.0,39.0
+17520,7520,Of. Y Op. Madera,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,1112.0,1112.0,8.42,0.25,8.21,0.0,100.0,0.0,2.18,0.39,68.73,6.94,63.0
+17521,7521,Op. Trat. Madera,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,6087.0,6087.0,9.09,0.46,8.74,0.0,100.0,16.3,4.34,1.58,38.92,10.7,32.0
+17522,7522,Ebanistas y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985315, 0.608422, 0.024202, 1.0)",#80796B,#17becf,91204.34,91204.34,8.73,0.68,8.7,0.0,100.0,1.14,4.16,1.14,46.64,19.54,45.0
+17523,7523,Reg. Y op. máquinas de labrar madera,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,2394.82,2394.82,8.52,0.0,8.52,0.0,100.0,0.0,5.0,0.0,36.0,0.0,36.0
+17530,7530,Of. Y Op. Confección,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,3007.0,3007.0,9.57,0.0,9.57,0.0,100.0,0.0,2.0,0.0,89.0,0.0,89.0
+17531,7531,"Sastres, modistos, peleteros y sombrereros",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,8493.0,8493.0,9.52,0.76,9.0,0.0,100.0,0.81,5.57,2.59,60.02,14.15,73.0
+17532,7532,Patronistas y cortadores de tela y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,18080.0,18080.0,9.09,0.21,9.07,0.0,100.0,13.03,3.47,0.62,47.82,14.4,46.0
+17533,7533,"Costureros, bordadores y afines",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,51446.36,51446.36,8.43,0.67,8.5,0.0,100.0,0.0,3.88,1.77,51.45,15.53,53.0
+17534,7534,"Tapiceros, colchoneros y afines",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,25361.78,25361.78,9.12,0.78,9.06,0.0,100.0,0.0,4.58,2.02,51.27,14.67,47.0
+17535,7535,"Apelambradores, pellejeros y curtidores",7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17536,7536,Zapateros y afines,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,36500.27,36500.27,8.58,0.7,8.4,0.0,100.0,0.0,3.91,1.2,46.02,14.62,44.5
+17540,7540,Of. Y Op. n/c,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17541,7541,Buzos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17542,7542,Dinamiteros y pegadores,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,0.0,,,,,,,,,,,,
+17543,7543,Clasificadores y probadores de productos (excluyendo alimentos y bebidas),7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,22281.0,22281.0,9.62,0.42,9.33,0.0,100.0,0.0,4.49,1.42,44.91,14.35,52.0
+17544,7544,Fumigadores y otros controladores de plagas y malas hierbas,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,16185.59,16185.59,8.74,0.22,8.78,0.0,100.0,21.54,3.33,1.11,54.21,15.4,52.5
+17549,7549,Of. Y Op. Mecánicos,7. Trabajadores de oficios,3. Trabajadores manuales,"(0.985952, 0.61575, 0.025592, 1.0)",#80796B,#17becf,2226.0,2226.0,7.64,1.3,8.5,0.0,100.0,0.0,3.7,0.89,50.61,17.12,58.5
+18000,8000,Op. Maquinas y ensambladores,8. Operarios calificados,3. Trabajadores manuales,"(0.986694, 0.70554, 0.095694, 1.0)",#05897B,#17becf,1139.26,1139.26,,,,0.0,100.0,0.0,,,,,
+18100,8100,Op. Inst y maquinaria,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,29498.0,29498.0,8.81,0.44,8.83,0.0,100.0,2.17,3.57,1.06,47.95,18.41,41.0
+18110,8110,Op. Inst minería,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,1168.0,1168.0,9.22,0.0,9.22,0.0,100.0,0.0,3.0,0.0,80.0,0.0,80.0
+18111,8111,Mineros y operadores de instalaciones mineras,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,6167.24,6167.24,7.98,0.81,8.01,0.0,100.0,0.0,3.2,1.33,56.54,18.49,52.0
+18112,8112,Op. Proces minerales,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,9907.0,9907.0,9.26,0.0,9.26,0.0,100.0,0.0,5.0,0.0,30.0,0.0,30.0
+18113,8113,Perforadores y sondistas de pozos y afines,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,16767.05,16767.05,9.47,0.87,9.31,0.0,100.0,4.03,3.78,1.14,47.2,17.48,46.0
+18114,8114,Op. Maq. Cemento,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,27830.07,27830.07,9.09,0.45,9.01,0.0,100.0,1.11,3.78,1.01,56.45,9.17,57.0
+18120,8120,Op. Proces metales,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,4054.0,4054.0,9.06,0.29,9.21,0.0,100.0,0.0,6.11,2.65,57.68,20.43,41.0
+18121,8121,Op. proces metales,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,24719.18,24719.18,8.2,0.06,8.22,0.0,100.0,2.47,3.84,2.0,57.26,13.5,53.0
+18122,8122,Op. Pulidoras y rec. Metales,8. Operarios calificados,3. Trabajadores manuales,"(0.984865, 0.728427, 0.120785, 1.0)",#05897B,#17becf,2490.34,2490.34,,,,0.0,100.0,0.0,,,,,
+18130,8130,Op. Prod químicos y fotográficos,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18131,8131,Op. Plant químicas,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,29888.09,29888.09,8.94,0.49,8.63,0.0,100.0,2.87,3.35,1.32,43.85,22.38,29.0
+18132,8132,Op. Maq fotográficos,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18140,8140,Op. Maq. Caucho y afines,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18141,8141,Op. Maq. Caucho,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,38073.92,38073.92,7.4,1.44,8.29,0.0,100.0,0.0,3.65,1.86,39.53,18.12,41.0
+18142,8142,Op. Maq. Plástico,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,37688.6,37688.6,8.58,0.52,8.7,0.0,100.0,5.72,4.39,1.63,38.91,13.58,38.0
+18143,8143,Op. Maq papel,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,8598.64,8598.64,8.97,0.22,8.7,0.0,100.0,0.0,4.81,0.4,37.42,5.66,33.0
+18150,8150,Op. Prod textiles,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,9433.0,9433.0,8.62,0.21,8.65,0.0,100.0,0.0,3.69,1.18,45.14,17.21,37.0
+18151,8151,Op. Maq. Fibras y tejidos,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,2307.0,2307.0,8.12,0.41,8.4,0.0,100.0,45.04,3.0,0.0,67.15,9.16,63.5
+18152,8152,Op. Telares y maq. Coser,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,5954.7,5954.7,8.77,0.33,8.8,0.0,100.0,0.0,3.46,0.5,65.3,14.94,64.0
+18153,8153,Op. Maq coser,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,5870.36,5870.36,8.94,0.34,8.85,0.0,100.0,0.0,2.78,1.34,54.13,12.48,63.0
+18154,8154,Op. Limpieza tejidos,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,2154.0,2154.0,7.96,2.03,7.75,0.0,100.0,0.0,4.55,0.5,35.87,10.94,37.0
+18155,8155,Op. Maq de cuero y pieles,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,19402.51,19402.51,8.7,0.36,8.42,0.0,100.0,0.0,4.04,1.14,52.97,11.23,54.5
+18156,8156,Op. Maq. Calzado,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,15966.0,15966.0,8.42,0.84,8.17,0.0,100.0,0.0,3.9,0.94,37.71,15.46,35.0
+18157,8157,Op. Maq. Lavarropas,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,6894.0,6894.0,9.35,0.14,9.11,0.0,100.0,1.38,5.39,0.86,47.37,4.33,49.0
+18159,8159,Op. Prod. Textiles,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,3394.0,3394.0,8.52,0.22,8.53,0.0,100.0,2.59,3.37,0.84,31.84,14.24,36.0
+18160,8160,Op. Maq. Alimentos y bebidas,8. Operarios calificados,3. Trabajadores manuales,"(0.984075, 0.736087, 0.129527, 1.0)",#05897B,#17becf,89043.55,89043.55,8.68,0.93,8.99,0.0,100.0,0.0,3.87,1.3,40.91,22.34,43.0
+18170,8170,Op. Inst papel y madera,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18171,8171,Op. Pasta de papel y celulosa,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,7011.48,7011.48,8.91,0.37,8.9,0.0,100.0,0.0,3.54,1.5,64.0,0.0,64.0
+18172,8172,Op. Proces madera,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,25882.71,25882.71,7.97,1.03,8.24,0.0,100.0,0.0,2.55,0.74,43.55,13.57,44.5
+18180,8180,Op. Maquinaria n/c,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18181,8181,Op. Vidriería y cerámica,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,11021.06,11021.06,9.57,0.47,9.6,0.0,100.0,0.0,3.64,0.89,67.22,3.58,68.0
+18182,8182,Op. Maq vapor y calderas,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,8609.0,8609.0,8.78,0.37,8.78,0.0,100.0,33.7,3.54,0.89,53.7,9.98,60.0
+18183,8183,Op. Maq. Embalaje,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,66629.05,66629.05,8.6,0.49,8.61,0.0,100.0,1.42,3.76,1.3,41.83,16.89,40.0
+18189,8189,Op maq. n/c,8. Operarios calificados,3. Trabajadores manuales,"(0.983196, 0.743758, 0.138453, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18200,8200,Ensambladores,8. Operarios calificados,3. Trabajadores manuales,"(0.982228, 0.751442, 0.147565, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18210,8210,Ensambladores,8. Operarios calificados,3. Trabajadores manuales,"(0.982228, 0.751442, 0.147565, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18211,8211,Ensambladores de maquinaria mecánica,8. Operarios calificados,3. Trabajadores manuales,"(0.982228, 0.751442, 0.147565, 1.0)",#05897B,#17becf,65881.94,65881.94,9.21,0.21,9.03,0.0,100.0,2.68,5.28,1.96,35.57,14.44,37.5
+18212,8212,Ensambladores de equipos eléctricos y electrónicos,8. Operarios calificados,3. Trabajadores manuales,"(0.982228, 0.751442, 0.147565, 1.0)",#05897B,#17becf,8773.21,8773.21,9.09,0.92,9.13,0.0,100.0,0.0,4.48,1.84,34.34,15.01,32.0
+18219,8219,Ensambladores no clasificados bajo otros epígrafes,8. Operarios calificados,3. Trabajadores manuales,"(0.982228, 0.751442, 0.147565, 1.0)",#05897B,#17becf,7460.16,7460.16,8.75,0.41,8.77,0.0,100.0,0.0,4.6,1.6,43.56,12.88,42.0
+18300,8300,Cond. equip. pesados móviles,8. Operarios calificados,3. Trabajadores manuales,"(0.980032, 0.766837, 0.166353, 1.0)",#05897B,#17becf,870.0,870.0,9.11,0.32,9.07,0.0,100.0,0.0,4.13,0.99,49.08,12.4,47.5
+18310,8310,Maq. Locomotoras,8. Operarios calificados,3. Trabajadores manuales,"(0.980032, 0.766837, 0.166353, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18311,8311,Mar. Locomotoras,8. Operarios calificados,3. Trabajadores manuales,"(0.980032, 0.766837, 0.166353, 1.0)",#05897B,#17becf,33266.8,33266.8,8.97,0.39,8.75,0.0,100.0,90.81,4.56,1.8,61.24,21.95,66.0
+18312,8312,"Guardafrenos, guardagujas y agentes de maniobras",8. Operarios calificados,3. Trabajadores manuales,"(0.980032, 0.766837, 0.166353, 1.0)",#05897B,#17becf,11892.0,11892.0,9.4,0.1,9.21,0.0,100.0,92.87,2.25,0.89,36.5,11.97,39.5
+18320,8320,"Cond. automóviles, camionetas y motocicletas",8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18321,8321,Cond. motocicletas,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,86189.74,86189.74,6.52,1.23,7.96,0.0,100.0,0.0,4.14,0.34,19.22,8.48,19.5
+18322,8322,Cond. autom. y camionetas,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,624463.79,624463.79,8.71,0.78,8.7,0.0,100.0,6.53,4.21,1.36,46.21,12.86,47.0
+18330,8330,Cond. camiones pesados y autobuses,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,0.0,,,,,,,,,,,,
+18331,8331,Cond. autobuses y tranvías,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,169275.05,169275.05,9.09,0.62,8.99,0.0,100.0,14.41,4.25,1.31,44.0,15.52,42.0
+18332,8332,Cond. camiones pesados,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,335816.4,335816.4,8.93,0.79,8.91,0.0,100.0,10.88,3.72,1.34,47.59,15.97,48.0
+18340,8340,Op. Equip. Pesados,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,706.0,706.0,9.47,0.0,9.47,0.0,100.0,0.0,5.0,0.0,32.0,0.0,32.0
+18341,8341,Op. Maq agrícola forestal,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,35894.86,35894.86,8.29,0.48,8.38,0.0,100.0,3.61,2.95,0.71,44.31,13.88,44.0
+18342,8342,Op. Mov tierra,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,29062.56,29062.56,8.85,0.74,8.92,0.0,100.0,47.12,3.4,1.01,46.11,17.15,42.5
+18343,8343,Op. Grúas y equipos móviles,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,29686.34,29686.34,8.74,0.73,8.57,0.0,100.0,18.66,3.57,1.11,57.8,15.04,60.0
+18344,8344,Op. Autoelevadoras,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,49832.55,49832.55,9.02,0.4,9.0,0.0,100.0,8.34,5.25,2.23,31.33,10.9,32.0
+18350,8350,Mariners,8. Operarios calificados,3. Trabajadores manuales,"(0.978806, 0.774545, 0.176037, 1.0)",#05897B,#17becf,3864.36,3864.36,9.24,0.42,9.26,0.0,100.0,18.35,5.8,2.7,52.99,13.04,51.0
+19000,9000,Oc. Elementales n/c,9. Operarios no calificados,3. Trabajadores manuales,"(0.948683, 0.910473, 0.395289, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19100,9100,Limpiadores y asistentes,9. Operarios no calificados,3. Trabajadores manuales,"(0.946809, 0.924168, 0.426373, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19110,9110,Limp. Domésticos y oficinas,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19111,9111,Limp. Doméstica,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,56733.63,56733.63,7.94,0.6,8.04,0.0,100.0,1.12,2.98,1.45,62.58,32.34,57.0
+19112,9112,Limp. Oficinas y hoteles,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,198124.36,198124.36,8.66,0.55,8.52,0.0,100.0,27.22,4.23,1.71,39.35,18.2,37.0
+19120,9120,Limpiadores gral.,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19121,9121,Lavadores y planchadores,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,3626.0,3626.0,7.53,1.07,8.52,0.0,100.0,0.0,3.64,0.93,38.5,9.13,40.0
+19122,9122,Lav. Vehículos,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,36478.49,36478.49,8.05,0.64,7.64,0.0,100.0,0.0,3.91,1.5,39.46,15.15,30.0
+19123,9123,Lav. Ventanas,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,5904.0,5904.0,8.42,0.15,8.54,0.0,100.0,0.0,2.9,0.99,59.37,13.42,52.0
+19129,9129,Limpieza n/c,9. Operarios no calificados,3. Trabajadores manuales,"(0.946392, 0.930761, 0.442367, 1.0)",#5C068C,#17becf,3221.0,3221.0,8.7,0.32,8.63,0.0,100.0,44.24,2.86,1.56,47.83,15.8,42.0
+19200,9200,"Peones agropecuarios, pesqueros y forestales",9. Operarios no calificados,3. Trabajadores manuales,"(0.946903, 0.943348, 0.47497, 1.0)",#5C068C,#17becf,9273.0,9273.0,,,,0.0,100.0,0.0,3.0,0.0,40.0,0.0,40.0
+19210,9210,"Peones agropecuarios, pesqueros y forestales",9. Operarios no calificados,3. Trabajadores manuales,"(0.946903, 0.943348, 0.47497, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19211,9211,Peones agrícolas,9. Operarios no calificados,3. Trabajadores manuales,"(0.946903, 0.943348, 0.47497, 1.0)",#5C068C,#17becf,176636.99,176636.99,7.97,0.87,7.94,0.0,100.0,10.59,3.23,1.27,39.56,19.48,38.0
+19212,9212,Peones ganaderos,9. Operarios no calificados,3. Trabajadores manuales,"(0.946903, 0.943348, 0.47497, 1.0)",#5C068C,#17becf,28343.21,28343.21,8.16,0.47,8.19,0.0,100.0,2.59,2.79,0.87,51.54,21.31,47.0
+19213,9213,Peones agrícolas mixtos,9. Operarios no calificados,3. Trabajadores manuales,"(0.946903, 0.943348, 0.47497, 1.0)",#5C068C,#17becf,12616.48,12616.48,8.38,0.24,8.52,0.0,100.0,0.0,2.03,0.24,52.5,20.02,55.5
+19214,9214,Peones de jardinería y horticultura,9. Operarios no calificados,3. Trabajadores manuales,"(0.946903, 0.943348, 0.47497, 1.0)",#5C068C,#17becf,140523.47,140523.47,7.61,0.96,7.6,0.0,100.0,10.02,3.27,1.36,31.88,15.2,24.0
+19215,9215,Peones forestales,9. Operarios no calificados,3. Trabajadores manuales,"(0.946903, 0.943348, 0.47497, 1.0)",#5C068C,#17becf,7153.73,7153.73,8.53,0.52,8.29,0.0,100.0,0.0,2.41,0.49,43.02,13.23,44.0
+19216,9216,Peones pesca,9. Operarios no calificados,3. Trabajadores manuales,"(0.947937, 0.949318, 0.491426, 1.0)",#5C068C,#17becf,1445.0,1445.0,7.5,0.0,7.5,0.0,100.0,0.0,3.0,0.0,32.0,0.0,32.0
+19300,9300,"Peones ind, min y construcción",9. Operarios no calificados,3. Trabajadores manuales,"(0.95174, 0.960587, 0.524203, 1.0)",#5C068C,#17becf,1679.0,1679.0,8.23,0.0,8.23,0.0,100.0,0.0,2.0,0.0,58.0,0.0,58.0
+19310,9310,Peons minería y la construcción,9. Operarios no calificados,3. Trabajadores manuales,"(0.95174, 0.960587, 0.524203, 1.0)",#5C068C,#17becf,1121.0,1121.0,7.82,0.0,7.82,0.0,100.0,100.0,2.0,0.0,93.0,0.0,93.0
+19311,9311,Peones minas y canteras,9. Operarios no calificados,3. Trabajadores manuales,"(0.95174, 0.960587, 0.524203, 1.0)",#5C068C,#17becf,1859.0,1859.0,8.39,0.0,8.39,0.0,100.0,0.0,3.0,0.0,41.0,0.0,41.0
+19312,9312,Peones obras públicas y mantenimiento,9. Operarios no calificados,3. Trabajadores manuales,"(0.95174, 0.960587, 0.524203, 1.0)",#5C068C,#17becf,76499.09,76499.09,9.04,0.83,8.52,0.0,100.0,34.36,4.01,2.27,40.09,15.54,35.0
+19313,9313,Peones construcción,9. Operarios no calificados,3. Trabajadores manuales,"(0.95174, 0.960587, 0.524203, 1.0)",#5C068C,#17becf,367529.58,367529.58,7.92,0.81,7.94,0.0,100.0,6.39,3.81,1.42,31.84,14.43,24.0
+19320,9320,Peones ind. Manufactoruera,9. Operarios no calificados,3. Trabajadores manuales,"(0.95174, 0.960587, 0.524203, 1.0)",#5C068C,#17becf,1204.0,1204.0,8.07,0.0,8.07,0.0,100.0,0.0,3.53,0.84,75.74,5.91,72.0
+19321,9321,Empacadores manuales,9. Operarios no calificados,3. Trabajadores manuales,"(0.95174, 0.960587, 0.524203, 1.0)",#5C068C,#17becf,19852.1,19852.1,8.33,0.63,8.01,0.0,100.0,0.0,3.29,0.7,41.27,17.15,40.0
+19329,9329,Peones ind. Manufactoruera,9. Operarios no calificados,3. Trabajadores manuales,"(0.954529, 0.965896, 0.540361, 1.0)",#5C068C,#17becf,57135.52,57135.52,8.43,0.78,8.07,0.0,100.0,11.04,4.17,1.13,34.21,16.13,30.0
+19330,9330,Peones transporte,9. Operarios no calificados,3. Trabajadores manuales,"(0.954529, 0.965896, 0.540361, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19331,9331,Cond. vehículos accionados a pedal o a brazo,9. Operarios no calificados,3. Trabajadores manuales,"(0.954529, 0.965896, 0.540361, 1.0)",#5C068C,#17becf,4047.65,4047.65,,,,0.0,100.0,0.0,,,,,
+19332,9332,Cond. tracc. animal,9. Operarios no calificados,3. Trabajadores manuales,"(0.954529, 0.965896, 0.540361, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19333,9333,Peones de carga,9. Operarios no calificados,3. Trabajadores manuales,"(0.954529, 0.965896, 0.540361, 1.0)",#5C068C,#17becf,119059.15,119059.15,8.2,1.09,8.44,0.0,100.0,2.55,3.73,1.12,35.46,17.12,30.0
+19334,9334,Reponedores de estanterías,9. Operarios no calificados,3. Trabajadores manuales,"(0.954529, 0.965896, 0.540361, 1.0)",#5C068C,#17becf,109752.0,109752.0,8.59,0.88,8.74,0.0,100.0,0.0,4.32,1.72,29.62,10.67,28.0
+19400,9400,Ay. prep. alimentos,9. Operarios no calificados,3. Trabajadores manuales,"(0.957896, 0.971003, 0.556275, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19410,9410,Ay. prep. alimentos,9. Operarios no calificados,3. Trabajadores manuales,"(0.961812, 0.975924, 0.571925, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19411,9411,Cocin. com. rápida,9. Operarios no calificados,3. Trabajadores manuales,"(0.961812, 0.975924, 0.571925, 1.0)",#5C068C,#17becf,10408.42,10408.42,8.01,0.48,8.01,0.0,100.0,10.2,4.26,1.17,34.07,22.06,23.0
+19412,9412,Ay. de cocina,9. Operarios no calificados,3. Trabajadores manuales,"(0.961812, 0.975924, 0.571925, 1.0)",#5C068C,#17becf,40471.08,40471.08,8.33,0.71,8.01,0.0,100.0,25.77,4.34,1.36,31.77,14.37,28.0
+19500,9500,Vend. ambulantes de servicios y afines,9. Operarios no calificados,3. Trabajadores manuales,"(0.971162, 0.985282, 0.602154, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19510,9510,Trab. ambulantes de servicios y afines,9. Operarios no calificados,3. Trabajadores manuales,"(0.971162, 0.985282, 0.602154, 1.0)",#5C068C,#17becf,12524.44,12524.44,6.96,1.08,7.63,0.0,100.0,9.94,4.39,1.79,23.25,9.31,21.0
+19520,9520,Vend. ambulantes (excluyendo de comida),9. Operarios no calificados,3. Trabajadores manuales,"(0.976511, 0.989753, 0.61676, 1.0)",#5C068C,#17becf,55870.06,55870.06,8.01,0.59,8.01,0.0,100.0,0.0,3.36,1.1,42.34,15.27,43.0
+19600,9600,Rec. Desechos,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,262.0,262.0,8.01,0.0,8.01,0.0,100.0,0.0,4.0,0.0,23.0,0.0,23.0
+19610,9610,Rec. Desechos y clasificadores,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19611,9611,Recol. Basura y mat reciclable,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,69415.1,69415.1,8.28,1.2,8.29,0.0,100.0,23.65,3.07,1.11,39.18,15.31,38.0
+19612,9612,Clas. de desechos,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,4836.17,4836.17,7.94,0.6,7.6,0.0,100.0,38.17,3.53,1.06,29.82,10.69,24.0
+19613,9613,Barrenderos y afines,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,41583.84,41583.84,8.44,0.76,8.34,0.0,100.0,51.77,3.42,0.82,39.36,13.36,39.0
+19620,9620,Oc. elementales n/c,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19621,9621,"Mensajeros, mandaderos, maleteros y repartidores",9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,148152.93,148152.93,7.99,0.89,8.01,0.0,100.0,8.92,4.6,1.74,31.11,12.93,26.0
+19622,9622,Trabajos varios,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,27430.34,27430.34,7.94,0.96,7.6,0.0,100.0,15.99,4.05,1.31,38.44,18.02,42.0
+19623,9623,Rec. Dinero,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,3295.55,3295.55,8.7,0.0,8.7,0.0,100.0,0.0,4.0,0.0,28.0,0.0,28.0
+19624,9624,Acarreadores de agua y recolectores de leña,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,0.0,,,,,,,,,,,,
+19629,9629,Oc. Elementales,9. Operarios no calificados,3. Trabajadores manuales,"(0.988362, 0.998364, 0.644924, 1.0)",#5C068C,#17becf,12127.85,12127.85,8.17,0.58,7.95,0.0,100.0,0.0,4.34,2.07,24.66,5.83,25.0

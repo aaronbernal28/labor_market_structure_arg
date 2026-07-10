@@ -84,7 +84,7 @@ def main() -> None:
 		ymax=df["num_communities"].max(),
 		linestyles="dashed",
 		color="gray",
-		label=_t("reference resolution"),
+		label=r"$\gamma = " + str(reference_resolution) + r"$",
 		zorder=1,
 	)
 	if str(snakemake.output[0]).endswith("_catplots_hidalgo_0.05.png"):
@@ -152,7 +152,7 @@ def main() -> None:
 			ymax=data_subset["score"].max(),
 			linestyles="dashed",
 			color="gray",
-			label=_t("reference resolution"),
+			label=r"$\gamma = " + str(reference_resolution) + r"$",
 		)
 		legend_handles, legend_labels = g.ax_joint.get_legend_handles_labels()
 		if g.ax_joint.get_legend() is not None:
@@ -180,7 +180,9 @@ def main() -> None:
 			zorder=2,
 		)
 	# Add label with all negatives values omitted, vertically separated
-	group_neg = df.groupby("algorithm")["modularity"].apply(lambda x: x[x < -0.1].count())
+	group_neg = df.groupby("algorithm")["modularity"].apply(
+		lambda x: x[x < -0.1].count()
+	)
 	label_y_base = 0.05
 	label_y_step = 0.06
 	for idx, algorithm in enumerate(algorithm_order):
@@ -201,7 +203,7 @@ def main() -> None:
 		ymax=1.1,
 		linestyles="dashed",
 		color="gray",
-		label=_t("reference resolution"),
+		label=r"$\gamma = " + str(reference_resolution) + r"$",
 		zorder=1,
 	)
 	if ax.get_legend() is not None:

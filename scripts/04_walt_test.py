@@ -276,6 +276,8 @@ def main() -> None:
 		snakemake.output[1],
 		save=True,
 		figsize=tuple(snakemake.config["figsizes"]["heatmap"]),
+		logscale=True,
+		logscale_vmin=1e-3,
 	)
 	pl.plot_rejection_heatmap(
 		test_results["p_values"],

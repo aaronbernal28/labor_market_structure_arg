@@ -7,6 +7,7 @@ import networkx as nx
 import pandas as pd
 import numpy as np
 import src.communities as comm
+import src.utils as ut
 
 
 def clean_graph(graph: nx.Graph) -> nx.Graph:
@@ -95,6 +96,7 @@ def build_bipartite_graph(
 	logscale: bool = True,
 	caes_partition: int = 1,
 	ciuo_partition: int = 0,
+	max_caes_id: int = 10000,
 ) -> nx.Graph:
 	"""
 	Build the bipartite graph from the merged ENES dataframe.
@@ -109,8 +111,12 @@ def build_bipartite_graph(
 
 	# Build bipartite graph
 	graph = nx.Graph()
-	graph.add_nodes_from(caes_nodes, bipartite=caes_partition)
-	graph.add_nodes_from(ciuo_nodes, bipartite=ciuo_partition)
+	for node in caes_nodes:
+		orig = ut.original_id(node, class_index=caes_partition, max_caes_id=max_caes_id)
+		graph.add_node(node, bipartite=caes_partition, label=str(orig))
+	for node in ciuo_nodes:
+		orig = ut.original_id(node, class_index=ciuo_partition, max_caes_id=max_caes_id)
+		graph.add_node(node, bipartite=ciuo_partition, label=str(orig))
 
 	# Use an explicit calibration/weight column if present
 	calib_col = "ponderation" if "ponderation" in enes_df.columns else None

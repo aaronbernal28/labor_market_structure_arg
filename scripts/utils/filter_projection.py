@@ -40,6 +40,10 @@ def main() -> None:
 	# Save backbone (contains directional information if alpha < 1.0)
 	output_path = Path(snakemake.output[0])
 	nx.write_gexf(backbone, output_path)
+	# utils.update_gexf_metadata(
+	# filepath=str(output_path),
+	# creator="NetworkX + Labor Market Structure Pipeline"
+	# )
 
 	# For weight histogram, use undirected version to count unique edges consistently
 	backbone_undirected = nx.to_undirected(backbone)

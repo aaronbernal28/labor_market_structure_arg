@@ -23,6 +23,7 @@ def main() -> None:
 		logscale=False,
 		caes_partition=snakemake.config["caes"]["partition"],
 		ciuo_partition=snakemake.config["cno"]["partition"],
+		max_caes_id=snakemake.config["max_caes_id"],
 	)
 
 	metric_results = metrics.summarize_graph(graph)
@@ -45,6 +46,22 @@ def main() -> None:
 
 	graph_path = Path(snakemake.output[0])
 	nx.write_gexf(graph, graph_path)
+
+	eph_file = snakemake.wildcards.get("eph_file", "unknown")
+	caes_partition = snakemake.config["caes"]["partition"]
+	cno_partition = snakemake.config["cno"]["partition"]
+
+	description = (
+		f"Bipartite graph of sectors and occupations from EPH data (file: {eph_file}). "
+		f"Parameters: CAES ID field = '{caes_id}', CNO ID field = '{cno_id}', "
+		f"CAES partition = {caes_partition}, CNO partition = {cno_partition}."
+	)
+
+	utils.update_gexf_metadata(
+		filepath=snakemake.output[0],
+		creator="NetworkX + Labor Market Structure Pipeline",
+		description=description,
+	)
 
 
 if __name__ == "__main__":

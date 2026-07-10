@@ -22,6 +22,12 @@ def main() -> None:
 	except OSError:
 		print("[DEBUG] Custom matplotlib style not found, using default.")
 
+	# Load translations from configuration
+	translation = snakemake.config.get("translation", {})
+
+	def _t(label: str) -> str:
+		return utils.translate_label(label, translation)
+
 	nodelist_path = snakemake.input["nodelist"]
 	graph_path = snakemake.input["graph"]
 	output_path = snakemake.output[0]
@@ -42,15 +48,30 @@ def main() -> None:
 
 	# 2. Filter the graph using one community as the focal class
 	if "community" in df.columns:
-		comm_counts = df["community"].value_counts()
-		if 8 in comm_counts:
-			target_comm = 8
-		elif "C08" in comm_counts:
-			target_comm = "C08"
+		target_comm = getattr(snakemake.params, "target_community", 8)
+		# Ensure target_comm type matches the column type
+		comm_unique = df["community"].unique()
+		if target_comm not in comm_unique:
+			# Try standard alternative formats
+			target_comm_str = (
+				f"C{target_comm:02d}"
+				if isinstance(target_comm, int)
+				else str(target_comm)
+			)
+			if target_comm_str in comm_unique:
+				target_comm = target_comm_str
+			elif str(target_comm) in comm_unique:
+				target_comm = str(target_comm)
+			else:
+				# Fallback to the largest community if not found
+				comm_counts = df["community"].value_counts()
+				target_comm = comm_counts.idxmax()
+				print(
+					f"[DEBUG] Target community {target_comm} not found. Falling back to largest: {target_comm}"
+				)
 		else:
-			target_comm = comm_counts.idxmax()
+			print(f"[DEBUG] Focal community determined from params: {target_comm}")
 
-		print(f"[DEBUG] Focal community determined: {target_comm}")
 		focal_nodes = df[df["community"] == target_comm][id_col].tolist()
 	else:
 		target_comm = "All"
@@ -86,7 +107,9 @@ def main() -> None:
 
 	# Fallback if coordinates are missing in nodelist
 	if not pos:
-		print("[DEBUG] Nodelist lacks 'pos_x'/'pos_y' or 'x'/'y', computing spring layout...")
+		print(
+			"[DEBUG] Nodelist lacks 'pos_x'/'pos_y' or 'x'/'y', computing spring layout..."
+		)
 		pos = nx.spring_layout(subgraph, seed=snakemake.config.get("seed", 42))
 
 	# Setup fixed styles (color, constant sizes, specific labels)
@@ -108,7 +131,7 @@ def main() -> None:
 		# Alpha = 1.0 implies no filtering (None)
 		if a == 1.0:
 			filtered_G = subgraph.copy()
-			title = r"$\alpha = None$ (Full Subgraph)"
+			val_str = "1.0"
 		else:
 			filtered_G = gc.disparity_filter_backbone(
 				original_graph=subgraph,
@@ -117,7 +140,8 @@ def main() -> None:
 				mode="or",
 				keep_isolates=False,
 			)
-			title = rf"$\alpha = {a}$"
+			val_str = f"{a:.3g}"
+		title = rf"$\alpha_{{{i}}} = {val_str}$"
 
 		current_nodelist = list(filtered_G.nodes())
 		current_nodes_set = set(current_nodelist)
@@ -240,7 +264,9 @@ def main() -> None:
 			else:
 				y_offset = 0.04
 
-			pos_labels = {node: (coords[0], coords[1] + y_offset) for node, coords in pos.items()}
+			pos_labels = {
+				node: (coords[0], coords[1] + y_offset) for node, coords in pos.items()
+			}
 
 			text_dict = nx.draw_networkx_labels(
 				filtered_G,
@@ -265,10 +291,10 @@ def main() -> None:
 
 	# Add a custom legend for the simplices at the bottom center of the figure
 	triangle_patch = mpatches.Patch(
-		color="deepskyblue", alpha=0.35, label="2-Simplices (Triangles)"
+		color="deepskyblue", alpha=0.35, label=_t("2-Simplex (Triangles)")
 	)
 	tetra_patch = mpatches.Patch(
-		color="crimson", alpha=0.25, label="3-Simplices (Tetrahedra / 4-Cliques)"
+		color="crimson", alpha=0.25, label=_t("3-Simplex (Tetrahedra / 4-Cliques)")
 	)
 	fig.legend(
 		handles=[triangle_patch, tetra_patch],
