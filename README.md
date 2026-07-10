@@ -13,7 +13,7 @@ This repository contains the full **Snakemake workflow** used to construct, filt
 labor-market networks from the ENES (Encuesta Nacional sobre Estructura Social) and
 ESAyPP (Encuesta Nacional sobre la Estructura Social de Argentina y Políticas Públicas) datasets.
 
-The pipeline:
+The workflow:
 1. **Prepares** cleaned microdata from ENES 2019, ENES 2021, and EPH (INDEC) survey waves.
 2. **Builds bipartite graphs** linking workers to occupational (CIUO-08) or sectoral (CAES-01) categories.
 3. **Projects** those graphs onto one mode, weighting edges with the Hidalgo Proximity (or dot product / cosine similarity).
@@ -53,7 +53,7 @@ The pipeline:
 
 ```text
 labor_market_structure_arg/
-├── Snakefile              ← Pipeline orchestration + all rule definitions
+├── Snakefile              ← Pipeline orchestration + top-level target rules
 ├── config.yaml            ← Configuration + experimentation panel (edit this!)
 ├── requirements.txt       ← Python dependencies
 ├── rules/
@@ -103,9 +103,9 @@ This generates:
 - `images/enes_all/ciuo/03_projection_plot_gradient/_hidalgo_0.05_pos_income_mean.png`
 - `images/enes_all/ciuo/03_projection_plot_gradient/_hidalgo_0.05_pos_nivel_ed_mean.png`
 
-### Full thesis — all outputs (`thesis_resume`)
+### Full thesis — representative outputs (`thesis_resume`)
 
-To reproduce **every figure cited in the thesis** (one representative output per pipeline rule), run:
+To reproduce the representative release set (one output per selected pipeline stage), run:
 
 ```bash
 snakemake thesis_resume --cores all
@@ -115,10 +115,9 @@ snakemake thesis_resume --cores all
 
 ---
 
-## 3. THESIS_INPUTS — Figures Cited in the Thesis
+## 3. THESIS_INPUTS — Release Targets from `thesis_resume`
 
-These are the exact targets produced by `snakemake thesis_resume`. They are documented here
-because they are the primary outputs cited in the manuscript and must remain reproducible.
+These are the exact targets produced by `snakemake thesis_resume` in the current workflow.
 
 ### Static ENES Outputs (always built)
 
@@ -153,10 +152,8 @@ because they are the primary outputs cited in the manuscript and must remain rep
 | # | Output path | Description |
 |---|---|---|
 | 09 | `images/eph/caes/09_alpha_sensitivity/_hidalgo.png` | α-sensitivity across EPH survey waves (CAES) |
-| 12 | `images/eph/cno/12_betweenness_centrality_ai/betweenness_centrality_ai_hidalgo_backbone.png` | Time-series of betweenness centrality for AI-related CNO occupations |
 | 13 | `images/eph/cno/13_preferential_attachment/_hidalgo.png` | Preferential attachment exponent over EPH waves |
 | 16 | `images/eph/cno/16_persistence_diagram_distance/_hidalgo_disparity_filtration_heatmap_wasserstein.png` | Wasserstein distance heatmap across EPH waves |
-| 20 | `images/20_persistence_diagram_umap_all/_hidalgo_disparity_filtration_wasserstein_umap_H1.png` | UMAP of H1 persistence diagrams — all datasets + EPH |
 
 ---
 
@@ -257,7 +254,7 @@ Community labels in the format `C01`–`C39` (zero-padded two digits), e.g. `C03
 
 ## 5. Experimenting with Variants
 
-The pipeline is fully parameterized. To explore alternative settings,
+The workflow is fully parameterized. To explore alternative settings,
 **edit only the `run_experiments` section** at the bottom of `config.yaml`
 — never modify the rest of the file for experimentation.
 
@@ -406,20 +403,7 @@ export CUDA_PATH=/usr
 
 ## Citation
 
-If you use the occupational graph in your research, please cite:
-
-```bibtex
-@dataset{bernal2026projection,
-	author    = {Bernal Huanca, Aaron},
-	title     = {Projection of Argentinian Industry-Occupation Space onto Occupations using Hidalgo Proximity},
-	year      = {2026},
-	publisher = {Zenodo},
-	doi       = {10.5281/zenodo.21185520},
-	url       = {https://doi.org/10.5281/zenodo.21185520}
-}
-```
-
-If you use this pipeline in your research, please cite:
+If you use this workflow in your research, please cite:
 
 ```bibtex
 @misc{bernal2026labormarket,
