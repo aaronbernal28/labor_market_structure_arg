@@ -373,9 +373,14 @@ snakemake -j4 "images/enes_all_female/ciuo/03_projection_plot_by_groups/_hidalgo
 ## 7. Pipeline Utilities
 
 **Visualize the execution DAG:**
+To visualize the full Directed Acyclic Graph (DAG) including all rules (even already completed ones), use `--forceall`:
 ```bash
-snakemake --dag thesis_resume | dot -Tpng -o thesis_resume_dag.png
+snakemake --forceall --dag thesis_resume | dot -Tpng -o thesis_resume_dag.png
 ```
+
+**Workflow DAG Visualization:**
+![Thesis Resume DAG](thesis_resume_dag.png)
+
 
 **Dry run — show what would be built without executing:**
 ```bash
