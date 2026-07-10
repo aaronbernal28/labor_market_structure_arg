@@ -74,12 +74,12 @@ rule all:
 			feature=TARGET_DISC,
 		),
 		expand(
-			"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{feature}.png",
+			"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{continuous_feature}.png",
 			dataset=TARGET_DATASETS,
 			class_=TARGET_CLASSES,
 			weight_function=["hidalgo"],
 			alpha=TARGET_ALPHAS,
-			feature=TARGET_CONT,
+			continuous_feature=TARGET_CONT,
 		),
 
 # Define thesis inputs that do not require EPH data
@@ -251,15 +251,15 @@ rule projection_plot_gradient:
 		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv",
 		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf"
 	output:
-		"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{discrete_feature}.png"
+		"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{continuous_feature}.png"
 	log:
-		"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{discrete_feature}.log"
+		"images/{dataset}/{class_}/03_projection_plot_gradient/_{weight_function}_{alpha}_pos_{continuous_feature}.log"
 	script:
 		"scripts/03_projection_plot_gradient.py"
 
 
-rule walt_test:
-	'''Walt test on datasets enes_2019 vs enes_2021.'''
+rule wald_test:
+	'''Wald test on datasets enes_2019 vs enes_2021.'''
 	input:
 		"data/processed/enes_2019.csv",
 		"data/processed/enes_2021.csv",
