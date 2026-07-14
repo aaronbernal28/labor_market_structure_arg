@@ -497,8 +497,20 @@ def compute_node_sizes(
 		if v in weighted_degree:
 			weighted_degree[v] += w
 
+	max_deg = max(weighted_degree.values()) if weighted_degree else 1.0
+	if max_deg <= 0.0:
+		max_deg = 1.0
+
+	# Normalize node sizes to a fixed scale (100.0) relative to max_deg,
+	# so that weights of different magnitudes (e.g. hidalgo vs dot_product)
+	# yield visually consistent node sizes.
+	base_constant = 100.0
+
 	size_map = {
-		node: max(min_size, weighted_degree.get(node, 0.0) * float(factor) * 5.0)
+		node: max(
+			min_size,
+			(weighted_degree.get(node, 0.0) / max_deg) * base_constant * float(factor)
+		)
 		for node in nodes_list
 	}
 	return size_map

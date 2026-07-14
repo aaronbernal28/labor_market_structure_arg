@@ -39,10 +39,12 @@ def louvain_partition(
 			graph, weight="weight", resolution=resolution, seed=seed
 		)
 
-	# Convert to dict format: node -> community_id
 	communities = {node: i for i, comm in enumerate(communities_list) for node in comm}
 
-	score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+	try:
+		score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+	except ZeroDivisionError:
+		score = 0.0
 	return communities, score
 
 
@@ -214,7 +216,10 @@ def leiden_partition(
 			communities[node] = i
 
 	# Calculate modularity score using NetworkX utility for consistency
-	score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+	try:
+		score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+	except ZeroDivisionError:
+		score = 0.0
 	return communities, score
 
 
@@ -304,7 +309,10 @@ def infomap_partition(
 		communities_list_dict.setdefault(community_id, set()).add(node)
 	communities_list = list(communities_list_dict.values())
 
-	score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+	try:
+		score = modularity(graph, communities_list, weight="weight", resolution=1.0)
+	except ZeroDivisionError:
+		score = 0.0
 	return communities, score
 
 
@@ -338,9 +346,12 @@ def girvan_newman_partition(
 		if level >= max_levels:
 			break
 		communities_list = [set(c) for c in communities]
-		score = modularity(
-			graph, communities_list, weight="weight", resolution=resolution
-		)
+		try:
+			score = modularity(
+				graph, communities_list, weight="weight", resolution=resolution
+			)
+		except ZeroDivisionError:
+			score = 0.0
 		if score > best_score:
 			best_score = score
 			best_partition = {

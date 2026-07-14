@@ -207,6 +207,14 @@ def main() -> None:
 	)
 	community_map = nodelist_df.set_index(id_col)["community"].to_dict()
 
+	if nodelist_df.empty:
+		for out_path in [snakemake.output[1], snakemake.output[2]]:
+			fig = plt.figure()
+			fig.text(0.5, 0.5, "No communities detected", ha="center", va="center")
+			fig.savefig(out_path)
+			plt.close(fig)
+		return
+
 	pl.plot_community_boxplots(
 		df_nodes=nodelist_df,
 		metrics_dict=cols_to_boxplot,

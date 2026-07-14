@@ -886,10 +886,13 @@ def plot_projection_by_group(
 		for node in graph.nodes()
 	}
 	if node_size_map is not None:
+		max_val = max(node_size_map.values()) if node_size_map else 1.0
+		if max_val <= 0.0:
+			max_val = 1.0
 		size_map = {
 			node: max(
 				10.0,
-				float(node_size_map.get(node, 1.0)) * float(factor_node_size) * 0.5,
+				(float(node_size_map.get(node, 1.0)) / max_val) * 100.0 * float(factor_node_size),
 			)
 			for node in graph.nodes()
 		}
@@ -1039,9 +1042,12 @@ def plot_projection_gradient(
 	node_colors = [colormap(norm(v)) if np.isfinite(v) else "lightgray" for v in values]
 	node_color_by_node = {n: c for n, c in zip(nodes, node_colors)}
 	if node_size_map is not None:
+		max_val = max(node_size_map.values()) if node_size_map else 1.0
+		if max_val <= 0.0:
+			max_val = 1.0
 		size_map = {
 			n: max(
-				10.0, float(node_size_map.get(n, 1.0)) * float(factor_node_size) * 0.5
+				10.0, (float(node_size_map.get(n, 1.0)) / max_val) * 100.0 * float(factor_node_size)
 			)
 			for n in nodes
 		}
