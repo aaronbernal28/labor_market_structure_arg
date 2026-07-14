@@ -109,6 +109,7 @@ THESIS_INPUTS = [
 	"images/enes_all/ciuo/18_disparity_filtration_subgraph/_hidalgo_0.05_pos_infomap_filtration.png",
 	# 19 — Public policy by communities (ciuo)
 	"images/enes_all/ciuo/19_public_policy_by_communities/_hidalgo_0.05_infomap_C03_C09_betweenness_centrality.png",
+	"images/enes_all/ciuo/19_public_policy_by_communities/_hidalgo_0.05_infomap_C03_C09_betweenness_centrality_inter.png",
 	# Zenodo GEXF exports
 	"data/enes_all/caes/zenodo_projection_hidalgo_0.05_infomap.gexf",
 	"data/enes_all/ciuo/zenodo_projection_hidalgo_0.05_infomap.gexf",
@@ -530,6 +531,29 @@ rule public_policy_by_communities:
 		"images/{dataset}/{class_}/19_public_policy_by_communities/_{weight_function}_{alpha}_{algorithm}_{c1}_{c2}_top_betweenness_centrality.log"
 	script:
 		"scripts/19_public_policy_by_communities.py"
+
+
+rule public_policy_by_communities_inter:
+	"""Exploration of public policy variables by communities using inter-community betweenness centrality.
+	Steps:
+	1. Load the projection graph and corresponding nodelist with community labels.
+	2. Filter the graph to only include nodes from two communities (eg. C12 vs C13).
+	3. Compute inter-community betweenness centrality for the two communities.
+	4. Log the top 5 nodes by inter-community betweenness centrality.
+	5. Plot the betweenness centrality distribution.
+	"""
+	wildcard_constraints:
+		c1 = "C(?:0[1-9]|[12][0-9]|3[0-9])",
+		c2 = "C(?:0[1-9]|[12][0-9]|3[0-9])",
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
+		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
+	output:
+		"images/{dataset}/{class_}/19_public_policy_by_communities/_{weight_function}_{alpha}_{algorithm}_{c1}_{c2}_betweenness_centrality_inter.png"
+	log:
+		"images/{dataset}/{class_}/19_public_policy_by_communities/_{weight_function}_{alpha}_{algorithm}_{c1}_{c2}_top_betweenness_centrality_inter.log"
+	script:
+		"scripts/19_public_policy_by_communities_inter.py"
 
 
 rule persistence_diagram_umap_all:
