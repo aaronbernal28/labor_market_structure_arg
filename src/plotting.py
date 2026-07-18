@@ -568,6 +568,197 @@ def draw_bipartite_by_color(
 	return pos
 
 
+def draw_bipartite_simple(
+	graph: nx.Graph,
+	caes_df: pd.DataFrame,
+	ciuo_df: pd.DataFrame,
+	caes_meta: dict,
+	ciuo_meta: dict,
+	output_path: Path = None,
+	seed: int = 28,
+	shift_x: float = 0.5,
+	figsize: tuple | None = None,
+	edge_color: str = "#e0e0e0",
+	edge_alpha: float = 0.25,
+	edge_lw: float = 0.1,
+	caes_color: str = "#2e7d32",
+	ciuo_color: str = "#c62828",
+	factor_node_size_caes: float = 3.0,
+	factor_node_size_ciuo: float = 3.0,
+	node_size_map: Mapping[int, float] = None,
+) -> None:
+	"""Draw a simplified bipartite graph with top 5 labeled nodes per partition, using the same node sizes as the original bipartite plot."""
+	np.random.seed(seed)
+
+	caes_idx = ut.get_class_index("caes")
+	ciuo_idx = ut.get_class_index("ciuo")
+
+	caes_nodes = [n for n in graph.nodes() if graph.nodes[n].get("bipartite") == caes_idx]
+	ciuo_nodes = [n for n in graph.nodes() if graph.nodes[n].get("bipartite") == ciuo_idx]
+
+	# Layout computation matching the original spring-layout vertical normalization
+	pos = nx.spring_layout(graph, seed=seed, k=0.5, iterations=100, method="force")
+	pos_caes_y = [pos[n][1] for n in caes_nodes]
+	pos_ciuo_y = [pos[n][1] for n in ciuo_nodes]
+
+	sigmoid_ = lambda x: 1 / (1 + np.exp(-x))
+	normalize_caes_y = lambda y: sigmoid_(2.5 * (y - np.mean(pos_caes_y)) / np.std(pos_caes_y))
+	normalize_ciuo_y = lambda y: sigmoid_(2.5 * (y - np.mean(pos_ciuo_y)) / np.std(pos_ciuo_y))
+
+	for node in graph.nodes():
+		if graph.nodes[node].get("bipartite") == caes_idx:
+			pos[node][0] -= shift_x
+			pos[node][1] = normalize_caes_y(pos[node][1])
+		else:
+			pos[node][0] += shift_x
+			pos[node][1] = normalize_ciuo_y(pos[node][1])
+
+	# Setup figure
+	fig, ax = plt.subplots(figsize=figsize)
+	ax.axis("off")
+
+	# Draw spline edges (constant color & weight)
+	path_cls = mpath.Path
+	for u, v in graph.edges():
+		start, end = pos[u], pos[v]
+		control1 = (np.mean([start[0], end[0]]), start[1])
+		control2 = (np.mean([start[0], end[0]]), start[1])
+		verts = [start, control1, control2, end]
+		codes = [path_cls.MOVETO, path_cls.CURVE4, path_cls.CURVE4, path_cls.CURVE4]
+		path = path_cls(verts, codes)
+
+		patch = patches.PathPatch(
+			path, facecolor="none", edgecolor=edge_color, lw=edge_lw, alpha=edge_alpha
+		)
+		ax.add_patch(patch)
+
+	# Defining color and size maps
+	if node_size_map is not None:
+		size_map = {
+			node: float(node_size_map.get(node, node_size_map.get(int(node), 1.0)))
+			for node in graph.nodes()
+		}
+	else:
+		size_map = {node: float(degree) for node, degree in graph.degree()}
+
+	# Draw nodes
+	nx.draw_networkx_nodes(
+		graph,
+		pos,
+		nodelist=caes_nodes,
+		node_color=caes_color,
+		node_size=[
+			np.sqrt(size_map[node]) * factor_node_size_caes for node in caes_nodes
+		],
+		node_shape="^",
+		alpha=0.8,
+		edgecolors="#000000",
+		linewidths=0.2,
+		ax=ax,
+	)
+	nx.draw_networkx_nodes(
+		graph,
+		pos,
+		nodelist=ciuo_nodes,
+		node_color=ciuo_color,
+		node_size=[
+			np.sqrt(size_map[node]) * factor_node_size_ciuo for node in ciuo_nodes
+		],
+		node_shape="o",
+		alpha=0.8,
+		edgecolors="#000000",
+		linewidths=0.2,
+		ax=ax,
+	)
+
+	# Load nodelist details for labels
+	caes_id_col = caes_meta["id"]
+	ciuo_id_col = ciuo_meta["id"]
+	caes_label_col = caes_meta["label"]
+	ciuo_label_col = ciuo_meta["label"]
+
+	caes_worker_counts = caes_df.set_index(caes_id_col)["n_obs"].to_dict()
+	ciuo_worker_counts = ciuo_df.set_index(ciuo_id_col)["n_obs"].to_dict()
+
+	label_map_names: dict[int, str] = {}
+	for _, row in caes_df.iterrows():
+		node_id = int(row[caes_id_col])
+		lbl = row.get(caes_label_col, None)
+		if pd.notna(lbl):
+			label_map_names[node_id] = str(lbl)
+	for _, row in ciuo_df.iterrows():
+		node_id = int(row[ciuo_id_col])
+		lbl = row.get(ciuo_label_col, None)
+		if pd.notna(lbl):
+			label_map_names[node_id] = str(lbl)
+
+	# Top 5 largest nodes by n_obs present in graph
+	caes_nodes_in_graph = [n for n in caes_nodes if int(n) in caes_worker_counts]
+	top_caes_nodes = sorted(caes_nodes_in_graph, key=lambda n: caes_worker_counts[int(n)], reverse=True)[:5]
+
+	ciuo_nodes_in_graph = [n for n in ciuo_nodes if int(n) in ciuo_worker_counts]
+	top_ciuo_nodes = sorted(ciuo_nodes_in_graph, key=lambda n: ciuo_worker_counts[int(n)], reverse=True)[:5]
+
+	# Draw label texts for top CAES nodes (aligned right, shifted left)
+	for node in top_caes_nodes:
+		x, y = pos[node]
+		label = label_map_names.get(int(node), str(node))
+		label_wrapped = textwrap.fill(label, width=25)
+		ax.text(
+			x - 0.04, y, label_wrapped,
+			color="black",
+			fontweight="normal",
+			horizontalalignment="right",
+			verticalalignment="center",
+			bbox=dict(facecolor="white", edgecolor="none", alpha=0.7, pad=0.2)
+		)
+
+	# Draw label texts for top CIUO nodes (aligned left, shifted right)
+	for node in top_ciuo_nodes:
+		x, y = pos[node]
+		label = label_map_names.get(int(node), str(node))
+		label_wrapped = textwrap.fill(label, width=25)
+		ax.text(
+			x + 0.04, y, label_wrapped,
+			color="black",
+			fontweight="normal",
+			horizontalalignment="left",
+			verticalalignment="center",
+			bbox=dict(facecolor="white", edgecolor="none", alpha=0.7, pad=0.2)
+		)
+
+	# Add medium labels at the top of each column/side
+	caes_x_mean = np.mean([pos[n][0] for n in caes_nodes])
+	ciuo_x_mean = np.mean([pos[n][0] for n in ciuo_nodes])
+
+	ax.text(
+		caes_x_mean, 1.08, "CAES 1.0",
+		color="black",
+		fontsize="medium",
+		fontweight="bold",
+		horizontalalignment="center",
+		verticalalignment="bottom",
+	)
+	ax.text(
+		ciuo_x_mean, 1.08, "CIUO-08",
+		color="black",
+		fontsize="medium",
+		fontweight="bold",
+		horizontalalignment="center",
+		verticalalignment="bottom",
+	)
+
+	ax.set_xlim(caes_x_mean - 0.6, ciuo_x_mean + 0.6)
+
+	if output_path:
+		output_path = Path(output_path)
+		output_path.parent.mkdir(parents=True, exist_ok=True)
+		plt.savefig(output_path, bbox_inches="tight")
+		plt.close()
+	else:
+		plt.show()
+
+
 def draw_bipartite_normal_layout_by_color(
 	graph: nx.Graph,
 	color_map: Dict[int, str],

@@ -86,6 +86,7 @@ rule all:
 THESIS_INPUTS = [
 	# 02 — Bipartite graph
 	"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_by_groups.png",
+	"images/enes_all/02_bipartite_plot_by_groups/bipartite_plot_simple.png",
 	# 03 — Projection plots by groups (ciuo)
 	"images/enes_all/ciuo/03_projection_plot_by_groups/_hidalgo_0.05_pos_infomap_community.png",
 	"images/enes_all/ciuo/03_projection_plot_by_groups/_hidalgo_0.05_pos_infomap_grupo.png",
@@ -203,6 +204,20 @@ rule bipartite_plot_by_groups:
 		"images/{dataset}/02_bipartite_plot_by_groups/bipartite_plot_by_groups.log"
 	script:
 		"scripts/02_bipartite_plot_by_groups.py"
+
+
+rule bipartite_plot_simple:
+	'''Plot a simplified bipartite graph with green CAES and red CIUO nodes.'''
+	input:
+		"data/graphs/{dataset}/bipartite.gexf",
+		"data/processed/{dataset}/nodelist_caes.csv",
+		"data/processed/{dataset}/nodelist_ciuo.csv",
+	output:
+		"images/{dataset}/02_bipartite_plot_by_groups/bipartite_plot_simple.png",
+	log:
+		"images/{dataset}/02_bipartite_plot_by_groups/bipartite_plot_simple.log"
+	script:
+		"scripts/02_bipartite_plot_simple.py"
 
 
 rule resolution_sensitivity:

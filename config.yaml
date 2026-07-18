@@ -161,6 +161,7 @@ figsizes:
   top_n_bar: [8, 4]
   edge_correlation: [6, 6]
   bipartite: [12, 8]
+  bipartite_simple: [8, 9]
   projection: [8, 8]
   stacked:
     caes: [12, 3]
