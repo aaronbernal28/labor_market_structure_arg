@@ -57,6 +57,9 @@ def _build_label_map(
 
 
 def main() -> None:
+	import matplotlib.colors as mcolors
+	import numpy as np
+
 	plt.style.use("src/styles/publication.mplstyle")
 	translation = snakemake.config.get("translation", {})
 
@@ -140,16 +143,16 @@ def main() -> None:
 
 	top_nodes = results.head(5).copy()
 
+	# Plot 1: Betweenness Centrality Histogram (existing logic)
 	color_community_1 = utils.get_community_color(
 		c1, communities=nodelist["community"].unique()
 	)
-
 	color_community_2 = utils.get_community_color(
 		c2, communities=nodelist["community"].unique()
 	)
 
-	figsize = tuple(snakemake.config.get("figsizes", {}).get("histogram", (10, 8)))
-	fig, ax = plt.subplots(figsize=figsize)
+	figsize_hist = tuple(snakemake.config.get("figsizes", {}).get("histogram", (10, 8)))
+	fig_hist, ax_hist = plt.subplots(figsize=figsize_hist)
 	sns.histplot(
 		data=results,
 		x="betweenness",
@@ -157,24 +160,24 @@ def main() -> None:
 		bins="auto",
 		alpha=0.6,
 		kde=True,
-		ax=ax,
+		ax=ax_hist,
 		multiple="dodge",
 		palette=[color_community_1, color_community_2],
 		hue_order=[c1, c2],
 	)
-	ax.set_title("")
-	ax.set_xlabel(_t("Betweenness centrality"))
-	ax.set_ylabel(_t("node_count"))
-	legend = ax.get_legend()
+	ax_hist.set_title("")
+	ax_hist.set_xlabel(_t("Betweenness centrality"))
+	ax_hist.set_ylabel(_t("node_count"))
+	legend = ax_hist.get_legend()
 	if legend is not None:
 		legend.set_title(_t("community"))
 
-	y_max = ax.get_ylim()[1] if ax.get_ylim()[1] > 0 else 1.0
+	y_max = ax_hist.get_ylim()[1] if ax_hist.get_ylim()[1] > 0 else 1.0
 	for i, (_, row) in enumerate(top_nodes.iterrows()):
 		x = row["betweenness"]
 		y = y_max * (0.92 - i * 0.07)
-		ax.axvline(x, color="black", linestyle="--", linewidth=0.6, alpha=0.6)
-		ax.annotate(
+		ax_hist.axvline(x, color="black", linestyle="--", linewidth=0.6, alpha=0.6)
+		ax_hist.annotate(
 			f"{row['label']} ({row['community']})",
 			xy=(x, y),
 			xytext=(x, y),
@@ -184,12 +187,199 @@ def main() -> None:
 			fontsize=9,
 		)
 
-	output_path = Path(snakemake.output[0])
-	utils.ensure_parent_dir(output_path)
-	plt.tight_layout()
-	plt.savefig(output_path, bbox_inches="tight")
-	plt.close(fig)
+	output_path_hist = Path(snakemake.output[0])
+	utils.ensure_parent_dir(output_path_hist)
+	fig_hist.tight_layout()
+	fig_hist.savefig(output_path_hist, bbox_inches="tight")
+	plt.close(fig_hist)
 
+	# Plot 2: Community Zoom Projection Plot (NEW)
+	pos = dl.load_positions(nodelist, id_col)
+	if pos:
+		subgraph = nx.subgraph(subgraph, set(pos.keys()))
+	group_map = nodelist.set_index(id_col)[community_col].to_dict()
+
+	# Load original community colors map
+	discrete_feature = "community"
+	color_col = next(
+		(col for col in nodelist.columns if discrete_feature in col and col.endswith("_color")),
+		None
+	)
+	group_color_map = {}
+	if color_col:
+		pairs = nodelist[[discrete_feature, color_col]].dropna().drop_duplicates()
+		raw_group_color_map = dict(zip(pairs[discrete_feature], pairs[color_col]))
+		for group_name, color_value in raw_group_color_map.items():
+			try:
+				parsed_color = utils.parse_color(color_value)
+				group_color_map[group_name] = mcolors.to_hex(parsed_color)
+			except Exception:
+				group_color_map[group_name] = "gray"
+	if not group_color_map:
+		unique_groups = sorted(set(group_map.values()))
+		group_color_map = utils.build_community_color_map(unique_groups, other_label="Otros")
+	group_color_map.setdefault("Otros", "gray")
+
+	# Prepare node colors (high alpha for top 5 target nodes, 0.1 for other nodes in c1/c2)
+	node_colors = []
+	node_color_by_node = {}
+	node_alpha = snakemake.config.get("NODE_ALPHA", 0.6)
+	top_node_ids = set(top_nodes["node_id"].astype(int))
+	for node in subgraph.nodes():
+		comm = group_map.get(node, "Otros")
+		color = group_color_map.get(comm, "gray")
+		if node in top_node_ids:
+			rgba = mcolors.to_rgba(color, alpha=0.9)
+		else:
+			rgba = mcolors.to_rgba(color, alpha=0.1)
+		node_colors.append(rgba)
+		node_color_by_node[node] = rgba
+
+	dataset_cfg = snakemake.config["datasets"].get(dataset, {})
+	node_size_metric = dataset_cfg.get("node_size", None)
+	if node_size_metric is None and "_unweighted" in dataset:
+		node_size_metric = "n_obs"
+
+	node_size_map = None
+	if node_size_metric and node_size_metric in nodelist.columns:
+		node_size_map = nodelist.set_index(id_col)[node_size_metric].to_dict()
+		node_size_map = {int(k): float(v) for k, v in node_size_map.items()}
+
+	factor_node_size = snakemake.config["FACTOR_NODE_SIZE"].get(class_, 0.5)
+	if node_size_map is not None:
+		max_val = max(node_size_map.values()) if node_size_map else 1.0
+		if max_val <= 0.0:
+			max_val = 1.0
+		size_map = {
+			node: max(
+				10.0,
+				(float(node_size_map.get(node, 1.0)) / max_val) * 100.0 * float(factor_node_size),
+			)
+			for node in subgraph.nodes()
+		}
+	else:
+		size_map = utils.compute_node_sizes(subgraph, factor=factor_node_size, min_size=10.0, weight_attr="weight")
+	node_sizes = [size_map.get(node, 10.0) for node in subgraph.nodes()]
+
+	# Prepare edge alphas
+	edge_alpha = snakemake.config["EDGE_ALPHA"].get(class_, 0.1)
+	edges = list(subgraph.edges())
+	edge_widths = 0.3
+	if len(edges) > 0:
+		edge_data = next(iter(subgraph.edges(data=True)))[-1]
+		if "weight" in edge_data:
+			weights = [subgraph[u][v].get("weight", 0.0) for u, v in edges]
+			max_weight = max(weights) if max(weights) > 0 else 1.0
+			edge_widths = [0.1 + 1.9 * (w / max_weight) for w in weights]
+
+		edge_alphas = []
+		for u, v in edges:
+			u_top = u in top_node_ids
+			v_top = v in top_node_ids
+			if u_top and v_top:
+				edge_alphas.append(0.9)
+			elif u_top or v_top:
+				edge_alphas.append(edge_alpha * 0.6)
+			else:
+				edge_alphas.append(edge_alpha * 0.3)
+
+	# Bounding Box calculations for zooming
+	x_coords = [pos[node][0] for node in subgraph.nodes() if node in pos]
+	y_coords = [pos[node][1] for node in subgraph.nodes() if node in pos]
+
+	if not x_coords or not y_coords:
+		raise ValueError("No positions found for targeted communities.")
+
+	min_x, max_x = min(x_coords), max(x_coords)
+	min_y, max_y = min(y_coords), max(y_coords)
+
+	margin_x = 0.08 * (max_x - min_x) if max_x > min_x else 1.0
+	margin_y = 0.08 * (max_y - min_y) if max_y > min_y else 1.0
+
+	xlim = (min_x - margin_x, max_x + margin_x)
+	ylim = (min_y - margin_y, max_y + margin_y)
+
+	figsize_proj = tuple(snakemake.config.get("figsizes", {}).get("projection", (8, 8)))
+	fig_proj, ax_proj = plt.subplots(figsize=figsize_proj)
+
+	nx.draw_networkx_nodes(
+		subgraph,
+		pos,
+		node_color=node_colors,
+		node_size=node_sizes,
+		alpha=None,
+		edgecolors="#000000",
+		linewidths=0.2,
+		ax=ax_proj,
+	)
+
+	if len(edges) > 0:
+		edge_colors = [
+			pl._edge_rgba_from_node_colors(node_color_by_node[u], node_color_by_node[v], a)
+			for (u, v), a in zip(edges, edge_alphas)
+		]
+		nx.draw_networkx_edges(
+			subgraph,
+			pos,
+			edgelist=edges,
+			edge_color=edge_colors,
+			width=edge_widths,
+			alpha=None,
+			ax=ax_proj,
+		)
+
+	# Direct labels for top 5 nodes with separate directions
+	range_x = max_x - min_x if max_x > min_x else 1.0
+	range_y = max_y - min_y if max_y > min_y else 1.0
+	directions = [
+		(0.12, 0.12),
+		(-0.12, 0.12),
+		(0.12, -0.12),
+		#(-0.12, -0.12),
+		(0.0, 0.18),
+	]
+	for idx, (_, row) in enumerate(top_nodes.iterrows()):
+		node_id = int(row["node_id"])
+		if node_id in pos:
+			x, y = pos[node_id]
+			dx, dy = directions[idx % len(directions)]
+			ax_proj.annotate(
+				row["label"],
+				xy=(x, y),
+				xytext=(x + dx * range_x, y + dy * range_y),
+				arrowprops=dict(arrowstyle="->", color="black", lw=0.7, ls="-"),
+				fontweight="bold",
+				bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.85, ec="gray"),
+				ha="center",
+				va="center",
+			)
+
+	ax_proj.set_xlim(xlim)
+	ax_proj.set_ylim(ylim)
+	ax_proj.axis("off")
+
+	# Build legend for c1 and c2
+	for group in sorted([c1, c2], key=lambda value: str(value).lower()):
+		if group in group_color_map:
+			group_label = utils.translate_label(group, translation) if translation else group
+			plt.scatter([], [], color=group_color_map[group], label=group_label)
+
+	legend_title_display = (
+		utils.translate_label(discrete_feature, translation) if discrete_feature else ""
+	)
+	plt.legend(
+		title=legend_title_display,
+		loc="lower left",
+		borderaxespad=2.0,
+		framealpha=0.7,
+	)
+
+	output_path_proj = Path(snakemake.output[1])
+	utils.ensure_parent_dir(output_path_proj)
+	fig_proj.savefig(output_path_proj, bbox_inches="tight")
+	plt.close(fig_proj)
+
+	# Existing logging logic
 	log_lines: list[str] = []
 	log_lines.append("=" * 60)
 	log_lines.append("PUBLIC POLICY BY COMMUNITIES")
