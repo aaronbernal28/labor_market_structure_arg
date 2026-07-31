@@ -17,7 +17,8 @@ rule compute_communities:
 	output:
 		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}.csv",
 		"images/{dataset}/{class_}/03_communities/_distribution_{weight_function}_{alpha}_{algorithm}.png",
-		"images/{dataset}/{class_}/03_communities/_boxplots_{weight_function}_{alpha}_{algorithm}.png"
+		"images/{dataset}/{class_}/03_communities/_boxplots_{weight_function}_{alpha}_{algorithm}.png",
+		"images/{dataset}/{class_}/03_communities/_distribution_{weight_function}_{alpha}_{algorithm}.csv"
 	log:
 		"images/{dataset}/{class_}/03_communities/_distribution_{weight_function}_{alpha}_{algorithm}.log"
 	script:

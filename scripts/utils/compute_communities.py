@@ -92,11 +92,6 @@ def main() -> None:
 	print(f"Saved {class_}_{dataset} communities to {snakemake.output[0]}.")
 	group_col = snakemake.config[class_].get("letra" if class_ == "ciuo" else "grupo")
 
-	def _fmt_number(value: float | None) -> str:
-		if value is None or pd.isna(value):
-			return "NA"
-		return f"\\num{{{value:.2f}}}"
-
 	def _mean_or_none(df: pd.DataFrame, col: str) -> float | None:
 		if col not in df.columns:
 			return None
@@ -150,10 +145,7 @@ def main() -> None:
 				return None
 			return float(series.median())
 
-	rows: list[str] = []
-	rows.append(
-		"Community & Dominant groups (by count) & Mean Female % & Mean Public Sector % & Age median & Income median & Modularity & Workers (millions) \\\\"  # noqa: E501
-	)
+	summary_rows: list[dict[str, Any]] = []
 	for comm_id, group in nodelist_df.groupby("community"):
 		if len(group) <= 1:
 			continue
@@ -167,14 +159,13 @@ def main() -> None:
 		if group_col and group_col in group.columns:
 			dominant_groups = group[group_col].value_counts().head(3)
 			dominant_groups_items = [
-				f"{idx} (\\num{{{count}}})" for idx, count in dominant_groups.items()
+				f"{idx} ({count})" for idx, count in dominant_groups.items()
 			]
-			dominant_groups_str = (
-				"\\makecell[l]{" + " \\\\ ".join(dominant_groups_items) + "}"
-			)
+			dominant_groups_str = "; ".join(dominant_groups_items)
 
 		female_mean = _mean_or_none(group, "female_pct")
 		public_mean = _mean_or_none(group, "public_sector_pct")
+		edu_mean = _mean_or_none(group, "nivel_ed_mean")
 		age_median = _median_or_none(group, "age_median")
 		income_median = _median_or_none(group, "income_median")
 		workers_millions = None
@@ -183,11 +174,25 @@ def main() -> None:
 			if not workers_series.empty:
 				workers_millions = float(workers_series.sum()) / 1_000_000
 
-		rows.append(  # Formato para latex table
-			f"\\texttt{{{comm_id}}} & {dominant_groups_str} & {_fmt_number(female_mean)} & {_fmt_number(public_mean)} & {_fmt_number(age_median)} & {_fmt_number(income_median)} & \\num{{{local_modularity:.4f}}} & \\num{{{workers_millions:.4f}}} \\\\ \\hline"
+		summary_rows.append(
+			{
+				"community": comm_id,
+				"dominant_groups": dominant_groups_str,
+				"female_pct": female_mean,
+				"public_sector_pct": public_mean,
+				"nivel_ed_mean": edu_mean,
+				"age_median": age_median,
+				"income_median": income_median,
+				"modularity": local_modularity,
+				"workers_millions": workers_millions,
+			}
 		)
 
-	log.add_notes(log_lines, "NODELIST WITH COMMUNITIES", rows)
+	summary_df = pd.DataFrame(summary_rows)
+	csv_output_path = snakemake.output[3] if len(snakemake.output) > 3 else None
+	if csv_output_path:
+		summary_df.to_csv(csv_output_path, index=False)
+		print(f"Saved community summary table to {csv_output_path}.")
 
 	log_path = snakemake.log[0] if hasattr(snakemake, "log") and snakemake.log else None
 	log.write_log(log_lines, log_path)
@@ -213,6 +218,20 @@ def main() -> None:
 			fig.text(0.5, 0.5, "No communities detected", ha="center", va="center")
 			fig.savefig(out_path)
 			plt.close(fig)
+		if csv_output_path:
+			pd.DataFrame(
+				columns=[
+					"community",
+					"dominant_groups",
+					"female_pct",
+					"public_sector_pct",
+					"nivel_ed_mean",
+					"age_median",
+					"income_median",
+					"modularity",
+					"workers_millions",
+				]
+			).to_csv(csv_output_path, index=False)
 		return
 
 	pl.plot_community_boxplots(
