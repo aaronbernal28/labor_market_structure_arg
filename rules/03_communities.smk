@@ -37,3 +37,13 @@ rule export_zenodo_graph:
 	script:
 		"../scripts/utils/export_zenodo_graph.py"
 
+
+rule compute_communities_light:
+	'''Compute communities and create csv file with id and community (only).'''
+	input:
+		"data/graphs/{dataset}/{class_}/projection_{weight_function}_{alpha}.gexf",
+		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos.csv"
+	output:
+		"data/processed/{dataset}/nodelist_{class_}_{weight_function}_{alpha}_pos_{algorithm}_light.csv"
+	script:
+		"../scripts/utils/compute_communities_light.py"
