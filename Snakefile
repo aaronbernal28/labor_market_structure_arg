@@ -32,6 +32,7 @@ DATASETS_ALL = DATASETS + EPH_FILES
 NULL_GRAPH_MODELS = ["configuration_model", "enhanced_configuration_model"]
 DISTANCE_DIAGRAMS = ["bottleneck", "wasserstein"]
 RESOLUTIONS = geomspace(0.1, 30, num=40).round(4).tolist()
+ALPHAS_RANGE = geomspace(0.01, 1.0, num=15).round(4).tolist()
 
 wildcard_constraints:
 	dataset = "|".join(DATASETS_ALL),
@@ -630,6 +631,22 @@ rule persistence_diagram_collar:
 		"images/enes_all/{class_}/08_persistence_diagram/_{weight_function}_{topo_method}_collar.png"
 	script:
 		"scripts/21_persistence_diagram_collar.py"
+
+
+rule disparity_filter_communities_persistence:
+	input:
+		expand(
+			"data/processed/{{dataset}}/nodelist_{{class_}}_{{weight_function}}_{alpha}_pos_{{algorithm}}_light.csv",
+			alpha=ALPHAS_RANGE
+		),
+		"data/processed/{dataset}/nodelist_{class_}.csv"
+	output:
+		"images/{dataset}/{class_}/22_disparity_filter_communities_persistence/_{weight_function}_{algorithm}_diagram.png",
+		"images/{dataset}/{class_}/22_disparity_filter_communities_persistence/_{weight_function}_{algorithm}_hierarchical_clustering.png"
+	log:
+		"images/{dataset}/{class_}/22_disparity_filter_communities_persistence/_{weight_function}_{algorithm}_persistence.log"
+	script:
+		"scripts/22_disparity_filter_communities_persistence.py"
 
 
 include: "rules/00_prepare.smk"

@@ -1,7 +1,9 @@
 from typing import Any
-from scripts import *
+
 import networkx as nx
 import pandas as pd
+
+from scripts import *
 
 snakemake: Any
 
@@ -13,7 +15,9 @@ def main() -> None:
 	alpha = float(snakemake.wildcards.get("alpha", 0.05))
 	seed = int(snakemake.config["seed"])
 	resolution = float(
-		snakemake.config["community"]["resolution"].get(f"{alpha:.2f}", {}).get(class_, 1.0)
+		snakemake.config["community"]["resolution"]
+		.get(f"{alpha:.2f}", {})
+		.get(class_, 1.0)
 	)
 
 	id_col = snakemake.config[class_]["id"]

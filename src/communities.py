@@ -405,3 +405,110 @@ def local_modularity_weighted(
 	fraction_real = internal_weight / strength_total
 	fraction_expected = (strength_community / strength_total) ** 2
 	return fraction_real - (gamma * fraction_expected)
+
+
+# Community-persistence analysis helpers
+
+def build_co_occurrence_matrix(
+	sub_df: "pd.DataFrame", layers: list[str]
+) -> "np.ndarray":
+	"""Compute pairwise node co-occurrence frequency matrix M across alpha layers.
+
+	M[i, j] is the fraction of layers in which nodes i and j were assigned to
+	the same community (NaN assignments count as absent). Diagonal is set to 1.
+	"""
+	import pandas as pd
+
+	n = len(sub_df)
+	co = np.zeros((n, n), dtype=float)
+	for col in layers:
+		labels = sub_df[col].values
+		not_na = pd.notna(labels)
+		eq = (labels[:, None] == labels[None, :]) & (not_na[:, None]) & (not_na[None, :])
+		co += eq.astype(float)
+	M = co / float(len(layers))
+	np.fill_diagonal(M, 1.0)
+	return M
+
+
+def detect_persistence_isolates(
+	sub_df: "pd.DataFrame", last_col: str
+) -> "tuple[list, list]":
+	"""Return (core_nodes, isolate_nodes) based on the strictest filtration layer.
+
+	Nodes with NaN or singleton-community assignments at *last_col* are isolates.
+	"""
+	vc = sub_df[last_col].value_counts()
+	singleton_comms = vc[vc == 1].index
+	mask = sub_df[last_col].isna() | sub_df[last_col].isin(singleton_comms)
+	return sub_df[~mask].index.tolist(), sub_df[mask].index.tolist()
+
+
+def compute_persistence_meta_groups(
+	M: "np.ndarray",
+	core_nodes: list,
+	valid_nodes: list,
+	*,
+	max_meta_groups: int = 6,
+	meta_group_label: str = "G",
+) -> "tuple":
+	"""Complete-linkage clustering on core nodes with tie-breaking.
+
+	Returns:
+		(Z_core, meta_clusters, cluster_counts, cluster_to_g, node_to_meta_core)
+	"""
+	import scipy.cluster.hierarchy as sch
+	import scipy.spatial.distance as ssd
+	import pandas as pd
+
+	core_idx = [valid_nodes.index(n) for n in core_nodes]
+	M_core = M[np.ix_(core_idx, core_idx)]
+	D_core = np.clip(1.0 - M_core, 0.0, 1.0)
+	np.fill_diagonal(D_core, 0.0)
+
+	Z_core = sch.linkage(ssd.squareform(D_core, checks=False), method="complete")
+
+	# Tie-break: ensure strictly monotone distances so fcluster maxclust works
+	for i in range(1, len(Z_core)):
+		if Z_core[i, 2] <= Z_core[i - 1, 2]:
+			Z_core[i, 2] = Z_core[i - 1, 2] + 1e-7
+
+	k = min(max_meta_groups, len(core_nodes))
+	meta_clusters = sch.fcluster(Z_core, t=k, criterion="maxclust")
+
+	cluster_counts = pd.Series(meta_clusters).value_counts()
+	cluster_order = cluster_counts.index.tolist()
+	cluster_to_g = {c: f"{meta_group_label}{i + 1}" for i, c in enumerate(cluster_order)}
+	node_to_meta_core = {n: cluster_to_g[meta_clusters[i]] for i, n in enumerate(core_nodes)}
+
+	return Z_core, meta_clusters, cluster_counts, cluster_to_g, node_to_meta_core
+
+
+def build_persistence_full_linkage(
+	Z_core: "np.ndarray",
+	n_core: int,
+	n_isolates: int,
+) -> "np.ndarray":
+	"""Graft isolate nodes onto the core linkage matrix at artificially high distances.
+
+	Keeps isolates out of the core dendrogram while still allowing clustermap
+	to plot them as a visually separated group.
+	"""
+	if n_isolates == 0:
+		return Z_core
+	if n_core == 0:
+		return np.array([])
+
+	offset = n_isolates  # isolates sit at indices n_core .. n_core+n_isolates-1
+	new_Z: list = []
+	for c1, c2, d, s in Z_core:
+		c1 = int(c1) + (offset if int(c1) >= n_core else 0)
+		c2 = int(c2) + (offset if int(c2) >= n_core else 0)
+		new_Z.append([c1, c2, d, s])
+
+	current_root = (n_core + n_isolates) + n_core - 2
+	for i in range(n_isolates):
+		new_Z.append([current_root, n_core + i, 1.05 + 0.01 * i, new_Z[-1][3] + 1])
+		current_root += 1
+
+	return np.array(new_Z)

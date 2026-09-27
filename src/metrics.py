@@ -230,3 +230,18 @@ def log_graph_metrics(label: str, metrics: Dict[str, MetricValue]) -> None:
 		print(
 			f"Degree assortativity (weighted): {metrics['degree_assortativity_weighted']:.4f}"
 		)
+
+
+def ari_between_columns(
+	df: "pd.DataFrame", col_a: str, col_b: str
+) -> float:
+	"""Compute Adjusted Rand Index between two community-label columns, ignoring NaNs.
+
+	Returns float('nan') if there are no valid overlapping rows.
+	"""
+	from sklearn.metrics import adjusted_rand_score
+	import pandas as pd
+	valid = df[[col_a, col_b]].dropna()
+	if len(valid) == 0:
+		return float("nan")
+	return float(adjusted_rand_score(valid[col_a], valid[col_b]))

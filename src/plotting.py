@@ -2608,3 +2608,331 @@ def plot_weighted_histograms(
 		plt.tight_layout()
 		plt.savefig(output_path, bbox_inches="tight")
 	plt.close(fig)
+
+# Community-persistence visualization helpers
+
+def _build_bezier_ribbon(
+	x0: float, y0_bot: float, y0_top: float,
+	x1: float, y1_bot: float, y1_top: float,
+	smoothness: float = 0.5,
+) -> "mpath.Path":
+	"""Return a closed cubic-bezier ``Path`` representing one alluvial ribbon."""
+	import matplotlib.path as mpath
+
+	dx = (x1 - x0) * smoothness
+	verts = [
+		(x0, y0_top), (x0 + dx, y0_top), (x1 - dx, y1_top), (x1, y1_top),
+		(x1, y1_bot), (x1 - dx, y1_bot), (x0 + dx, y0_bot), (x0, y0_bot),
+		(x0, y0_top),
+	]
+	codes = [
+		mpath.Path.MOVETO,
+		mpath.Path.CURVE4, mpath.Path.CURVE4, mpath.Path.CURVE4,
+		mpath.Path.LINETO,
+		mpath.Path.CURVE4, mpath.Path.CURVE4, mpath.Path.CURVE4,
+		mpath.Path.CLOSEPOLY,
+	]
+	return mpath.Path(verts, codes)
+
+
+def propagate_community_colors(
+	sub_df: "pd.DataFrame",
+	layers: list[str],
+	*,
+	palette: str = "tab20",
+	fallback_color: str = "#888888",
+) -> list[dict]:
+	"""Phases 1-3: assign base colors and forward-propagate lineage through filtration.
+
+	Phase 1: Assign palette colors to base-layer (layers[0]) communities.
+	Phase 2+3: For each subsequent layer, each target community inherits the
+	            color of whichever source community contributed the most nodes.
+
+	Args:
+		sub_df: DataFrame with community assignments per layer.
+		layers: ordered list of alpha-column names (descending alpha).
+		palette: seaborn palette name for base-layer initialization.
+		fallback_color: hex color for communities with no traceable source.
+
+	Returns:
+		List of dicts, one per layer: {comm_id: hex_color_str}.
+	"""
+	base_comms = list(sub_df[layers[0]].dropna().unique())
+	pal = sns.color_palette(palette, max(len(base_comms), 20))
+	comm_colors: list[dict] = [
+		{c: mcolors.to_hex(pal[i % len(pal)]) for i, c in enumerate(base_comms)}
+	]
+
+	for k in range(len(layers) - 1):
+		col_src, col_tgt = layers[k], layers[k + 1]
+		src_colors = comm_colors[k]
+		tgt_colors: dict = {}
+		flow_df = sub_df[[col_src, col_tgt]].dropna()
+		for tgt_c in sub_df[col_tgt].dropna().unique():
+			incoming = flow_df[flow_df[col_tgt] == tgt_c].groupby(col_src).size()
+			tgt_colors[tgt_c] = (
+				src_colors.get(incoming.idxmax(), fallback_color)
+				if not incoming.empty
+				else fallback_color
+			)
+		comm_colors.append(tgt_colors)
+
+	return comm_colors
+
+
+def build_alluvial_layout(
+	sub_df: "pd.DataFrame",
+	layers: list[str],
+	n_nodes: int,
+) -> list[dict]:
+	"""Phase 4: build per-layer community geometry with barycenter sorting.
+
+	Layer 0 is sorted by descending community size.  All subsequent layers use
+	the barycenter heuristic: each community is placed at the weighted average
+	vertical position of its source nodes, minimising ribbon crossings.
+
+	Args:
+		sub_df: DataFrame with community assignments.
+		layers: ordered list of alpha-column names.
+		n_nodes: total number of valid nodes (used for padding scale).
+
+	Returns:
+		List of dicts, one per layer.  Each dict maps community_id to a sub-dict
+		with keys: ``nodes``, ``size``, ``y_bot``, ``y_top``, ``y_center``.
+	"""
+	def _layout(c_info: dict, sorted_comms: list) -> None:
+		pad = (n_nodes * 0.05) / max(1, len(sorted_comms) - 1)
+		y = 0.0
+		for c in sorted_comms:
+			sz = c_info[c]["size"]
+			c_info[c].update({"y_bot": y, "y_top": y + sz, "y_center": y + sz / 2.0})
+			y += sz + pad
+
+	layer_comms: list[dict] = []
+
+	# Layer 0 - sort by descending size
+	col0 = layers[0]
+	c_info_0: dict = {
+		c: {"nodes": sub_df[sub_df[col0] == c].index.tolist(),
+		    "size": int((sub_df[col0] == c).sum())}
+		for c in sub_df[col0].dropna().unique()
+	}
+	_layout(c_info_0, sorted(c_info_0, key=lambda c: -c_info_0[c]["size"]))
+	layer_comms.append(c_info_0)
+
+	# Layers 1..K - barycenter heuristic
+	for k in range(1, len(layers)):
+		col, col_prev = layers[k], layers[k - 1]
+		prev_info = layer_comms[k - 1]
+		c_info_k: dict = {
+			c: {"nodes": sub_df[sub_df[col] == c].index.tolist(),
+			    "size": int((sub_df[col] == c).sum())}
+			for c in sub_df[col].dropna().unique()
+		}
+		flow_df = sub_df[[col_prev, col]].dropna()
+		bary: dict = {}
+		for c in c_info_k:
+			incoming = flow_df[flow_df[col] == c].groupby(col_prev).size()
+			if incoming.empty:
+				bary[c] = 0.0
+			else:
+				total = incoming.sum()
+				bary[c] = (
+					sum(cnt * prev_info[src]["y_center"]
+					    for src, cnt in incoming.items() if src in prev_info)
+					/ total
+				)
+		_layout(c_info_k, sorted(c_info_k, key=lambda c: bary[c]))
+		layer_comms.append(c_info_k)
+
+	return layer_comms
+
+
+def build_alluvial_ribbons(
+	sub_df: "pd.DataFrame",
+	layers: list[str],
+	layer_comms: list[dict],
+	comm_colors: list[dict],
+	*,
+	fallback_color: str = "#888888",
+) -> list[dict]:
+	"""Phase 5: build ribbon geometry with propagated lineage colors.
+
+	Args:
+		sub_df: DataFrame with community assignments.
+		layers: ordered list of alpha-column names.
+		layer_comms: output of :func:`build_alluvial_layout`.
+		comm_colors: output of :func:`propagate_community_colors`.
+		fallback_color: color for ribbons with no mapped source.
+
+	Returns:
+		List of ribbon dicts: {x0, x1, y0_bot, y0_top, y1_bot, y1_top, color}.
+	"""
+	ribbons: list[dict] = []
+	for k in range(len(layers) - 1):
+		c_info_x, c_info_nxt = layer_comms[k], layer_comms[k + 1]
+		col_x, col_nxt = layers[k], layers[k + 1]
+		src_colors = comm_colors[k]
+
+		flow_df = sub_df[[col_x, col_nxt]].dropna()
+		flows: list[dict] = []
+		for (cx, cnxt), grp in flow_df.groupby([col_x, col_nxt]):
+			if cx not in c_info_x or cnxt not in c_info_nxt:
+				continue
+			flows.append({
+				"cx": cx, "cnxt": cnxt, "size": len(grp),
+				"y_center_nxt": c_info_nxt[cnxt]["y_center"],
+				"y_center_x": c_info_x[cx]["y_center"],
+			})
+
+		# Vertical slot assignment - source side
+		cx_out: dict = {}
+		for f in flows:
+			cx_out.setdefault(f["cx"], []).append(f)
+		for cx, flist in cx_out.items():
+			flist.sort(key=lambda x: x["y_center_nxt"])
+			y = c_info_x[cx]["y_bot"]
+			for f in flist:
+				f["y_out_bot"], f["y_out_top"] = y, y + f["size"]
+				y = f["y_out_top"]
+
+		# Vertical slot assignment - target side
+		cnxt_in: dict = {}
+		for f in flows:
+			cnxt_in.setdefault(f["cnxt"], []).append(f)
+		for cnxt, flist in cnxt_in.items():
+			flist.sort(key=lambda x: x["y_center_x"])
+			y = c_info_nxt[cnxt]["y_bot"]
+			for f in flist:
+				f["y_in_bot"], f["y_in_top"] = y, y + f["size"]
+				y = f["y_in_top"]
+
+		for f in flows:
+			ribbons.append({
+				"x0": k, "x1": k + 1,
+				"y0_bot": f["y_out_bot"], "y0_top": f["y_out_top"],
+				"y1_bot": f["y_in_bot"],  "y1_top": f["y_in_top"],
+				"color": src_colors.get(f["cx"], fallback_color),
+			})
+
+	return ribbons
+
+
+def plot_alluvial_diagram(
+	layer_comms: list[dict],
+	ribbons: list[dict],
+	comm_colors: list[dict],
+	layers: list[str],
+	n_nodes: int,
+	*,
+	title: str = "",
+	output_path: "Path | None" = None,
+	figsize: tuple = (14, 8),
+	ribbon_alpha: float = 0.45,
+	bar_width: float = 0.1,
+	fallback_color: str = "#888888",
+) -> "plt.Figure":
+	"""Render a complete alluvial/flow diagram using bezier ribbons.
+
+	Args:
+		layer_comms: output of :func:`build_alluvial_layout`.
+		ribbons: output of :func:`build_alluvial_ribbons`.
+		comm_colors: output of :func:`propagate_community_colors`.
+		layers: ordered list of alpha-column name strings.
+		n_nodes: total node count (used for y-axis limits).
+		title: figure title (supports LaTeX math strings).
+		output_path: save destination; if None the figure is returned open.
+		figsize: (width, height) in inches.
+		ribbon_alpha: opacity of ribbon fills.
+		bar_width: width of each community bar in data coordinates.
+		fallback_color: color for bars/ribbons with no mapped source.
+
+	Returns:
+		The rendered ``matplotlib.figure.Figure``.
+	"""
+	from matplotlib.patches import PathPatch, Rectangle
+
+	fig, ax = plt.subplots(figsize=figsize)
+
+	# Ribbons first (behind bars)
+	for r in ribbons:
+		path = _build_bezier_ribbon(r["x0"], r["y0_bot"], r["y0_top"],
+		                            r["x1"], r["y1_bot"], r["y1_top"])
+		ax.add_patch(PathPatch(path, facecolor=r["color"], edgecolor="none", alpha=ribbon_alpha))
+
+	# Community bars
+	for k, c_info in enumerate(layer_comms):
+		layer_clrs = comm_colors[k]
+		for c, info in c_info.items():
+			ax.add_patch(Rectangle(
+				(k - bar_width / 2, info["y_bot"]), bar_width, info["size"],
+				facecolor=layer_clrs.get(c, fallback_color),
+				edgecolor="white", linewidth=0.5, alpha=0.9,
+			))
+
+	n_layers = len(layers)
+	ax.set_xlim(-0.5, n_layers - 0.5)
+	ax.set_ylim(-n_nodes * 0.02, n_nodes * 1.1)
+	ax.set_xticks(range(n_layers))
+	ax.set_xticklabels([rf"$\alpha={col}$" for col in layers], rotation=45, ha="right")
+	ax.set_yticks([])
+	for spine in ax.spines.values():
+		spine.set_visible(False)
+	if title:
+		ax.set_title(title, fontsize=14, pad=20)
+
+	fig.tight_layout()
+	if output_path is not None:
+		fig.savefig(output_path, bbox_inches="tight", dpi=300)
+		plt.close(fig)
+	return fig
+
+
+def plot_persistence_clustermap(
+	M_ordered: "np.ndarray",
+	ordered_nodes: list,
+	Z_full: "np.ndarray",
+	side_colors: "pd.DataFrame",
+	*,
+	k_clusters: int,
+	meta_group_label: str = "G",
+	noise_label: str = "G0",
+	output_path: "Path | None" = None,
+	figsize: tuple = (10, 10),
+) -> None:
+	"""Render the co-occurrence clustermap with meta-group sidebars.
+
+	Args:
+		M_ordered: symmetric co-occurrence matrix reordered by dendrogram.
+		ordered_nodes: node ids matching rows/cols of M_ordered.
+		Z_full: full linkage matrix (core + grafted isolates).
+		side_colors: DataFrame of hex-color columns (e.g. meta-group, group).
+		k_clusters: number of core meta-groups.
+		meta_group_label: prefix used in the title.
+		noise_label: isolate label used in the title.
+		output_path: save destination; if None the figure is shown.
+		figsize: (width, height) in inches.
+	"""
+	if len(Z_full) == 0:
+		return
+
+	g = sns.clustermap(
+		pd.DataFrame(M_ordered, index=ordered_nodes, columns=ordered_nodes),
+		row_linkage=Z_full,
+		col_linkage=Z_full,
+		row_colors=side_colors,
+		col_colors=side_colors,
+		cmap="viridis",
+		vmin=0.0, vmax=1.0,
+		figsize=figsize,
+		xticklabels=False, yticklabels=False,
+		cbar_kws={"label": "Co-occurrence Frequency"},
+	)
+	g.figure.suptitle(
+		f"Hierarchical Clustering ({k_clusters} Meta-groups "
+		f"{meta_group_label}1\u2013{meta_group_label}{k_clusters} + {noise_label} Isolates)",
+		y=1.02, fontsize=12,
+	)
+	if output_path is not None:
+		g.savefig(output_path, bbox_inches="tight")
+		plt.close(g.figure)
